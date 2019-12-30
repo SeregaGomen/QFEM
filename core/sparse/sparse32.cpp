@@ -11,12 +11,17 @@ extern TMessenger* msg;
 #define MAXBLKSZE   16
 #define MAXINDEX    0x40000000
 
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 // функция сравнения элементов массива
 int cmp(const void *x1, const void *x2)
 {
     return *static_cast<const int*>(x1) - *static_cast<const int*>(x2);
 }
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 void BCCS_Matrix::spSetElem(int i, int j, double val)
 {
     int k, strt, stop, col, row, ofst;
@@ -35,7 +40,9 @@ void BCCS_Matrix::spSetElem(int i, int j, double val)
             break;
         }
 }
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 void BCCS_Matrix::spAddElem(int i, int j, double val)
 {
     int k, strt, stop, col, row, ofst;
@@ -54,7 +61,9 @@ void BCCS_Matrix::spAddElem(int i, int j, double val)
             break;
         }
 }
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 double BCCS_Matrix::spGetElem(int i, int j)
 {
     int k, strt, stop, col, row, ofst;
@@ -71,7 +80,9 @@ double BCCS_Matrix::spGetElem(int i, int j)
             return avals[blksze * blksze * k + ofst];
     return 0;
 }
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 void BCCS_Matrix::spSetMatrix(const int* mesh, int nelmnts, int elmsze, int nv, int bs)
 {
     int i, j, m, k, n, nedges, node, *nptr, *mark, *nind, len, ilim;
@@ -178,7 +189,9 @@ void BCCS_Matrix::spSetMatrix(const int* mesh, int nelmnts, int elmsze, int nv, 
     for (; i < len; i++)
         avals[i] = 0;
 }
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 void BCCS_Matrix::spMulMatrix(double val)
 {
     int len = aptrs[nvtxs] * blksze * blksze;
@@ -186,7 +199,9 @@ void BCCS_Matrix::spMulMatrix(double val)
     for (int i = 0; i < len; i++)
         avals[i] *= val;
 }
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 void BCCS_Matrix::spMulMatrix(const double* x, double *y)
 {
     int i, j, bi, bj, strt, stop, node, sqrblk, ilim;
@@ -222,7 +237,6 @@ void BCCS_Matrix::spMulMatrix(const double* x, double *y)
         }
     }
 }
-
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
@@ -234,49 +248,57 @@ void BCCS_Matrix::spMulMatrix(const double* x, double *y)
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
-
 int genqmd(const int nvtxs, const int xadj[], int adjncy[], int perm[], int invp[], int degree[], int marker[], int reach[], int nbrhd[], int qsize[], int qlink[], int qhead[], int *maxnonz, int *maxsub)
 {
-    int     MinDeg, thresh, Deg, nDeg,
-            nxnode, search, num, ip, np, counter, Flag, SetPower,
-            i, j, k, node, nabor, Root, tmpRoot, jstrt, jstop,
-            kstrt, kstop, rchsze, nhdsze, srchsze, snhdsze, ovlsze,
-            *sreach, *snbrhd, *ovrlp, mrgsze, lnode, head, *mask;
+    int MinDeg, thresh, Deg, nDeg,nxnode, search, num, ip, np, counter, Flag, SetPower, i, j, k, node, nabor, Root, tmpRoot, jstrt, jstop,
+        kstrt, kstop, rchsze, nhdsze, srchsze, snhdsze, ovlsze, *sreach, *snbrhd, *ovrlp, mrgsze, lnode, head, *mask;
+    bool find;
 
     /* initialisation */
     *maxnonz = *maxsub = num = search = 0;
     MinDeg = nvtxs;
-    for(i=0; i<nvtxs; i++) {
+    for (i = 0; i < nvtxs; i++)
+    {
         perm[i] = invp[i] = qhead[i] = i;
         qsize[i] = 1;
         qlink[i] = MAXINDEX;
         marker[i] = 0;
         degree[i] = nDeg = xadj[i+1] - xadj[i];
-        if(nDeg < MinDeg) MinDeg = nDeg;
+        if (nDeg < MinDeg)
+            MinDeg = nDeg;
     }
     thresh = MinDeg;
     MinDeg = nvtxs;
 
-    while(num < nvtxs) {
-
+    while (num < nvtxs)
+    {
         /* threshold searching */
-        for(;;) {
-            if(num >= search) search = num;
-            for(i=search; i<nvtxs; i++) {
+        for(;;)
+        {
+            if (num >= search)
+                search = num;
+            find = false;
+            for (i = search; i < nvtxs; i++)
+            {
                 node = perm[i];
-                if(marker[node] < 0) continue;
+                if (marker[node] < 0)
+                    continue;
                 nDeg = degree[node];
-                if(nDeg <= thresh) {
+                if (nDeg <= thresh)
+                {
                     search = i;
-                    goto StopSearching;
+                    find = true;
+                    break;
                 }
-                if(nDeg <  MinDeg) MinDeg = nDeg;
+                if (nDeg <  MinDeg)
+                    MinDeg = nDeg;
             }
+            if (find)
+                break;
             thresh = MinDeg;
             MinDeg = nvtxs;
             search = 0;
         }
-StopSearching:
 
         /* Root is pretendent! */
         Root = perm[search];
@@ -288,12 +310,15 @@ StopSearching:
         SetPower = rchsze = nhdsze = 0;
         jstrt = xadj[Root];
         jstop = xadj[Root+1];
-        if(jstrt < jstop)
-            for(j=jstrt; j<jstop; j++) {
+        if (jstrt < jstop)
+            for(j = jstrt; j < jstop; j++)
+            {
                 node = adjncy[j];
                 assert(node < nvtxs);
-                if(marker[node]) continue;
-                if(degree[node] >= 0) {
+                if (marker[node])
+                    continue;
+                if (degree[node] >= 0)
+                {
                     reach[rchsze++] = node;
                     marker[node] = 1;
                     SetPower += qsize[node];
@@ -303,12 +328,15 @@ StopSearching:
                 marker[node] = -1;
 ReachSegment:
                 kstrt = xadj[node];
-                kstop = xadj[node+1];
-                for(k=kstrt; k<kstop; k++) {
+                kstop = xadj[node + 1];
+                for (k = kstrt; k < kstop; k++)
+                {
                     node = adjncy[k];
-                    if(node >= nvtxs) {
+                    if (node >= nvtxs)
+                    {
                         node -= nvtxs;
-                        if(node < nvtxs) goto ReachSegment;
+                        if (node < nvtxs)
+                            goto ReachSegment;
                         break;
                     }
                     if(marker[node]) continue;
@@ -319,7 +347,8 @@ ReachSegment:
             } /* next j */
 
         /* numerate merged roots */
-        for(nxnode=Root; nxnode<nvtxs; nxnode=qlink[nxnode]) {
+        for (nxnode = Root; nxnode < nvtxs; nxnode = qlink[nxnode])
+        {
             assert(num < nvtxs);
             np = invp[nxnode];
             ip = perm[num];
@@ -333,8 +362,11 @@ ReachSegment:
             num++;
         }
 
-        if(num >= nvtxs) break;
-        if(rchsze == 0) { /* isolate root */
+        if (num >= nvtxs)
+            break;
+        if (rchsze == 0)
+        {
+            /* isolate root */
             marker[Root] = 0;
             continue; /* main loop */
         }
@@ -343,24 +375,29 @@ ReachSegment:
         counter = 0;
 
         /* find merged roots */
-        for(snhdsze=i=0; i<rchsze; i++) {
+        for (snhdsze = i = 0; i < rchsze; i++)
+        {
             node = reach[i];
             jstrt = xadj[node];
             jstop = xadj[node+1];
-            for(j=jstrt; j<jstop; j++) {
+            for (j = jstrt; j < jstop; j++)
+            {
                 nabor = adjncy[j];
-                if(degree[nabor] >= 0) continue;
-                if(marker[nabor]) continue;
+                if (degree[nabor] >= 0)
+                    continue;
+                if (marker[nabor])
+                    continue;
                 snbrhd[snhdsze++] = nabor;
                 marker[nabor] = -1;
             } /* next j */
         } /* next i */
-        if(snhdsze) {
-            for(i=0; i<snhdsze; i++) {
+        if(snhdsze)
+        {
+            for (i = 0; i < snhdsze; i++)
                 marker[snbrhd[i]] = 0;
-            }
             ovrlp = &snbrhd[snhdsze]; /* overlapped */
-            for(i=0; i<snhdsze; i++) {
+            for (i = 0; i < snhdsze; i++)
+            {
                 tmpRoot = snbrhd[i];
                 marker[tmpRoot] = -1;
                 Deg = ovlsze = srchsze = 0;
@@ -368,17 +405,23 @@ ReachSegment:
 MergeSegment:
                 jstrt = xadj[node];
                 jstop = xadj[node+1];
-                for(j=jstrt; j<jstop; j++) {
+                for (j = jstrt; j < jstop; j++)
+                {
                     node = adjncy[j];
-                    if(node >= nvtxs) {
+                    if(node >= nvtxs)
+                    {
                         node -= nvtxs;
-                        if(node < nvtxs) goto MergeSegment;
+                        if (node < nvtxs)
+                            goto MergeSegment;
                         break;
                     }
                     mask = &marker[node];
-                    if(*mask < 0) continue;
-                    if(*mask > 0) {
-                        if(*mask > 1) continue;
+                    if (*mask < 0)
+                        continue;
+                    if (*mask > 0)
+                    {
+                        if (*mask > 1)
+                            continue;
                         *mask = 2; /* marker for overlapped */
                         ovrlp[ovlsze++] = node;
                         continue;
@@ -389,55 +432,65 @@ MergeSegment:
                 } /* next j */
 
                 head = nvtxs;
-                for(mrgsze=j=0; j<ovlsze; j++) {
+                for (mrgsze = j = 0; j < ovlsze; j++)
+                {
                     node = ovrlp[j];
                     kstrt = xadj[node];
                     kstop = xadj[node+1];
                     Flag = 0;
-                    for(k=kstrt; k<kstop; k++) {
-                        if(marker[adjncy[k]]) continue;
+                    for (k = kstrt; k < kstop; k++)
+                    {
+                        if (marker[adjncy[k]])
+                            continue;
                         Flag = 1;
                         break;
                     }
-                    if(Flag) {
+                    if (Flag)
                         marker[node] = 1;
-                    }
-                    else {
+                    else
+                    {
                         mrgsze += qsize[node];
                         counter++;
                         marker[node] = -1;
                         lnode = qhead[node];
                         qlink[lnode] = head;
-                        if(head < nvtxs) qhead[node] = qhead[head];
+                        if (head < nvtxs)
+                            qhead[node] = qhead[head];
                         head = node;
                     }
                 } /* next j */
-                if(head < nvtxs) {
+                if (head < nvtxs)
+                {
                     degree[head] = SetPower + Deg - 1;
                     marker[head] = 2;
                     qsize[head] = mrgsze;
                 }
                 marker[tmpRoot] = 0;
-                if(srchsze)
-                    for(j=0; j<srchsze; j++)
+                if (srchsze)
+                    for (j = 0; j < srchsze; j++)
                         marker[sreach[j]] = 0;
             } /* next i */
         } /* if(snhdsze) */
 
         /* update root degree */
-        for(i=0; i<rchsze; i++) {
+        for (i = 0; i < rchsze; i++)
+        {
             tmpRoot = reach[i];
             mask = &marker[tmpRoot];
-            if(*mask > 1 || *mask < 0) continue;
+            if (*mask > 1 || *mask < 0)
+                continue;
             *mask = 2;
             Deg = srchsze = snhdsze = 0;
             jstrt = xadj[tmpRoot];
             jstop = xadj[tmpRoot+1];
-            for(j=jstrt; j<jstop; j++) {
+            for (j = jstrt; j < jstop; j++)
+            {
                 node = adjncy[j];
                 assert(node < nvtxs);
-                if(marker[node]) continue;
-                if(degree[node] >= 0) {
+                if (marker[node])
+                    continue;
+                if (degree[node] >= 0)
+                {
                     sreach[srchsze++] = node;
                     Deg += qsize[node];
                     marker[node] = 1;
@@ -448,14 +501,18 @@ MergeSegment:
 UpdateSegment:
                 kstrt = xadj[node];
                 kstop = xadj[node+1];
-                for(k=kstrt; k<kstop; k++) {
+                for (k = kstrt; k < kstop; k++)
+                {
                     node = adjncy[k];
-                    if(node >= nvtxs) {
+                    if (node >= nvtxs)
+                    {
                         node -= nvtxs;
-                        if(node < nvtxs) goto UpdateSegment;
+                        if (node < nvtxs)
+                            goto UpdateSegment;
                         break;
                     }
-                    if(marker[node]) continue;
+                    if (marker[node])
+                        continue;
                     sreach[srchsze++] = node;
                     Deg += qsize[node];
                     marker[node] = 1;
@@ -464,11 +521,11 @@ UpdateSegment:
 
             degree[tmpRoot] = SetPower + Deg - 1;
             counter++;
-            if(srchsze)
-                for(j=0; j<srchsze; j++)
+            if (srchsze)
+                for (j = 0; j < srchsze; j++)
                     marker[sreach[j]] = 0;
-            if(snhdsze)
-                for(j=0; j<snhdsze; j++)
+            if (snhdsze)
+                for (j = 0; j < snhdsze; j++)
                     marker[snbrhd[j]] = 0;
         } /* next i */
 
@@ -476,22 +533,28 @@ UpdateSegment:
 
         /* update thresh */
         marker[Root] = 0;
-        for(j=0; j<rchsze; j++) {
+        for (j = 0; j < rchsze; j++)
+        {
             nabor = reach[j];
-            if(marker[nabor] < 0) continue;
+            if (marker[nabor] < 0)
+                continue;
             marker[nabor] = 0;
             nDeg = degree[nabor];
-            if(nDeg < MinDeg) MinDeg = nDeg;
-            if(nDeg > thresh) continue;
+            if (nDeg < MinDeg)
+                MinDeg = nDeg;
+            if (nDeg > thresh)
+                continue;
             MinDeg = thresh;
             thresh = nDeg;
             search = invp[nabor];
         } /* next j */
 
         /* transform graph */
-        if(nhdsze) {
+        if (nhdsze)
+        {
             nxnode = qhead[Root];
-            for(counter=i=0; i<nhdsze; i++) {
+            for (counter = i = 0; i<nhdsze; i++)
+            {
                 node = nbrhd[i];
                 qlink[nxnode] = node;
                 counter += qsize[node];
@@ -502,29 +565,38 @@ UpdateSegment:
             qsize[Root] += counter;
             jstrt = xadj[Root];
             jstop = xadj[Root+1] - 1;
-            for(i=0; i<rchsze; i++) {
+            for (i = 0; i < rchsze; i++)
+            {
                 nabor = reach[i];
-                if(marker[nabor] < 0) continue;
-                if(jstrt == jstop) {
+                if (marker[nabor] < 0)
+                    continue;
+                if (jstrt == jstop)
+                {
                     lnode = jstrt;
-                    do {
+                    do
+                    {
                         node = qlink[node];
                         assert(node < nvtxs);
                         jstrt = xadj[node];
-                        jstop = xadj[node+1] - 1;
-                    } while(jstrt >= jstop);
+                        jstop = xadj[node + 1] - 1;
+                    }
+                    while (jstrt >= jstop);
                     adjncy[lnode] = node + nvtxs;
                 }
                 adjncy[jstrt++] = nabor;
             } /* next i */
             adjncy[jstrt] = MAXINDEX;
-            for(i=0; i<rchsze; i++) {
+            for (i = 0; i < rchsze; i++)
+            {
                 node = reach[i];
-                if(marker[node] < 0) continue;
+                if (marker[node] < 0)
+                    continue;
                 jstrt = xadj[node];
                 jstop = xadj[node+1];
-                for(j=jstrt; j<jstop; j++) {
-                    if(marker[adjncy[j]] < 0) {
+                for (j = jstrt; j < jstop; j++)
+                {
+                    if (marker[adjncy[j]] < 0)
+                    {
                         adjncy[j] = Root;
                         break;
                     }
@@ -532,23 +604,20 @@ UpdateSegment:
             } /* next i */
         } /* end transforming */
     } /* main loop */
-
-    return(0);
+    return 0;
 }
-
-/*********************************/
-/* solver for LDL' factorization */
-/* diagonal system               */
-/*********************************/
-
+/*********************************************************************/
+/*********************************************************************/
+/*********************************************************************/
 void dtrsd(int n, const signed char d[], double r[])
 {
-    int          i, ilim;
-    double        *cr;
-    const signed char  *cd;
+    int i, ilim;
+    double *cr;
+    const signed char *cd;
 
     ilim = n - 8;
-    for(cd=d, cr=r, i=0; i<=ilim; i+=8, cr+=8, cd+=8) {
+    for (cd = d, cr = r, i = 0; i <= ilim; i += 8, cr += 8, cd += 8)
+    {
         cr[0] *= double(cd[0]);
         cr[1] *= double(cd[1]);
         cr[2] *= double(cd[2]);
@@ -559,51 +628,46 @@ void dtrsd(int n, const signed char d[], double r[])
         cr[7] *= double(cd[7]);
     }
 
-    for( ; i<n; i++) {
+    for (; i<n; i++)
         r[i] *= double(d[i]);
-    }
 
 } /* end dtrsd */
-
-
-
 /***********************************************************************/
 /***********************************************************************/
 /***********************************************************************/
 static int merge(int a[], int alen, int b[], int blen, int t[])
 {
-    int   i, j, k;
+    int i, j, k;
 
-    i=j=k=0;
+    i = j = k = 0;
 
-    while( (i < alen) && (j < blen) ) {
-        if(a[i] < b[j]) {
+    while ((i < alen) && (j < blen))
+    {
+        if (a[i] < b[j])
             t[k] = a[i++];
-        } else if(a[i] == b[j]) {
-            t[k] = a[i++];
-            j++;
-        } else {
-            t[k] = b[j++];
-        }
+        else
+            if(a[i] == b[j])
+            {
+                t[k] = a[i++];
+                j++;
+            }
+            else
+                t[k] = b[j++];
         k++;
     }
 
-    while(i < alen) {
+    while (i < alen)
         t[k++] = a[i++];
-    }
 
-    while(j < blen) {
+    while (j < blen)
         t[k++] = b[j++];
-    }
 
-    return(k);
+    return k;
 }
-
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
-
-static int funInSymbolic(BCCS_Matrix& matrix, int nvtxs, const int* aptrs, const int* ainds)
+int funInSymbolic(BCCS_Matrix& matrix, int nvtxs, const int* aptrs, const int* ainds)
 {
     int i, j, k, node, lsize, setsze, strt, stop, *linds, *pool, *mrglnk, *stack, *nodeset;
 
@@ -716,7 +780,6 @@ static int funInSymbolic(BCCS_Matrix& matrix, int nvtxs, const int* aptrs, const
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
-
 int spOrder(BCCS_Matrix& matrix, bool& aborted)
 {
     int i, j, k, l, nvtxs, error, nedges, strt, stop, *perm, *invp, *mempool, *xadj, *adjncy, maxlnz, ispace;
@@ -776,7 +839,6 @@ int spOrder(BCCS_Matrix& matrix, bool& aborted)
 
     return (matrix.error = error);
 }
-
 /*************************************************************/
 /* GENERAL SPARSE SYMMETRIC SCHEME, CLASSIC FUN-IN ALGORITHM */
 /*************************************************************/
@@ -924,7 +986,6 @@ static int gsfct1(BCCS_Matrix& matrix, double tol, bool& aborted)
 
     return(error);
 }
-
 /*********************************************************************/
 /*********************************************************************/
 /*********************************************************************/
@@ -1218,11 +1279,9 @@ static int gsfctb(BCCS_Matrix& matrix, int blksze, double tol, bool& aborted)
     delete [] link;
     return error;
 }
-
 /*********************************************************************/
 /*********************************************************************/
 /*********************************************************************/
-
 int spFactor(BCCS_Matrix& matrix, double tol, bool& aborted)
 {
     int error, nvtxs, blksze, memsze, denter;
@@ -1278,7 +1337,6 @@ int spFactor(BCCS_Matrix& matrix, double tol, bool& aborted)
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
-
 void permrv(double rhs[], const int* order, int nvtxs, int blksze)
 {
     int i, j, node;
@@ -1308,7 +1366,6 @@ void permrv(double rhs[], const int* order, int nvtxs, int blksze)
                 swap(ptrn[j], ptri[j]);
         }
 }
-
 /*******************************************************************/
 /*******************************************************************/
 /*******************************************************************/
@@ -1318,7 +1375,6 @@ void permrv(double rhs[], const int* order, int nvtxs, int blksze)
 /*******************************************************************/
 /*******************************************************************/
 /*******************************************************************/
-
 static void gsslv1(BCCS_Matrix& matrix, double rhs[])
 {
     int i, j, k, strt, stop, nvtxs;
@@ -1369,12 +1425,9 @@ static void gsslv1(BCCS_Matrix& matrix, double rhs[])
         rhs[j] /= value;
     }
 }
-
-
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
-
 static void gsslvb(BCCS_Matrix& matrix, double rght[], int blksze)
 {
     int i, j, k, nvtxs, brow, bcol, colsze, strt, stop, denter, fenter, run;
@@ -1550,7 +1603,6 @@ int spSolve(BCCS_Matrix &matrix, double *rhs)
     msg->stop();
     return 0;
 }
-
 /*********************************************************************/
 /*********************************************************************/
 /*********************************************************************/
