@@ -1,0 +1,500 @@
+#ifndef OBJECT_H
+#define OBJECT_H
+
+#include <string>
+#include "params.h"
+#include "mesh/mesh.h"
+#include "fem/fem.h"
+#include "analyse/analyse.h"
+
+using namespace std;
+
+class TFEM;
+
+// Класс, описывающий конечно-элементный объект
+class TFEMObject
+{
+private:
+    string fileName;                    // Имя файла с данными
+    string objName;                     // Имя объекта
+    bool isProcessStarted;              // Признак того, что процесс запущен
+    bool isProcessCalculated;           // ... успешно завершен
+    list<string> notes;                 // Вспомогательная информация по решению задачи
+    TFEMParams params;                  // Параметры решения задачи
+    TResultList results;                // Результаты расчета
+    TFEM* fem;                          // Реализация МКЭ
+    TMesh mesh;                         // КЭ сетка
+public:
+    TFEMObject(void)
+    {
+        fem = nullptr;
+        isProcessStarted = isProcessCalculated = false;
+    }
+   ~TFEMObject(void)
+    {
+        clear();
+    }
+    void clear(void);
+    bool setMeshFile(string);
+    TFEMParams& getParams(void)
+    {
+        return params;
+    }
+    TMesh& getMesh(void)
+    {
+        return mesh;
+    }
+    bool isCalculated(void)
+    {
+        return isProcessCalculated;
+    }
+    bool isStarted(void)
+    {
+        return isProcessStarted;
+    }
+    void stop(void)
+    {
+        if (fem)
+            fem->breakProcess();
+    }
+    void setTaskParam(FEMType);
+    bool start(void);
+    list<string>& getNotes(void)
+    {
+        return notes;
+    }
+    TResultList& getResult(void)
+    {
+        return results;
+    }
+    TResult& getResult(unsigned i)
+    {
+        return results[i];
+    }
+    FEType getFEType(void)
+    {
+        return mesh.getTypeFE();
+    }
+    bool saveResult(string);
+    bool loadResult(string);
+    void printResult(string);
+    void setFileName(string n)
+    {
+        cout << endl << n << endl;
+        fileName = n;
+        objName = n.substr(n.find_last_of("/\\") + 1,n.find_last_of(".") - n.find_last_of("/\\") - 1);
+    }
+    string getFileName(void)
+    {
+        return fileName;
+    }
+    string getObjectName(void)
+    {
+        return objName;
+    }
+    void setT0(unsigned p)
+    {
+        params.t0 = p;
+    }
+    void setT1(unsigned p)
+    {
+        params.t1 = p;
+    }
+    void setTh(unsigned p)
+    {
+        params.th = p;
+    }
+    void setEps(double p)
+    {
+        params.eps = p;
+    }
+    void setWidth(int p)
+    {
+        params.width = p;
+    }
+    void setPrecision(int p)
+    {
+        params.precision = p;
+    }
+    void setForceStep(double p)
+    {
+        params.forceStep = p;
+    }
+    // Толщина
+    void addThickness(double v, string p)
+    {
+        params.plist.addThickness(v, p);
+    }
+    void addThickness(double v)
+    {
+        params.plist.addThickness(v, "");
+    }
+    void addThickness(string e, string p)
+    {
+        params.plist.addThickness(e, p);
+    }
+    void addThickness(string e)
+    {
+        params.plist.addThickness(e, "");
+    }
+    void addThickness(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addThickness(v, p);
+    }
+    void addThickness(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addThickness(e, p);
+    }
+    void addThickness(function<double (double, double, double, double)> e)
+    {
+        params.plist.addThickness(e, nullptr);
+    }
+    // Температура
+    void addTemperature(double v, string p)
+    {
+        params.plist.addTemperature(v, p);
+    }
+    void addTemperature(double v)
+    {
+        params.plist.addTemperature(v, "");
+    }
+    void addTemperature(string e, string p)
+    {
+        params.plist.addTemperature(e, p);
+    }
+    void addTemperature(string e)
+    {
+        params.plist.addTemperature(e, "");
+    }
+    void addTemperature(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addTemperature(v, p);
+    }
+    void addTemperature(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addTemperature(e, p);
+    }
+    void addTemperature(function<double (double, double, double, double)> e)
+    {
+        params.plist.addTemperature(e, nullptr);
+    }
+    // Альфа
+    void addAlpha(double v, string p)
+    {
+        params.plist.addAlpha(v, p);
+    }
+    void addAlpha(double v)
+    {
+        params.plist.addAlpha(v, "");
+    }
+    void addAlpha(string e, string p)
+    {
+        params.plist.addAlpha(e, p);
+    }
+    void addAlpha(string e)
+    {
+        params.plist.addAlpha(e, "");
+    }
+    void addAlpha(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addAlpha(v, p);
+    }
+    void addAlpha(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addAlpha(e, p);
+    }
+    void addAlpha(function<double (double, double, double, double)> e)
+    {
+        params.plist.addAlpha(e, nullptr);
+    }
+    // Плотность
+    void addDensity(double v, string p)
+    {
+        params.plist.addDensity(v, p);
+    }
+    void addDensity(double v)
+    {
+        params.plist.addDensity(v, "");
+    }
+    void addDensity(string e, string p)
+    {
+        params.plist.addDensity(e, p);
+    }
+    void addDensity(string e)
+    {
+        params.plist.addDensity(e, "");
+    }
+    void addDensity(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addDensity(v, p);
+    }
+    void addDensity(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addDensity(e, p);
+    }
+    void addDensity(function<double (double, double, double, double)> e)
+    {
+        params.plist.addDensity(e, nullptr);
+    }
+    // Параметр демпфирования
+    void addDamping(double v, string p)
+    {
+        params.plist.addDamping(v, p);
+    }
+    void addDamping(double v)
+    {
+        params.plist.addDamping(v, "");
+    }
+    void addDamping(string e, string p)
+    {
+        params.plist.addDamping(e, p);
+    }
+    void addDamping(string e)
+    {
+        params.plist.addDamping(e, "");
+    }
+    void addDamping(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addDamping(v, p);
+    }
+    void addDamping(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addDamping(e, p);
+    }
+    void addDamping(function<double (double, double, double, double)> e)
+    {
+        params.plist.addDamping(e, nullptr);
+    }
+    // Модуль Юнга
+    void addYoungModulus(double v, string p)
+    {
+        params.plist.addYoungModulus(v, p);
+    }
+    void addYoungModulus(double v)
+    {
+        params.plist.addYoungModulus(v, "");
+    }
+    void addYoungModulus(string e, string p)
+    {
+        params.plist.addYoungModulus(e, p);
+    }
+    void addYoungModulus(string e)
+    {
+        params.plist.addYoungModulus(e, "");
+    }
+    void addYoungModulus(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addYoungModulus(v, p);
+    }
+    void addYoungModulus(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addYoungModulus(e, p);
+    }
+    void addYoungModulus(function<double (double, double, double, double)> e)
+    {
+        params.plist.addYoungModulus(e, nullptr);
+    }
+    // Коэффициент Пуассона
+    void addPoissonRatio(double v, string p)
+    {
+        params.plist.addPoissonRatio(v, p);
+    }
+    void addPoissonRatio(double v)
+    {
+        params.plist.addPoissonRatio(v, "");
+    }
+    void addPoissonRatio(string e, string p)
+    {
+        params.plist.addPoissonRatio(e, p);
+    }
+    void addPoissonRatio(string e)
+    {
+        params.plist.addPoissonRatio(e, "");
+    }
+    void addPoissonRatio(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addPoissonRatio(e, p);
+    }
+    void addPoissonRatio(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addPoissonRatio(v, p);
+    }
+    void addPoissonRatio(function<double (double, double, double, double)> e)
+    {
+        params.plist.addPoissonRatio(e, nullptr);
+    }
+    // Граничные условия
+    void addBoundaryCondition(int dir, double v, string p)
+    {
+        params.plist.addBoundaryCondition(v, p, dir);
+    }
+    void addBoundaryCondition(int dir, string e, string p)
+    {
+        params.plist.addBoundaryCondition(e, p, dir);
+    }
+    void addBoundaryCondition(int dir, double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addBoundaryCondition(v, p, dir);
+    }
+    void addBoundaryCondition(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addBoundaryCondition(e, p, dir);
+    }
+    // Начальные условия
+    void addInitialCondition(int dir, double v)
+    {
+        params.plist.addInitialCondition(v, dir);
+    }
+    void addInitialCondition(int dir, string e)
+    {
+        params.plist.addInitialCondition(e, dir);
+    }
+    void addInitialCondition(int dir, function<double (double, double, double, double)> e)
+    {
+        params.plist.addInitialCondition(e, dir);
+    }
+    // Сосредоточенная нагрузка
+    void addConcentratedLoad(int dir, double v, string p)
+    {
+        params.plist.addConcentratedLoad(v, p, dir);
+    }
+    void addConcentratedLoad(int dir, double v)
+    {
+        params.plist.addConcentratedLoad(v, "", dir);
+    }
+    void addConcentratedLoad(int dir, string e, string p)
+    {
+        params.plist.addConcentratedLoad(e, p, dir);
+    }
+    void addConcentratedLoad(int dir, string e)
+    {
+        params.plist.addConcentratedLoad(e, "", dir);
+    }
+    void addConcentratedLoad(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addConcentratedLoad(e, p, dir);
+    }
+    void addConcentratedLoad(int dir, double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addConcentratedLoad(v, p, dir);
+    }
+    void addConcentratedLoad(int dir, function<double (double, double, double, double)> e)
+    {
+        params.plist.addConcentratedLoad(e, nullptr, dir);
+    }
+    // Объемная нагрузка
+    void addVolumeLoad(int dir, double v, string p)
+    {
+        params.plist.addVolumeLoad(v, p, dir);
+    }
+    void addVolumeLoad(int dir, double v)
+    {
+        params.plist.addVolumeLoad(v, "", dir);
+    }
+    void addVolumeLoad(int dir, string e, string p)
+    {
+        params.plist.addVolumeLoad(e, p, dir);
+    }
+    void addVolumeLoad(int dir, string e)
+    {
+        params.plist.addVolumeLoad(e, "", dir);
+    }
+    void addVolumeLoad(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addVolumeLoad(e, p, dir);
+    }
+    void addVolumeLoad(int dir, double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addVolumeLoad(v, p, dir);
+    }
+    void addVolumeLoad(int dir, function<double (double, double, double, double)> e)
+    {
+        params.plist.addVolumeLoad(e, nullptr, dir);
+    }
+    // Поверхностная нагрузка
+    void addSurfaceLoad(int dir, double v, string p)
+    {
+        params.plist.addSurfaceLoad(v, p, dir);
+    }
+    void addSurfaceLoad(int dir, double v)
+    {
+        params.plist.addSurfaceLoad(v, "", dir);
+    }
+    void addSurfaceLoad(int dir, string e, string p)
+    {
+        params.plist.addSurfaceLoad(e, p, dir);
+    }
+    void addSurfaceLoad(int dir, string e)
+    {
+        params.plist.addSurfaceLoad(e, "", dir);
+    }
+    void addSurfaceLoad(int dir, double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addSurfaceLoad(v, p, dir);
+    }
+    void addSurfaceLoad(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addSurfaceLoad(e, p, dir);
+    }
+    void addSurfaceLoad(int dir, function<double (double, double, double, double)> e)
+    {
+        params.plist.addSurfaceLoad(e, nullptr, dir);
+    }
+    // Давление
+    void addPressureLoad(double v, string p)
+    {
+        params.plist.addPressureLoad(v, p);
+    }
+    void addPressureLoad(double v)
+    {
+        params.plist.addPressureLoad(v, "");
+    }
+    void addPressureLoad(string e, string p)
+    {
+        params.plist.addPressureLoad(e, p);
+    }
+    void addPressureLoad(string e)
+    {
+        params.plist.addPressureLoad(e, "");
+    }
+    void addPressureLoad(double v, function<double (double, double, double, double)> p)
+    {
+        params.plist.addPressureLoad(v, p);
+    }
+    void addPressureLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    {
+        params.plist.addPressureLoad(e, p);
+    }
+    void addPressureLoad(function<double (double, double, double, double)> e)
+    {
+        params.plist.addPressureLoad(e, nullptr);
+    }
+    // Диаграмма деформирования
+    void addStressStrainCurve(matrix<double>& ssc, string p)
+    {
+        params.plist.addStressStrainCurve(ssc, p);
+    }
+    void addStressStrainCurve(matrix<double>& ssc)
+    {
+        params.plist.addStressStrainCurve(ssc, "");
+    }
+    void setFunName(vector<string>& fn)
+    {
+        params.names = fn;
+    }
+    void setPlasticityMethod(PlasticityMethod p)
+    {
+        params.pMethod = p;
+    }
+    void setLanguage(int);
+    string stdTxtResName(void)
+    {
+        return getFileName().substr(0, getFileName().find_last_of(".")) + ".txt";
+    }
+    string stdQResName(void)
+    {
+        return getFileName().substr(0, getFileName().find_last_of(".")) + ".qres";
+    }
+};
+
+#endif // OBJECT_H

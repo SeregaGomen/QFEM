@@ -1,0 +1,3563 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
+<context>
+    <name>AppSetupDialog</name>
+    <message>
+        <source>Change language</source>
+        <translation type="vanished">Смена языка</translation>
+    </message>
+    <message>
+        <source>Setup programm</source>
+        <translation type="vanished">Настройки программы</translation>
+    </message>
+    <message>
+        <source>Current language</source>
+        <translation type="vanished">Текущий язык</translation>
+    </message>
+    <message>
+        <source>Russian (Русский)</source>
+        <translation type="vanished">Russian (Русский)</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="vanished">English</translation>
+    </message>
+    <message>
+        <source>Terminal</source>
+        <translation type="vanished">Терминал</translation>
+    </message>
+    <message>
+        <source>Black background</source>
+        <translation type="vanished">Темный цвет фона</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation type="vanished">Автопрокрутка</translation>
+    </message>
+    <message>
+        <source>Task</source>
+        <translation type="vanished">Задача</translation>
+    </message>
+    <message>
+        <source>Autosave task</source>
+        <translation type="vanished">Автосохранение задачи</translation>
+    </message>
+    <message>
+        <source>Autosave protocol</source>
+        <translation type="vanished">Автосохранение протокола</translation>
+    </message>
+</context>
+<context>
+    <name>FunListDialog</name>
+    <message>
+        <source>Select the function for the analysis</source>
+        <translation type="vanished">Выбор функции для анализа</translation>
+    </message>
+    <message>
+        <source>The list of available functions</source>
+        <translation type="vanished">Список доступных функций</translation>
+    </message>
+</context>
+<context>
+    <name>GBDialog</name>
+    <message>
+        <source>Object info</source>
+        <oldsource>Object size</oldsource>
+        <translation type="vanished">Информация об объекте
+</translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="vanished">Координаты</translation>
+    </message>
+    <message>
+        <source>minX:</source>
+        <translation type="vanished">minX:</translation>
+    </message>
+    <message>
+        <source>minY:</source>
+        <translation type="vanished">minY:</translation>
+    </message>
+    <message>
+        <source>minZ:</source>
+        <translation type="vanished">minZ:</translation>
+    </message>
+    <message>
+        <source>maxZ:</source>
+        <translation type="vanished">maxZ:</translation>
+    </message>
+    <message>
+        <source>maxY:</source>
+        <translation type="vanished">maxY:</translation>
+    </message>
+    <message>
+        <source>maxX:</source>
+        <translation type="vanished">maxX:</translation>
+    </message>
+    <message>
+        <source>Mesh Info</source>
+        <translation type="vanished">Дискретизация</translation>
+    </message>
+    <message>
+        <source>FE type:</source>
+        <translation type="vanished">Тип КЭ:</translation>
+    </message>
+    <message>
+        <source>Nodes:</source>
+        <translation type="vanished">Узлов:</translation>
+    </message>
+    <message>
+        <source>FE:</source>
+        <translation type="vanished">КЭ:</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Габариты</translation>
+    </message>
+    <message>
+        <source>Length:</source>
+        <translation type="vanished">Длина:</translation>
+    </message>
+    <message>
+        <source>Width:</source>
+        <translation type="vanished">Ширина:</translation>
+    </message>
+    <message>
+        <source>Dimensions</source>
+        <translation type="vanished">Габариты</translation>
+    </message>
+    <message>
+        <source>Height:</source>
+        <translation type="vanished">Высота:</translation>
+    </message>
+</context>
+<context>
+    <name>GLFunWidget</name>
+    <message>
+        <source>&amp;Condition on nodes selection...</source>
+        <translatorcomment>&amp;Условие отбора узлов...</translatorcomment>
+        <translation type="vanished">&amp;Условие отбора узлов...</translation>
+    </message>
+    <message>
+        <source>&amp;Save image...</source>
+        <translation type="vanished">&amp;Сохранить изображение...</translation>
+    </message>
+    <message>
+        <source>Selection condition nodes</source>
+        <translation type="vanished">Условие отбора узлов</translation>
+    </message>
+    <message>
+        <source>Predicate:</source>
+        <translation type="vanished">Предикат:</translation>
+    </message>
+    <message>
+        <source>Saving the image</source>
+        <translation type="vanished">Сохранение изображения</translation>
+    </message>
+    <message>
+        <source>Image files (*.png)</source>
+        <translation type="vanished">Файлы изображений (*.png)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Unable get correct color value</source>
+        <translation type="vanished">Невозможно корректно получить цвет</translation>
+    </message>
+    <message>
+        <source>Turn off lights!</source>
+        <translation type="vanished">Выключите режим освещения!</translation>
+    </message>
+    <message>
+        <source>A Boolean expression:</source>
+        <translation type="obsolete">Логическое выражение:</translation>
+    </message>
+</context>
+<context>
+    <name>GLObjWidget</name>
+    <message>
+        <source>Creating a list of boundary conditions: %1%</source>
+        <translation type="vanished">Формирование списка краевых условий: %1%</translation>
+    </message>
+</context>
+<context>
+    <name>HelpDialog</name>
+    <message>
+        <source>About</source>
+        <translation type="vanished">О программе</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM is developed by:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600;&quot;&gt;Department of Mathematics &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600;&quot;&gt;Zaporozhye National University (ZNU)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.graphics.rwth-aachen.de/&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600; text-decoration: underline; color:#0057ae;&quot;&gt;http://www.znu.edu.ua/ukr/university/departments/math&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM website is &lt;/span&gt;&lt;a href=&quot;http://github.com/SeregaGomen/QFEM&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600; text-decoration: underline; color:#0057ae;&quot;&gt;http://github.com/SeregaGomen/QFEM&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;The source code and binaries are published on github.com/SeregaGomen/QFEM based on&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;the following license:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;=====================================&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Copyright (C) 2009-2015 by Mathdept, ZNU, Zaporozhye&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;http://github.com/SeregaGomen/QFEM&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;it under the terms of the GNU Lesser General Public License as&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;published by the Free Software Foundation, either version 3 of&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;the License, or (at your option) any later version with the&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;following exceptions:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;If other files instantiate templates or use macros&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;or inline functions from this file, or you compile this file and&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;link it with other files to produce an executable, this file does&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;not by itself cause the resulting executable to be covered by the&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;GNU Lesser General Public License. This exception does not however&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;invalidate any other reasons why the executable file might be&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;covered by the GNU Lesser General Public License.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;GNU Lesser General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;You should have received a copy of the GNU LesserGeneral Public&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;License along with QFEM. If not,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;see &amp;lt;http://www.gnu.org/licenses/&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;=====================================&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Noto Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM разработан:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600;&quot;&gt;Математическим факультетом &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600;&quot;&gt;Запорожского национального университета (ЗНУ)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.graphics.rwth-aachen.de/&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600; text-decoration: underline; color:#0057ae;&quot;&gt;http://www.znu.edu.ua/ukr/university/departments/math&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Вебстарница QFEM &lt;/span&gt;&lt;a href=&quot;http://github.com/SeregaGomen/QFEM&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt; font-weight:600; text-decoration: underline; color:#0057ae;&quot;&gt;http://github.com/SeregaGomen/QFEM&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Исходный код и бинарные файлы, опубликованные на github.com/SeregaGomen/QFEM, базируются на следующей лицензии:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;=====================================&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Все права защищены (C) 2009-2015, Математический факультет ЗНУ, Запорожье&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;http://github.com/SeregaGomen/QFEM&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM является свободным программным обеспечением: вы можете &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;распространять его и/или модифицировать в соответствии с условиями &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Стандартной Общественной Лицензии GNU, опубликованной Фондом свободного программного обеспечения, либо версии 3,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;либо (по вашему выбору) любой более поздней версии Лицензии со&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;следующими исключениями:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;В частности, если иные файлы используют экземпляры шаблонов &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;или встраиваемые функции из этого файла, или вы компилируете этот файл, &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;связывая его с другими файлами для получения исполнимой программы,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;то само по себе это не делает итоговую исполнимую программу подчиняющейся &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Лицении GNU GPL. Это исключение, однако, не аннулирует &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;любые другие причины, почему исполняемый файл может подпадать &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;под действие ослабленной версии GPL.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;QFEM распространяется в предположении, &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;что она будет полезна пользователям, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Смотрите Стандартную Общественную Лицензию GNU &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;для более побробной информации.&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;Копию Стандартной Общественной Лицензии GNU вы должны были получить&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;вместе с QFEM. Если нет, смотрите &amp;lt;http://www.gnu.org/licenses/&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:11pt;&quot;&gt;=====================================&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="vanished">Справка</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>QFEM</source>
+        <translation type="vanished">QFEM</translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="vanished">&amp;Файл</translation>
+    </message>
+    <message>
+        <source>&amp;Object</source>
+        <translation type="vanished">&amp;Объект</translation>
+    </message>
+    <message>
+        <source>&amp;Image</source>
+        <translation type="vanished">&amp;Изображение</translation>
+    </message>
+    <message>
+        <source>toolBar</source>
+        <translation type="vanished">toolBar</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="vanished">&amp;Открыть...</translation>
+    </message>
+    <message>
+        <source>Opening an existing document</source>
+        <translation type="vanished">Открытие существующего документа</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="vanished">&amp;Закрыть</translation>
+    </message>
+    <message>
+        <source>Closes the current document</source>
+        <translation type="vanished">Закрытие текущего документа</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="vanished">В&amp;ыход</translation>
+    </message>
+    <message>
+        <source>&amp;?</source>
+        <translation type="vanished">&amp;?</translation>
+    </message>
+    <message>
+        <source>&amp;Settings</source>
+        <translation type="vanished">&amp;Параметры</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation type="vanished">&amp;Правка</translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation type="vanished">&amp;О программе...</translation>
+    </message>
+    <message>
+        <source>About QFEM</source>
+        <translation type="vanished">О программе QFEM</translation>
+    </message>
+    <message>
+        <source>About the program</source>
+        <translation type="vanished">Вывод информации о программе</translation>
+    </message>
+    <message>
+        <source>&amp;Terminal</source>
+        <translation type="vanished">&amp;Терминал</translation>
+    </message>
+    <message>
+        <source>Enable/Disable the Terminal</source>
+        <translation type="vanished">Включить/выключить терминал</translation>
+    </message>
+    <message>
+        <source>&amp;Rotate</source>
+        <translation type="vanished">&amp;Поворот</translation>
+    </message>
+    <message>
+        <source>Rotate</source>
+        <translation type="vanished">Повернуть</translation>
+    </message>
+    <message>
+        <source>Enable rotation of an object</source>
+        <translation type="vanished">Включить режим вращения объекта</translation>
+    </message>
+    <message>
+        <source>&amp;Translate</source>
+        <translation type="vanished">&amp;Сдвиг</translation>
+    </message>
+    <message>
+        <source>Translate</source>
+        <translation type="vanished">Сместить</translation>
+    </message>
+    <message>
+        <source>Enable the translate of the object</source>
+        <translation type="vanished">Включить режим перемещения объекта</translation>
+    </message>
+    <message>
+        <source>&amp;Scale</source>
+        <translation type="vanished">&amp;Масштабирование</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="vanished">Масштабировать</translation>
+    </message>
+    <message>
+        <source>Enable the scale of the object</source>
+        <translation type="vanished">Масштабирование</translation>
+    </message>
+    <message>
+        <source>Сo&amp;mputation parameters...</source>
+        <oldsource>&amp;Сomputation parameters...</oldsource>
+        <translation type="vanished">&amp;Параметры расчета...</translation>
+    </message>
+    <message>
+        <source>Сomputation parameters</source>
+        <oldsource>Сomputation Сomputation parameters</oldsource>
+        <translation type="vanished">Параметры расчета</translation>
+    </message>
+    <message>
+        <source>The calculation parameters (elastic characteristics, boundary conditions, ...)</source>
+        <translation type="vanished">Параметры расчета (упругие характеристики, краевые условия, ...)</translation>
+    </message>
+    <message>
+        <source>&amp;Copy</source>
+        <translation type="vanished">&amp;Копировать</translation>
+    </message>
+    <message>
+        <source>Copy current data to Clipboard</source>
+        <translation type="vanished">Копировать данные текущей вкладки в буффер обмена</translation>
+    </message>
+    <message>
+        <source>Computation parameters</source>
+        <oldsource>Computation parameters task</oldsource>
+        <translation type="vanished">Параметры расчета задачи</translation>
+    </message>
+    <message>
+        <source>&amp;Start</source>
+        <translation type="vanished">&amp;Старт</translation>
+    </message>
+    <message>
+        <source>Start calculation problem</source>
+        <translation type="vanished">Начать расчет задачи</translation>
+    </message>
+    <message>
+        <source>In&amp;fo...</source>
+        <translation type="vanished">Ин&amp;формация...</translation>
+    </message>
+    <message>
+        <source>S&amp;top</source>
+        <translation type="vanished">Сто&amp;п</translation>
+    </message>
+    <message>
+        <source>Stop current calculation process</source>
+        <oldsource>Stop calculation problem</oldsource>
+        <translation type="vanished">Прервать текущий вычислительный процесс</translation>
+    </message>
+    <message>
+        <source>Save &amp;results...</source>
+        <translation type="vanished">Сохранить &amp;результаты...</translation>
+    </message>
+    <message>
+        <source>Save calculation results</source>
+        <translation type="vanished">Сохранить результаты решения задачи в текстовый файл</translation>
+    </message>
+    <message>
+        <source>&amp;Help...</source>
+        <translation type="vanished">&amp;Справка...</translation>
+    </message>
+    <message>
+        <source>Open Help Browser with Documentation</source>
+        <translation type="vanished">Справка по использованию программы</translation>
+    </message>
+    <message>
+        <source>Start computation</source>
+        <translation type="vanished">Запустить расчет</translation>
+    </message>
+    <message>
+        <source>Analyse</source>
+        <translation type="vanished">Анализ</translation>
+    </message>
+    <message>
+        <source>Save &amp;As...</source>
+        <translation type="vanished">Сохранить &amp;как...</translation>
+    </message>
+    <message>
+        <source>Imaging &amp;parameters...</source>
+        <translation type="vanished">Параметры &amp;визуализации...</translation>
+    </message>
+    <message>
+        <source>Imaging parameters</source>
+        <translation type="vanished">Параметры визуализации</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Габариты</translation>
+    </message>
+    <message>
+        <source>Size of the object</source>
+        <translation type="vanished">Размеры объекта</translation>
+    </message>
+    <message>
+        <source>&amp;Setup...</source>
+        <translation type="vanished">&amp;Настройки...</translation>
+    </message>
+    <message>
+        <source>Setting the parameters of the program</source>
+        <translation type="vanished">Настройки параметров работы программы</translation>
+    </message>
+    <message>
+        <source>&amp;Language...</source>
+        <translation type="vanished">&amp;Язык...</translation>
+    </message>
+    <message>
+        <source>Change current language</source>
+        <translation type="vanished">Смена текущего языка</translation>
+    </message>
+    <message>
+        <source>Object parameters</source>
+        <translation type="obsolete">Параметры объекта</translation>
+    </message>
+    <message>
+        <source>Set the parameters of the elastic object, calculating, boundary conditions and forces</source>
+        <translation type="obsolete">Задать параметры упругости объекта, расчета, краевые условия и нагрузки</translation>
+    </message>
+    <message>
+        <source>&amp;Start computation</source>
+        <translation type="vanished">&amp;Выполнить расчет</translation>
+    </message>
+    <message>
+        <source>&amp;Restore</source>
+        <translation type="vanished">&amp;Восстановить</translation>
+    </message>
+    <message>
+        <source>Restore</source>
+        <translation type="vanished">Восстановить</translation>
+    </message>
+    <message>
+        <source>To restore the initial image settings</source>
+        <translation type="vanished">Восстановить начальные параметры изображения</translation>
+    </message>
+    <message>
+        <source>&amp;Analyse...</source>
+        <translation type="vanished">&amp;Анализ...</translation>
+    </message>
+    <message>
+        <source>Select the function for the visualization</source>
+        <translation type="vanished">Выбрать функцию для визуализации</translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
+        <translation type="obsolete">Сохранить &amp;как...</translation>
+    </message>
+    <message>
+        <source>Save As</source>
+        <translation type="vanished">Сохранить как</translation>
+    </message>
+    <message>
+        <source>Save the current file with a new name</source>
+        <translation type="vanished">Сохранить текущий файл с новым именем</translation>
+    </message>
+    <message>
+        <source>Setting visualization</source>
+        <translation type="vanished">Настройка параметров визуализации</translation>
+    </message>
+    <message>
+        <source>&amp;Info...</source>
+        <oldsource>&amp;Size...</oldsource>
+        <translation type="vanished">&amp;Информация...</translation>
+    </message>
+    <message>
+        <source>About object (dimension, mesh, ...)</source>
+        <translation type="vanished">Информация об объекте (габариты, дискретизация,...)</translation>
+    </message>
+    <message>
+        <source>Add &amp;expression...</source>
+        <translation type="vanished">&amp;Добавить выражение...</translation>
+    </message>
+    <message>
+        <source>Add expression</source>
+        <translation type="vanished">Добавить выражение</translation>
+    </message>
+    <message>
+        <source>Add a new expression for the analysis</source>
+        <translation type="vanished">Добавить новое выражение для анализа</translation>
+    </message>
+    <message>
+        <source>&amp;%1 %2</source>
+        <translation type="obsolete">&amp;%1 %2</translation>
+    </message>
+    <message>
+        <source>Terminal</source>
+        <translation type="vanished">Терминал</translation>
+    </message>
+    <message>
+        <source>Opening a document</source>
+        <translation type="vanished">Открытие документа</translation>
+    </message>
+    <message>
+        <source>Task files (*.qft);; data files (*.trp *.trpa *.vol *.mesh);; result files (*.qfrf)</source>
+        <translation type="vanished">Файлы задач (*.qft);;Файлы данных (*.trp *.trpa *.vol *.mesh);;Файлы результатов (*.qfrf)</translation>
+    </message>
+    <message>
+        <source>Object</source>
+        <translation type="vanished">Объект</translation>
+    </message>
+    <message>
+        <source>File successfully downloaded</source>
+        <translation type="vanished">Файл успешно загружен</translation>
+    </message>
+    <message>
+        <source>Error opening file</source>
+        <translation type="vanished">Ошибка открытия файла</translation>
+    </message>
+    <message>
+        <source>Saving the document</source>
+        <translation type="vanished">Сохранение документа</translation>
+    </message>
+    <message>
+        <source>Task files (*.qft)</source>
+        <translation type="vanished">Файлы задач (*.qft)</translation>
+    </message>
+    <message>
+        <source>File successfully saved</source>
+        <translation type="vanished">Файл успешно сохранен</translation>
+    </message>
+    <message>
+        <source>Stop computation</source>
+        <translation type="vanished">Остановить расчет</translation>
+    </message>
+    <message>
+        <source>Problem files (*.xml);; Mesh files (*.trp *.trpa *.vol *.mesh);; Result files (*.qres)</source>
+        <translation type="vanished">Файлы задач (*.xml);; Файлы сеток (*.trp *.trpa *.vol *.mesh);; Файлы результатов (*.qres)</translation>
+    </message>
+    <message>
+        <source>Error writing file</source>
+        <translation type="vanished">Ошибка записи файла</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="vanished">Ошибка</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified elastic modulus!</source>
+        <translation type="vanished">Неправильно задан модуль Юнга!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified nonlinear parameters!</source>
+        <translation type="vanished">Некорректно заданы параметры нелинейного рассчета!</translation>
+    </message>
+    <message>
+        <source>The task is solved %1 at %2</source>
+        <translation type="vanished">Задача решена %1 в %2</translation>
+    </message>
+    <message>
+        <source>Object: &lt;b&gt;%1&lt;/b&gt; (nodes: &lt;b&gt;%2&lt;/b&gt;, finite elements: &lt;b&gt;%3&lt;/b&gt;)</source>
+        <translation type="vanished">Объект: &lt;b&gt;%1&lt;/b&gt; (узлов: &lt;b&gt;%2&lt;/b&gt;, конечных элементов: &lt;b&gt;%3&lt;/b&gt;)</translation>
+    </message>
+    <message>
+        <source>FE type: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="vanished">Тип КЭ: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Method for approximating the time: the method of Wilson</source>
+        <translation type="vanished">Способ аппроксимации по времени: метод Вильсона</translation>
+    </message>
+    <message>
+        <source>Method for approximating the time: the method Zinkevych</source>
+        <translation type="vanished">Способ аппроксимации по времени: метод Зинкевича</translation>
+    </message>
+    <message>
+        <source>Results of calculation</source>
+        <translation type="vanished">Результаты расчета</translation>
+    </message>
+    <message>
+        <source>Function</source>
+        <translation type="vanished">Функция</translation>
+    </message>
+    <message>
+        <source>Min</source>
+        <translation type="vanished">Min</translation>
+    </message>
+    <message>
+        <source>Results</source>
+        <translation type="vanished">Результаты</translation>
+    </message>
+    <message>
+        <source>Task parameters:</source>
+        <translation type="vanished">Параметры задачи:</translation>
+    </message>
+    <message>
+        <source>Solution method: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="vanished">Метод расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>static (Lagrange)</source>
+        <translation type="vanished">статика (Lagrange)</translation>
+    </message>
+    <message>
+        <source>dynamic (Ostrogradsky)</source>
+        <translation type="vanished">динамика (Ostrogradsky)</translation>
+    </message>
+    <message>
+        <source>Computational accuracy: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="vanished">Точность вычислений: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Elastic characteristics</source>
+        <translation type="vanished">Упругие характеристики</translation>
+    </message>
+    <message>
+        <source>N</source>
+        <translation type="vanished">№</translation>
+    </message>
+    <message>
+        <source>Young&apos;s modulus</source>
+        <translation type="vanished">Модуль Юнга</translation>
+    </message>
+    <message>
+        <source>Poisson&apos;s ratio</source>
+        <translation type="vanished">Коэффициент Пуассона</translation>
+    </message>
+    <message>
+        <source>density: &lt;b&gt;%1&lt;/b&gt;, damping parameter: &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation type="vanished">плотность: &lt;b&gt;%1&lt;/b&gt;, параметр демпфирования: &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Method of elastic-plastic analysis: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translatorcomment>метод переменной жесткости</translatorcomment>
+        <translation type="vanished">Способ упруго-пластического расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>method of variable stiffness</source>
+        <translation type="vanished">метод переменной жесткости</translation>
+    </message>
+    <message>
+        <source>method of elastic solutions Ilyushin</source>
+        <translation type="vanished">метод упругих решений Ильюшина</translation>
+    </message>
+    <message>
+        <source>Yield strength: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="vanished">Предел текучести: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Mechanical properties of the material:</source>
+        <translation type="vanished">Механические свойства материала:</translation>
+    </message>
+    <message>
+        <source>Stress</source>
+        <translation type="vanished">Напряжения</translation>
+    </message>
+    <message>
+        <source>Deformation</source>
+        <translation type="vanished">Деформации</translation>
+    </message>
+    <message>
+        <source>Force step</source>
+        <translation type="vanished">Шаг по нагрузке</translation>
+    </message>
+    <message>
+        <source>Boundary condition</source>
+        <translation type="vanished">Граничные условия</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="vanished">Значение</translation>
+    </message>
+    <message>
+        <source>Predicate</source>
+        <translation type="vanished">Предикат</translation>
+    </message>
+    <message>
+        <source>Volume strain</source>
+        <translation type="vanished">Объемная нагрузка</translation>
+    </message>
+    <message>
+        <source>Surface strain</source>
+        <translation type="vanished">Поверхностная нагрузка</translation>
+    </message>
+    <message>
+        <source>Point strain</source>
+        <translation type="vanished">Сосредоточенная нагрузка</translation>
+    </message>
+    <message>
+        <source>time parameters - initial time: &lt;b&gt;%1&lt;/b&gt;, the final moment: &lt;b&gt;%2&lt;/b&gt;, step: &lt;b&gt;%3&lt;/b&gt;</source>
+        <translation type="vanished">параметры времени - начальный момент: &lt;b&gt;%1&lt;/b&gt;, конечный момент: &lt;b&gt;%2&lt;/b&gt;, шаг: &lt;b&gt;%3&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>initial conditions:</source>
+        <translation type="vanished">начальныe условия:</translation>
+    </message>
+    <message>
+        <source>function: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation type="vanished">функция: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Error reading file %1</source>
+        <translation type="vanished">Ошибка чтения файла %1</translation>
+    </message>
+    <message>
+        <source>Problem files (*.xml);; Mesh files (*.trp *.trpa *.vol *.mesh *.msh);; Result files (*.qres)</source>
+        <translation type="vanished">Файлы задач (*.xml);; Файлы сеток (*.trp *.trpa *.vol *.mesh *.msh);; Файлы результатов (*.qres)</translation>
+    </message>
+    <message>
+        <source>variables:</source>
+        <translation type="vanished">параметры:</translation>
+    </message>
+    <message>
+        <source>name: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation type="vanished">название: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Error writing file %1</source>
+        <translation type="vanished">Ошибка записи файла %1</translation>
+    </message>
+    <message>
+        <source>Invalid expression!</source>
+        <translation type="vanished">Неправильно задано выражение!</translation>
+    </message>
+    <message>
+        <source>This function is is already exists!</source>
+        <translation type="vanished">Такая функция уже существует!</translation>
+    </message>
+    <message>
+        <source>Saving results</source>
+        <translation type="vanished">Сохранение результатов</translation>
+    </message>
+    <message>
+        <source>Results files (*.txt)</source>
+        <translation type="vanished">Файлы результатов (*.txt)</translation>
+    </message>
+    <message>
+        <source>Error opening file %1</source>
+        <translation type="vanished">Ошибка открытия файла %1</translation>
+    </message>
+    <message>
+        <source>Problem files (*.xml);; Mesh files (*.trp *.trpa *.vol *.mesh);; Result files (*.qfrf)</source>
+        <translation type="vanished">Файлы задач (*.xml);; Файлы сеток (*.trp *.trpa *.vol *.mesh);; Файлы результатов (*.qfrf)</translation>
+    </message>
+    <message>
+        <source>Problem files (*.xml)</source>
+        <translation type="vanished">Файлы задач (*.xml)</translation>
+    </message>
+    <message>
+        <source>Error riading file %1</source>
+        <translation type="vanished">Ошибка чтения файла %1</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="xmlprocessor.cpp" line="18"/>
+        <location filename="xmlprocessor.cpp" line="227"/>
+        <location filename="xmlprocessor.cpp" line="248"/>
+        <location filename="xmlprocessor.cpp" line="337"/>
+        <location filename="xmlprocessor.cpp" line="359"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="xmlprocessor.cpp" line="18"/>
+        <location filename="xmlprocessor.cpp" line="248"/>
+        <source>Error opening file %1</source>
+        <translation>Ошибка открытия файла %1</translation>
+    </message>
+    <message>
+        <location filename="xmlprocessor.cpp" line="227"/>
+        <source>Error writing file %1</source>
+        <translation>Ошибка записи файла %1</translation>
+    </message>
+    <message>
+        <location filename="xmlprocessor.cpp" line="337"/>
+        <source>Wrong format file %1</source>
+        <translation>Некорректный формат файла %1</translation>
+    </message>
+    <message>
+        <location filename="xmlprocessor.cpp" line="359"/>
+        <source>Error reading file %1</source>
+        <translation>Ошибка чтения файла %1</translation>
+    </message>
+</context>
+<context>
+    <name>SetupImageDialog</name>
+    <message>
+        <source>Imaging parameters</source>
+        <translation type="obsolete">Параметры визуализации</translation>
+    </message>
+    <message>
+        <source>Imaging settings</source>
+        <translation type="vanished">Параметры визуализации</translation>
+    </message>
+    <message>
+        <source>Visualisation:</source>
+        <translation type="vanished">Отображение:</translation>
+    </message>
+    <message>
+        <source>The coordinate axes</source>
+        <translation type="vanished">Оси координат</translation>
+    </message>
+    <message>
+        <source>Lighting</source>
+        <translation type="vanished">Освещение</translation>
+    </message>
+    <message>
+        <source>Quality visualisation mesh</source>
+        <oldsource>Quality visualisation</oldsource>
+        <translation type="vanished">Качественная прорисовка сетки</translation>
+    </message>
+    <message>
+        <source>Scale values</source>
+        <translation type="vanished">Шкала значений</translation>
+    </message>
+    <message>
+        <source>Object:</source>
+        <translation type="vanished">Объект:</translation>
+    </message>
+    <message>
+        <source>Grid</source>
+        <translation type="vanished">Сетка</translation>
+    </message>
+    <message>
+        <source>Nodes</source>
+        <translation type="vanished">Узлы</translation>
+    </message>
+    <message>
+        <source>Surface</source>
+        <translation type="vanished">Поверхность</translation>
+    </message>
+    <message>
+        <source>Boundary conditions</source>
+        <translation type="vanished">Граничные условия</translation>
+    </message>
+    <message>
+        <source>Forces</source>
+        <translation type="vanished">Нагрузки</translation>
+    </message>
+    <message>
+        <source>Transparency:</source>
+        <translation type="vanished">Прозрачность:</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="vanished">0</translation>
+    </message>
+    <message>
+        <source>0.5</source>
+        <translation type="vanished">0.5</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="vanished">1</translation>
+    </message>
+    <message>
+        <source>Image:</source>
+        <translation type="vanished">Образ:</translation>
+    </message>
+    <message>
+        <source>greyscale</source>
+        <translation type="vanished">Черно-белый</translation>
+    </message>
+    <message>
+        <source>RGB</source>
+        <translation type="vanished">Цветной (RGB)</translation>
+    </message>
+    <message>
+        <source>Spectral</source>
+        <translation type="vanished">Спектральный</translation>
+    </message>
+    <message>
+        <source>Colors:</source>
+        <translation type="vanished">Цветов:</translation>
+    </message>
+    <message>
+        <source>16</source>
+        <translation type="vanished">16</translation>
+    </message>
+    <message>
+        <source>128</source>
+        <translation type="vanished">128</translation>
+    </message>
+    <message>
+        <source>256</source>
+        <translation type="vanished">256</translation>
+    </message>
+    <message>
+        <source>Negative</source>
+        <translation type="vanished">Негатив</translation>
+    </message>
+    <message>
+        <source>Transformation ratio</source>
+        <translation type="vanished">Коэффициент трансформации</translation>
+    </message>
+    <message>
+        <source>Translate</source>
+        <translation type="vanished">Сместить</translation>
+    </message>
+    <message>
+        <source>Min</source>
+        <translation type="vanished">Min</translation>
+    </message>
+    <message>
+        <source>X:</source>
+        <translation type="vanished">X:</translation>
+    </message>
+    <message>
+        <source>Y:</source>
+        <translation type="vanished">Y:</translation>
+    </message>
+    <message>
+        <source>Z:</source>
+        <translation type="vanished">Z:</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="vanished">Масштабировать</translation>
+    </message>
+    <message>
+        <source>Rotation</source>
+        <translation type="vanished">Вращать</translation>
+    </message>
+    <message>
+        <source>360</source>
+        <translation type="obsolete">360</translation>
+    </message>
+    <message>
+        <source>Max</source>
+        <translation type="vanished">Max</translation>
+    </message>
+    <message>
+        <source>Background color</source>
+        <translation type="vanished">Цвет фона</translation>
+    </message>
+    <message>
+        <source>%1</source>
+        <translation type="vanished">%1</translation>
+    </message>
+</context>
+<context>
+    <name>SetupTaskDialog</name>
+    <message>
+        <source>The task settings</source>
+        <translation type="vanished">Параметры задачи</translation>
+    </message>
+    <message>
+        <source>Base settings</source>
+        <translation type="vanished">Базовые параметры</translation>
+    </message>
+    <message>
+        <source>Physical parameters</source>
+        <translation type="vanished"> Физические параметры</translation>
+    </message>
+    <message>
+        <source>Damping:</source>
+        <translation type="vanished">Демпфирование:</translation>
+    </message>
+    <message>
+        <source>Density:</source>
+        <translation type="vanished">Плотность:</translation>
+    </message>
+    <message>
+        <source>Task type</source>
+        <translation type="vanished">Тип задачи</translation>
+    </message>
+    <message>
+        <source>&amp;Statics</source>
+        <oldsource>Statics</oldsource>
+        <translation type="vanished">&amp;Статика</translation>
+    </message>
+    <message>
+        <source>&amp;Dynamics</source>
+        <oldsource>Dynamics</oldsource>
+        <translation type="vanished">&amp;Динамика</translation>
+    </message>
+    <message>
+        <source>Computation parameters</source>
+        <translation type="vanished">Параметры расчета</translation>
+    </message>
+    <message>
+        <source>1.0e-6</source>
+        <translation type="vanished">1.0e-6</translation>
+    </message>
+    <message>
+        <source>Accuracy of calculations:</source>
+        <translation type="vanished">Точность вычислений:</translation>
+    </message>
+    <message>
+        <source>Direct &amp;method solving SLAE</source>
+        <oldsource>Direct method solving SLAE</oldsource>
+        <translation type="vanished">Прямой &amp;метод решения СЛАУ</translation>
+    </message>
+    <message>
+        <source>&amp;Iterative method solving SLAE</source>
+        <oldsource>Iterative method solving SLAE</oldsource>
+        <translation type="vanished">&amp;Итерационный метод решения СЛАУ</translation>
+    </message>
+    <message>
+        <source>Approximation of time</source>
+        <translation type="vanished">Аппроксимация по времени</translation>
+    </message>
+    <message>
+        <source>Zinkevych method</source>
+        <translation type="vanished">Метод Зинкевича</translation>
+    </message>
+    <message>
+        <source>Output settings</source>
+        <translation type="vanished">Параметры вывода</translation>
+    </message>
+    <message>
+        <source>Width:</source>
+        <translation type="vanished">Ширина:</translation>
+    </message>
+    <message>
+        <source>15</source>
+        <translation type="vanished">15</translation>
+    </message>
+    <message>
+        <source>Precision:</source>
+        <translation type="vanished">Точность:</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="vanished">5</translation>
+    </message>
+    <message>
+        <source>Forces</source>
+        <translation type="vanished">Нагрузки</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">Объемные</translation>
+    </message>
+    <message>
+        <source>Expression</source>
+        <translation type="vanished">Выражение</translation>
+    </message>
+    <message>
+        <source>Predicate</source>
+        <translation type="vanished">Предикат</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="vanished">x</translation>
+    </message>
+    <message>
+        <source>y</source>
+        <translation type="vanished">y</translation>
+    </message>
+    <message>
+        <source>z</source>
+        <translation type="vanished">z</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="vanished">...</translation>
+    </message>
+    <message>
+        <source>Youngs modulus:</source>
+        <translation type="vanished">Модуль Юнга:</translation>
+    </message>
+    <message>
+        <source>Poissons ratio:</source>
+        <translation type="vanished">Коэффициент Пуассона:</translation>
+    </message>
+    <message>
+        <source>Time parameters</source>
+        <translation type="vanished">Параметры времени</translation>
+    </message>
+    <message>
+        <source>Wilson-θ:</source>
+        <oldsource>Wilsons method</oldsource>
+        <translation type="vanished">Метод Вильсона:</translation>
+    </message>
+    <message>
+        <source>1.37</source>
+        <translation type="vanished">1.37</translation>
+    </message>
+    <message>
+        <source>Surface</source>
+        <translation type="vanished">Поверхностные</translation>
+    </message>
+    <message>
+        <source>Concentrated</source>
+        <translation type="vanished">Сосредоточенные</translation>
+    </message>
+    <message>
+        <source>Boundary conditions</source>
+        <translation type="vanished">Краевые условия</translation>
+    </message>
+    <message>
+        <source>The initial conditions</source>
+        <translation type="vanished">Начальные условия</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="vanished">0</translation>
+    </message>
+    <message>
+        <source>U:</source>
+        <translation type="vanished">U:</translation>
+    </message>
+    <message>
+        <source>V:</source>
+        <translation type="vanished">V:</translation>
+    </message>
+    <message>
+        <source>W:</source>
+        <translation type="vanished">W:</translation>
+    </message>
+    <message>
+        <source>Vt:</source>
+        <translation type="vanished">Vt:</translation>
+    </message>
+    <message>
+        <source>Ut:</source>
+        <translation type="vanished">Ut:</translation>
+    </message>
+    <message>
+        <source>Wt:</source>
+        <translation type="vanished">Wt:</translation>
+    </message>
+    <message>
+        <source>Utt:</source>
+        <translation type="vanished">Utt:</translation>
+    </message>
+    <message>
+        <source>Vtt:</source>
+        <translation type="vanished">Vtt:</translation>
+    </message>
+    <message>
+        <source>Wtt:</source>
+        <translation type="vanished">Wtt:</translation>
+    </message>
+    <message>
+        <source>&amp;variable stiffness</source>
+        <translation type="vanished">переменной &amp;жесткости</translation>
+    </message>
+    <message>
+        <source>&amp;elastic solutions</source>
+        <translation type="vanished">&amp;упругих решений</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="vanished">Время</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="vanished">Значение</translation>
+    </message>
+    <message>
+        <source>1.0e-10</source>
+        <translation type="obsolete">1.0e-10 {1.0e?}</translation>
+    </message>
+    <message>
+        <source>Start:</source>
+        <translation type="vanished">Начало:</translation>
+    </message>
+    <message>
+        <source>Stop:</source>
+        <translation type="vanished">Конец:</translation>
+    </message>
+    <message>
+        <source>Step:</source>
+        <translation type="vanished">Шаг:</translation>
+    </message>
+    <message>
+        <source>Limiting conditions</source>
+        <translation type="vanished">Граничные условия</translation>
+    </message>
+    <message>
+        <source>U</source>
+        <translation type="vanished">U</translation>
+    </message>
+    <message>
+        <source>V</source>
+        <translation type="vanished">V</translation>
+    </message>
+    <message>
+        <source>W</source>
+        <translation type="vanished">W</translation>
+    </message>
+    <message>
+        <source>Nonlinearity</source>
+        <translation type="vanished">Нелинейность</translation>
+    </message>
+    <message>
+        <source>Method of calculation</source>
+        <translation type="vanished">Метод расчета</translation>
+    </message>
+    <message>
+        <source>elastic solutions</source>
+        <translation type="vanished">упругих решений</translation>
+    </message>
+    <message>
+        <source>Yield strength</source>
+        <translation type="vanished">Предел текучести</translation>
+    </message>
+    <message>
+        <source>Mechanical properties of the material</source>
+        <translation type="vanished">Механические свойства материала</translation>
+    </message>
+    <message>
+        <source>Stress</source>
+        <translation type="vanished">Напряжения</translation>
+    </message>
+    <message>
+        <source>Deformation</source>
+        <translation type="vanished">Деформации</translation>
+    </message>
+    <message>
+        <source>nonlinear calculation</source>
+        <translation type="vanished">нелинейный расчет</translation>
+    </message>
+    <message>
+        <source>Force step</source>
+        <translation type="vanished">Шаг по нагрузке</translation>
+    </message>
+    <message>
+        <source>0.01</source>
+        <translation type="obsolete">0.01</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Обозначение</translation>
+    </message>
+    <message>
+        <source>Variables</source>
+        <translation type="vanished">Параметры</translation>
+    </message>
+    <message>
+        <source>Global variables</source>
+        <translation type="vanished">Глобальные параметры</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="vanished">1</translation>
+    </message>
+    <message>
+        <source>Remove the current row</source>
+        <translation type="vanished">Удалить текущую строку</translation>
+    </message>
+    <message>
+        <source>Add new row</source>
+        <translation type="vanished">Добавить новую строку</translation>
+    </message>
+    <message>
+        <source>variable stiffness</source>
+        <translation type="vanished">переменной жесткости</translation>
+    </message>
+    <message>
+        <source>Notations</source>
+        <translation type="vanished">Обозначения</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation type="vanished">2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation type="vanished">3</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation type="vanished">4</translation>
+    </message>
+    <message>
+        <source>6</source>
+        <translation type="vanished">6</translation>
+    </message>
+    <message>
+        <source>7</source>
+        <translation type="vanished">7</translation>
+    </message>
+    <message>
+        <source>8</source>
+        <translation type="vanished">8</translation>
+    </message>
+    <message>
+        <source>9</source>
+        <translation type="vanished">9</translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="vanished">10</translation>
+    </message>
+    <message>
+        <source>11</source>
+        <translation type="vanished">11</translation>
+    </message>
+    <message>
+        <source>12</source>
+        <translation type="vanished">12</translation>
+    </message>
+    <message>
+        <source>13</source>
+        <translation type="vanished">13</translation>
+    </message>
+    <message>
+        <source>14</source>
+        <translation type="vanished">14</translation>
+    </message>
+    <message>
+        <source>16</source>
+        <translation type="vanished">16</translation>
+    </message>
+    <message>
+        <source>17</source>
+        <translation type="vanished">17</translation>
+    </message>
+    <message>
+        <source>18</source>
+        <translation type="vanished">18</translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="vanished">19</translation>
+    </message>
+    <message>
+        <source>20</source>
+        <translation type="vanished">20</translation>
+    </message>
+    <message>
+        <source>21</source>
+        <translation type="vanished">21</translation>
+    </message>
+    <message>
+        <source>Function</source>
+        <translation type="vanished">Функция</translation>
+    </message>
+    <message>
+        <source>U(x,y,z)</source>
+        <translation type="obsolete">U(x,y,z)</translation>
+    </message>
+    <message>
+        <source>V(x,y,z)</source>
+        <translation type="obsolete">V(x,y,z)</translation>
+    </message>
+    <message>
+        <source>W(x,y,z)</source>
+        <translation type="obsolete">W(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Exx(x,y,z)</source>
+        <translation type="obsolete">Exx(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Exx</source>
+        <translation type="obsolete">Exx</translation>
+    </message>
+    <message>
+        <source>Eyy(x,y,z)</source>
+        <translation type="obsolete">Eyy(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Eyy</source>
+        <translation type="obsolete">Eyy</translation>
+    </message>
+    <message>
+        <source>Ezz(x,y,z)</source>
+        <translation type="obsolete">Ezz(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Ezz</source>
+        <translation type="obsolete">Ezz</translation>
+    </message>
+    <message>
+        <source>Exy(x,y,z)</source>
+        <translation type="obsolete">Exy(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Exy</source>
+        <translation type="obsolete">Exy</translation>
+    </message>
+    <message>
+        <source>Exz(x,y,z)</source>
+        <translation type="obsolete">Exz(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Exz</source>
+        <translation type="obsolete">Exz</translation>
+    </message>
+    <message>
+        <source>Eyz(x,y,z)</source>
+        <translation type="obsolete">Eyz(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Eyz</source>
+        <translation type="obsolete">Eyz</translation>
+    </message>
+    <message>
+        <source>Sxx(x,y,z)</source>
+        <translation type="obsolete">Sxx(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Sxx</source>
+        <translation type="obsolete">Sxx</translation>
+    </message>
+    <message>
+        <source>Syy(x,y,z)</source>
+        <translation type="obsolete">Syy(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Syy</source>
+        <translation type="obsolete">Syy</translation>
+    </message>
+    <message>
+        <source>Szz(x,y,z)</source>
+        <translation type="obsolete">Szz(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Szz</source>
+        <translation type="obsolete">Szz</translation>
+    </message>
+    <message>
+        <source>Sxy(x,y,z)</source>
+        <translation type="obsolete">Sxy(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Sxy</source>
+        <translation type="obsolete">Sxy</translation>
+    </message>
+    <message>
+        <source>Sxz(x,y,z)</source>
+        <translation type="obsolete">Sxz(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Sxz</source>
+        <translation type="obsolete">Sxz</translation>
+    </message>
+    <message>
+        <source>Syz(x,y,z)</source>
+        <translation type="obsolete">Syz(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Syz</source>
+        <translation type="obsolete">Syz</translation>
+    </message>
+    <message>
+        <source>Ut(x,y,z)</source>
+        <translation type="obsolete">Ut(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Ut</source>
+        <translation type="obsolete">Ut</translation>
+    </message>
+    <message>
+        <source>Vt(x,y,z)</source>
+        <translation type="obsolete">Vt(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Coordinate</source>
+        <translation type="vanished">Координаты</translation>
+    </message>
+    <message>
+        <source>Vt</source>
+        <translation type="obsolete">Vt</translation>
+    </message>
+    <message>
+        <source>Wt(x,y,z)</source>
+        <translation type="obsolete">Wt(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Wt</source>
+        <translation type="obsolete">Wt</translation>
+    </message>
+    <message>
+        <source>Utt(x,y,z)</source>
+        <translation type="obsolete">Utt(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Utt</source>
+        <translation type="obsolete">Utt</translation>
+    </message>
+    <message>
+        <source>Vtt(x,y,z)</source>
+        <translation type="obsolete">Vtt(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Vtt</source>
+        <translation type="obsolete">Vtt</translation>
+    </message>
+    <message>
+        <source>Wtt(x,y,z)</source>
+        <translation type="obsolete">Wtt(x,y,z)</translation>
+    </message>
+    <message>
+        <source>Wtt</source>
+        <translation type="obsolete">Wtt</translation>
+    </message>
+    <message>
+        <source>x:</source>
+        <translation type="vanished">x:</translation>
+    </message>
+    <message>
+        <source>y:</source>
+        <translation type="vanished">y:</translation>
+    </message>
+    <message>
+        <source>z:</source>
+        <translation type="vanished">z:</translation>
+    </message>
+    <message>
+        <source>t:</source>
+        <translation type="vanished">t:</translation>
+    </message>
+    <message>
+        <source>t</source>
+        <translation type="vanished">t</translation>
+    </message>
+    <message>
+        <source>&amp;Condition on nodes selection...</source>
+        <translation type="vanished">&amp;Условие отбора узлов...</translation>
+    </message>
+    <message>
+        <source>&amp;Select all</source>
+        <translation type="vanished">&amp;Выделить все</translation>
+    </message>
+    <message>
+        <source>Clear &amp;all</source>
+        <translation type="vanished">&amp;Сбросить все</translation>
+    </message>
+    <message>
+        <source>Select &amp;X</source>
+        <translation type="vanished">Выделить по &amp;X</translation>
+    </message>
+    <message>
+        <source>Select &amp;Y</source>
+        <translation type="vanished">Выделить по &amp;Y</translation>
+    </message>
+    <message>
+        <source>Select &amp;Z</source>
+        <translation type="vanished">Выделить по &amp;Z</translation>
+    </message>
+    <message>
+        <source>&amp;Remove all</source>
+        <translation type="vanished">У&amp;далить все</translation>
+    </message>
+    <message>
+        <source>Select &amp;U</source>
+        <translation type="vanished">Выделить по &amp;U</translation>
+    </message>
+    <message>
+        <source>Select &amp;V</source>
+        <translation type="vanished">Выделить по &amp;V</translation>
+    </message>
+    <message>
+        <source>Select &amp;W</source>
+        <translation type="vanished">Выделить по &amp;W</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="vanished">Ошибка</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified elastic modulus!</source>
+        <translation type="vanished">Неправильно задан модуль Юнга!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified calculation errors!</source>
+        <translation type="vanished">Неправильно задана погрешность вычислений!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set output parameters!</source>
+        <translation type="vanished">Некорректно заданы параметры вывода!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified volume force in a row: %1!</source>
+        <translation type="vanished">Неправильно задана объемная нагрузкa в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Predicate is not set correctly in the string: %1!</source>
+        <translation type="vanished">Неправильно задан предикат в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified surface force in a row: %1!</source>
+        <translation type="vanished">Неправильно задана поверхностная нагрузкa в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified point force in a row: %1!</source>
+        <translation type="vanished">Неправильно задана сосредоточенная нагрузкa в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified boundary condition in a row: %1!</source>
+        <translation type="vanished">Неправильно заданo граничное условие в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly specified density!</source>
+        <translation type="vanished">Неправильно задана плотность!</translation>
+    </message>
+    <message>
+        <source>Damping parameter is set incorrectly!</source>
+        <translation type="vanished">Неправильно задан параметр демпфирования!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set the Wilson-theta!</source>
+        <translation type="vanished">Некоректно заданна тетта Вильсона!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set the initial time!</source>
+        <translation type="vanished">Неправильно задан начальный момент времени!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set the time step!</source>
+        <translation type="vanished">Неправильно задан шаг по времени!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set the initial conditions!</source>
+        <translation type="vanished">Неправильно заданы начальные условия!</translation>
+    </message>
+    <message>
+        <source>Incorrect function name %1!</source>
+        <translation type="vanished">Неправильное название функции %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set force step!</source>
+        <translation type="vanished">Некорректно задан шаг по нагрузке!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set variable value in a row: %1!</source>
+        <translation type="vanished">Некорректно задано значение параметра в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set yield strength!</source>
+        <translation type="vanished">Неправильно задан предел текучести!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set stress intensity in a row: %1!</source>
+        <translation type="vanished">Неправильно задана интенсивность напряжений в строке: %1!</translation>
+    </message>
+    <message>
+        <source>Incorrectly set deformation intensity in a row: %1!</source>
+        <translation type="vanished">Неправильно задана интенсивность деформаций в строке: %1!</translation>
+    </message>
+    <message>
+        <source>%1</source>
+        <translation type="obsolete">%1</translation>
+    </message>
+    <message>
+        <source>volumetric force X</source>
+        <translation type="vanished">объемной нагрузки X</translation>
+    </message>
+    <message>
+        <source>volumetric force Y</source>
+        <translation type="vanished">объемной нагрузки Y</translation>
+    </message>
+    <message>
+        <source>volumetric force Z</source>
+        <translation type="vanished">объемной нагрузки Z</translation>
+    </message>
+    <message>
+        <source>coordinate x</source>
+        <translation type="vanished">координаты x</translation>
+    </message>
+    <message>
+        <source>coordinate y</source>
+        <translation type="vanished">координаты y</translation>
+    </message>
+    <message>
+        <source>coordinate z</source>
+        <translation type="vanished">координаты z</translation>
+    </message>
+</context>
+<context>
+    <name>TAppSetupDialog</name>
+    <message>
+        <location filename="appsetupdialog.ui" line="26"/>
+        <source>Setup programm</source>
+        <translation>Настройки программы</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="54"/>
+        <source>Current language</source>
+        <translation>Текущий язык</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="66"/>
+        <source>Russian (Русский)</source>
+        <translation>Russian (Русский)</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="82"/>
+        <source>English</source>
+        <translation>English</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="96"/>
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="108"/>
+        <source>Black background</source>
+        <translation>Темный цвет фона</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="124"/>
+        <source>Auto scroll</source>
+        <translation>Автопрокрутка</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="141"/>
+        <source>Task</source>
+        <translation>Задача</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="153"/>
+        <source>Autosave task</source>
+        <translation>Автосохранение задачи</translation>
+    </message>
+    <message>
+        <location filename="appsetupdialog.ui" line="169"/>
+        <source>Autosave protocol</source>
+        <translation>Автосохранение протокола</translation>
+    </message>
+</context>
+<context>
+    <name>TFunListDialog</name>
+    <message>
+        <location filename="funlistdialog.ui" line="26"/>
+        <source>Select the function for the analysis</source>
+        <translation>Выбор функции для анализа</translation>
+    </message>
+    <message>
+        <location filename="funlistdialog.ui" line="54"/>
+        <source>The list of available functions</source>
+        <translation>Список доступных функций</translation>
+    </message>
+</context>
+<context>
+    <name>TGBDialog</name>
+    <message>
+        <location filename="gbdialog.ui" line="26"/>
+        <source>Object info</source>
+        <translation>Информация об объекте</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="63"/>
+        <source>Dimensions</source>
+        <translation>Габариты</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="81"/>
+        <source>minX:</source>
+        <translation>minX:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="100"/>
+        <source>minY:</source>
+        <translation>minY:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="119"/>
+        <source>minZ:</source>
+        <translation>minZ:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="195"/>
+        <source>maxZ:</source>
+        <translation>maxZ:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="252"/>
+        <source>maxY:</source>
+        <translation>maxY:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="271"/>
+        <source>maxX:</source>
+        <translation>maxX:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="328"/>
+        <source>Width:</source>
+        <translation>Ширина:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="366"/>
+        <source>Length:</source>
+        <translation>Длина:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="404"/>
+        <source>Height:</source>
+        <translation>Высота:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="424"/>
+        <source>Mesh Info</source>
+        <translation>Дискретизация</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="442"/>
+        <source>FE type:</source>
+        <translation>Тип КЭ:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="499"/>
+        <source>Nodes:</source>
+        <translation>Узлов:</translation>
+    </message>
+    <message>
+        <location filename="gbdialog.ui" line="537"/>
+        <source>FE:</source>
+        <translation>КЭ:</translation>
+    </message>
+</context>
+<context>
+    <name>TGLFunWidget</name>
+    <message>
+        <location filename="glfun.cpp" line="39"/>
+        <source>&amp;Condition on nodes selection...</source>
+        <translation>&amp;Условие отбора узлов...</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="40"/>
+        <source>&amp;Save image...</source>
+        <translation>&amp;Сохранить изображение...</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="858"/>
+        <source>Selection condition nodes</source>
+        <translation>Условие отбора узлов</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="858"/>
+        <source>Predicate:</source>
+        <translation>Предикат:</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="868"/>
+        <source>Saving the image</source>
+        <translation>Сохранение изображения</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="868"/>
+        <source>Image files (*.png)</source>
+        <translation>Файлы изображений (*.png)</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="942"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="glfun.cpp" line="942"/>
+        <source>Turn off lights!</source>
+        <translation>Выключите режим освещения!</translation>
+    </message>
+</context>
+<context>
+    <name>THelpDialog</name>
+    <message>
+        <location filename="helpdialog.ui" line="24"/>
+        <source>About</source>
+        <translation>О программе</translation>
+    </message>
+    <message>
+        <location filename="helpdialog.ui" line="30"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;QFEM is developed by:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-weight:600;&quot;&gt;Department of Mathematics &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-weight:600;&quot;&gt;Zaporozhye National University (ZNU)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.graphics.rwth-aachen.de/&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-weight:600; text-decoration: underline; color:#0057ae;&quot;&gt;http://www.znu.edu.ua/ukr/university/departments/math&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;QFEM website is &lt;/span&gt;&lt;a href=&quot;http://github.com/SeregaGomen/QFEM&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-weight:600; text-decoration: underline; color:#0057ae;&quot;&gt;http://github.com/SeregaGomen/QFEM&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;The source code and binaries are published on github.com/SeregaGomen/QFEM based on&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;the following license:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;=====================================&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;QFEM&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;Copyright (C) 2009-2015 by Mathdept, ZNU, Zaporozhye&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;http://github.com/SeregaGomen/QFEM&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;QFEM is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;it under the terms of the GNU Lesser General Public License as&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;published by the Free Software Foundation, either version 3 of&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;the License, or (at your option) any later version with the&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;following exceptions:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;If other files instantiate templates or use macros&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;or inline functions from this file, or you compile this file and&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;link it with other files to produce an executable, this file does&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;not by itself cause the resulting executable to be covered by the&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;GNU Lesser General Public License. This exception does not however&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;invalidate any other reasons why the executable file might be&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;covered by the GNU Lesser General Public License.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;QFEM is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;GNU Lesser General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;You should have received a copy of the GNU LesserGeneral Public&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;License along with QFEM. If not,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;see &amp;lt;http://www.gnu.org/licenses/&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;;&quot;&gt;=====================================&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="helpdialog.ui" line="80"/>
+        <source>Help</source>
+        <translation>Справка</translation>
+    </message>
+</context>
+<context>
+    <name>TMainWindow</name>
+    <message>
+        <location filename="mainwindow.ui" line="14"/>
+        <source>QFEM</source>
+        <translation>QFEM</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="32"/>
+        <source>&amp;File</source>
+        <translation>&amp;Файл</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="43"/>
+        <source>&amp;?</source>
+        <translation>&amp;?</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="51"/>
+        <source>&amp;Settings</source>
+        <translation>&amp;Параметры</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="59"/>
+        <source>&amp;Object</source>
+        <translation>&amp;Объект</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="63"/>
+        <source>&amp;Image</source>
+        <translation>&amp;Изображение</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="87"/>
+        <source>&amp;Edit</source>
+        <translation>&amp;Правка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="125"/>
+        <source>toolBar</source>
+        <translation>toolBar</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="140"/>
+        <source>&amp;Open...</source>
+        <translation>&amp;Открыть...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="143"/>
+        <source>Opening an existing document</source>
+        <translation>Открытие существующего документа</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="148"/>
+        <source>&amp;Close</source>
+        <translation>&amp;Закрыть</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="151"/>
+        <location filename="mainwindow.ui" line="159"/>
+        <source>Closes the current document</source>
+        <translation>Закрытие текущего документа</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="156"/>
+        <source>E&amp;xit</source>
+        <translation>В&amp;ыход</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="168"/>
+        <source>&amp;About...</source>
+        <translation>&amp;О программе...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="171"/>
+        <source>About QFEM</source>
+        <translation>О программе QFEM</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="174"/>
+        <source>About the program</source>
+        <translation>Вывод информации о программе</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="186"/>
+        <source>&amp;Terminal</source>
+        <translation>&amp;Терминал</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="189"/>
+        <source>Enable/Disable the Terminal</source>
+        <translation>Включить/выключить терминал</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="201"/>
+        <source>&amp;Rotate</source>
+        <translation>&amp;Поворот</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="204"/>
+        <source>Rotate</source>
+        <translation>Повернуть</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="207"/>
+        <source>Enable rotation of an object</source>
+        <translation>Включить режим вращения объекта</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="219"/>
+        <source>&amp;Translate</source>
+        <translation>&amp;Сдвиг</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="222"/>
+        <source>Translate</source>
+        <translation>Сместить</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="225"/>
+        <source>Enable the translate of the object</source>
+        <translation>Включить режим перемещения объекта</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="237"/>
+        <source>&amp;Scale</source>
+        <translation>&amp;Масштабирование</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="240"/>
+        <location filename="mainwindow.ui" line="243"/>
+        <source>Scale</source>
+        <translation>Масштабировать</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="246"/>
+        <source>Enable the scale of the object</source>
+        <translation>Масштабирование</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="255"/>
+        <source>Сo&amp;mputation parameters...</source>
+        <translation>&amp;Параметры расчета...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="258"/>
+        <source>Сomputation parameters</source>
+        <translation>Параметры расчета</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="261"/>
+        <location filename="mainwindow.ui" line="264"/>
+        <source>The calculation parameters (elastic characteristics, boundary conditions, ...)</source>
+        <translation>Параметры расчета (упругие характеристики, краевые условия, ...)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="273"/>
+        <source>&amp;Start</source>
+        <translation>&amp;Старт</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="276"/>
+        <location filename="mainwindow.ui" line="279"/>
+        <source>Start calculation problem</source>
+        <translation>Начать расчет задачи</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="284"/>
+        <source>&amp;Restore</source>
+        <translation>&amp;Восстановить</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="287"/>
+        <location filename="mainwindow.ui" line="290"/>
+        <source>Restore</source>
+        <translation>Восстановить</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="293"/>
+        <source>To restore the initial image settings</source>
+        <translation>Восстановить начальные параметры изображения</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="302"/>
+        <source>&amp;Analyse...</source>
+        <translation>&amp;Анализ...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="305"/>
+        <source>Analyse</source>
+        <translation>Анализ</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="308"/>
+        <source>Select the function for the visualization</source>
+        <translation>Выбрать функцию для визуализации</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="313"/>
+        <source>Save &amp;As...</source>
+        <translation>Сохранить &amp;как...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="316"/>
+        <source>Save As</source>
+        <translation>Сохранить как</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="319"/>
+        <source>Save the current file with a new name</source>
+        <translation>Сохранить текущий файл с новым именем</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="331"/>
+        <source>Imaging &amp;parameters...</source>
+        <translation>Параметры &amp;визуализации...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="334"/>
+        <source>Imaging parameters</source>
+        <translation>Параметры визуализации</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="337"/>
+        <source>Setting visualization</source>
+        <translation>Настройка параметров визуализации</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="342"/>
+        <source>In&amp;fo...</source>
+        <translation>Ин&amp;формация...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="345"/>
+        <location filename="mainwindow.ui" line="348"/>
+        <source>About object (dimension, mesh, ...)</source>
+        <translation>Информация об объекте (габариты, дискретизация,...)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="353"/>
+        <source>Add &amp;expression...</source>
+        <translation>&amp;Добавить выражение...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="356"/>
+        <source>Add expression</source>
+        <translation>Добавить выражение</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="359"/>
+        <source>Add a new expression for the analysis</source>
+        <translation>Добавить новое выражение для анализа</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="368"/>
+        <source>&amp;Setup...</source>
+        <translation>&amp;Настройки...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="371"/>
+        <location filename="mainwindow.ui" line="374"/>
+        <source>Setting the parameters of the program</source>
+        <translation>Настройки параметров работы программы</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="383"/>
+        <source>S&amp;top</source>
+        <translation>Сто&amp;п</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="386"/>
+        <location filename="mainwindow.ui" line="389"/>
+        <source>Stop current calculation process</source>
+        <translation>Прервать текущий вычислительный процесс</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="394"/>
+        <source>Save &amp;results...</source>
+        <translation>Сохранить &amp;результаты...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="397"/>
+        <source>Save calculation results</source>
+        <translation>Сохранить результаты решения задачи в текстовый файл</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="402"/>
+        <source>&amp;Help...</source>
+        <translation>&amp;Справка...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="405"/>
+        <location filename="mainwindow.ui" line="408"/>
+        <source>Open Help Browser with Documentation</source>
+        <translation>Справка по использованию программы</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="417"/>
+        <source>&amp;Copy</source>
+        <translation>&amp;Копировать</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="420"/>
+        <location filename="mainwindow.ui" line="423"/>
+        <source>Copy current data to Clipboard</source>
+        <translation>Копировать данные текущей вкладки в буффер обмена</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="115"/>
+        <location filename="mainwindow.cpp" line="120"/>
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="366"/>
+        <source>Opening a document</source>
+        <translation>Открытие документа</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="366"/>
+        <source>Problem files (*.xml);; Mesh files (*.trp *.trpa *.vol *.mesh *.msh);; Result files (*.qres)</source>
+        <translation>Файлы задач (*.xml);; Файлы сеток (*.trp *.trpa *.vol *.mesh *.msh);; Файлы результатов (*.qres)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="386"/>
+        <source>Object</source>
+        <translation>Объект</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="393"/>
+        <source>File successfully downloaded</source>
+        <translation>Файл успешно загружен</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="410"/>
+        <source>Error opening file</source>
+        <translation>Ошибка открытия файла</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="494"/>
+        <source>Saving the document</source>
+        <translation>Сохранение документа</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="494"/>
+        <source>Problem files (*.xml)</source>
+        <translation>Файлы задач (*.xml)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="516"/>
+        <source>File successfully saved</source>
+        <translation>Файл успешно сохранен</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="522"/>
+        <source>Error writing file</source>
+        <translation>Ошибка записи файла</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="550"/>
+        <location filename="mainwindow.cpp" line="718"/>
+        <location filename="mainwindow.cpp" line="724"/>
+        <location filename="mainwindow.cpp" line="850"/>
+        <location filename="mainwindow.cpp" line="1315"/>
+        <location filename="mainwindow.cpp" line="1326"/>
+        <location filename="mainwindow.cpp" line="1346"/>
+        <location filename="mainwindow.cpp" line="1356"/>
+        <location filename="mainwindow.cpp" line="1364"/>
+        <location filename="mainwindow.cpp" line="1399"/>
+        <location filename="mainwindow.cpp" line="1405"/>
+        <location filename="mainwindow.cpp" line="1411"/>
+        <location filename="mainwindow.cpp" line="1426"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="550"/>
+        <location filename="mainwindow.cpp" line="1326"/>
+        <source>Error reading file %1</source>
+        <translation>Ошибка чтения файла %1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="718"/>
+        <source>Incorrectly specified elastic modulus!</source>
+        <translation>Неправильно задан модуль Юнга!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="724"/>
+        <source>Incorrectly specified nonlinear parameters!</source>
+        <translation>Некорректно заданы параметры нелинейного рассчета!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="769"/>
+        <source>The task is solved %1 at %2</source>
+        <translation>Задача решена %1 в %2</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="772"/>
+        <source>Object: &lt;b&gt;%1&lt;/b&gt; (nodes: &lt;b&gt;%2&lt;/b&gt;, finite elements: &lt;b&gt;%3&lt;/b&gt;)</source>
+        <translation>Объект: &lt;b&gt;%1&lt;/b&gt; (узлов: &lt;b&gt;%2&lt;/b&gt;, конечных элементов: &lt;b&gt;%3&lt;/b&gt;)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="775"/>
+        <source>FE type: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>Тип КЭ: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="782"/>
+        <source>Method for approximating the time: the method of Wilson</source>
+        <translation>Способ аппроксимации по времени: метод Вильсона</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="784"/>
+        <source>Method for approximating the time: the method Zinkevych</source>
+        <translation>Способ аппроксимации по времени: метод Зинкевича</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="792"/>
+        <source>Results of calculation</source>
+        <translation>Результаты расчета</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="793"/>
+        <source>Function</source>
+        <translation>Функция</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="793"/>
+        <source>Min</source>
+        <translation>Min</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="839"/>
+        <source>Results</source>
+        <translation>Результаты</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="850"/>
+        <location filename="mainwindow.cpp" line="1315"/>
+        <source>Error opening file %1</source>
+        <translation>Ошибка открытия файла %1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="868"/>
+        <source>Task parameters:</source>
+        <translation>Параметры задачи:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="872"/>
+        <location filename="mainwindow.cpp" line="874"/>
+        <source>Solution method: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>Метод расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="872"/>
+        <source>static (Lagrange)</source>
+        <translation>статика (Lagrange)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="874"/>
+        <source>dynamic (Ostrogradsky)</source>
+        <translation>динамика (Ostrogradsky)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="878"/>
+        <source>Computational accuracy: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>Точность вычислений: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="880"/>
+        <source>Elastic characteristics</source>
+        <translation>Упругие характеристики</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="881"/>
+        <location filename="mainwindow.cpp" line="904"/>
+        <location filename="mainwindow.cpp" line="931"/>
+        <location filename="mainwindow.cpp" line="973"/>
+        <location filename="mainwindow.cpp" line="1016"/>
+        <location filename="mainwindow.cpp" line="1059"/>
+        <source>N</source>
+        <translation>№</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="881"/>
+        <source>Young&apos;s modulus</source>
+        <translation>Модуль Юнга</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="881"/>
+        <source>Poisson&apos;s ratio</source>
+        <translation>Коэффициент Пуассона</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="888"/>
+        <source>density: &lt;b&gt;%1&lt;/b&gt;, damping parameter: &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation>плотность: &lt;b&gt;%1&lt;/b&gt;, параметр демпфирования: &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="896"/>
+        <location filename="mainwindow.cpp" line="898"/>
+        <source>Method of elastic-plastic analysis: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>Способ упруго-пластического расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="896"/>
+        <source>method of variable stiffness</source>
+        <translation>метод переменной жесткости</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="898"/>
+        <source>method of elastic solutions Ilyushin</source>
+        <translation>метод упругих решений Ильюшина</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="901"/>
+        <source>Mechanical properties of the material:</source>
+        <translation>Механические свойства материала:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="904"/>
+        <source>Stress</source>
+        <translation>Напряжения</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="904"/>
+        <source>Deformation</source>
+        <translation>Деформации</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="910"/>
+        <source>Force step</source>
+        <translation>Шаг по нагрузке</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="929"/>
+        <source>Boundary condition</source>
+        <translation>Граничные условия</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="931"/>
+        <location filename="mainwindow.cpp" line="973"/>
+        <location filename="mainwindow.cpp" line="1016"/>
+        <location filename="mainwindow.cpp" line="1059"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="931"/>
+        <location filename="mainwindow.cpp" line="973"/>
+        <location filename="mainwindow.cpp" line="1016"/>
+        <location filename="mainwindow.cpp" line="1059"/>
+        <source>Predicate</source>
+        <translation>Предикат</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="971"/>
+        <source>Volume strain</source>
+        <translation>Объемная нагрузка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1014"/>
+        <source>Surface strain</source>
+        <translation>Поверхностная нагрузка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1057"/>
+        <source>Point strain</source>
+        <translation>Сосредоточенная нагрузка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1092"/>
+        <source>time parameters - initial time: &lt;b&gt;%1&lt;/b&gt;, the final moment: &lt;b&gt;%2&lt;/b&gt;, step: &lt;b&gt;%3&lt;/b&gt;</source>
+        <translation>параметры времени - начальный момент: &lt;b&gt;%1&lt;/b&gt;, конечный момент: &lt;b&gt;%2&lt;/b&gt;, шаг: &lt;b&gt;%3&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1105"/>
+        <source>initial conditions:</source>
+        <translation>начальныe условия:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1112"/>
+        <location filename="mainwindow.cpp" line="1117"/>
+        <location filename="mainwindow.cpp" line="1122"/>
+        <location filename="mainwindow.cpp" line="1127"/>
+        <location filename="mainwindow.cpp" line="1132"/>
+        <location filename="mainwindow.cpp" line="1137"/>
+        <location filename="mainwindow.cpp" line="1142"/>
+        <location filename="mainwindow.cpp" line="1147"/>
+        <location filename="mainwindow.cpp" line="1152"/>
+        <source>function: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation>функция: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1163"/>
+        <source>variables:</source>
+        <translation>параметры:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1167"/>
+        <source>name: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation>название: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1346"/>
+        <location filename="mainwindow.cpp" line="1356"/>
+        <location filename="mainwindow.cpp" line="1364"/>
+        <source>Error writing file %1</source>
+        <translation>Ошибка записи файла %1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1399"/>
+        <source>This function is is already exists!</source>
+        <translation>Такая функция уже существует!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1405"/>
+        <location filename="mainwindow.cpp" line="1411"/>
+        <location filename="mainwindow.cpp" line="1426"/>
+        <source>Invalid expression!</source>
+        <translation>Неправильно задано выражение!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1517"/>
+        <source>Saving results</source>
+        <translation>Сохранение результатов</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1517"/>
+        <source>Results files (*.txt)</source>
+        <translation>Файлы результатов (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>TSetupImageDialog</name>
+    <message>
+        <location filename="setupimagedialog.ui" line="32"/>
+        <source>Imaging settings</source>
+        <translation>Параметры визуализации</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="60"/>
+        <source>Visualisation:</source>
+        <translation>Отображение:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="72"/>
+        <source>The coordinate axes</source>
+        <translation>Оси координат</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="88"/>
+        <source>Lighting</source>
+        <translation>Освещение</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="104"/>
+        <source>Quality visualisation mesh</source>
+        <translation>Качественная прорисовка сетки</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="120"/>
+        <source>Scale values</source>
+        <translation>Шкала значений</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="136"/>
+        <location filename="setupimagedialog.ui" line="928"/>
+        <location filename="setupimagedialog.ui" line="970"/>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="152"/>
+        <source>Transparency:</source>
+        <translation>Прозрачность:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="165"/>
+        <location filename="setupimagedialog.ui" line="494"/>
+        <location filename="setupimagedialog.ui" line="507"/>
+        <location filename="setupimagedialog.ui" line="625"/>
+        <location filename="setupimagedialog.ui" line="695"/>
+        <location filename="setupimagedialog.ui" line="750"/>
+        <location filename="setupimagedialog.ui" line="836"/>
+        <location filename="setupimagedialog.ui" line="852"/>
+        <location filename="setupimagedialog.ui" line="868"/>
+        <location filename="setupimagedialog.ui" line="1046"/>
+        <location filename="setupimagedialog.ui" line="1059"/>
+        <location filename="setupimagedialog.ui" line="1116"/>
+        <location filename="setupimagedialog.ui" line="1142"/>
+        <location filename="setupimagedialog.ui" line="1171"/>
+        <location filename="setupimagedialog.ui" line="1244"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="210"/>
+        <source>Object:</source>
+        <translation>Объект:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="222"/>
+        <source>Grid</source>
+        <translation>Сетка</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="238"/>
+        <source>Nodes</source>
+        <translation>Узлы</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="251"/>
+        <source>Surface</source>
+        <translation>Поверхность</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="267"/>
+        <source>Boundary conditions</source>
+        <translation>Граничные условия</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="283"/>
+        <source>Forces</source>
+        <translation>Нагрузки</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="300"/>
+        <source>Image:</source>
+        <translation>Образ:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="312"/>
+        <source>greyscale</source>
+        <translation>Черно-белый</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="325"/>
+        <source>RGB</source>
+        <translation>Цветной (RGB)</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="341"/>
+        <source>Spectral</source>
+        <translation>Спектральный</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="379"/>
+        <source>Colors:</source>
+        <translation>Цветов:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="392"/>
+        <source>16</source>
+        <translation>16</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="405"/>
+        <source>128</source>
+        <translation>128</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="421"/>
+        <source>256</source>
+        <translation>256</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="437"/>
+        <source>Negative</source>
+        <translation>Негатив</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="451"/>
+        <source>Transformation ratio</source>
+        <translation>Коэффициент трансформации</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="520"/>
+        <location filename="setupimagedialog.ui" line="609"/>
+        <location filename="setupimagedialog.ui" line="734"/>
+        <location filename="setupimagedialog.ui" line="763"/>
+        <location filename="setupimagedialog.ui" line="954"/>
+        <source>Max</source>
+        <translation>Max</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="537"/>
+        <source>Background color</source>
+        <translation>Цвет фона</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="566"/>
+        <source>Translate</source>
+        <translation>Сместить</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="638"/>
+        <location filename="setupimagedialog.ui" line="721"/>
+        <location filename="setupimagedialog.ui" line="823"/>
+        <location filename="setupimagedialog.ui" line="941"/>
+        <source>Min</source>
+        <translation>Min</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="651"/>
+        <location filename="setupimagedialog.ui" line="1072"/>
+        <source>X:</source>
+        <translation>X:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="708"/>
+        <location filename="setupimagedialog.ui" line="1129"/>
+        <source>Y:</source>
+        <translation>Y:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="810"/>
+        <location filename="setupimagedialog.ui" line="1231"/>
+        <source>Z:</source>
+        <translation>Z:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="885"/>
+        <source>Scale</source>
+        <translation>Масштабировать</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="987"/>
+        <source>Rotation</source>
+        <translation>Вращать</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="1030"/>
+        <location filename="setupimagedialog.ui" line="1155"/>
+        <location filename="setupimagedialog.ui" line="1184"/>
+        <source>360</source>
+        <translation>360</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.cpp" line="178"/>
+        <location filename="setupimagedialog.cpp" line="190"/>
+        <location filename="setupimagedialog.cpp" line="195"/>
+        <location filename="setupimagedialog.cpp" line="200"/>
+        <location filename="setupimagedialog.cpp" line="205"/>
+        <location filename="setupimagedialog.cpp" line="210"/>
+        <location filename="setupimagedialog.cpp" line="215"/>
+        <source>%1</source>
+        <translation>%1</translation>
+    </message>
+</context>
+<context>
+    <name>TSetupTaskDialog</name>
+    <message>
+        <location filename="setuptaskdialog.ui" line="32"/>
+        <source>The task settings</source>
+        <translation>Параметры задачи</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="64"/>
+        <source>Base settings</source>
+        <translation>Базовые параметры</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="82"/>
+        <source>Physical parameters</source>
+        <translation> Физические параметры</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="138"/>
+        <source>Youngs modulus:</source>
+        <translation>Модуль Юнга:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="157"/>
+        <source>Poissons ratio:</source>
+        <translation>Коэффициент Пуассона:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="198"/>
+        <source>Damping:</source>
+        <translation>Демпфирование:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="233"/>
+        <source>Density:</source>
+        <translation>Плотность:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="253"/>
+        <source>Task type</source>
+        <translation>Тип задачи</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="274"/>
+        <source>&amp;Statics</source>
+        <translation>&amp;Статика</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="296"/>
+        <source>&amp;Dynamics</source>
+        <translation>&amp;Динамика</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="316"/>
+        <source>Computation parameters</source>
+        <translation>Параметры расчета</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="353"/>
+        <source>Accuracy of calculations:</source>
+        <translation>Точность вычислений:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="372"/>
+        <source>Direct &amp;method solving SLAE</source>
+        <translation>Прямой &amp;метод решения СЛАУ</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="394"/>
+        <source>&amp;Iterative method solving SLAE</source>
+        <translation>&amp;Итерационный метод решения СЛАУ</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="417"/>
+        <source>Time parameters</source>
+        <translation>Параметры времени</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="438"/>
+        <source>Wilson-θ:</source>
+        <translation>Метод Вильсона:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="508"/>
+        <source>Stop:</source>
+        <translation>Конец:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="527"/>
+        <source>Start:</source>
+        <translation>Начало:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="562"/>
+        <source>Step:</source>
+        <translation>Шаг:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="582"/>
+        <source>Output settings</source>
+        <translation>Параметры вывода</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="600"/>
+        <source>Width:</source>
+        <translation>Ширина:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="638"/>
+        <source>Precision:</source>
+        <translation>Точность:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="677"/>
+        <source>Thermal expansion</source>
+        <translation>Температурное расширение</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="759"/>
+        <source>Forces</source>
+        <translation>Нагрузки</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="775"/>
+        <source>Volume</source>
+        <translation>Объемные</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="797"/>
+        <location filename="setuptaskdialog.ui" line="895"/>
+        <location filename="setuptaskdialog.ui" line="993"/>
+        <location filename="setuptaskdialog.ui" line="1472"/>
+        <location filename="setuptaskdialog.cpp" line="284"/>
+        <location filename="setuptaskdialog.cpp" line="802"/>
+        <location filename="setuptaskdialog.cpp" line="854"/>
+        <location filename="setuptaskdialog.cpp" line="905"/>
+        <source>Expression</source>
+        <translation>Выражение</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="802"/>
+        <location filename="setuptaskdialog.ui" line="900"/>
+        <location filename="setuptaskdialog.ui" line="998"/>
+        <location filename="setuptaskdialog.ui" line="1477"/>
+        <location filename="setuptaskdialog.cpp" line="285"/>
+        <location filename="setuptaskdialog.cpp" line="803"/>
+        <location filename="setuptaskdialog.cpp" line="855"/>
+        <location filename="setuptaskdialog.cpp" line="906"/>
+        <source>Predicate</source>
+        <translation>Предикат</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="807"/>
+        <location filename="setuptaskdialog.ui" line="905"/>
+        <location filename="setuptaskdialog.ui" line="1003"/>
+        <location filename="setuptaskdialog.ui" line="2167"/>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="812"/>
+        <location filename="setuptaskdialog.ui" line="910"/>
+        <location filename="setuptaskdialog.ui" line="1008"/>
+        <location filename="setuptaskdialog.ui" line="2186"/>
+        <source>y</source>
+        <translation>y</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="817"/>
+        <location filename="setuptaskdialog.ui" line="915"/>
+        <location filename="setuptaskdialog.ui" line="1013"/>
+        <location filename="setuptaskdialog.ui" line="2243"/>
+        <source>z</source>
+        <translation>z</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="837"/>
+        <location filename="setuptaskdialog.ui" line="935"/>
+        <location filename="setuptaskdialog.ui" line="1056"/>
+        <location filename="setuptaskdialog.ui" line="1512"/>
+        <location filename="setuptaskdialog.ui" line="1671"/>
+        <location filename="setuptaskdialog.ui" line="2369"/>
+        <source>Remove the current row</source>
+        <translation>Удалить текущую строку</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="840"/>
+        <location filename="setuptaskdialog.ui" line="863"/>
+        <location filename="setuptaskdialog.ui" line="938"/>
+        <location filename="setuptaskdialog.ui" line="961"/>
+        <location filename="setuptaskdialog.ui" line="1033"/>
+        <location filename="setuptaskdialog.ui" line="1059"/>
+        <location filename="setuptaskdialog.ui" line="1515"/>
+        <location filename="setuptaskdialog.ui" line="1538"/>
+        <location filename="setuptaskdialog.ui" line="1674"/>
+        <location filename="setuptaskdialog.ui" line="1697"/>
+        <location filename="setuptaskdialog.ui" line="2372"/>
+        <location filename="setuptaskdialog.ui" line="2395"/>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="860"/>
+        <location filename="setuptaskdialog.ui" line="958"/>
+        <location filename="setuptaskdialog.ui" line="1030"/>
+        <location filename="setuptaskdialog.ui" line="1535"/>
+        <location filename="setuptaskdialog.ui" line="1694"/>
+        <location filename="setuptaskdialog.ui" line="2392"/>
+        <source>Add new row</source>
+        <translation>Добавить новую строку</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="873"/>
+        <source>Surface</source>
+        <translation>Поверхностные</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="971"/>
+        <source>Concentrated</source>
+        <translation>Сосредоточенные</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1071"/>
+        <source>Boundary conditions</source>
+        <translation>Граничные условия</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1092"/>
+        <source>The initial conditions</source>
+        <translation>Начальные условия</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1110"/>
+        <location filename="setuptaskdialog.ui" line="1167"/>
+        <location filename="setuptaskdialog.ui" line="1205"/>
+        <location filename="setuptaskdialog.ui" line="1224"/>
+        <location filename="setuptaskdialog.ui" line="1243"/>
+        <location filename="setuptaskdialog.ui" line="1281"/>
+        <location filename="setuptaskdialog.ui" line="1338"/>
+        <location filename="setuptaskdialog.ui" line="1376"/>
+        <location filename="setuptaskdialog.ui" line="1395"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1129"/>
+        <source>U:</source>
+        <translation>U:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1148"/>
+        <source>V:</source>
+        <translation>V:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1186"/>
+        <source>W:</source>
+        <translation>W:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1262"/>
+        <source>Vt:</source>
+        <translation>Vt:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1300"/>
+        <source>Ut:</source>
+        <translation>Ut:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1319"/>
+        <source>Wt:</source>
+        <translation>Wt:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1357"/>
+        <source>Utt:</source>
+        <translation>Utt:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1414"/>
+        <source>Vtt:</source>
+        <translation>Vtt:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1433"/>
+        <source>Wtt:</source>
+        <translation>Wtt:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1453"/>
+        <source>Limiting conditions</source>
+        <translation>Граничные условия</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1482"/>
+        <source>U</source>
+        <translation>U</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1487"/>
+        <source>V</source>
+        <translation>V</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1492"/>
+        <source>W</source>
+        <translation>W</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1549"/>
+        <source>Nonlinearity</source>
+        <translation>Нелинейность</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1567"/>
+        <source>Method of calculation</source>
+        <translation>Метод расчета</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1585"/>
+        <source>&amp;variable stiffness</source>
+        <translation>переменной &amp;жесткости</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1607"/>
+        <source>&amp;elastic solutions</source>
+        <translation>&amp;упругих решений</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1627"/>
+        <source>Mechanical properties of the material</source>
+        <translation>Механические свойства материала</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1646"/>
+        <source>Stress</source>
+        <translation>Напряжения</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1651"/>
+        <source>Deformation</source>
+        <translation>Деформации</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1721"/>
+        <source>nonlinear calculation</source>
+        <translation>нелинейный расчет</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1740"/>
+        <source>Force step</source>
+        <translation>Шаг по нагрузке</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1765"/>
+        <source>Notations</source>
+        <translation>Обозначения</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1883"/>
+        <source>Function</source>
+        <translation>Функция</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="1894"/>
+        <location filename="setuptaskdialog.ui" line="2344"/>
+        <source>Name</source>
+        <translation>Обозначение</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2130"/>
+        <source>Coordinate</source>
+        <translation>Координаты</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2148"/>
+        <source>x:</source>
+        <translation>x:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2205"/>
+        <source>y:</source>
+        <translation>y:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2224"/>
+        <source>z:</source>
+        <translation>z:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2263"/>
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2281"/>
+        <source>t:</source>
+        <translation>t:</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2300"/>
+        <source>t</source>
+        <translation>t</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2307"/>
+        <source>Variables</source>
+        <translation>Параметры</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2325"/>
+        <source>Global variables</source>
+        <translation>Глобальные параметры</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.ui" line="2349"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="77"/>
+        <location filename="setuptaskdialog.cpp" line="86"/>
+        <source>&amp;Select all</source>
+        <translation>&amp;Выделить все</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="78"/>
+        <location filename="setuptaskdialog.cpp" line="87"/>
+        <source>Clear &amp;all</source>
+        <translation>&amp;Сбросить все</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="80"/>
+        <source>Select &amp;X</source>
+        <translation>Выделить по &amp;X</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="81"/>
+        <source>Select &amp;Y</source>
+        <translation>Выделить по &amp;Y</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="82"/>
+        <source>Select &amp;Z</source>
+        <translation>Выделить по &amp;Z</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="84"/>
+        <location filename="setuptaskdialog.cpp" line="93"/>
+        <location filename="setuptaskdialog.cpp" line="95"/>
+        <source>&amp;Remove all</source>
+        <translation>У&amp;далить все</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="89"/>
+        <source>Select &amp;U</source>
+        <translation>Выделить по &amp;U</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="90"/>
+        <source>Select &amp;V</source>
+        <translation>Выделить по &amp;V</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="91"/>
+        <source>Select &amp;W</source>
+        <translation>Выделить по &amp;W</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="957"/>
+        <location filename="setuptaskdialog.cpp" line="964"/>
+        <location filename="setuptaskdialog.cpp" line="974"/>
+        <location filename="setuptaskdialog.cpp" line="981"/>
+        <location filename="setuptaskdialog.cpp" line="991"/>
+        <location filename="setuptaskdialog.cpp" line="998"/>
+        <location filename="setuptaskdialog.cpp" line="1008"/>
+        <location filename="setuptaskdialog.cpp" line="1016"/>
+        <location filename="setuptaskdialog.cpp" line="1026"/>
+        <location filename="setuptaskdialog.cpp" line="1033"/>
+        <location filename="setuptaskdialog.cpp" line="1072"/>
+        <location filename="setuptaskdialog.cpp" line="1079"/>
+        <location filename="setuptaskdialog.cpp" line="1095"/>
+        <location filename="setuptaskdialog.cpp" line="1102"/>
+        <location filename="setuptaskdialog.cpp" line="1118"/>
+        <location filename="setuptaskdialog.cpp" line="1125"/>
+        <location filename="setuptaskdialog.cpp" line="1140"/>
+        <location filename="setuptaskdialog.cpp" line="1146"/>
+        <location filename="setuptaskdialog.cpp" line="1262"/>
+        <location filename="setuptaskdialog.cpp" line="1269"/>
+        <location filename="setuptaskdialog.cpp" line="1278"/>
+        <location filename="setuptaskdialog.cpp" line="1285"/>
+        <location filename="setuptaskdialog.cpp" line="1295"/>
+        <location filename="setuptaskdialog.cpp" line="1302"/>
+        <location filename="setuptaskdialog.cpp" line="1311"/>
+        <location filename="setuptaskdialog.cpp" line="1318"/>
+        <location filename="setuptaskdialog.cpp" line="1327"/>
+        <location filename="setuptaskdialog.cpp" line="1334"/>
+        <location filename="setuptaskdialog.cpp" line="1343"/>
+        <location filename="setuptaskdialog.cpp" line="1350"/>
+        <location filename="setuptaskdialog.cpp" line="1360"/>
+        <location filename="setuptaskdialog.cpp" line="1370"/>
+        <location filename="setuptaskdialog.cpp" line="1380"/>
+        <location filename="setuptaskdialog.cpp" line="1390"/>
+        <location filename="setuptaskdialog.cpp" line="1400"/>
+        <location filename="setuptaskdialog.cpp" line="1410"/>
+        <location filename="setuptaskdialog.cpp" line="1420"/>
+        <location filename="setuptaskdialog.cpp" line="1430"/>
+        <location filename="setuptaskdialog.cpp" line="1440"/>
+        <location filename="setuptaskdialog.cpp" line="1464"/>
+        <location filename="setuptaskdialog.cpp" line="1473"/>
+        <location filename="setuptaskdialog.cpp" line="1876"/>
+        <location filename="setuptaskdialog.cpp" line="1885"/>
+        <location filename="setuptaskdialog.cpp" line="1892"/>
+        <location filename="setuptaskdialog.cpp" line="1909"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="957"/>
+        <location filename="setuptaskdialog.cpp" line="964"/>
+        <location filename="setuptaskdialog.cpp" line="974"/>
+        <location filename="setuptaskdialog.cpp" line="981"/>
+        <source>Incorrectly specified elastic modulus!</source>
+        <translation>Неправильно задан модуль Юнга!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="991"/>
+        <location filename="setuptaskdialog.cpp" line="998"/>
+        <source>Incorrectly specified calculation errors!</source>
+        <translation>Неправильно задана погрешность вычислений!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1008"/>
+        <location filename="setuptaskdialog.cpp" line="1016"/>
+        <location filename="setuptaskdialog.cpp" line="1026"/>
+        <location filename="setuptaskdialog.cpp" line="1033"/>
+        <source>Incorrectly set output parameters!</source>
+        <translation>Некорректно заданы параметры вывода!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1072"/>
+        <source>Incorrectly specified volume force in a row: %1!</source>
+        <translation>Неправильно задана объемная нагрузкa в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1079"/>
+        <location filename="setuptaskdialog.cpp" line="1102"/>
+        <location filename="setuptaskdialog.cpp" line="1125"/>
+        <location filename="setuptaskdialog.cpp" line="1146"/>
+        <source>Predicate is not set correctly in the string: %1!</source>
+        <translation>Неправильно задан предикат в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1095"/>
+        <source>Incorrectly specified surface force in a row: %1!</source>
+        <translation>Неправильно задана поверхностная нагрузкa в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1118"/>
+        <source>Incorrectly specified point force in a row: %1!</source>
+        <translation>Неправильно задана сосредоточенная нагрузкa в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1140"/>
+        <source>Incorrectly specified boundary condition in a row: %1!</source>
+        <translation>Неправильно заданo граничное условие в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1262"/>
+        <location filename="setuptaskdialog.cpp" line="1269"/>
+        <source>Incorrectly specified density!</source>
+        <translation>Неправильно задана плотность!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1278"/>
+        <location filename="setuptaskdialog.cpp" line="1285"/>
+        <source>Damping parameter is set incorrectly!</source>
+        <translation>Неправильно задан параметр демпфирования!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1295"/>
+        <source>Incorrectly set the Wilson-theta!</source>
+        <translation>Некоректно заданна тетта Вильсона!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1302"/>
+        <location filename="setuptaskdialog.cpp" line="1311"/>
+        <location filename="setuptaskdialog.cpp" line="1318"/>
+        <location filename="setuptaskdialog.cpp" line="1327"/>
+        <location filename="setuptaskdialog.cpp" line="1334"/>
+        <source>Incorrectly set the initial time!</source>
+        <translation>Неправильно задан начальный момент времени!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1343"/>
+        <location filename="setuptaskdialog.cpp" line="1350"/>
+        <source>Incorrectly set the time step!</source>
+        <translation>Неправильно задан шаг по времени!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1360"/>
+        <location filename="setuptaskdialog.cpp" line="1370"/>
+        <location filename="setuptaskdialog.cpp" line="1380"/>
+        <location filename="setuptaskdialog.cpp" line="1390"/>
+        <location filename="setuptaskdialog.cpp" line="1400"/>
+        <location filename="setuptaskdialog.cpp" line="1410"/>
+        <location filename="setuptaskdialog.cpp" line="1420"/>
+        <location filename="setuptaskdialog.cpp" line="1430"/>
+        <location filename="setuptaskdialog.cpp" line="1440"/>
+        <source>Incorrectly set the initial conditions!</source>
+        <translation>Неправильно заданы начальные условия!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1450"/>
+        <source>volumetric force X</source>
+        <translation>объемной нагрузки X</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1451"/>
+        <source>volumetric force Y</source>
+        <translation>объемной нагрузки Y</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1452"/>
+        <source>volumetric force Z</source>
+        <translation>объемной нагрузки Z</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1453"/>
+        <source>coordinate x</source>
+        <translation>координаты x</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1454"/>
+        <source>coordinate y</source>
+        <translation>координаты y</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1455"/>
+        <source>coordinate z</source>
+        <translation>координаты z</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1464"/>
+        <location filename="setuptaskdialog.cpp" line="1473"/>
+        <source>Incorrect function name %1!</source>
+        <translation>Неправильное название функции %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1876"/>
+        <source>Incorrectly set force step!</source>
+        <translation>Некорректно задан шаг по нагрузке!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1885"/>
+        <source>Incorrectly set stress intensity in a row: %1!</source>
+        <translation>Неправильно задана интенсивность напряжений в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1892"/>
+        <source>Incorrectly set deformation intensity in a row: %1!</source>
+        <translation>Неправильно задана интенсивность деформаций в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="setuptaskdialog.cpp" line="1909"/>
+        <source>Incorrectly set variable value in a row: %1!</source>
+        <translation>Некорректно задано значение параметра в строке: %1!</translation>
+    </message>
+</context>
+<context>
+    <name>TVCDialog</name>
+    <message>
+        <location filename="vcdialog.ui" line="26"/>
+        <source>Adding a new function for the analysis</source>
+        <translation>Добавление новой функции для анализа</translation>
+    </message>
+    <message>
+        <location filename="vcdialog.ui" line="54"/>
+        <source>Functional expression, for example, S = Sxx ^ 2 + Syy ^ 2</source>
+        <translation>Функциональное выражение, например, S = Sxx^2 + Syy^2</translation>
+    </message>
+    <message>
+        <location filename="vcdialog.ui" line="73"/>
+        <source>Expression:</source>
+        <translation>Выражение:</translation>
+    </message>
+    <message>
+        <location filename="vcdialog.cpp" line="32"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="vcdialog.cpp" line="32"/>
+        <source>Invalid expression!</source>
+        <translation>Неправильно задано выражение!</translation>
+    </message>
+</context>
+<context>
+    <name>VCDialog</name>
+    <message>
+        <source>Adding a new function for the analysis</source>
+        <translation type="vanished">Добавление новой функции для анализа</translation>
+    </message>
+    <message>
+        <source>Functional expression, for example, S = Sxx ^ 2 + Syy ^ 2</source>
+        <translation type="vanished">Функциональное выражение, например, S = Sxx^2 + Syy^2</translation>
+    </message>
+    <message>
+        <source>Expression:</source>
+        <translation type="vanished">Выражение:</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="vanished">Ошибка</translation>
+    </message>
+    <message>
+        <source>Invalid expression!</source>
+        <translation type="vanished">Неправильно задано выражение!</translation>
+    </message>
+</context>
+</TS>
