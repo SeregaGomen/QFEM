@@ -37,8 +37,8 @@ bool TFEMObject::start(void)
             case StaticProblem:
                 if (params.pMethod == Linear) // Упругий расчет
                     // fem = new TFEMStatic<TBCCSolver>(objName, &mesh, &results, &notes);
-                    fem = new TFEMStaticThread<TBCCSolver>(objName, &mesh, &results, &notes);
-                    // fem = new TFEMStaticThread<TEigenSolver>(objName, &mesh, &results, &notes);
+                    // fem = new TFEMStaticThread<TBCCSolver>(objName, &mesh, &results, &notes);
+                    fem = new TFEMStaticThread<TEigenSolver>(objName, &mesh, &results, &notes);
                 else if (params.pMethod == MVS)
                     fem = new TFEMStaticMVS<TBCCSolver>(params.forceStep, objName, &mesh, &results, &notes);
                 break;
