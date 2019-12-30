@@ -1,5 +1,7 @@
 //---------------------------------------------------------------------------
+#include <cmath>
 #include <cassert>
+#include <cfloat>
 
 #include "sparse32.h"
 #include "msg/msg.h"
@@ -181,8 +183,8 @@ void BCCS_Matrix::spSetMatrix(const int* mesh, int nelmnts, int elmsze, int nv, 
 
     /* prepare matrix */
     nnz = aptrs[nvtxs];
-    len = unsigned(nnz * blksze * blksze);
-    avals = new double[len];
+    len = nnz * blksze * blksze;
+    avals = new double[unsigned(len)];
 
     for (ilim = len - 8, cv = avals, i = 0; i <= ilim; i += 8, cv += 8)
         cv[0] = cv[1] = cv[2] = cv[3] = cv[4] = cv[5] = cv[6] = cv[7] = 0;
@@ -1288,7 +1290,7 @@ int spFactor(BCCS_Matrix& matrix, double tol, bool& aborted)
 
     /* test arguments */
     if ((matrix.aptrs == nullptr) || (matrix.ainds == nullptr) || (matrix.avals == nullptr) || (matrix.blksze <= 0) ||
-        (matrix.blksze >= MAXBLKSZE) || (matrix.nvtxs != matrix.nvtxs) || (matrix.error != 0))
+        (matrix.blksze >= MAXBLKSZE) || (matrix.error != 0))
         return 1;
 
     /* load data from structure */
