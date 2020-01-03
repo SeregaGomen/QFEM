@@ -95,7 +95,7 @@ protected:
     // Признак того, что процесс расчета успешно завершен
     bool isProcessCalculated;
     // Настройка КЭ
-    void setupFE(TFE *fe, unsigned i)
+    virtual void setupFE(TFE *fe, unsigned i)
     {
         double val;
         matrix<double> x;

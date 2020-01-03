@@ -38,9 +38,11 @@ bool TFEMObject::start(void)
                 if (params.pMethod == Linear) // Упругий расчет
                     // fem = new TFEMStatic<TBCCSolver>(objName, &mesh, &results, &notes);
                     // fem = new TFEMStaticThread<TBCCSolver>(objName, &mesh, &results, &notes);
-                    fem = new TFEMStaticThread<TEigenSolver>(objName, &mesh, &results, &notes);
+                    // fem = new TFEMStaticThread<TEigenSolver>(objName, &mesh, &results, &notes);
+                    fem = new TFEMStatic<TEigenSolver>(objName, &mesh, &results, &notes);
                 else if (params.pMethod == MVS)
-                    fem = new TFEMStaticMVS<TBCCSolver>(params.forceStep, objName, &mesh, &results, &notes);
+                    // fem = new TFEMStaticMVS<TBCCSolver>(params.forceStep, objName, &mesh, &results, &notes);
+                    fem = new TFEMStaticMVS<TEigenSolver>(params.forceStep, objName, &mesh, &results, &notes);
                 break;
             case DynamicProblem:
                 fem = new TFEMDynamic<TBCCSolver>(objName, &mesh, &results, &notes);
@@ -206,7 +208,7 @@ void TFEMObject::printResult(string fname)
 
     if (params.fType == DynamicProblem)
         counter_size = unsigned((params.t1 - params.t0) / params.th);
-    msg->setProcess(PRINT_RESULT_PROCESS, 0, int(counter_size * mesh.getNumVertex()) - 1, 10);
+    msg->setProcess(PRINT_RESULT_PROCESS, 1, int(counter_size * mesh.getNumVertex()));
     do
     {
         if (params.fType == DynamicProblem)
@@ -337,6 +339,7 @@ void TFEMObject::printResult(string fname)
     }
     while (t <= params.t1);
     out.close();
+    msg->stopProcess();
     if (out.fail())
         cerr << sayError(WRITE_FILE_ERR) << endl;
 }

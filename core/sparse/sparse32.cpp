@@ -797,7 +797,7 @@ int spOrder(BCCS_Matrix& matrix, bool& aborted)
     adjncy = new int[unsigned(nedges)];
 
     /* form (xadj,adjncy) from (aptrs,ainds) */
-    msg->setProcess(SYSTEM_PREPARE_PROCESS, 0, nvtxs - 1, 10);
+    msg->setProcess(SYSTEM_PREPARE_PROCESS, 1, nvtxs);
     for(l = i = 0; i < nvtxs; i++)
     {
         msg->addProgress();
@@ -817,6 +817,7 @@ int spOrder(BCCS_Matrix& matrix, bool& aborted)
             }
         }
     }
+    msg->stopProcess();
     xadj[nvtxs] = l;
     assert(l == nedges);
 
@@ -1037,8 +1038,8 @@ static int gsfctb(BCCS_Matrix& matrix, int blksze, double tol, bool& aborted)
 
     /* main routine */
 
-    msg->setProcess(SYSTEM_FACTORIZATION_PROCESS, 0, nvtxs - 1, 10);
-    for(error = j = 0; j < nvtxs; j++)
+    msg->setProcess(SYSTEM_FACTORIZATION_PROCESS, 1, nvtxs);
+    for (error = j = 0; j < nvtxs; j++)
     {
         msg->addProgress();
         if (aborted)
@@ -1275,6 +1276,7 @@ static int gsfctb(BCCS_Matrix& matrix, int blksze, double tol, bool& aborted)
         }
 
     } /* next factored columns */
+    msg->stopProcess();
 
     delete [] translate;
     delete [] first;

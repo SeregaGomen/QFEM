@@ -46,7 +46,7 @@ void TEigenSolver::createMemMap(TMesh* mesh)
     vector< vector<unsigned> > meshMap(size);
 
     // Создание списка связей узлов сетки
-    msg->setProcess(MESH_ANALYSE_PROCESS, 0, int(mesh->getNumFE()) - 1, 10);
+    msg->setProcess(MESH_ANALYSE_PROCESS, 1, int(mesh->getNumFE()));
     for (unsigned i = 0; i < mesh->getNumFE(); msg->addProgress(), i++)
         for (unsigned j = 0; j < mesh->getSizeFE(); j++)
             for (unsigned k = 0; k < mesh->getSizeFE(); k++)
@@ -62,6 +62,8 @@ void TEigenSolver::createMemMap(TMesh* mesh)
     for (unsigned i = 0; i < size; i++)
         for (unsigned j = 0; j < freedom; j++)
             memMap[i * freedom + j] = int(sizeof(double) * freedom * meshMap[i].size());
+
+    msg->stopProcess();
 }
 
 void TEigenSolver::setupStaticMatrix(TMesh* mesh)

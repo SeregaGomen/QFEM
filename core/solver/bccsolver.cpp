@@ -33,7 +33,6 @@ bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
     spSolve(globalStiffnessMatrix, globalLoadVector.data());
     if (isAborted)
         return false;
-//    msg->setProcess();
     result = globalLoadVector;
     ////////////////////
 //    for (unsigned i = 0; i < right.size(); i++)

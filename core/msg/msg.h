@@ -374,10 +374,9 @@ public:
         stringstream ss;
         int persent = (processStop - processStart) ? int((100.0 * double(++processCurrent)) / double(processStop - processStart)) : 100;
 
-        if (processCurrent == processStop + 1)
+        if (processCurrent == processStop)
         {
-            // lock_guard<mutex> guard(mtx);
-            ss << '\r' << sayProcess(processCode) << "... 100%" << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl << endl;
+            ss << '\r' << sayProcess(processCode) << "... 100%"/* << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl << endl*/;
             cout << ss.str() << flush;
             return;
         }
@@ -385,7 +384,6 @@ public:
             return;
         if (persent % processStep == 0)
         {
-            // lock_guard<mutex> guard(mtx);
             ss << '\r' << sayProcess(processCode) << "... " << persent << "%";
             cout << ss.str() << flush;
         }
@@ -395,8 +393,8 @@ public:
     {
         stringstream ss;
 
-        if (processCurrent == processStop + 1)
-            return;
+//        if (processCurrent == processStop)
+//            return;
         ss << '\r' << sayProcess(processCode) << "... 100%" << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl << endl;
         cout << ss.str() << flush;
     }

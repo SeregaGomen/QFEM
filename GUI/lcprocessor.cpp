@@ -52,7 +52,7 @@ void TLCProcessor::processBoundaryVertex(void)
     lcVertex->clear();
     parser.set_variables(object->getParams().variables);
     isStoped = false;
-    msg->setProcess(BC_CREATE_PROCESS, 0, int(object->getMesh().getNumBE()) * num - 1);
+    msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumBE()) * num);
     // Обработка граничных условий
     for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
     {
@@ -145,4 +145,5 @@ void TLCProcessor::processBoundaryVertex(void)
                 }
         }
     }
+    msg->stopProcess();
 }
