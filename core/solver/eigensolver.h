@@ -51,14 +51,17 @@ public:
     }
     void addStiffnessMatrix(double value, unsigned i, unsigned j)
     {
-        globalStiffnessMatrix.coeffRef(i, j) += value;
+#pragma omp critical
+            globalStiffnessMatrix.coeffRef(i, j) += value;
     }
     void addMassMatrix(double value, unsigned i, unsigned j)
     {
+#pragma omp critical
         globalMassMatrix.coeffRef(i, j) += value;
     }
     void addDampingMatrix(double value, unsigned i, unsigned j)
     {
+#pragma omp critical
         globalDampingMatrix.coeffRef(i, j) += value;
     }
     void print(string);

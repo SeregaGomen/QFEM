@@ -571,10 +571,12 @@ template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double>& loa
         msg->setProcess(CALCULATION_CONCENTRATED_LOAD_PROCESS, 1, mesh->getNumVertex());
 #ifdef OPENMP
         int step = TFEM::mesh->getNumVertex() / numThread;
+        vector<double> thd_max_val(numThread);
 
 #pragma omp parallel for
         for (int i = 0; i < numThread; i++)
-            getConcentratedLoad(load, max_val, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+            getConcentratedLoad(load, thd_max_val[i], i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+        max_val = *max_element(thd_max_val.begin(), thd_max_val.end());
 #else
         getConcentratedLoad(load, max_val, 0, TFEM::mesh->getNumFE(), t);
 #endif
@@ -596,10 +598,12 @@ template<class T> double TFEMStatic<T>::calcSurfaceLoad(vector<double>& load, do
         msg->setProcess(CALCULATION_SURFACE_LOAD_PROCESS, 1, mesh->getNumBE());
 #ifdef OPENMP
         int step = TFEM::mesh->getNumBE() / numThread;
+        vector<double> thd_max_val(numThread);
 
 #pragma omp parallel for
         for (int i = 0; i < numThread; i++)
-            getSurfaceLoad(load, max_val, i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t);
+            getSurfaceLoad(load, thd_max_val[i], i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t);
+        max_val = *max_element(thd_max_val.begin(), thd_max_val.end());
 #else
         getSurfaceLoad(load, max_val, 0, TFEM::mesh->getNumBE(), t);
 #endif
@@ -621,10 +625,12 @@ template<class T> double TFEMStatic<T>::calcPressureLoad(vector<double>& load, d
         msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, mesh->getNumBE());
 #ifdef OPENMP
         int step = TFEM::mesh->getNumBE() / numThread;
+        vector<double> thd_max_val(numThread);
 
 #pragma omp parallel for
         for (int i = 0; i < numThread; i++)
-            getPressureLoad(load, max_val, i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t);
+            getPressureLoad(load, thd_max_val[i], i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t);
+        max_val = *max_element(thd_max_val.begin(), thd_max_val.end());
 #else
         getPressureLoad(load, max_val, 0, TFEM::mesh->getNumBE(), t);
 #endif
@@ -646,10 +652,12 @@ template<class T> double TFEMStatic<T>::calcVolumeLoad(vector<double>& load, dou
         msg->setProcess(CALCULATION_VOLUME_LOAD_PROCESS, 1, mesh->getNumFE());
 #ifdef OPENMP
         int step = TFEM::mesh->getNumFE() / numThread;
+        vector<double> thd_max_val(numThread);
 
 #pragma omp parallel for
         for (int i = 0; i < numThread; i++)
-            getVolumeLoad(load, max_val, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+            getVolumeLoad(load, thd_max_val[i], i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+        max_val = *max_element(thd_max_val.begin(), thd_max_val.end());
 #else
         getVolumeLoad(load, max_val, 0, TFEM::mesh->getNumFE(), t);
 #endif
