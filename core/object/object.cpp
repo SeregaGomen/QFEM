@@ -1,5 +1,4 @@
 #include "object.h"
-#include "fem/femtstatic_t.h"
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
 #include "solver/bccsolver.h"
@@ -37,8 +36,6 @@ bool TFEMObject::start(void)
             case StaticProblem:
                 if (params.pMethod == Linear) // Упругий расчет
                     // fem = new TFEMStatic<TBCCSolver>(objName, &mesh, &results, &notes);
-                    // fem = new TFEMStaticThread<TBCCSolver>(objName, &mesh, &results, &notes);
-                    // fem = new TFEMStaticThread<TEigenSolver>(objName, &mesh, &results, &notes);
                     fem = new TFEMStatic<TEigenSolver>(objName, &mesh, &results, &notes);
                 else if (params.pMethod == MVS)
                     // fem = new TFEMStaticMVS<TBCCSolver>(params.forceStep, objName, &mesh, &results, &notes);

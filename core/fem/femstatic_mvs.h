@@ -23,7 +23,7 @@ private:
     vector<double> si;                      // Интенсивность напряжений (по элементам)
     vector<double> e0;                      // Модули упругости (для каждого КЭ), полученные на предыдущей итерации
     vector<unsigned> index0;                // Индекс упругих свойств, полученный на предыдущей итерации
-    void setupFE(TFE*, unsigned);                 // Настройка парметров КЭ (для нелинейного случая)
+    void setupFE(TFE*, unsigned);           // Настройка парметров КЭ (для нелинейного случая)
     void calcIteration(void);
     double calcStressIntensity(TResultList&);
 public:
@@ -81,7 +81,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
         TFEMStatic<T>::calcGlobalMatrix();
 
         // Учет нагрузки
-        TFEMStatic<T>::useLoadCondition(load);
+        TFEMStatic<T>::setLoad(load);
 
         // Учет краевых условий
         TFEMStatic<T>::calcBoundaryCondition();

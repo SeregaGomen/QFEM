@@ -14,6 +14,7 @@ INCLUDEPATH += ../core \
                ../../../eigen
 
 
+msvc:QMAKE_CXXFLAGS+= /openmp
 gcc:QMAKE_CXXFLAGS+= -fopenmp
 gcc:QMAKE_LFLAGS += -fopenmp
 
@@ -73,7 +74,6 @@ HEADERS  += mainwindow.h \
     terminal.h \
     lclist.h \
     glmesh.h \
-    ../core/fem/femtstatic_t.h \
     ../core/analyse/analyse.h \
     ../core/msg/msg.h \
     ../core/mesh/mesh.h \

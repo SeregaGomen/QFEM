@@ -1,7 +1,7 @@
 #ifndef FEMSTATIC_H
 #define FEMSTATIC_H
 
-#define OMP
+#define OPENMP
 
 #include <sstream>
 #include <iomanip>
@@ -11,7 +11,7 @@
 
 extern TMessenger* msg;
 
-#ifdef OMP
+#ifdef OPENMP
 const int numThread = omp_get_max_threads();
 #else
 const int numThread = 1;
@@ -26,27 +26,26 @@ template <class T> class TFEMStatic : public TFEM
 protected:
     T solver;
     void ansambleLocalMatrix(TFE*, unsigned);
-    void setBoundaryConstant(unsigned, unsigned, double);
-    void setLoadConstant(unsigned, unsigned, double);
-    void useLoadCondition(vector<double>&);
+    void setLoad(vector<double>&);
     void genResults(vector<double>&, bool isAdd = false);
     void avgResults(matrix<double>&, vector<int>&);
-    virtual void calcResult(matrix<double>&, vector<double>&);
-    virtual void saveResult(matrix<double>&, bool);
-    virtual void getConcentratedLoad(vector<double>&, double&, unsigned, unsigned, double);
-    virtual void getSurfaceLoad(vector<double>&, double&, unsigned, unsigned, double);
-    virtual void getPressureLoad(vector<double>&, double&, unsigned, unsigned, double);
-    virtual void getVolumeLoad(vector<double>&, double&, unsigned, unsigned, double);
-    virtual void getBoundaryCondition(unsigned, unsigned);
-    virtual void getFEResult(matrix<double>&, vector<double>&, vector<int>&, unsigned, unsigned);
-    virtual void getMatrix(unsigned, unsigned, bool);
-    virtual void calcBoundaryCondition(void);
-    virtual void calcGlobalMatrix(bool = true);
-    virtual double calcLoad(vector<double>&, double = 0);
-    virtual double calcConcentratedLoad(vector<double>&, double = 0);
-    virtual double calcSurfaceLoad(vector<double>&, double = 0);
-    virtual double calcVolumeLoad(vector<double>&, double = 0);
-    virtual double calcPressureLoad(vector<double>&, double = 0);
+    void calcResult(matrix<double>&, vector<double>&);
+    void saveResult(matrix<double>&, bool);
+    void getConcentratedLoad(vector<double>&, double&, unsigned, unsigned, double);
+    void getSurfaceLoad(vector<double>&, double&, unsigned, unsigned, double);
+    void getPressureLoad(vector<double>&, double&, unsigned, unsigned, double);
+    void getVolumeLoad(vector<double>&, double&, unsigned, unsigned, double);
+    void getBoundaryCondition(unsigned, unsigned);
+    void getFEResult(matrix<double>&, vector<double>&, vector<int>&, unsigned, unsigned);
+    void getMatrix(unsigned, unsigned, bool);
+    void getLoad(vector<double>&, unsigned, unsigned);
+    void calcBoundaryCondition(void);
+    void calcGlobalMatrix(bool = true);
+    double calcLoad(vector<double>&, double = 0);
+    double calcConcentratedLoad(vector<double>&, double = 0);
+    double calcSurfaceLoad(vector<double>&, double = 0);
+    double calcVolumeLoad(vector<double>&, double = 0);
+    double calcPressureLoad(vector<double>&, double = 0);
     bool checkBE(unsigned, TParameter&);
     bool checkFE(unsigned, TParameter&);
 public:
@@ -85,7 +84,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
     calcGlobalMatrix();
 
     // Учет нагрузки
-    useLoadCondition(load);
+    setLoad(load);
 
     // Учет краевых условий
     calcBoundaryCondition();
@@ -141,16 +140,18 @@ template<class T> void TFEMStatic<T>::ansambleLocalMatrix(TFE* fe, unsigned i)
 //-------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumVertex() / (numThread - 1) : TFEM::mesh->getNumVertex();
-
     if (params.plist.findParameter(BOUNDARY_CONDITION_PARAMETER))
     {
         msg->setProcess(CALC_BOUNDARY_CONDITION_PROCESS, 1, mesh->getNumVertex());
-#ifdef OMP
+#ifdef OPENMP
+        int step = TFEM::mesh->getNumVertex() / (numThread - 1);
+
 #pragma omp parallel for
-#endif
-        for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+        for (int i = 0; i < numThread - 1; i++)
             getBoundaryCondition(i * step, (i == numThread - 2) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
+#else
+        getBoundaryCondition(0, TFEM::mesh->getNumVertex());
+#endif
         if (isProcessAborted)
             throw ABORT_ERR;
         msg->stopProcess();
@@ -174,18 +175,20 @@ template<class T> double TFEMStatic<T>::calcLoad(vector<double>& load, double t)
 //-----------------------------------------------------------------------------------------
 template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double>& load, double t)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumVertex() / (numThread - 1) : TFEM::mesh->getNumVertex();
     double max_val = 0;
 
     if (params.plist.findParameter(CONCENTRATED_LOAD_PARAMETER))
     {
         msg->setProcess(CALCULATION_CONCENTRATED_LOAD_PROCESS, 1, mesh->getNumVertex());
+#ifdef OPENMP
+        int step = TFEM::mesh->getNumVertex() / (numThread - 1);
 
-#ifdef OMP
 #pragma omp parallel for
-#endif
-        for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+        for (int i = 0; i < numThread - 1; i++)
             getConcentratedLoad(load, max_val, i * step, (i == numThread - 2) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+#else
+        getConcentratedLoad(load, max_val, 0, TFEM::mesh->getNumFE(), t);
+#endif
         if (isProcessAborted)
             throw ABORT_ERR;
         msg->stopProcess();
@@ -197,17 +200,20 @@ template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double>& loa
 //-----------------------------------------------------------------------------------------
 template<class T> double TFEMStatic<T>::calcSurfaceLoad(vector<double>& load, double t)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumBE() / (numThread - 1) : TFEM::mesh->getNumBE();
     double max_val = 0;
 
     if (params.plist.findParameter(SURFACE_LOAD_PARAMETER))
     {
         msg->setProcess(CALCULATION_SURFACE_LOAD_PROCESS, 1, mesh->getNumBE());
-#ifdef OMP
+#ifdef OPENMP
+        int step = TFEM::mesh->getNumBE() / (numThread - 1);
+
 #pragma omp parallel for
-#endif
-        for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+        for (int i = 0; i < numThread - 1; i++)
             getSurfaceLoad(load, max_val, i * step, (i == numThread - 2) ? TFEM::mesh->getNumBE() : (i + 1) * step, t);
+#else
+        getSurfaceLoad(load, max_val, 0, TFEM::mesh->getNumBE(), t);
+#endif
         if (isProcessAborted)
             throw ABORT_ERR;
         msg->stopProcess();
@@ -219,17 +225,20 @@ template<class T> double TFEMStatic<T>::calcSurfaceLoad(vector<double>& load, do
 //-----------------------------------------------------------------------------------------
 template<class T> double TFEMStatic<T>::calcPressureLoad(vector<double>& load, double t)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumBE() / (numThread - 1) : TFEM::mesh->getNumBE();
     double max_val = 0;
 
     if (params.plist.findParameter(PRESSURE_LOAD_PARAMETER))
     {
         msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, mesh->getNumBE());
-#ifdef OMP
+#ifdef OPENMP
+        int step = TFEM::mesh->getNumBE() / (numThread - 1);
+
 #pragma omp parallel for
-#endif
-        for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+        for (int i = 0; i < numThread - 1; i++)
             getPressureLoad(load, max_val, i * step, (i == numThread - 2) ? TFEM::mesh->getNumBE() : (i + 1) * step, t);
+#else
+        getPressureLoad(load, max_val, 0, TFEM::mesh->getNumBE(), t);
+#endif
         if (isProcessAborted)
             throw ABORT_ERR;
         msg->stopProcess();
@@ -241,17 +250,20 @@ template<class T> double TFEMStatic<T>::calcPressureLoad(vector<double>& load, d
 //-----------------------------------------------------------------------------------------
 template<class T> double TFEMStatic<T>::calcVolumeLoad(vector<double>& load, double t)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumFE() / (numThread - 1) : TFEM::mesh->getNumFE();
     double max_val = 0;
 
     if (params.plist.findParameter(VOLUME_LOAD_PARAMETER))
     {
         msg->setProcess(CALCULATION_VOLUME_LOAD_PROCESS, 1, mesh->getNumFE());
-#ifdef OMP
+#ifdef OPENMP
+        int step = TFEM::mesh->getNumFE() / (numThread - 1);
+
 #pragma omp parallel for
-#endif
-        for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+        for (int i = 0; i < numThread - 1; i++)
             getVolumeLoad(load, max_val, i * step, (i == numThread - 2) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+#else
+        getVolumeLoad(load, max_val, 0, TFEM::mesh->getNumFE(), t);
+#endif
         if (isProcessAborted)
             throw ABORT_ERR;
         msg->stopProcess();
@@ -279,7 +291,6 @@ template<class T> void TFEMStatic<T>::saveResult(matrix<double>& res, bool isAdd
 //-------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcResult(matrix<double>& res, vector<double>& u)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumFE() / (numThread - 1) : TFEM::mesh->getNumFE();
     vector<int> counter(mesh->getNumVertex()); // Счетчик кол-ва вхождения узлов для осреднения результатов
 
     res.resize(params.numResult(mesh->getTypeFE()), mesh->getNumVertex());
@@ -290,11 +301,15 @@ template<class T> void TFEMStatic<T>::calcResult(matrix<double>& res, vector<dou
 
     // Вычисляем стандартные результаты по всем КЭ
     msg->setProcess(CALCULATION_STANDART_RESULT_PROCESS, 1, mesh->getNumFE());
-#ifdef OMP
+#ifdef OPENMP
+    int step = TFEM::mesh->getNumFE() / (numThread - 1);
+
 #pragma omp parallel for
-#endif
-    for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+    for (int i = 0; i < numThread - 1; i++)
         getFEResult(res, u, counter, i * step, (i == numThread - 2) ? TFEM::mesh->getNumFE() : (i + 1) * step);
+#else
+    getFEResult(res, u, counter, 0, TFEM::mesh->getNumFE());
+#endif
     if (isProcessAborted)
         throw ABORT_ERR;
     // Осредняем результаты
@@ -350,19 +365,33 @@ template<class T> bool TFEMStatic<T>::checkFE(unsigned index, TParameter& p)
 //-------------------------------------------------------------
 //      Формирование глобального вектора-столбца нагрузки
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::useLoadCondition(vector<double>& load)
+template<class T> void TFEMStatic<T>::setLoad(vector<double>& load)
 {
     int size = mesh->getNumVertex() * mesh->getFreedom();
 
     msg->setProcess(CREATE_LOAD_PROCESS, 1, size);
-    for (int i = 0; i < size; i++)
+#ifdef OPENMP
+    int step = size / (numThread - 1);
+
+#pragma omp parallel for
+    for (int i = 0; i < numThread - 1; i++)
+        getLoad(load, i * step, (i == numThread - 2) ? size : (i + 1) * step);
+#else
+    getLoadCondition(load, 0, size);
+#endif
+    if (isProcessAborted)
+        throw ABORT_ERR;
+    msg->stopProcess();
+}
+template<class T> void TFEMStatic<T>::getLoad(vector<double>& load, unsigned begin, unsigned end)
+{
+    for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
         if (isProcessAborted)
-            throw ABORT_ERR;
+            return;
         solver.addLoadVector(load[i], i);
     }
-    msg->stopProcess();
 }
 //-----------------------------------------------------------------------------------------
 //           Вычисление сосредоточенной нагрузки для заданного диапазона узлов
@@ -600,14 +629,16 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
 {
-    int step = (numThread > 1) ? TFEM::mesh->getNumFE() / (numThread - 1) : TFEM::mesh->getNumFE();
-
     msg->setProcess((isStatic) ? GENERATE_FE_STATIC_PROCESS : GENERATE_FE_DYNAMIC_PROCESS, 1, mesh->getNumFE());
-#ifdef OMP
+#ifdef OPENMP
+    int step = TFEM::mesh->getNumFE() / (numThread - 1);
+
 #pragma omp parallel for
-#endif
-    for (int i = 0; i < ((numThread == 1) ? numThread : numThread - 1); i++)
+    for (int i = 0; i < numThread - 1; i++)
         getMatrix(i * step, (i == numThread - 2) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic);
+#else
+    getMatrix(0, TFEM::mesh->getNumFE(), isStatic);
+#endif
     if (isProcessAborted)
         throw ABORT_ERR;
     msg->stopProcess();

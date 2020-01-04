@@ -225,7 +225,7 @@ template<class T> void TFEMDynamic<T>::createDynamicVector(void)
 
     // Вычисление вектора нагрузок для текущего момента времени
     TFEMStatic<T>::calcLoad(load, t);
-    TFEMStatic<T>::useLoadCondition(load);
+    TFEMStatic<T>::setLoad(load);
     TFEMStatic<T>::solver.createDynamicVector(u0, TFEM::params.th, TFEM::params.theta);
 }
 //---------------------------------------------------------
