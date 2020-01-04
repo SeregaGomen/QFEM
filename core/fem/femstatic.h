@@ -704,7 +704,7 @@ template<class T> void TFEMStatic<T>::setLoad(vector<double>& load)
     for (int i = 0; i < numThread - 1; i++)
         getLoad(load, i * step, (i == numThread - 2) ? size : (i + 1) * step);
 #else
-    getLoadCondition(load, 0, size);
+    getLoad(load, 0, size);
 #endif
     if (isProcessAborted)
         throw ABORT_ERR;

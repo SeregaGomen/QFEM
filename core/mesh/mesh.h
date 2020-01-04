@@ -21,6 +21,8 @@ private:
     // Минимальное значение координат
     vector<double> minX = {0, 0, 0};
     vector<double> maxX = {0, 0, 0};
+    // Структура сетки
+    vector< vector<unsigned> > meshMap;
     // Координаты вершин сетки
     matrix<double> x;
     // Связи между узлами в КЭ
@@ -189,6 +191,7 @@ public:
         x.clear();
         fe.clear();
         be.clear();
+        meshMap.clear();
     }
     void getCoordFE(unsigned index, matrix<double>& coord)
     {
@@ -258,6 +261,10 @@ public:
     void normal(unsigned, vector<double>&);
     vector<double> surfaceLoadShare(void);
     vector<double> volumeLoadShare(void);
+    vector<unsigned>& getMeshMap(unsigned i)
+    {
+        return meshMap[i];
+    }
     double beVolume(unsigned);
     double feVolume(unsigned);
 };

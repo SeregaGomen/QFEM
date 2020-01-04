@@ -38,34 +38,6 @@ bool TEigenSolver::solve(std::vector<double>& r, double, bool&)
     return true;
 }
 
-// -----------------------------------------------------------
-//  Подсчет кол-ва необходимой памяти для разреженной матрицы
-// -----------------------------------------------------------
-void TEigenSolver::createMemMap(TMesh* mesh)
-{
-    vector< vector<unsigned> > meshMap(size);
-
-    // Создание списка связей узлов сетки
-    msg->setProcess(MESH_ANALYSE_PROCESS, 1, int(mesh->getNumFE()));
-    for (unsigned i = 0; i < mesh->getNumFE(); msg->addProgress(), i++)
-        for (unsigned j = 0; j < mesh->getSizeFE(); j++)
-            for (unsigned k = 0; k < mesh->getSizeFE(); k++)
-                if (k != j)
-                    if (find(meshMap[mesh->getFE(i, j)].begin(), meshMap[mesh->getFE(i, j)].end(), mesh->getFE(i, k)) == meshMap[mesh->getFE(i, j)].end())
-                        meshMap[mesh->getFE(i, j)].push_back(mesh->getFE(i, k));
-
-//    for (unsigned i = 0; i < meshMap.size(); i++)
-//        sort(meshMap[i].begin(), meshMap[i].end(), [](unsigned k, unsigned l) -> bool{ return (k < l); });
-
-    // Резервируем объем необходимой памяти
-    memMap.resize(size * freedom);
-    for (unsigned i = 0; i < size; i++)
-        for (unsigned j = 0; j < freedom; j++)
-            memMap[i * freedom + j] = int(sizeof(double) * freedom * meshMap[i].size());
-
-    msg->stopProcess();
-}
-
 void TEigenSolver::setupStaticMatrix(TMesh* mesh)
 {
     unsigned globalSize;
@@ -79,7 +51,10 @@ void TEigenSolver::setupStaticMatrix(TMesh* mesh)
     globalLoadVector.resize(globalSize, 0);
 
     // Резервируем объем необходимой памяти
-    createMemMap(mesh);
+    memMap.resize(globalSize);
+    for (unsigned i = 0; i < size; i++)
+        for (unsigned j = 0; j < freedom; j++)
+            memMap[i * freedom + j] = sizeof(double) * int(mesh->getMeshMap(i).size() * freedom);
     globalStiffnessMatrix.reserve(memMap);
     memMap.resize(0);
 }
@@ -101,7 +76,10 @@ void TEigenSolver::setupDynamicMatrix(TMesh* mesh)
     globalLoadVector.resize(globalSize, 0);
 
     // Резервируем объем необходимой памяти
-    createMemMap(mesh);
+    memMap.resize(globalSize);
+    for (unsigned i = 0; i < size; i++)
+        for (unsigned j = 0; j < freedom; j++)
+            memMap[i * freedom + j] = sizeof(double) * int(mesh->getMeshMap(i).size() * freedom);
     globalStiffnessMatrix.reserve(memMap);
     globalMassMatrix.reserve(memMap);
     globalDampingMatrix.reserve(memMap);

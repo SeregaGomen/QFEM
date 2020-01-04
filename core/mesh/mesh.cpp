@@ -42,8 +42,10 @@ bool TMesh::read(string fname)
         return (error = true);
     }
     if (!error)
+    {
+        createMeshMap();
         getMinMax();
-
+    }
 
     // writeTRPA("shell-tube.trpa");
 
@@ -644,6 +646,7 @@ bool TMesh::read(ifstream& in)
     if (!error)
     {
         cout << *this << endl;
+        createMeshMap();
         getMinMax();
     }
     return error;
@@ -1116,5 +1119,23 @@ double TMesh::volume3d8(const matrix<double>& px)
              (px(ref[i][1], 1) - px(ref[i][0], 1)) * (px(ref[i][2], 0) - px(ref[i][0], 0)) * (px(ref[i][3], 2) - px(ref[i][0], 2)) -
              (px(ref[i][1], 0) - px(ref[i][0], 0)) * (px(ref[i][2], 2) - px(ref[i][0], 2)) * (px(ref[i][3], 1) - px(ref[i][0], 1)) / 6.0;
     return v;
+}
+// -------------------------------------------------------
+//          Создание списка связей узлов сетки
+// -------------------------------------------------------
+void TMesh::createMeshMap(void)
+{
+    meshMap.resize(x.size1());
+    msg->setProcess(MESH_ANALYSE_PROCESS, 1, int(fe.size1()));
+    for (unsigned i = 0; i < fe.size1(); msg->addProgress(), i++)
+        for (unsigned j = 0; j < fe.size2(); j++)
+            for (unsigned k = 0; k < fe.size2(); k++)
+                if (k != j)
+                    if (find(meshMap[fe(i, j)].begin(), meshMap[fe(i, j)].end(), fe(i, k)) == meshMap[fe(i, j)].end())
+                        meshMap[fe(i, j)].push_back(fe(i, k));
+
+    for (unsigned i = 0; i < meshMap.size(); i++)
+        sort (meshMap[i].begin(), meshMap[i].end(), [](unsigned k, unsigned l) -> bool{ return (k < l); });
+    msg->stopProcess();
 }
 // ----------------------------------------------------------------

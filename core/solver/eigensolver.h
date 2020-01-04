@@ -15,7 +15,6 @@ private:
     unsigned size;
     unsigned freedom;
     VectorXi memMap;
-    void createMemMap(TMesh*);
     bool loadMatrix(string, SparseMatrix<double>&);
     bool saveMatrix(string, SparseMatrix<double>&);
 public:
@@ -32,11 +31,11 @@ public:
     void clear(void)
     {
         freedom = size = 0;
-        globalStiffnessMatrix.setZero();
-        globalMassMatrix.setZero();
-        globalDampingMatrix.setZero();
+        globalStiffnessMatrix.resize(0, 0);
+        globalMassMatrix.resize(0, 0);
+        globalDampingMatrix.resize(0, 0);
+        memMap.resize(0);
         globalLoadVector.clear();
-        memMap.setZero();
     }
     void setStiffnessMatrix(double value, unsigned i, unsigned j)
     {
