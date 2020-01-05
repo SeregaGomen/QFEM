@@ -1726,6 +1726,7 @@ bool TSetupTaskDialog::decodeStressStarinCurve(string str, matrix<double>& ssc)
     stringstream ss(str);
     vector<double> v;
 
+    str.erase(remove(str.begin(), str.end(), ' '), str.end());
     ss >> ch[0];
     if (ch[0] != '{')
         return false;
@@ -1740,8 +1741,10 @@ bool TSetupTaskDialog::decodeStressStarinCurve(string str, matrix<double>& ssc)
             return false;
         v.push_back(val[0]);
         v.push_back(val[1]);
+        if (ch[3] == '}')
+            break;
     }
-    if (ss.bad() || ch[3] != '}')
+    if (ss.bad())
         return false;
     ssc.resize(unsigned(v.size() / 2), 2);
     for (unsigned i = 0; i < v.size(); i += 2)

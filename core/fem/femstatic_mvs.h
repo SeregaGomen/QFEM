@@ -99,7 +99,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             else
                 if (isStopLocalIteration)
                 {
-                    TFEMStatic<T>::genResults(result,true);
+                    TFEMStatic<T>::genResults(result, true);
                     maxSi = calcStressIntensity(*TFEM::results);
                 }
 
@@ -241,6 +241,10 @@ template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
 
 
     // ------------- Нелинейный случай ----------------
+
+    if (feSi > 3.3E+8)
+        feSi += 0;
+
     // Поиск в таблице свойств материала соответствующего напряжения
     if (feSi < ssCurve[1][0])
         index = 0;
