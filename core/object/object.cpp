@@ -26,6 +26,9 @@ bool TFEMObject::setMeshFile(string n)
 //---------------------------------------------------------
 bool TFEMObject::start(void)
 {
+//    Eigen::initParallel();
+//    Eigen::setNbThreads(7);
+
     results.clear();
     notes.clear();
     cout << endl << S_MSG_START << endl;
