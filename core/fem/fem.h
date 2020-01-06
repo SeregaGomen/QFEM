@@ -15,18 +15,18 @@
 #include "fe/fe2dp.h"
 #include "fe/fe3ds.h"
 
-//-------------------------------------------------------------
-//  Абстрактный класс, реализующий метод конечных элементов
-//-------------------------------------------------------------
-class TFEM
-{
-protected:
-    TFE* createFE(void)
-    {
-        TFE* fe;
 
+//-------------------------------------------------------------
+//            Класс-обертка для TFE с поддержкой RAII
+//-------------------------------------------------------------
+class TRFE
+{
+private:
+    TFE* fe;
+    void createFE(FEType type)
+    {
         // Создание конечного элемента
-        switch (mesh->getTypeFE())
+        switch (type)
         {
             case FE1D2:
                 fe = new TFE1D<TShape1D2>();
@@ -71,13 +71,30 @@ protected:
                 //throw UNKNOWN_FE_ERR;
                 fe = nullptr;
         }
-        return fe;
     }
-    void removeFE(TFE *fe)
+public:
+    TRFE(FEType type)
+    {
+        createFE(type);
+    }
+    ~TRFE(void)
     {
         if (fe)
             delete fe;
     }
+    TFE* getFE(void)
+    {
+        return fe;
+    }
+};
+
+
+//-------------------------------------------------------------
+//  Абстрактный класс, реализующий метод конечных элементов
+//-------------------------------------------------------------
+class TFEM
+{
+protected:
     // Назание объекта расчета
     string objName;
     // Параметры расчета
@@ -137,14 +154,6 @@ protected:
             fe->setDamping(val);
         }
     }
-    //  Настройка парсера
-//    void setParser(TParser& parser, vector<double>& coord, double t = 0)
-//    {
-//        parser.set_variables(params.variables);
-//        for (unsigned i = 0; i < mesh->getDimension(); i++)
-//            parser.set_variable(params.names[i], coord[i]);
-//        parser.set_variable(params.names[3], t);
-//    }
 public:
     TFEM(string n, TMesh* m, TResultList* r, list<string>* l = nullptr)
     {
@@ -153,7 +162,6 @@ public:
         results = r;
         notes = l;
         isProcessStarted = isProcessAborted = isProcessCalculated = false;
-        createFE();
     }
     virtual ~TFEM(void) {}
     virtual void startProcess(void) = 0;
@@ -171,7 +179,6 @@ public:
         cout << "-------------------------------------------------" << endl;
         cout.setf(ios::left);
         cout << setw(10) << ' ' << setw(params.width) << "\tmin" << ' ' << setw(params.width) << "\tmax" << endl;
-//        cout.setf(ios::floatfield, ios::scientific);
         cout.flags (ios::floatfield | ios::scientific | ios::showpos);
         for (unsigned i = 0; i < results->size(); i++)
             cout << setw(10) << (*results)[i].getName() << '\t' << std::scientific << setw(params.width) <<
