@@ -18,7 +18,7 @@ void TFEMObject::clear(void)
 //---------------------------------------------------------
 bool TFEMObject::setMeshFile(string n)
 {
-    cout << endl << s_MSG_MESH_NAME << n << endl;
+    cout << endl << S_MSG_MESH_NAME << n << endl;
     fileName = n;
     objName = n.substr(n.find_last_of("/\\") + 1,n.find_last_of(".") - n.find_last_of("/\\") - 1);
     return !mesh.read(fileName);

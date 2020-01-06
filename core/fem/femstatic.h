@@ -73,6 +73,8 @@ template<class T> void TFEMStatic<T>::startProcess(void)
     isProcessAborted = false;
     solver.setupStaticMatrix(mesh);
 
+    cout << S_NUM_THREAD << numThread << endl;
+
     // Предварительное вычисление компонент нагрузки
     full_timer = clock();
     calcConcentratedLoad(load);

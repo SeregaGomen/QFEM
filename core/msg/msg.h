@@ -85,7 +85,8 @@ extern int langCode;
 #define S_MSG_WRITE_RESULT              ((langCode) ? "Сохранение результатов расчета" : "Writing results")
 #define S_MSG_READ_RESULT               ((langCode) ? "Загрузка результатов расчета" : "Reading results")
 #define S_MSG_CALC_STANDART_RESULTS     ((langCode) ? "Расчет стандартных результатов КЭ" : "Calculation of standard FE results")
-#define s_MSG_MESH_NAME                 ((langCode) ? "Файл сетки: " : "Mesh file: ")
+#define S_MSG_MESH_NAME                 ((langCode) ? "Файл сетки: " : "Mesh file: ")
+#define S_NUM_THREAD                    ((langCode) ? "Использовано потоков: " : "Using threads: ")
 
 using namespace std;
 
