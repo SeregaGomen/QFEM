@@ -6,6 +6,8 @@
 class TFEMObject;
 class LimitList;
 
+using namespace std;
+
 /***********************************************************************/
 /* Обертка для класса, реализующего построение списка краевых условий  */
 /***********************************************************************/
@@ -26,7 +28,7 @@ private:
     bool isStoped;
     // Формирование списка краевых условий
     void processBoundaryVertex(void);
-
+    void calc(unsigned, unsigned, int, int, string, string, int&);
 public slots:
     // запуск расчета
     void start(void);
