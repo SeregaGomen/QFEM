@@ -39,7 +39,7 @@ void TLCProcessor::processBoundaryVertex(void)
         numThread = 4, //std::thread::hardware_concurrency(),
         step = object->getMesh().getNumBE() / numThread;
     int error = NO_ERR;
-    vector<std::thread*> thr(numThread);
+    vector<std::thread> thr(numThread);
 
     // Подсчет количества краевых условий
     for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
@@ -54,13 +54,11 @@ void TLCProcessor::processBoundaryVertex(void)
     for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
     {
         for (int i = 0; i < numThread; i++)
-            thr[i] = new std::thread(&TLCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, it->getType(), unsigned(it->getDirect()), it->getPredicate(), it->getExpression(), ref(error));
-        for_each(thr.begin(), thr.end(), [](std::thread* t) { t->join(); });
+            thr[i] = std::thread(&TLCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, it->getType(), unsigned(it->getDirect()), it->getPredicate(), it->getExpression(), ref(error));
+        for_each(thr.begin(), thr.end(), [](std::thread& t) { t.join(); });
         if (error)
             break;
     }
-    for_each(thr.begin(), thr.end(), [](std::thread* t) { delete t; });
-
     if (error)
         cerr << endl << sayError(ErrorCode(error)) << endl;
     else
