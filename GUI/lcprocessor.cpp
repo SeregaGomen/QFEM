@@ -65,7 +65,7 @@ void TLCProcessor::processBoundaryVertex(void)
             if (isStoped)
             {
                 lcVertex->clear();
-                cerr << sayError(ABORT_ERR) << endl;
+                cerr << endl << sayError(ABORT_ERR) << endl;
                 return;
             }
 
