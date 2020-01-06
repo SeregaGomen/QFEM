@@ -1,21 +1,22 @@
 #ifndef FEMSTATIC_H
 #define FEMSTATIC_H
 
-#define OPENMP
-
 #include <sstream>
 #include <iomanip>
-
-#include <omp.h>
 #include "fem/fem.h"
 
-extern TMessenger* msg;
+
+#define OPENMP // Многопоточный расчет
 
 #ifdef OPENMP
+#include <omp.h>
 const int numThread = omp_get_max_threads() - 1;
 #else
 const int numThread = 1;
 #endif
+
+extern TMessenger* msg;
+
 
 //----------------------------------------------------------
 //  Реализация конечно-элементного расчета в соответствии с
