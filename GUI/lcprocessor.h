@@ -2,6 +2,7 @@
 #define LCPROCESSOR_H
 
 #include <QObject>
+#include "lclist.h"
 
 class TFEMObject;
 class LimitList;
@@ -23,7 +24,7 @@ private:
     // Объект рассчета (содержит геометрию)
     TFEMObject* object;
     // Список краевых условий
-    LimitList* lcVertex;
+    LimitList lcVertex;
     // Признак того, что процесс прерван
     bool isStoped;
     // Формирование списка краевых условий
@@ -31,18 +32,30 @@ private:
     void calc(unsigned, unsigned, int, int, string, string, int&);
 public slots:
     // запуск расчета
-    void start(void);
+    void start(void)
+    {
+        processBoundaryVertex();
+        emit finished();
+    }
     // остановка расчета
-    void stop(void);
-
+    void stop(void)
+    {
+        isStoped = true;
+    }
 public:
-    TLCProcessor(TFEMObject*);
-    ~TLCProcessor(void);
-    LimitList* getLCVertex(void)
+    TLCProcessor(TFEMObject* p)
+    {
+        object = p;
+    }
+    ~TLCProcessor(void) {}
+    LimitList& getLCVertex(void)
     {
         return lcVertex;
     }
-    void clear(void);
+    void clear(void)
+    {
+        lcVertex.clear();
+    }
 };
 
 #endif // LCPROCESSOR_H

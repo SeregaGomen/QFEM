@@ -1,42 +1,15 @@
+#include <mutex>
 #include "lcprocessor.h"
-#include "lclist.h"
 #include "object/plist.h"
 #include "parser/parser.h"
 #include "object/object.h"
 
 extern TMessenger* msg;
 
-TLCProcessor::TLCProcessor(TFEMObject* p) : QObject()
-{
-    object = p;
-    lcVertex = new LimitList();
-}
-
-TLCProcessor::~TLCProcessor(void)
-{
-    delete lcVertex;
-}
-
-void TLCProcessor::start(void)
-{
-    processBoundaryVertex();
-    emit finished();
-}
-
-void TLCProcessor::stop(void)
-{
-    isStoped = true;
-}
-
-void TLCProcessor::clear(void)
-{
-    lcVertex->clear();
-}
-
 void TLCProcessor::processBoundaryVertex(void)
 {
     int num = 0,
-        numThread = 4, //std::thread::hardware_concurrency(),
+        numThread = std::thread::hardware_concurrency(),
         step = object->getMesh().getNumBE() / numThread;
     int error = NO_ERR;
     vector<std::thread> thr(numThread);
@@ -47,15 +20,16 @@ void TLCProcessor::processBoundaryVertex(void)
     if (!num)
         return;
 
-    lcVertex->clear();
+    lcVertex.clear();
     isStoped = false;
-    msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumBE()) * num);
+    msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumBE()) * num, 5);
     // Обработка граничных условий
     for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
     {
         for (int i = 0; i < numThread; i++)
             thr[i] = std::thread(&TLCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, it->getType(), unsigned(it->getDirect()), it->getPredicate(), it->getExpression(), ref(error));
         for_each(thr.begin(), thr.end(), [](std::thread& t) { t.join(); });
+//        calc(0, object->getMesh().getNumBE(), it->getType(), it->getDirect(), it->getPredicate(), it->getExpression(), ref(error));
         if (error)
             break;
     }
@@ -71,6 +45,7 @@ void TLCProcessor::calc(unsigned begin, unsigned end, int type, int direct, stri
     double value;
     vector<double> v(3);
     TParser parser;
+    mutex mtx;
 
     parser.set_variables(object->getParams().variables);
     for (unsigned i = begin; i < end; i++)
@@ -122,14 +97,16 @@ void TLCProcessor::calc(unsigned begin, unsigned end, int type, int direct, stri
             object->getMesh().normal(i, v);
             for (unsigned j = 0; j < object->getMesh().getBaseSizeBE(); j++)
             {
+                lock_guard<mutex> guard(mtx);
+
                 // X
-                lcVertex->add(object->getMesh().getBE(i, j), DIR_X, value * v[0], LoadValue);
+                lcVertex.add(object->getMesh().getBE(i, j), DIR_X, value * v[0], LoadValue);
                 // Y
                 if (object->getMesh().getFreedom() > 1)
-                    lcVertex->add(object->getMesh().getBE(i, j), DIR_Y, value * v[1], LoadValue);
+                    lcVertex.add(object->getMesh().getBE(i, j), DIR_Y, value * v[1], LoadValue);
                 // Z
                 if (object->getMesh().getFreedom() > 2)
-                    lcVertex->add(object->getMesh().getBE(i, j), DIR_Z, value * v[2], LoadValue);
+                    lcVertex.add(object->getMesh().getBE(i, j), DIR_Z, value * v[2], LoadValue);
             }
         }
         else if (type != EMPTY_PARAMETER && type != INITIAL_CONDITION_PARAMETER)
@@ -165,7 +142,10 @@ void TLCProcessor::calc(unsigned begin, unsigned end, int type, int direct, stri
                     return;
                 }
                 value = parser.run();
-                lcVertex->add(object->getMesh().getBE(i, j), direct, value, (type == BOUNDARY_CONDITION_PARAMETER) ? LimitValue : LoadValue);
+
+                lock_guard<mutex> guard(mtx);
+
+                lcVertex.add(object->getMesh().getBE(i, j), direct, value, (type == BOUNDARY_CONDITION_PARAMETER) ? LimitValue : LoadValue);
             }
     }
 

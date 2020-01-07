@@ -376,7 +376,7 @@ void TMainWindow::loadFile(QString fileName)
 
     if (isOk)
     {
-        tabWidget->insertTab(0,new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), lcProcessor->getLCVertex(), this), tr("Object"));
+        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), &lcProcessor->getLCVertex(), this), tr("Object"));
         tabWidget->setTabsClosable(true);
         tabWidget->setCurrentIndex(0);
 
