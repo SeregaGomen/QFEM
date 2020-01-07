@@ -76,7 +76,7 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
             genResults(result); // Вычисление результатов
         if (TFEM::isProcessAborted)
             throw ABORT_ERR;
-        TFEM::printResultSummary();
+        TFEM::printResultSummary(t);
         if (fabs(TFEM::params.t1 - (t + TFEM::params.th)) <= TFEM::params.eps)
             t = TFEM::params.t1;
         else

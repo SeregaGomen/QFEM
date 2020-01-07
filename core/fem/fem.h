@@ -174,15 +174,16 @@ public:
         params = p;
     }
     // Вывод рез-тов по каждой функции на экран
-    void printResultSummary(void)
+    void printResultSummary(double t = 0)
     {
         cout << "-------------------------------------------------" << endl;
         cout.setf(ios::left);
         cout << setw(10) << ' ' << setw(params.width) << "\tmin" << ' ' << setw(params.width) << "\tmax" << endl;
         cout.flags (ios::floatfield | ios::scientific | ios::showpos);
         for (unsigned i = 0; i < results->size(); i++)
-            cout << setw(10) << (*results)[i].getName() << '\t' << std::scientific << setw(params.width) <<
-                    setprecision(params.precision) << (*results)[i].min() << '\t' << setw(params.width) << (*results)[i].max() << endl;
+            if ((*results)[i].getTime() == t)
+                cout << setw(10) << (*results)[i].getName() << '\t' << std::scientific << setw(params.width) <<
+                        setprecision(params.precision) << (*results)[i].min() << '\t' << setw(params.width) << (*results)[i].max() << endl;
         cout.unsetf(ios::showpos);
         cout << "-------------------------------------------------" << endl;
     }

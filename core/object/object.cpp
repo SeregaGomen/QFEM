@@ -27,7 +27,7 @@ bool TFEMObject::setMeshFile(string n)
 bool TFEMObject::start(void)
 {
 //    Eigen::initParallel();
-//    Eigen::setNbThreads(7);
+//    Eigen::setNbThreads(std::thread::hardware_concurrency() - 1);
 
     results.clear();
     notes.clear();
@@ -45,7 +45,8 @@ bool TFEMObject::start(void)
                     fem = new TFEMStaticMVS<TEigenSolver>(params.loadStep, objName, &mesh, &results, &notes);
                 break;
             case DynamicProblem:
-                fem = new TFEMDynamic<TBCCSolver>(objName, &mesh, &results, &notes);
+                // fem = new TFEMDynamic<TBCCSolver>(objName, &mesh, &results, &notes);
+                fem = new TFEMDynamic<TEigenSolver>(objName, &mesh, &results, &notes);
         }
         // Задание параметров расчета
         fem->setParams(params);

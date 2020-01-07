@@ -138,7 +138,7 @@ private:
     vector<TResult> result;
 public:
     TResultList(void) {}
-   ~TResultList(void) {}
+    ~TResultList(void) {}
     void setSolutionTime(tm& t)
     {
         sdt = t;
