@@ -54,7 +54,7 @@ void TEigenSolver::setupStaticMatrix(TMesh* mesh)
     memMap.resize(globalSize);
     for (unsigned i = 0; i < size; i++)
         for (unsigned j = 0; j < freedom; j++)
-            memMap[i * freedom + j] = sizeof(double) * int(mesh->getMeshMap(i).size() * freedom);
+            memMap[i * freedom + j] = int(mesh->getMeshMap(i).size() * freedom * freedom);
     globalStiffnessMatrix.reserve(memMap);
     memMap.resize(0);
 }
@@ -79,7 +79,7 @@ void TEigenSolver::setupDynamicMatrix(TMesh* mesh)
     memMap.resize(globalSize);
     for (unsigned i = 0; i < size; i++)
         for (unsigned j = 0; j < freedom; j++)
-            memMap[i * freedom + j] = sizeof(double) * int(mesh->getMeshMap(i).size() * freedom);
+            memMap[i * freedom + j] = int(mesh->getMeshMap(i).size() * freedom * freedom);
     globalStiffnessMatrix.reserve(memMap);
     globalMassMatrix.reserve(memMap);
     globalDampingMatrix.reserve(memMap);
@@ -197,8 +197,8 @@ bool TEigenSolver::loadMatrix(string fname, SparseMatrix<double>& globalMatrix)
 void TEigenSolver::createDynamicMatrix(double th, double theta)
 {
     double val,
-          k1 = 3.0/(theta*th),
-          k2 = 6.0/(theta*theta*th*th);
+           k1 = 3.0 / (theta * th),
+           k2 = 6.0 / (theta * theta * th * th);
 
     for (int k = 0; k < globalDampingMatrix.outerSize(); ++k)
         for (SparseMatrix<double>::InnerIterator it(globalDampingMatrix, k); it; ++it)
@@ -210,21 +210,21 @@ void TEigenSolver::createDynamicMatrix(double th, double theta)
                 globalStiffnessMatrix.coeffRef(k,it.col()) += k2 * val;
 }
 
-void mulMatrix(SparseMatrix<double>& A, vector<double>& b, vector<double>& r)
-{
-    r.resize(b.size());
-    for (unsigned k = 0; k < A.outerSize(); ++k)
-        for (SparseMatrix<double>::InnerIterator it(A,k); it; ++it)
-            r[k] += it.value() * b[unsigned(it.col())];
-}
+//void mulMatrix(SparseMatrix<double>& A, vector<double>& b, vector<double>& r)
+//{
+//    r.resize(b.size());
+//    for (unsigned k = 0; k < A.outerSize(); ++k)
+//        for (SparseMatrix<double>::InnerIterator it(A,k); it; ++it)
+//            r[k] += it.value() * b[unsigned(it.col())];
+//}
 
 // Формирование правой части СЛАУ в динамике (согласно методу Тета-Вильсона)
 void TEigenSolver::createDynamicVector(matrix<double>& uvw, double th, double theta)
 {
-    vector<double> u1(size * freedom),
-                   u2(size * freedom),
-                   r1(size * freedom),
-                   r2(size * freedom);
+    VectorXd u1(size * freedom),
+             u2(size * freedom),
+             r1(size * freedom),
+             r2(size * freedom);
     double k1 = 3.0 / (theta * th),
            k2 = 6.0 / (theta * theta * th * th),
            k3 = 0.5 * theta * th;
@@ -237,12 +237,13 @@ void TEigenSolver::createDynamicVector(matrix<double>& uvw, double th, double th
             u2[i * freedom + j] = (k2 * uvw[j][i] + 2.0 * uvw[uvw.size1() - 2 * freedom + j][i] + k3 * uvw[uvw.size1() - freedom + j][i]) / k1;
         }
 
-    mulMatrix(globalMassMatrix, u1, r1);
-    mulMatrix(globalDampingMatrix, u2, r2);
+    r1 = globalMassMatrix * u1;
+    r2 = globalDampingMatrix * u2;
+//    mulMatrix(globalMassMatrix, u1, r1);
+//    mulMatrix(globalDampingMatrix, u2, r2);
 
     // Формирование столбца правой части с учетом "динамической" составляющей
     for (unsigned i = 0; i < size * freedom; i++)
         globalLoadVector[i] += r1[i] + r2[i];
-
 }
 
