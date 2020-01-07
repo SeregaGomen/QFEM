@@ -10,7 +10,7 @@
 
 #ifdef OPENMP
 #include <omp.h>
-const int numThread = omp_get_max_threads() - 1;
+const int numThread = 4;//omp_get_max_threads() - 1;
 #else
 const int numThread = 1;
 #endif

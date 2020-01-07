@@ -118,7 +118,7 @@ public:
     }
     void setForceStep(double p)
     {
-        params.forceStep = p;
+        params.loadStep = p;
     }
     // Толщина
     void addThickness(double v, string p)

@@ -31,7 +31,7 @@ public:
     double t1;                      // Конечный момент времени расчета
     double th;                      // Шаг по времени
     double theta;                   // Тета Вильсона
-    double forceStep;               // Шаг по нагрузке при нелинейном расчете
+    double loadStep;                // Шаг по нагрузке при нелинейном расчете
     vector<string> names;           // Массив имен искомых функций
     TParameterList plist;           // Список краевых условий, нагрузок etc
     map<string, double> variables;  // Список дополнительных числовых параметров
@@ -43,7 +43,7 @@ public:
         eps = 1.0e-10;
         width = 12;
         precision = 5;
-        forceStep = 0.01;
+        loadStep = 1;
         theta = 1.37;
         t0 = t1 = th = 0;
         plist.clear();
@@ -61,7 +61,7 @@ public:
         eps = 1.0E-10;
         width = 12;
         precision = 5;
-        forceStep = 0.01;
+        loadStep = 1;
         theta = 1.37;
         t0 = t1 = th = 0;
         // Заполнение имен функций стандартными значениями
@@ -83,7 +83,7 @@ public:
         theta = r.theta;
         plist = r.plist;
         variables = r.variables;
-        forceStep = r.forceStep;
+        loadStep = r.loadStep;
         names = r.names;
     }
     ~TFEMParams(void)
@@ -110,7 +110,7 @@ public:
         theta = r.theta;
         plist = r.plist;
         variables = r.variables;
-        forceStep = r.forceStep;
+        loadStep = r.loadStep;
         names = r.names;
         return *this;
     }

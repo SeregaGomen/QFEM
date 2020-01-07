@@ -693,7 +693,7 @@ void TSetupTaskDialog::setPlasticityParam(void)
     ui->rbLinear->setChecked((femObject->getParams().pMethod == Linear) ? true : false);
     ui->rbMVS->setChecked((femObject->getParams().pMethod == MVS) ? true : false);
     ui->rbMES->setChecked((femObject->getParams().pMethod == MES) ? true : false);
-    ui->textLoadStep->setText(QString("%1").arg(femObject->getParams().forceStep));
+    ui->textLoadStep->setText(QString("%1").arg(femObject->getParams().loadStep));
 
     Titles << tr("Stress-Strain curve") << tr("Predicate");
     ui->twStressStrainCurve->setHorizontalHeaderLabels(Titles);
@@ -1545,7 +1545,7 @@ void TSetupTaskDialog::getPlasticityParam(void)
     matrix<double> ssc(unsigned(ui->twStressStrainCurve->rowCount()), 2);
 
     femObject->getParams().pMethod = (ui->rbLinear->isChecked()) ? Linear : (ui->rbMVS->isChecked()) ? MVS : MES;
-    femObject->getParams().forceStep = ui->textLoadStep->text().toDouble();
+    femObject->getParams().loadStep = ui->textLoadStep->text().toDouble();
 
     for (unsigned i = 0; i < unsigned(ui->twStressStrainCurve->rowCount()); i++)
     {

@@ -917,7 +917,7 @@ void TMainWindow::sayParams(QString& webOut)
             }
         webOut += "<br>";
         webOut += tr("Load step");
-        webOut += QString("<b>%1</b>").arg(femObject->getParams().forceStep, int(femObject->getParams().width),'e', int(femObject->getParams().precision));
+        webOut += QString("<b>%1</b>").arg(femObject->getParams().loadStep, int(femObject->getParams().width),'e', int(femObject->getParams().precision));
         webOut += "<br>";
 
     }
@@ -1142,7 +1142,7 @@ bool TMainWindow::saveJSON(QString fileName)
 
     // Параметры нелинейного расчета
     nonlin.insert("CalculationMethod", QJsonValue::fromVariant(femObject->getParams().pMethod));
-    nonlin.insert("ForceStep", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().forceStep)));
+    nonlin.insert("ForceStep", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().loadStep)));
     params.insert("Nonlinearity", nonlin);
 
     // Краевые условия и прочие параметры
@@ -1269,7 +1269,7 @@ bool TMainWindow::loadJSON(QString fileName)
     params.precision = obj.value(QString("Parameters"))["OutputParameters"]["Precision"].toVariant().toInt();
 
     // Параметры нелинейного расчета
-    params.forceStep = obj.value(QString("Parameters"))["Nonlinearity"]["ForceStep"].toVariant().toDouble();
+    params.loadStep = obj.value(QString("Parameters"))["Nonlinearity"]["ForceStep"].toVariant().toDouble();
     params.pMethod = PlasticityMethod(obj.value(QString("Parameters"))["Nonlinearity"]["CalculationMethod"].toVariant().toInt());
 
     // Краевые условия и прочие параметры

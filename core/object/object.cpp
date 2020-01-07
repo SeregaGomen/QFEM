@@ -42,7 +42,7 @@ bool TFEMObject::start(void)
                     fem = new TFEMStatic<TEigenSolver>(objName, &mesh, &results, &notes);
                 else if (params.pMethod == MVS)
                     // fem = new TFEMStaticMVS<TBCCSolver>(params.forceStep, objName, &mesh, &results, &notes);
-                    fem = new TFEMStaticMVS<TEigenSolver>(params.forceStep, objName, &mesh, &results, &notes);
+                    fem = new TFEMStaticMVS<TEigenSolver>(params.loadStep, objName, &mesh, &results, &notes);
                 break;
             case DynamicProblem:
                 fem = new TFEMDynamic<TBCCSolver>(objName, &mesh, &results, &notes);

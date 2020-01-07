@@ -236,7 +236,7 @@
        </font>
       </property>
       <property name="text">
-       <string notr="true">0.01</string>
+       <string notr="true">1</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_6">
@@ -255,7 +255,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Load step:</string>
+       <string>Load step (%):</string>
       </property>
      </widget>
     </widget>

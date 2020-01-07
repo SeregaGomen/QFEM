@@ -27,7 +27,7 @@ private:
     void calcIteration(void);
     double calcStressIntensity(TResultList&);
 public:
-    TFEMStaticMVS(double& step,string n,TMesh* m,TResultList* r,list<string>* l) : TFEMStatic<T>(n,m,r,l)
+    TFEMStaticMVS(double& step, string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
     {
         maxAvgSi = 0;
         loadStep = step;
@@ -48,13 +48,13 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
            maxLoad,
            loadFactor,
            addLoad = 0,
-           step = loadStep;
+           step = loadStep / 100;
     unsigned hour,
              min,
              sec,
              count = 1;
     vector<double> result,
-                   load(TFEM::mesh->getNumVertex()*TFEM::mesh->getFreedom());
+                   load(TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom());
     time_t full_timer;
     bool isLoaded = false,
          isStopRewind = false;
