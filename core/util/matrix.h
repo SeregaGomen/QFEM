@@ -6,9 +6,7 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
-#include <ostream>
 #include <iostream>
-#include <cmath>
 
 using namespace std;
 
