@@ -1,7 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#define DEBUG
+//#define DEBUG
 
 #include <algorithm>
 #include <functional>
