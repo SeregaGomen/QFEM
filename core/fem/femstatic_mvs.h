@@ -76,7 +76,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     do
     {
         isStopLocalIteration = true;
-        TFEMStatic<T>::solver.setupStaticMatrix(TFEM::mesh);
+        TFEMStatic<T>::solver.setMatrix(TFEM::mesh);
         // Формирование ГМЖ
         TFEMStatic<T>::calcGlobalMatrix();
 

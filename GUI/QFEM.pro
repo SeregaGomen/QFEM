@@ -50,14 +50,11 @@ SOURCES += main.cpp\
     ../core/parser/unary.cpp \
     ../core/object/object.cpp \
     ../core/object/params.cpp \
-    ../core/solver/bccsolver.cpp \
-    ../core/sparse/sparse32.cpp \
     ../core/fe/shape.cpp
 
 HEADERS  += mainwindow.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \
-    ../core/sparse/sparse32.h \
     qstdredirector.h \
     setuptaskdialog.h \
     fldialog.h \
@@ -91,7 +88,6 @@ HEADERS  += mainwindow.h \
     ../core/fem/femstatic.h \
     ../core/fem/femstatic_mvs.h \
     ../core/fem/femdynamic.h \
-    ../core/solver/bccsolver.h \
     ../core/fe/shape.h \
     ../core/fe/fe.h \
     ../core/fe/fe1d.h \

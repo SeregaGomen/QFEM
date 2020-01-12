@@ -16,6 +16,8 @@ template <class T> class TFEMDynamic : public TFEMStatic<T>
 private:
     double t; // Текущий момент времени
     matrix<double> u0;  // Начальные условия и результаты U,V,W,Ut,... по итерациям
+    void createDynamicMatrix(double, double);
+    void createDynamicVector(matrix<double>&, double, double);
 protected:
     void ansambleLocalMatrix(TFE*, unsigned);
     void prepareForceCondition(vector<double>&, vector<double>&, vector<double>&);
@@ -50,7 +52,7 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
     t = TFEMStatic<T>::params.t0 + TFEMStatic<T>::params.th;
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
-    TFEMStatic<T>::solver.setupDynamicMatrix(TFEM::mesh);
+    TFEMStatic<T>::solver.setMatrix(TFEM::mesh, true);
 
     full_timer = clock();
 
@@ -58,7 +60,7 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
     TFEMStatic<T>::calcGlobalMatrix(false);
 
     // Формирование "статической" левой части СЛАУ и сохранение ее для последующего использования
-    TFEMStatic<T>::solver.createDynamicMatrix(TFEM::params.th,TFEM::params.theta);
+    createDynamicMatrix(TFEM::params.th, TFEM::params.theta);
 
     // Учет начальных условий
     getInitialCondition();
@@ -221,14 +223,58 @@ template<class T> void TFEMDynamic<T>::calcDynamicResult(matrix<double>& results
 //-----------------------------------------------------------------------------
 template<class T> void TFEMDynamic<T>::createDynamicVector(void)
 {
-    vector<double> load(TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom());
+    unsigned nvtx = TFEM::mesh->getNumVertex(),
+            freedom = TFEM::mesh->getFreedom(),
+            size = nvtx * freedom;
+    double k1 = 3.0 / (TFEM::params.theta * TFEM::params.th),
+            k2 = 6.0 / (TFEM::params.theta * TFEM::params.theta * TFEM::params.th * TFEM::params.th),
+            k3 = 0.5 * TFEM::params.theta * TFEM::params.th;
+    vector<double> load(size),
+            u1(size),
+            u2(size),
+            r1(size),
+            r2(size);
 
     // Вычисление вектора нагрузок для текущего момента времени
     TFEMStatic<T>::calcLoad(load, t);
+
+    // Получаем значения U, Ut и Utt предыдущей итерации (или из начальных условий)
+    for (unsigned i = 0; i < nvtx; i++)
+        for (unsigned j = 0; j < freedom; j++)
+        {
+            u1[i * freedom + j] = (k1 * u0[j][i] + 2.0 * k2 * u0[u0.size1() - 2 * freedom + j][i] + 2.0 * u0[u0.size1() - freedom + j][i]) / k2;
+            u2[i * freedom + j] = (k2 * u0[j][i] + 2.0 * u0[u0.size1() - 2 * freedom + j][i] + k3 * u0[u0.size1() - freedom + j][i]) / k1;
+        }
+    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getMassMatrix(), u1, r1);
+    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getDampingMatrix(), u2, r2);
+//    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getMM(), u1, r1);
+//    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getDM(), u2, r2);
+
+    // Формирование столбца правой части с учетом "динамической" составляющей
+    for (unsigned i = 0; i < size; i++)
+        load[i] += (r1[i] + r2[i]);
+
     TFEMStatic<T>::setLoad(load);
-    TFEMStatic<T>::solver.createDynamicVector(u0, TFEM::params.th, TFEM::params.theta);
 }
-//---------------------------------------------------------
+//--------------------------------------------------------------------------
+// Формирование левой части СЛАУ в динамике (согласно методу Тета-Вильсона)
+//--------------------------------------------------------------------------
+template<class T> void TFEMDynamic<T>::createDynamicMatrix(double th, double theta)
+{
+    double val,
+           k1 = 3.0 / (theta * th),
+           k2 = 6.0 / (theta * theta * th * th);
+
+    for (unsigned i = 0; i < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); i++)
+        for (unsigned j = 0; j < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); j++)
+        {
+            val = k1 * TFEMStatic<T>::solver.getDamping(i, j) + k2 * TFEMStatic<T>::solver.getMass(i, j);
+            if (val != 0.0)
+                TFEMStatic<T>::solver.addStiffness(val, i, j);
+        }
+}
+//--------------------------------------------------------------------------
+
 
 #endif // FEMDYNAMIC_H
 

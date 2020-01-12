@@ -11,67 +11,81 @@ class TMesh;
 template <class T> class TSolver
 {
 protected:
-    T globalStiffnessMatrix;
-    T globalMassMatrix;
-    T globalDampingMatrix;
-    vector<double> globalLoadVector;
+    T stiffnessMatrix;
+    T massMatrix;
+    T dampingMatrix;
+    vector<double> loadVector;
     virtual bool loadMatrix(string, T&) = 0;
     virtual bool saveMatrix(string, T&) = 0;
 public:
     TSolver(void) {}
     virtual ~TSolver(void) {}
     virtual void clear(void) = 0;
-    virtual void createDynamicMatrix(double, double) = 0;
-    virtual void createDynamicVector(matrix<double>&, double, double) = 0;
-    virtual void setBoundaryCondition(unsigned, unsigned, double) = 0;
-    virtual void setupStaticMatrix(TMesh*) = 0;
-    virtual void setupDynamicMatrix(TMesh*) = 0;
-    virtual void setStiffnessMatrix(double, unsigned, unsigned) = 0;
-    virtual void setMassMatrix(double, unsigned, unsigned) = 0;
-    virtual void setDampingMatrix(double, unsigned, unsigned) = 0;
-    virtual void addStiffnessMatrix(double, unsigned, unsigned) = 0;
-    virtual void addMassMatrix(double, unsigned, unsigned) = 0;
-    virtual void addDampingMatrix(double, unsigned, unsigned) = 0;
-    void setLoadVector(double value, unsigned i)
+    virtual void setBoundaryCondition(unsigned, double) = 0;
+    virtual void setMatrix(TMesh*, bool = false) = 0;
+    virtual void setStiffness(double, unsigned, unsigned) = 0;
+    virtual void setMass(double, unsigned, unsigned) = 0;
+    virtual void setDamping(double, unsigned, unsigned) = 0;
+    virtual void addStiffness(double, unsigned, unsigned) = 0;
+    virtual void addMass(double, unsigned, unsigned) = 0;
+    virtual void addDamping(double, unsigned, unsigned) = 0;
+    virtual void product(T&, vector<double>&, vector<double>&) = 0;
+    void setLoad(double value, unsigned i)
     {
-        globalLoadVector[i] = value;
+        loadVector[i] = value;
     }
-    void addLoadVector(double value, unsigned i)
+    void addLoad(double value, unsigned i)
     {
-        globalLoadVector[i] += value;
+        loadVector[i] += value;
     }
-    virtual double getStiffnessMatrix(unsigned i, unsigned j) = 0;
-    virtual double getMassMatrix(unsigned, unsigned) = 0;
-    virtual double getDampingMatrix(unsigned, unsigned) = 0;
-    double getLoadVector(unsigned i)
+    double getLoad(unsigned i)
     {
-        return globalLoadVector[i];
+        return loadVector[i];
+    }
+    virtual double getStiffness(unsigned, unsigned) = 0;
+    virtual double getMass(unsigned, unsigned) = 0;
+    virtual double getDamping(unsigned, unsigned) = 0;
+    T& getStiffnessMatrix(void)
+    {
+        return stiffnessMatrix;
+    }
+    T& getMassMatrix(void)
+    {
+        return massMatrix;
+    }
+    T& getDampingMatrix(void)
+    {
+        return dampingMatrix;
+    }
+    vector<double>& getLoadVector(void)
+    {
+        return loadVector;
     }
     virtual bool solve(vector<double>&, double, bool&) = 0;
     virtual void print(string) = 0;
     bool saveStiffnessMatrix(string fname)
     {
-        return saveMatrix(fname, globalStiffnessMatrix);
+        return saveMatrix(fname, stiffnessMatrix);
     }
     bool loadStiffnessMatrix(string fname)
     {
-        return loadMatrix(fname, globalStiffnessMatrix);
+        return loadMatrix(fname, stiffnessMatrix);
     }
     bool saveMassMatrix(string fname)
     {
-        return saveMatrix(fname, globalMassMatrix);
+        return saveMatrix(fname, massMatrix);
     }
     bool loadMassMatrix(string fname)
     {
-        return loadMatrix(fname, globalMassMatrix);
+        return loadMatrix(fname, massMatrix);
     }
     bool saveDampingMatrix(string fname)
     {
-        return saveMatrix(fname, globalDampingMatrix);
+        return saveMatrix(fname, dampingMatrix);
     }
     bool loadDampingMatrix(string fname)
     {
-        return loadMatrix(fname, globalDampingMatrix);
+        return loadMatrix(fname, dampingMatrix);
     }
 };
 

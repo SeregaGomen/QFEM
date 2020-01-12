@@ -130,8 +130,8 @@ double TFEMParams::getMinStress(void)
         {
             if (!it->getStressStrainCurve().size1())
                 throw NONLINEAR_PARAM_ERR;
-            if (it->getStressStrainCurve().size1() && it->getStressStrainCurve()[1][0] < res)
-                res = it->getStressStrainCurve()[1][0];
+            if (it->getStressStrainCurve().size1() && it->getStressStrainCurve(1, 0) < res)
+                res = it->getStressStrainCurve(1, 0);
         }
     return res;
 }

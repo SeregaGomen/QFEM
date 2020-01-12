@@ -72,7 +72,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
 
     isProcessStarted = true;
     isProcessAborted = false;
-    solver.setupStaticMatrix(mesh);
+    solver.setMatrix(mesh);
 
     cout << S_NUM_THREAD << numThread << endl;
 
@@ -131,11 +131,11 @@ template<class T> void TFEMStatic<T>::ansambleLocalMatrix(TFE* fe, unsigned i)
     {
         for (unsigned k = l; k < size; k++)
         {
-            solver.addStiffnessMatrix(fe->getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            solver.addStiffness(fe->getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
             if (l != k)
-                solver.addStiffnessMatrix(fe->getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                solver.addStiffness(fe->getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
         }
-        solver.addLoadVector(fe->getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);
+        solver.addLoad(fe->getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);
     }
 }
 //-----------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ template<class T> void TFEMStatic<T>::getLoad(vector<double>& load, unsigned beg
         msg->addProgress();
         if (isProcessAborted)
             throw ABORT_ERR;
-        solver.addLoadVector(load[i], i);
+        solver.addLoad(load[i], i);
     }
 }
 //-----------------------------------------------------------------------------------------
@@ -429,7 +429,8 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double>& load, double
 template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsigned end)
 {
     double val;
-    unsigned direct;
+    unsigned direct,
+             freedom = TFEM::mesh->getFreedom();
     vector<double> coord;
 
     for (unsigned i = begin; i < end; i++)
@@ -446,11 +447,11 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
                 {
                     val = params.getExpressionValue(*it, coord);
                     if ((direct & DIR_X) == DIR_X)
-                        solver.setBoundaryCondition(i, 0, val);
+                        solver.setBoundaryCondition(i * freedom + 0, val);
                     if ((direct & DIR_Y) == DIR_Y)
-                        solver.setBoundaryCondition(i, 1, val);
+                        solver.setBoundaryCondition(i * freedom + 1, val);
                     if ((direct & DIR_Z) == DIR_Z)
-                        solver.setBoundaryCondition(i, 2, val);
+                        solver.setBoundaryCondition(i * freedom + 2, val);
                 }
             }
     }
@@ -606,7 +607,7 @@ template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double>& loa
 
             try
             {
-                getConcentratedLoad(load, thd_max_val[i], i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t);
+                getConcentratedLoad(load, thd_max_val[i], i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t);
             }
             catch (ErrorCode& err)
             {
@@ -616,7 +617,7 @@ template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double>& loa
         if (error == NO_ERR)
             max_val = *max_element(thd_max_val.begin(), thd_max_val.end());
 #else
-        getConcentratedLoad(load, max_val, 0, TFEM::mesh->getNumFE(), t);
+        getConcentratedLoad(load, max_val, 0, TFEM::mesh->getNumVertex(), t);
 #endif
         if (error)
             throw error;

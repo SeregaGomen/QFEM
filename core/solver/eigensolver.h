@@ -12,70 +12,62 @@ class TMesh;
 class TEigenSolver : public TSolver< SparseMatrix<double> >
 {
 private:
-    unsigned size;
-    unsigned freedom;
     VectorXi memMap;
     bool loadMatrix(string, SparseMatrix<double>&);
     bool saveMatrix(string, SparseMatrix<double>&);
 public:
-    TEigenSolver(void)
-    {
-        freedom = size = 0;
-    }
-    ~TEigenSolver(void) {}
-    void createDynamicMatrix(double, double);
-    void createDynamicVector(matrix<double>&, double, double);
-    void setupStaticMatrix(TMesh*);
-    void setupDynamicMatrix(TMesh*);
-    void setBoundaryCondition(unsigned, unsigned, double);
+    TEigenSolver(void) {}
+    virtual ~TEigenSolver(void) {}
+    void setMatrix(TMesh*, bool = false);
+    void setBoundaryCondition(unsigned, double);
     void clear(void)
     {
-        freedom = size = 0;
-        globalStiffnessMatrix.resize(0, 0);
-        globalMassMatrix.resize(0, 0);
-        globalDampingMatrix.resize(0, 0);
+        stiffnessMatrix.resize(0, 0);
+        massMatrix.resize(0, 0);
+        dampingMatrix.resize(0, 0);
         memMap.resize(0);
-        globalLoadVector.clear();
+        loadVector.clear();
     }
-    void setStiffnessMatrix(double value, unsigned i, unsigned j)
+    void product(SparseMatrix<double>&, vector<double>&, vector<double>&);
+    void setStiffness(double value, unsigned i, unsigned j)
     {
-        globalStiffnessMatrix.coeffRef(i, j) = value;
+        stiffnessMatrix.coeffRef(i, j) = value;
     }
-    void setDampingMatrix(double value, unsigned i, unsigned j)
+    void setDamping(double value, unsigned i, unsigned j)
     {
-        globalDampingMatrix.coeffRef(i, j) = value;
+        dampingMatrix.coeffRef(i, j) = value;
     }
-    void setMassMatrix(double value, unsigned i, unsigned j)
+    void setMass(double value, unsigned i, unsigned j)
     {
-        globalMassMatrix.coeffRef(i, j) = value;
+        massMatrix.coeffRef(i, j) = value;
     }
-    void addStiffnessMatrix(double value, unsigned i, unsigned j)
-    {
-#pragma omp critical
-            globalStiffnessMatrix.coeffRef(i, j) += value;
-    }
-    void addMassMatrix(double value, unsigned i, unsigned j)
+    void addStiffness(double value, unsigned i, unsigned j)
     {
 #pragma omp critical
-        globalMassMatrix.coeffRef(i, j) += value;
+            stiffnessMatrix.coeffRef(i, j) += value;
     }
-    void addDampingMatrix(double value, unsigned i, unsigned j)
+    void addMass(double value, unsigned i, unsigned j)
     {
 #pragma omp critical
-        globalDampingMatrix.coeffRef(i, j) += value;
+        massMatrix.coeffRef(i, j) += value;
+    }
+    void addDamping(double value, unsigned i, unsigned j)
+    {
+#pragma omp critical
+        dampingMatrix.coeffRef(i, j) += value;
     }
     void print(string);
-    double getStiffnessMatrix(unsigned i, unsigned j)
+    double getStiffness(unsigned i, unsigned j)
     {
-        return globalStiffnessMatrix.coeff(i, j);
+        return stiffnessMatrix.coeff(i, j);
     }
-    double getMassMatrix(unsigned i,unsigned j)
+    double getMass(unsigned i, unsigned j)
     {
-        return globalMassMatrix.coeff(i, j);
+        return massMatrix.coeff(i, j);
     }
-    double getDampingMatrix(unsigned i,unsigned j)
+    double getDamping(unsigned i, unsigned j)
     {
-        return globalDampingMatrix.coeff(i, j);
+        return dampingMatrix.coeff(i, j);
     }
     bool solve(vector<double>&, double, bool&);
 };

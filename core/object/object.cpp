@@ -1,7 +1,6 @@
 #include "object.h"
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
-#include "solver/bccsolver.h"
 #include "solver/eigensolver.h"
 
 int langCode = 0; // Код языка (0 - английский, 1 - русский)
@@ -38,14 +37,11 @@ bool TFEMObject::start(void)
         {
             case StaticProblem:
                 if (params.pMethod == Linear) // Упругий расчет
-                    // fem = new TFEMStatic<TBCCSolver>(objName, &mesh, &results, &notes);
                     fem = new TFEMStatic<TEigenSolver>(objName, &mesh, &results, &notes);
                 else if (params.pMethod == MVS)
-                    // fem = new TFEMStaticMVS<TBCCSolver>(params.forceStep, objName, &mesh, &results, &notes);
                     fem = new TFEMStaticMVS<TEigenSolver>(params.loadStep, objName, &mesh, &results, &notes);
                 break;
             case DynamicProblem:
-                // fem = new TFEMDynamic<TBCCSolver>(objName, &mesh, &results, &notes);
                 fem = new TFEMDynamic<TEigenSolver>(objName, &mesh, &results, &notes);
         }
         // Задание параметров расчета
