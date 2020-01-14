@@ -127,7 +127,7 @@
         ],
         "Nonlinearity": {
             "CalculationMethod": 0,
-            "ForceStep": "0.01"
+            "LoadStep": "0.01"
         },
         "OutputParameters": {
             "Precision": "5",

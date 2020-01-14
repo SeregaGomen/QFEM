@@ -1357,9 +1357,9 @@ bool TSetupTaskDialog::checkDynamicParams(void)
 bool TSetupTaskDialog::checkFuncNames(void)
 {
     QString msg[] = {
-                     tr("volumetric force X"),
-                     tr("volumetric force Y"),
-                     tr("volumetric force Z"),
+                     tr("volumetric load X"),
+                     tr("volumetric load Y"),
+                     tr("volumetric load Z"),
                      tr("coordinate x"),
                      tr("coordinate y"),
                      tr("coordinate z")
@@ -1501,7 +1501,7 @@ bool TSetupTaskDialog::checkPlasticity(void)
     if (!isOk || val <=0)
     {
         ui->tabWidget->setCurrentIndex(3);
-        QMessageBox::critical(this, tr("Error"), tr("Incorrectly set force step!"));
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly set load step!"));
         return false;
     }
     for (int i = 0; i < ui->twStressStrainCurve->rowCount(); i++)

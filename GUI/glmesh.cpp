@@ -385,7 +385,7 @@ void TGLMesh::wheelEvent(QWheelEvent* pe)
     updateGL();
 }
 /*******************************************************************/
-void TGLMesh::forcePaint(void)
+void TGLMesh::loadPaint(void)
 {
     isIdle = true;
     paintGL();

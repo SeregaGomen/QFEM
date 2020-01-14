@@ -1140,7 +1140,7 @@ bool TMainWindow::saveJSON(QString fileName)
 
     // Параметры нелинейного расчета
     nonlin.insert("CalculationMethod", QJsonValue::fromVariant(femObject->getParams().pMethod));
-    nonlin.insert("ForceStep", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().loadStep)));
+    nonlin.insert("LoadStep", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().loadStep)));
     params.insert("Nonlinearity", nonlin);
 
     // Краевые условия и прочие параметры
@@ -1267,7 +1267,7 @@ bool TMainWindow::loadJSON(QString fileName)
     params.precision = obj.value(QString("Parameters"))["OutputParameters"]["Precision"].toVariant().toInt();
 
     // Параметры нелинейного расчета
-    params.loadStep = obj.value(QString("Parameters"))["Nonlinearity"]["ForceStep"].toVariant().toDouble();
+    params.loadStep = obj.value(QString("Parameters"))["Nonlinearity"]["LoadStep"].toVariant().toDouble();
     params.pMethod = PlasticityMethod(obj.value(QString("Parameters"))["Nonlinearity"]["CalculationMethod"].toVariant().toInt());
 
     // Краевые условия и прочие параметры
@@ -1582,7 +1582,7 @@ void TMainWindow::slotDataCopy(void)
 
     if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
     {
-        qobject_cast<TGLMesh*>(tabWidget->currentWidget())->forcePaint();
+        qobject_cast<TGLMesh*>(tabWidget->currentWidget())->loadPaint();
         clipboard->setImage(qobject_cast<TGLMesh*>(tabWidget->currentWidget())->grabFrameBuffer(true));
     }
     else

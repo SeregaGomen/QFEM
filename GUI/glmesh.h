@@ -83,7 +83,7 @@ public:
         params = r;
     }
     void setColor(float r,float g,float b,float a = 1);
-    void forcePaint(void);
+    void loadPaint(void);
     bool isSelectedVertex(void);
     bool getRotate(void)
     {
