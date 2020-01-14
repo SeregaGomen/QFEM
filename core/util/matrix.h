@@ -7,6 +7,7 @@
 #include <functional>
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ template <typename T> vector<T> operator + (const vector<T>& left, const vector<
         cerr << "vector<T> operator + (const vector<T>& left, const vector<T>& right) " << left.size() << ' ' << right.size() << endl;
 #endif
 
-    std::transform(left.begin(), left.end(), right.begin(), r.begin(), std::plus<T>());
+    transform(left.begin(), left.end(), right.begin(), r.begin(), plus<T>());
     return r;
 }
 
@@ -29,20 +30,20 @@ template <typename T> void operator += (vector<T>& left, const vector<T>& right)
     if (left.size() != right.size())
         cerr << "vector<T> operator += (const vector<T>& left, const vector<T>& right) " << left.size() << ' ' << right.size() << endl;
 #endif
-    std::transform(left.begin(), left.end(), right.begin(), left.begin(), plus<T>());
+    transform(left.begin(), left.end(), right.begin(), left.begin(), plus<T>());
 }
 
 template <typename T> vector<T> operator * (const vector<T>& left, T right)
 {
     vector<T> r = left;
 
-    std::transform(r.begin(), r.end(), r.begin(), std::bind1st(std::multiplies<T>(),right));
+    transform(r.begin(), r.end(), r.begin(), bind1st(multiplies<T>(),right));
     return r;
 }
 
 template <typename T> vector<T> operator *= (vector<T>& left, T right)
 {
-    std::transform(left.begin(), left.end(), left.begin(), std::bind1st(std::multiplies<T>(), right));
+    transform(left.begin(), left.end(), left.begin(), bind1st(multiplies<T>(), right));
 }
 
 template <typename T> vector<T> operator * (T left, const vector<T>& right)
@@ -54,7 +55,7 @@ template <typename T> T sum(const vector<T>& val)
 {
     T sum_of_elems = 0;
 
-    std::for_each(val.begin(), val.end(), [&] (T n) { sum_of_elems += n;});
+    for_each(val.begin(), val.end(), [&] (T n) { sum_of_elems += n;});
     return sum_of_elems;
 }
 
@@ -198,7 +199,7 @@ public:
     }
     void fill(T val)
     {
-        std::fill(buffer.begin(),buffer.end(),val);
+        std::fill(buffer.begin(), buffer.end(), val);
     }
     void clear(void)
     {

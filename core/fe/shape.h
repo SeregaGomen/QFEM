@@ -9,14 +9,11 @@
 //-----------------------------------------------------------------------
 class TShape
 {
-private:
-    // Решение СЛАУ методом Гауса
-    bool solve(matrix<double>&, vector<double>&, double eps = 1.0E-10);
 protected:
     // Коэффициенты функций форм
     matrix<double> c;
     // Структура изопараметрической функции формы
-    virtual vector<double> shape_coeff(unsigned) = 0;
+    virtual double shape_coeff(unsigned, unsigned) = 0;
 public:
     // Количество узлов КЭ
     unsigned size = 0;
@@ -38,9 +35,11 @@ public:
 class TShape1D2 : public TShape
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0) };
+        vector<double> s = { 1.0, x(i, 0) };
+
+        return s[j];
     }
 public:
     TShape1D2(void) : TShape()
@@ -83,9 +82,11 @@ public:
 class TShape2D3 : public TShape
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0), x(i, 1) };
+        vector<double> s = { 1.0, x(i, 0), x(i, 1) };
+
+        return s[j];
     }
 public:
     TShape2D3(void) : TShape()
@@ -125,9 +126,11 @@ public:
 class TShape2D4 : public TShape
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1) };
+        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1) };
+
+        return s[j];
     }
 public:
     TShape2D4(void) : TShape()
@@ -167,9 +170,11 @@ public:
 class TShape2D6 : public TShape2D3
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1) };
+        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1) };
+
+        return s[j];
     }
 public:
     TShape2D6(void) : TShape2D3()
@@ -209,9 +214,11 @@ public:
 class TShape3D4 : public TShape
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0), x(i, 1), x(i, 2) };
+        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 2) };
+
+        return s[j];
     }
 public:
     TShape3D4(void) : TShape()
@@ -260,9 +267,11 @@ public:
 class TShape3D8 : public TShape
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 1) * x(i, 2) };
+        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 1) * x(i, 2) };
+
+        return s[j];
     }
 public:
     TShape3D8(void) : TShape()
@@ -341,9 +350,11 @@ public:
 class TShape3D10 : public TShape3D4
 {
 protected:
-    vector<double> shape_coeff(unsigned i)
+    double shape_coeff(unsigned i, unsigned j)
     {
-        return { 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1), x(i, 2) * x(i, 2) };
+        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1), x(i, 2) * x(i, 2) };
+
+        return s[j];
     }
 public:
     TShape3D10(void) : TShape3D4()
