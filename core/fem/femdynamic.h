@@ -20,7 +20,6 @@ private:
     void createDynamicVector(matrix<double>&, double, double);
 protected:
     void ansambleLocalMatrix(TFE*, unsigned);
-    void prepareForceCondition(vector<double>&, vector<double>&, vector<double>&);
     void getInitialCondition(void);
     void setBoundaryConstant(unsigned,unsigned,double);
     void setLoadConstant(unsigned,unsigned,double);

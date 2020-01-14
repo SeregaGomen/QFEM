@@ -10,8 +10,21 @@ QMAKE_LFLAGS += -pthread
 
 
 INCLUDEPATH += ../core \
-               ../../../../eigen
+               ../../../eigen
 
+msvc:QMAKE_CXXFLAGS+= /openmp
+gcc:QMAKE_CXXFLAGS+= -fopenmp
+gcc:QMAKE_LFLAGS += -fopenmp
+
+win32 {
+    INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
+    LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+}
+
+unix {
+    INCLUDEPATH +=../../../../intel/compilers_and_libraries_2019.5.281/linux/mkl/include/
+    LIBS += -L$$PWD/../../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+}
 
 SOURCES += main.cpp \
     ../core/fe/shape.cpp \
@@ -22,10 +35,8 @@ SOURCES += main.cpp \
     ../core/parser/parser.cpp \
     ../core/parser/tree.cpp \
     ../core/parser/unary.cpp \
-    ../core/solver/bccsolver.cpp \
-    ../core/solver/elltsolver.cpp \
-    ../core/sparse/sparse32.cpp \
-    ../core/util/util.cpp
+    ../core/solver/eigensolver.cpp
+
 
 HEADERS += \
     ../core/analyse/analyse.h \
@@ -51,10 +62,7 @@ HEADERS += \
     ../core/parser/real.h \
     ../core/parser/tree.h \
     ../core/parser/unary.h \
-    ../core/solver/bccsolver.h \
-    ../core/solver/elltsolver.h \
-    ../core/sparse/private.h \
-    ../core/sparse/sparse32.h \
+    ../core/solver/solver.h \
+    ../core/solver/eigensolver.h \
     ../core/util/list.h \
-    ../core/util/matrix.h \
-    ../core/util/util.h
+    ../core/util/matrix.h

@@ -391,7 +391,6 @@ void TMainWindow::loadFile(QString fileName)
 
 
         if (iDlg->getImageParams().isLimit || iDlg->getImageParams().isLoad)
-//        if (qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams().isLimit || qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams().isForce)
         {
             lcProcess();
             if (tabWidget->count())
@@ -631,7 +630,6 @@ void TMainWindow::slotSetupTaskParams(void)
     if (tDlg->exec() == QDialog::Accepted)
     {
         if (iDlg->getImageParams().isLoad || iDlg->getImageParams().isLimit)
-//        if (qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams().isLimit || qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams().isForce)
             if (!qobject_cast<TGLMesh*>(tabWidget->widget(0))->isSelectedVertex() || tDlg->isBCChanged())
             {
 //                pb->show();
@@ -707,7 +705,7 @@ void TMainWindow::femProcess(void)
     pb->hide();
 }
 
-// Проверка наличия всех необходимых ждя успешного расчета параметров
+// Проверка наличия всех необходимых для успешного расчета параметров
 bool TMainWindow::checkParams(void)
 {
 //    if (femObject->getParams().e == 0.0)

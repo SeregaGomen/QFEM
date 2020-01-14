@@ -17,7 +17,7 @@ enum LimitType { NoValue = 0, LimitValue = 1, LoadValue = 2 };
 class GCondition
 {
 private:
-    LimitType type;   // Тип краевого условия (LimitValue - граничное условие или ForseValue - сосредоточенная нагрузка)
+    LimitType type;   // Тип краевого условия (LimitValue - граничное условие или LoadValue - нагрузка)
     unsigned index;   // Номер узла в списке граничных элементов
     unsigned direct;  // Направление краевого условия: по Х, Y, ...
     double value;     // Значение краевого условия

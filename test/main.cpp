@@ -52,7 +52,7 @@ void calcTank(void)
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc);
     // Шаг по нагрузке
-    object.setForceStep(0.5);
+    object.setLoadStep(10);
     // Способ расчета пластичности
     object.setPlasticityMethod(MVS);
 
@@ -279,10 +279,10 @@ int main()
 {
     msg = new TMessenger();
 
-    // calcTank();
+    calcTank();
     // calcBalka();
     // calcShell();
-    pyfem_test();
+    // pyfem_test();
     // calcTank3ds();
     // calcTank3s6();
 

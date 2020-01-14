@@ -116,7 +116,7 @@ public:
     {
         params.precision = p;
     }
-    void setForceStep(double p)
+    void setLoadStep(double p)
     {
         params.loadStep = p;
     }
