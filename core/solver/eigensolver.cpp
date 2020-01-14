@@ -76,6 +76,8 @@ void TEigenSolver::setBoundaryCondition(unsigned index, double value)
         }
     }
     loadVector[index] = value * stiffnessMatrix.coeffRef(index, index);
+//    stiffnessMatrix.coeffRef(index, index) *= 1.0E+8;
+//    loadVector[index] *= 1.0E+8 * value;
 }
 
 void TEigenSolver::print(string fname)

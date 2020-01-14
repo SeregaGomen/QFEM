@@ -708,17 +708,30 @@ void TMainWindow::femProcess(void)
 // Проверка наличия всех необходимых для успешного расчета параметров
 bool TMainWindow::checkParams(void)
 {
-//    if (femObject->getParams().e == 0.0)
-//    {
-//        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified elastic modulus!"));
-//        return;
-//    }
-//    if (femObject->getParams().pMethod != PEmpty && (femObject->getParams().forceStep <= 0 ||
-//        femObject->getParams().ssCurve.size1() == 0))
-//    {
-//        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified nonlinear parameters!"));
-//        return;
-//    }
+    TFEMObject* femObject = femProcessor->getFEMObject();
+
+    if (femObject->getParams().plist.findParameter(YOUNG_MODULUS_PARAMETER) == 0)
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Young's modulus!"));
+        return false;
+    }
+    if (femObject->getParams().plist.findParameter(POISSON_RATIO_PARAMETER) == 0 && !femObject->getMesh().is1D())
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Poisson's ratio!"));
+        return false;
+    }
+    if (femObject->getParams().plist.findParameter(THICKNESS_PARAMETER) == 0 && (femObject->getMesh().is2D() || femObject->getMesh().isShell() || femObject->getMesh().isPlate()))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified FE thickness!"));
+        return false;
+    }
+
+    if (femObject->getParams().pMethod != Linear && (femObject->getParams().loadStep <= 0 || femObject->getParams().plist.findParameter(STRESS_STRAIN_CURVE_PARAMETER) == 0))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified nonlinear parameters!"));
+        return false;
+    }
+
     return true;
 }
 
