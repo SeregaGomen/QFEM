@@ -720,16 +720,51 @@ bool TMainWindow::checkParams(void)
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Poisson's ratio!"));
         return false;
     }
+    if (femObject->getParams().plist.findParameter(BOUNDARY_CONDITION_PARAMETER) == 0)
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified boundary conditions!"));
+        return false;
+    }
+    if (femObject->getParams().plist.findParameter(VOLUME_LOAD_PARAMETER) == 0 && femObject->getParams().plist.findParameter(SURFACE_LOAD_PARAMETER) == 0 &&
+        femObject->getParams().plist.findParameter(CONCENTRATED_LOAD_PARAMETER) == 0 && femObject->getParams().plist.findParameter(PRESSURE_LOAD_PARAMETER) == 0)
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified loads!"));
+        return false;
+    }
     if (femObject->getParams().plist.findParameter(THICKNESS_PARAMETER) == 0 && (femObject->getMesh().is2D() || femObject->getMesh().isShell() || femObject->getMesh().isPlate()))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified FE thickness!"));
         return false;
     }
-
     if (femObject->getParams().pMethod != Linear && (femObject->getParams().loadStep <= 0 || femObject->getParams().plist.findParameter(STRESS_STRAIN_CURVE_PARAMETER) == 0))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified nonlinear parameters!"));
         return false;
+    }
+    if (femObject->getParams().fType == DynamicProblem)
+    {
+        if (femObject->getParams().theta <= 0)
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified the Wilson-Theta parameter!"));
+            return false;
+        }
+        if (femObject->getParams().plist.findParameter(DENSITY_PARAMETER) == 0)
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified density!"));
+            return false;
+        }
+        if (femObject->getParams().plist.findParameter(DAMPING_PARAMETER) == 0)
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping parameter!"));
+            return false;
+        }
+        if (femObject->getParams().th == 0 || femObject->getParams().t0 < 0 || femObject->getParams().t1 <= 0 || (femObject->getParams().t0 >= femObject->getParams().t1))
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified time!"));
+            return false;
+        }
+
+
     }
 
     return true;
