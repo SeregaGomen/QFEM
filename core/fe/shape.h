@@ -113,11 +113,11 @@ public:
     }
     double shape_dx(unsigned, unsigned j)
     {
-        return c(1, j);
+        return c(j, 1);
     }
     double shape_dy(unsigned, unsigned j)
     {
-        return c(2, j);
+        return c(j, 2);
     }
 };
 //-----------------------------------------------------------------------
@@ -157,11 +157,11 @@ public:
     }
     double shape_dx(unsigned i, unsigned j)
     {
-        return c(1, j) + c(3, j) * x(i, 1);
+        return c(j, 1) + c(j, 3) * x(i, 1);
     }
     double shape_dy(unsigned i, unsigned j)
     {
-        return c(2, j) + c(3, j) * x(i, 0);
+        return c(j, 2) + c(j, 3) * x(i, 0);
     }
 };
 //-----------------------------------------------------------------------
@@ -201,11 +201,11 @@ public:
     }
     double shape_dx(unsigned i, unsigned j)
     {
-        return c(1, j) + c(3, j) * x(i, 1) + 2.0 * c(4, j) * x(i, 0);
+        return c(j, 1) + c(j, 3) * x(i, 1) + 2.0 * c(j, 4) * x(i, 0);
     }
     double shape_dy(unsigned i, unsigned j)
     {
-        return c(2, j) + c(3, j) * x(i, 0) + 2.0 * c(5, j) * x(i, 1);
+        return c(j, 2) + c(j, 3) * x(i, 0) + 2.0 * c(j, 5) * x(i, 1);
     }
 };
 //-----------------------------------------------------------------------

@@ -14,6 +14,9 @@ double UnaryNode::value(void)
         case ABS:
             result = fabs(val.value());
             break;
+        case SQRT:
+            result = sqrt(val.value());
+            break;
         case SIN:
             result = sin(val.value());
             break;

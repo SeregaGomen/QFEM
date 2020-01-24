@@ -6,6 +6,7 @@
 #include "parser.h"
 
 static idToken functionList[] = {
+    { "SQRT", SQRT },
     { "SIN", SIN },
     { "COS", COS },
     { "TAN", TAN },

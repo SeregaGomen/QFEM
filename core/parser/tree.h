@@ -4,7 +4,7 @@
 #include "node.h"
 
 
-enum Op { SIN = 1, COS, TAN, EXP, ASIN, ACOS, ATAN, ATAN2, SINH, COSH, TANH,
+enum Op { SIN = 1, COS, TAN, EXP, ASIN, ACOS, ATAN, ATAN2, SINH, COSH, TANH, SQRT,
           ABS, PLUS, MINUS, DIV, MUL, POW, EQ, NE, LT, LE, GT, GE, NOT, AND, OR };
 
 

@@ -26,10 +26,10 @@ void TLCProcessor::processBoundaryVertex(void)
     // Обработка граничных условий
     for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
     {
-        for (int i = 0; i < numThread; i++)
-            thr[i] = std::thread(&TLCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, it->getType(), unsigned(it->getDirect()), it->getPredicate(), it->getExpression(), ref(error));
-        for_each(thr.begin(), thr.end(), [](std::thread& t) { t.join(); });
-//        calc(0, object->getMesh().getNumBE(), it->getType(), it->getDirect(), it->getPredicate(), it->getExpression(), ref(error));
+//        for (int i = 0; i < numThread; i++)
+//            thr[i] = std::thread(&TLCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, it->getType(), unsigned(it->getDirect()), it->getPredicate(), it->getExpression(), ref(error));
+//        for_each(thr.begin(), thr.end(), [](std::thread& t) { t.join(); });
+        calc(0, object->getMesh().getNumBE(), it->getType(), it->getDirect(), it->getPredicate(), it->getExpression(), ref(error));
         if (error)
             break;
     }
