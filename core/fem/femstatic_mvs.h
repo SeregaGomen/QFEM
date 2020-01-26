@@ -20,10 +20,10 @@ private:
     double maxAvgSi;                        // Максимальная средняя по КЭ интенсивность напряжений
     bool isStopGlobalIteration;             // Признак того, что расчет окончен (достигнут предел текучести)
     bool isStopLocalIteration;              // Признак того, что итерационный процесс для заданной нагрузки окончен
-    vector<double> si;                      // Интенсивность напряжений (по элементам)
+    vector<double> si;                      // Интенсивность напряжений (по узлам)
     vector<double> e0;                      // Модули упругости (для каждого КЭ), полученные на предыдущей итерации
     vector<unsigned> index0;                // Индекс упругих свойств, полученный на предыдущей итерации
-    void setupFE(TFE*, unsigned);           // Настройка парметров КЭ (для нелинейного случая)
+    virtual void setupFE(TFE*, unsigned);           // Настройка парметров КЭ (для нелинейного случая)
     void calcIteration(void);
     double calcStressIntensity(TResultList&);
 public:
@@ -72,6 +72,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
 
     // Итерационный процесс линеаризации упруго-пластической задачи
     e0.resize(TFEM::mesh->getNumFE());
+    si.resize(TFEM::mesh->getNumVertex(), 0);
     index0.resize(TFEM::mesh->getNumFE(), 0);
     do
     {
@@ -101,6 +102,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
                 {
                     TFEMStatic<T>::genResults(result, true);
                     maxSi = calcStressIntensity(*TFEM::results);
+                    TFEM::results->setResult(si, "Si");
                 }
 
             // Вывод рез-тов по каждой функции на экран
@@ -161,6 +163,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
         TFEMStatic<T>::solver.clear();
     }
     while (!isStopGlobalIteration);
+
     TFEM::isProcessStarted = false;
     TFEM::isProcessCalculated = true;
 
@@ -189,27 +192,26 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
 //---------------------------------------------------------------------------------
 template<class T> double TFEMStaticMVS<T>::calcStressIntensity(TResultList& res)
 {
-    double m_sqrt1_2 = 0.5*sqrt(2.0);
+    double m_sqrt1_2 = 0.5 * sqrt(2.0);
     unsigned dimension = TFEM::mesh->getDimension();
 
     // Вычисление узловых значений интенсивности напряжений
-    si.resize(TFEM::mesh->getNumVertex(),0);
     for (unsigned i = 0; i < TFEM::mesh->getNumVertex(); i++)
         switch (dimension)
         {
             case 1:
-                si[i] = fabs(res[2].getResults(i))*m_sqrt1_2;
+                si[i] = fabs(res[2].getResults(i)) * m_sqrt1_2;
                 break;
             case 2:
-                si[i] = sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0*(pow(res[7].getResults(i), 2)))*m_sqrt1_2;
+                si[i] = sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0 * (pow(res[7].getResults(i), 2))) * m_sqrt1_2;
                 break;
             case 3:
-                si[i] = sqrt(pow(res[9].getResults(i) - res[10].getResults(i), 2) +
-                             pow(res[9].getResults(i) - res[11].getResults(i), 2) +
-                             pow(res[10].getResults(i) - res[11].getResults(i), 2) +
-                             6.0*(pow(res[12].getResults(i), 2) + pow(res[13].getResults(i), 2) + pow(res[14].getResults(i), 2)))*m_sqrt1_2;
+                si[i] = sqrt(pow(res[12].getResults(i) - res[13].getResults(i), 2) +
+                             pow(res[12].getResults(i) - res[14].getResults(i), 2) +
+                             pow(res[13].getResults(i) - res[14].getResults(i), 2) +
+                             6.0 * (pow(res[15].getResults(i), 2) + pow(res[16].getResults(i), 2) + pow(res[17].getResults(i), 2))) * m_sqrt1_2;
         }
-    return *std::max_element(si.begin(),si.end());
+    return *std::max_element(si.begin(), si.end());
 }
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ

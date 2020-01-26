@@ -275,11 +275,100 @@ void calcTank3s6(void)
 
 }
 
+double tank3_new_thickness(double, double y, double, double)
+{
+    double L = 0.22,
+           shpangout_top = 0.0435,
+           shpangout_bot = 0.047,
+           R = 1.037;
+
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.17*0.17))) // d = 340
+        return 0.0032;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.365*0.365))) // d = 730
+        return 0.0019;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.418*0.418))) // d = 836
+        return 0.0032;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.94*0.94))) // d = 1880
+        return 0.0019;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.9645*0.9645))) // d = 1929
+        return 0.003;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 1.029*1.029))) // d = 2058
+        return 0.0019;
+    if (y > (L / 2 + 0.061))
+        return 0.003;
+    if (y > (L / 2 + 0.031))
+        return 0.058; //
+    if (y > L / 2 - 0.020)
+        return 0.003;
+    if (abs(y) <= L / 2 - 0.020)
+        return 0.0023;
+    if (y > -L / 2)
+        return 0.003;
+    if (y > -(L/2 + shpangout_bot))
+        return 0.007;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.479*0.479)))
+        return 0.0015;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.4365*0.4365)))
+        return 0.0024;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.425*0.425)))
+        return 0.007;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.403*0.403)))
+        return 0.0125;
+    return 0.0024;
+}
+void calcNewTank3(void)
+{
+    TFEMObject object;
+    double eps = 0.001,
+           L = 0.22,
+           Lt = 0.0435,
+           P = 10000,
+           data[][2] = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
+    matrix<double> ssc(10, 2);
+
+    // Подготовка диаграммы деформирования
+    for (unsigned i = 0; i < ssc.size1(); i++)
+        for (unsigned j = 0; j < ssc.size2(); j++)
+            ssc[i][j] = data[i][j];
+
+    if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new-6.trpa"))
+        return;
+    object.setTaskParam(StaticProblem);
+    // Упругие характеристики
+    object.addYoungModulus(6.67E+10);
+    object.addPoissonRatio(0.3);
+    // Толщина КЭ
+    object.addThickness(tank3_new_thickness);
+    // Граничные условия
+    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, 0.0, [&](double, double y, double, double){ return (abs(y - L / 2 - Lt) <= eps) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(DIR_X, 0.0, [&](double x, double, double, double){ return (abs(x) < eps) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(DIR_Z, 0.0, [&](double, double, double z, double){ return (abs(z) < eps) ? 1.0 : 0.0; });
+    // Распределенная поверхностная нагрузка
+    object.addPressureLoad(P, [&](double, double y, double, double){ return (y - L / 2 - Lt >= 0) ? 1.0 : 0.0; });
+    object.addPressureLoad(P / 2.0, [&](double, double y, double, double){ return (y - L / 2 - Lt < 0) ? 1.0 : 0.0; });
+    // Диаграмма деформирования
+    object.addStressStrainCurve(ssc);
+    // Шаг по нагрузке
+    object.setLoadStep(5);
+    // Способ расчета пластичности
+    object.setPlasticityMethod(MVS);
+
+
+    // Запуск расчета
+    if (object.start())
+    {
+        object.saveResult(object.stdQResName());
+        object.printResult(object.stdTxtResName());
+    }
+
+}
+
 int main()
 {
     msg = new TMessenger();
 
-    calcTank();
+    calcNewTank3();
+    // calcTank();
     // calcBalka();
     // calcShell();
     // pyfem_test();
