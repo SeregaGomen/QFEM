@@ -1,6 +1,7 @@
 #ifndef LCLIST_H
 #define LCLIST_H
 
+#include <mutex>
 #include <list>
 #include <iostream>
 #include <QString>
@@ -95,6 +96,8 @@ public:
     ~LimitList(void) {}
     void add(unsigned index, unsigned direct, double value, LimitType type = LoadValue)
     {
+        mutex mtx;
+        lock_guard<mutex> guard(mtx);
         GCondition c;
 
         c.setIndex(index);
