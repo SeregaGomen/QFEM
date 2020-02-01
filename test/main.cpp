@@ -331,7 +331,7 @@ void calcNewTank3(void)
         for (unsigned j = 0; j < ssc.size2(); j++)
             ssc[i][j] = data[i][j];
 
-    if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new-4.trpa"))
+    if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new.trpa"))
         return;
     object.setTaskParam(StaticProblem);
     // Упругие характеристики

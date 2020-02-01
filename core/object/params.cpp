@@ -39,51 +39,46 @@ unsigned TFEMParams::numResult(FEType type)
     return ret;
 }
 //--------------------------------------------------------------------
+//    Индексы названий функций в зависимости от размерности задачи
+//--------------------------------------------------------------------
+vector<unsigned> TFEMParams::getFunIndex(FEType type)
+{
+    switch (type)
+    {
+        case FE1D2:
+            // U, Exx, Sxx, Ut, Utt
+            return { 4, 10, 16, 22, 25 };
+        case FE2D3:
+        case FE2D4:
+        case FE2D6:
+            // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy, Ut, Vt, Utt, Vtt
+            return { 4, 5, 10, 11, 13, 16, 17, 19, 22, 23, 25, 26 };
+        case FE2D3P:
+        case FE2D4P:
+        case FE2D6P:
+            // W, Tx, Ty, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
+            return { 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
+        case FE3D4:
+        case FE3D8:
+        case FE3D10:
+            // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
+            return { 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
+        case FE3D3S:
+        case FE3D4S:
+        case FE3D6S:
+            // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
+            return { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
+        default:
+            break; // ?
+    }
+    return {};
+}
+//--------------------------------------------------------------------
 //    Название заданной функции в зависимости от размерности задачи
 //--------------------------------------------------------------------
 string TFEMParams::getName(unsigned i, FEType type)
 {
-    unsigned // U, Exx, Sxx, Ut, Utt
-        index1d[] = { 4, 10, 16, 22, 25 },
-        // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy, Ut, Vt, Utt, Vtt
-        index2d[] = { 4, 5, 10, 11, 13, 16, 17, 19, 22, 23, 25, 26  },
-        // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
-        index2dp[] = { 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 },
-        // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
-        index3d[] = { 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 },
-        // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
-        index3ds[] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
-    string ret;
-
-    switch (type)
-    {
-        case FE1D2:
-            ret = names[index1d[i]];
-            break;
-        case FE2D3:
-        case FE2D4:
-        case FE2D6:
-            ret = names[index2d[i]];
-            break;
-        case FE2D3P:
-        case FE2D4P:
-        case FE2D6P:
-            ret = names[index2dp[i]];
-            break;
-        case FE3D4:
-        case FE3D8:
-        case FE3D10:
-            ret = names[index3d[i]];
-            break;
-        case FE3D3S:
-        case FE3D4S:
-        case FE3D6S:
-            ret = names[index3ds[i]];
-            break;
-        default:
-            ret = -1; // ?
-    }
-    return ret;
+    return names[getFunIndex(type)[i]];
 }
 //--------------------------------------------------------------------
 // Извлечение значения параметра, соответствующего заданной координате

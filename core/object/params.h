@@ -20,6 +20,7 @@ private:
     void getParam(int, vector<double>&, double&, matrix<double>&);
     double getScalarParam(int, vector<double>&);
     void getMatrixParam(vector<double>&, matrix<double>&);
+    vector<unsigned> getFunIndex(FEType);
 public:
     FEMType fType;                  // Тип задачи (статика, динамика,...)
     TimeMethod tMethod;             // Способ аппроксимации по времени
