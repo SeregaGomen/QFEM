@@ -25,7 +25,6 @@ private:
     vector<unsigned> index0;                // Индекс упругих свойств, полученный на предыдущей итерации
     virtual void setupFE(TFE*, unsigned);   // Настройка парметров КЭ (для нелинейного случая)
     void calcIteration(void);
-    double calcStressIntensity(TResultList&);
 public:
     TFEMStaticMVS(double& step, string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
     {
@@ -88,20 +87,20 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
         TFEMStatic<T>::calcBoundaryCondition();
 
         // Решение СЛАУ
-        if (TFEMStatic<T>::solver.solve(result,TFEM::params.eps,TFEM::isProcessAborted))
+        if (TFEMStatic<T>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
         {
             // Вычисление дополнительных результатов
             if (iterNo == 0)
             {
                 TFEMStatic<T>::genResults(result);
                 // Вычисление интенсивности напряжений
-                maxSi = calcStressIntensity(*TFEM::results);
+                maxSi = TFEMStatic<T>::calcStressIntensity(*TFEM::results, si);
             }
             else
                 if (isStopLocalIteration)
                 {
                     TFEMStatic<T>::genResults(result, true);
-                    maxSi = calcStressIntensity(*TFEM::results);
+                    maxSi = TFEMStatic<T>::calcStressIntensity(*TFEM::results, si);
                     TFEM::results->setResult(si, "Si");
                 }
 
@@ -185,47 +184,6 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
     TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
-}
-//---------------------------------------------------------------------------------
-//                       Вычисление интенсивности напряжений
-//    Si=((Sxx-Syy)^2+(Sxx-Szz)^2+(Syy-Szz)^2+6*(Sxy^2+Sxz^2+Syz^2))^0.5/2^0.5
-//---------------------------------------------------------------------------------
-template<class T> double TFEMStaticMVS<T>::calcStressIntensity(TResultList& res)
-{
-    double m_sqrt1_2 = 0.5 * sqrt(2.0);
-    FEType type = TFEM::mesh->getTypeFE();
-
-    // Вычисление узловых значений интенсивности напряжений
-    for (unsigned i = 0; i < TFEM::mesh->getNumVertex(); i++)
-        switch (type)
-        {
-            case FE1D2: // U, Exx, Sxx
-                si[i] = m_sqrt1_2 * fabs(res[2].getResults(i));
-                break;
-            case FE2D3:
-            case FE2D4:
-            case FE2D6: // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy
-                si[i] = m_sqrt1_2 * sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0 * (pow(res[7].getResults(i), 2)));
-                break;
-            case FE2D3P:
-            case FE2D4P:
-            case FE2D6P: // W, Tx, Ty, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
-            case FE3D4:
-            case FE3D8:
-            case FE3D10: // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
-                si[i] =  m_sqrt1_2 * sqrt(pow(res[9].getResults(i) - res[10].getResults(i), 2) + pow(res[9].getResults(i) - res[11].getResults(i), 2) +
-                             pow(res[11].getResults(i) - res[12].getResults(i), 2) + 6.0 * (pow(res[12].getResults(i), 2) + pow(res[13].getResults(i), 2) + pow(res[14].getResults(i), 2)));
-                break;
-            case FE3D3S:
-            case FE3D4S:
-            case FE3D6S: // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
-                si[i] = m_sqrt1_2 * sqrt(pow(res[12].getResults(i) - res[13].getResults(i), 2) + pow(res[12].getResults(i) - res[14].getResults(i), 2) +
-                             pow(res[13].getResults(i) - res[14].getResults(i), 2) + 6.0 * (pow(res[15].getResults(i), 2) + pow(res[16].getResults(i), 2) + pow(res[17].getResults(i), 2)));
-                break;
-            default:
-                si[i] = 0;
-        }
-    return *std::max_element(si.begin(), si.end());
 }
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ

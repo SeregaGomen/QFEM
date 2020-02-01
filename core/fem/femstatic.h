@@ -40,6 +40,7 @@ protected:
     void getFEResult(matrix<double>&, vector<double>&, vector<int>&, unsigned, unsigned);
     void getMatrix(unsigned, unsigned, bool);
     void getLoad(vector<double>&, unsigned, unsigned);
+    void getStressIntensity(TResultList&, vector<double>&, unsigned, unsigned);
     void calcBoundaryCondition(void);
     void calcGlobalMatrix(bool = true);
     double calcLoad(vector<double>&, double = 0);
@@ -47,6 +48,7 @@ protected:
     double calcSurfaceLoad(vector<double>&, double = 0);
     double calcVolumeLoad(vector<double>&, double = 0);
     double calcPressureLoad(vector<double>&, double = 0);
+    double calcStressIntensity(TResultList&, vector<double>&);
     bool checkBE(unsigned, TParameter&);
     bool checkFE(unsigned, TParameter&);
 public:
@@ -507,6 +509,44 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double>& res, vector<do
         fe_res.fill(0);
     }
 }
+//--------------------------------------------------------------------------------------------------------------
+// Вычисление интенсивности напряжений Si=((Sxx-Syy)^2+(Sxx-Szz)^2+(Syy-Szz)^2+6*(Sxy^2+Sxz^2+Syz^2))^0.5/2^0.5
+//--------------------------------------------------------------------------------------------------------------
+template<class T> void TFEMStatic<T>::getStressIntensity(TResultList &res, vector<double> &si, unsigned begin, unsigned end)
+{
+    double m_sqrt1_2 = 0.5 * sqrt(2.0);
+
+    // Вычисление узловых значений интенсивности напряжений
+    for (unsigned i = begin; i < end; i++)
+        switch (TFEM::mesh->getTypeFE())
+        {
+            case FE1D2: // U, Exx, Sxx
+                si[i] = m_sqrt1_2 * fabs(res[2].getResults(i));
+                break;
+            case FE2D3:
+            case FE2D4:
+            case FE2D6: // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy
+                si[i] = m_sqrt1_2 * sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0 * (pow(res[7].getResults(i), 2)));
+                break;
+            case FE2D3P:
+            case FE2D4P:
+            case FE2D6P: // W, Tx, Ty, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
+            case FE3D4:
+            case FE3D8:
+            case FE3D10: // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
+                si[i] =  m_sqrt1_2 * sqrt(pow(res[9].getResults(i) - res[10].getResults(i), 2) + pow(res[9].getResults(i) - res[11].getResults(i), 2) +
+                             pow(res[11].getResults(i) - res[12].getResults(i), 2) + 6.0 * (pow(res[12].getResults(i), 2) + pow(res[13].getResults(i), 2) + pow(res[14].getResults(i), 2)));
+                break;
+            case FE3D3S:
+            case FE3D4S:
+            case FE3D6S: // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
+                si[i] = m_sqrt1_2 * sqrt(pow(res[12].getResults(i) - res[13].getResults(i), 2) + pow(res[12].getResults(i) - res[14].getResults(i), 2) +
+                             pow(res[13].getResults(i) - res[14].getResults(i), 2) + 6.0 * (pow(res[15].getResults(i), 2) + pow(res[16].getResults(i), 2) + pow(res[17].getResults(i), 2)));
+                break;
+            default:
+                si[i] = 0;
+        }
+}
 //-----------------------------------------------------------------------------------------
 //                Осреднение результатов расчета деформаций, напряжений, ...
 //-----------------------------------------------------------------------------------------
@@ -741,6 +781,26 @@ template<class T> double TFEMStatic<T>::calcVolumeLoad(vector<double>& load, dou
         msg->stopProcess();
     }
     return max_val;
+}
+//-----------------------------------------------------------------------------------------
+//                       Вычисление интенсивности напряжений
+//-----------------------------------------------------------------------------------------
+template<class T> double TFEMStatic<T>::calcStressIntensity(TResultList &res, vector<double>& si)
+{
+#ifdef OPENMP
+    int step = TFEM::mesh->getNumVertex() / numThread;
+    vector<double> thd_max_val(numThread);
+
+#pragma omp parallel num_threads(numThread)
+    {
+        int i = omp_get_thread_num();
+
+        getStressIntensity(res, si, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
+    }
+#else
+    getStressIntensity(res, si, 0, TFEM::mesh->getNumVertex());
+#endif
+    return *std::max_element(si.begin(), si.end());
 }
 //-------------------------------------------------------------
 //                  Формирование результатов
