@@ -6,7 +6,7 @@
 #include "fem/fem.h"
 
 
-#define OPENMP // Многопоточный расчет
+//#define OPENMP // Многопоточный расчет
 
 #ifdef OPENMP
 #include <omp.h>

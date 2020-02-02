@@ -339,6 +339,34 @@ void calcNewTank3(void)
     object.addPoissonRatio(0.3);
     // Толщина КЭ
     object.addThickness(tank3_new_thickness);
+
+//    object.addVariable("L", 0.22);
+//    object.addVariable("Lt", 0.0435);
+//    object.addVariable("Lb", 0.047);
+//    object.addVariable("R", 1.037);
+
+//    object.addThickness("0.0032", "y > (L / 2 + Lt + sqrt(R*R - 0.17*0.17))");
+//    object.addThickness("0.0019", "y > (L / 2 + Lt + sqrt(R*R - 0.365*0.365))");
+//    object.addThickness("0.0032", "y > (L / 2 + Lt + sqrt(R*R - 0.418*0.418))");
+//    object.addThickness("0.0019", "y > (L / 2 + Lt + sqrt(R*R - 0.94*0.94))");
+//    object.addThickness("0.003", "y > (L / 2 + Lt + sqrt(R*R - 0.9645*0.9645))");
+//    object.addThickness("0.0019", "y > (L / 2 +Lt + sqrt(R*R - 1.029*1.029))");
+//    object.addThickness("0.003", "y > (L / 2 + 0.061)");
+//    object.addThickness("0.058", "y > (L / 2 + 0.031)");
+//    object.addThickness("0.003", "y > L / 2 - 0.020");
+//    object.addThickness("0.0023", "abs(y) <= L / 2 - 0.020");
+//    object.addThickness("0.003", "y > -L / 2");
+//    object.addThickness("0.007", "y > -(L/2 + Lb)");
+//    object.addThickness("0.0015", "y > -(L/2 + Lb + sqrt(R*R - 0.479*0.479))");
+//    object.addThickness("0.0024", "y > -(L/2 + Lb + sqrt(R*R - 0.4365*0.4365))");
+//    object.addThickness("0.007", "y > -(L/2 +Lb + sqrt(R*R - 0.425*0.425))");
+//    object.addThickness("0.0125", "y > -(L/2 + Lb + sqrt(R*R - 0.403*0.403))");
+//    object.addThickness("0.0024");
+
+//////////////
+
+
+
     // Граничные условия
     object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, 0.0, [&](double, double y, double, double){ return (abs(y - L / 2 - Lt) <= eps) ? 1.0 : 0.0; });
     object.addBoundaryCondition(DIR_X, 0.0, [&](double x, double, double, double){ return (abs(x) < eps) ? 1.0 : 0.0; });

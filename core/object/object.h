@@ -469,6 +469,10 @@ public:
     {
         params.plist.addPressureLoad(e, nullptr);
     }
+    void addVariable(string name, double val)
+    {
+        params.variables[name] = val;
+    }
     // Диаграмма деформирования
     void addStressStrainCurve(matrix<double>& ssc, string p)
     {
