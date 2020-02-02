@@ -74,7 +74,7 @@ extern int langCode;
 #define S_MSG_SYSTEM_FACTORIZATION      ((langCode) ? "Факторизация системы уравнений" : "Factorization equations")
 #define S_MSG_PRINT_RESULT              ((langCode) ? "Печать результатов расчета" : "Printing results")
 #define S_MSG_LOAD                      ((langCode) ? "Нагрузка: " : "Load: ")
-#define S_MSG_SI                        ((langCode) ? "Интенсивность напряжений - " : "Stress intensity - ")
+#define S_MSG_SI                        ((langCode) ? "Максимальная интенсивность напряжений: " : "Max stress intensity: ")
 #define S_MSG_TIME_ITERATION            ((langCode) ? "Расчет по времени" : "Time calculation")
 #define S_MSG_SE_MATRIX_GENERATION      ((langCode) ? "Формирование матрицы СЛАУ" : "Building of matrix SE")
 #define S_MSG_MESH_ANALYSE              ((langCode) ? "Анализ структуры сетки" : "Analysing of the mesh structure")

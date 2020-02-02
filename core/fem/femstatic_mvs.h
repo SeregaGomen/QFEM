@@ -17,7 +17,6 @@ template <class T> class TFEMStaticMVS : public TFEMStatic<T>
 private:
     int iterNo;                             // Номер итерации (0 - признак того, что расчет линейный)
     double loadStep;                        // Шаг по нагрузке
-    double maxAvgSi;                        // Максимальная средняя по КЭ интенсивность напряжений
     bool isStopGlobalIteration;             // Признак того, что расчет окончен (достигнут предел текучести)
     bool isStopLocalIteration;              // Признак того, что итерационный процесс для заданной нагрузки окончен
     vector<double> si;                      // Интенсивность напряжений (по узлам)
@@ -28,7 +27,6 @@ private:
 public:
     TFEMStaticMVS(double& step, string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
     {
-        maxAvgSi = 0;
         loadStep = step;
         iterNo = 0;
         isStopGlobalIteration = isStopLocalIteration = false;
@@ -108,7 +106,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             TFEM::printResultSummary();
             // Вывод информации об итерации
             cout << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxLoad << endl;
-            cout << S_MSG_SI << " max: " << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi << ", avg: " << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxAvgSi <<endl;
+            cout << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi << endl;
             cout << S_MSG_ITERATION << count++ << endl << endl;
             cout.unsetf(ios::scientific);
 
@@ -175,7 +173,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     out << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxLoad;
     TFEM::notes->push_back(out.str());
     out.str("");
-    out << S_MSG_SI << " max: " << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi << ", avg: " << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxAvgSi;
+    out << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi;
     TFEM::notes->push_back(out.str());
     out.str("");
     out << S_MSG_ITERATION << --count;
@@ -191,7 +189,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
 template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
 {
     double newE,
-           feSi = 0;
+           feSi = si[TFEM::mesh->getFE(i, 0)];
     unsigned index;
     vector<double> cx;
     matrix<double> ssCurve;
@@ -208,11 +206,9 @@ template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
         throw NONLINEAR_PARAM_ERR;
 
     // Определяем среднюю по КЭ интенсивность наряжений
-    for (unsigned j = 0; j < TFEM::mesh->getSizeFE(); j++)
-        feSi += si[TFEM::mesh->getFE(i, j)];
-    feSi /= double(TFEM::mesh->getSizeFE());
-    maxAvgSi = (feSi > maxAvgSi) ? feSi : maxAvgSi;
-
+    for (unsigned j = 1; j < TFEM::mesh->getSizeFE(); j++)
+        if (feSi < si[TFEM::mesh->getFE(i, j)])
+            feSi = si[TFEM::mesh->getFE(i, j)];
 
     // ------------- Нелинейный случай ----------------
     // Поиск в таблице свойств материала соответствующего напряжения
