@@ -12,13 +12,15 @@
 #include <QProgressBar>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QScrollArea>
 #include <fstream>
 
+#include "problemsetupform.h"
 #include "appesetupdialog.h"
 #include "vcdialog.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "setuptaskdialog.h"
+//#include "setuptaskdialog.h"
 #include "setupimagedialog.h"
 #include "fldialog.h"
 #include "glfun.h"
@@ -26,7 +28,7 @@
 #include "qmsg.h"
 #include "helpdialog.h"
 #include "femprocessor.h"
-#include "lcprocessor.h"
+#include "bcprocessor.h"
 #include "terminal.h"
 #include "parser/parser.h"
 #include "object/object.h"
@@ -54,7 +56,6 @@ TMainWindow::~TMainWindow()
     delete terminal;
     delete dock;
     delete tabWidget;
-    delete tDlg;
     delete iDlg;
     delete ui;
 }
@@ -84,8 +85,9 @@ void TMainWindow::init(void)
     setupLanguage();
     createRecentMenu();
 
-    tDlg = new TSetupTaskDialog(femProcessor->getFEMObject(), this);
     iDlg = new TSetupImageDialog(this);
+
+    pForm = new TProblemSetupForm(femProcessor->getFEMObject());
 
     tabWidget = new QTabWidget();
     tabWidget->setTabsClosable(false);
@@ -228,7 +230,7 @@ void TMainWindow::slotCloseTab(int nTab)
             tabWidget->removeTab(i--);
         }
         iDlg->clear();
-        tDlg->clear();
+        pForm->clear();
         setWindowTitle("QFEM");
         isUntitled = true;
         checkMenuState();
@@ -376,7 +378,7 @@ void TMainWindow::loadFile(QString fileName)
 
     if (isOk)
     {
-        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), &lcProcessor->getLCVertex(), this), tr("Object"));
+        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), &lcProcessor->getVertex(), this), tr("Object"));
         tabWidget->setTabsClosable(true);
         tabWidget->setCurrentIndex(0);
 
@@ -528,8 +530,8 @@ void TMainWindow::slotCloseDocument(void)
     lcProcessor->clear();
     isUntitled = true;
     setWindowTitle("QFEM");
-    tDlg->clear();
     iDlg->clear();
+    pForm->clear();
     checkMenuState();
 }
 
@@ -617,7 +619,6 @@ void TMainWindow::lcProcess(void)
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
     pb->hide();
-    tDlg->setBCChanged(false);
 
     terminal->setTextCursor(saveCursor);
 }
@@ -625,26 +626,28 @@ void TMainWindow::lcProcess(void)
 
 void TMainWindow::slotSetupTaskParams(void)
 {
-    tDlg->changeLanguage();
-    tDlg->setup();
-    if (tDlg->exec() == QDialog::Accepted)
+    bool isFind = false;
+    QScrollArea *scroll;
+
+
+    // Проверка наличия такой функции в уже открытых закладках
+    for (int i = 0; i < tabWidget->count(); i++)
+        if (tabWidget->tabText(i) == tr("Setup"))
+        {
+            isFind = true;
+            tabWidget->setCurrentIndex(i);
+        }
+    if (!isFind)
     {
-        if (iDlg->getImageParams().isLoad || iDlg->getImageParams().isLimit)
-            if (!qobject_cast<TGLMesh*>(tabWidget->widget(0))->isSelectedVertex() || tDlg->isBCChanged())
-            {
-//                pb->show();
-//                ui->actionStart->setEnabled(false);
-//                ui->actionStop->setEnabled(true);
-//                qobject_cast<GLObjWidget*>(tabWidget->widget(0))->setSelectedVertex();
-//                ui->actionStart->setEnabled(true);
-//                ui->actionStop->setEnabled(false);
-//                pb->hide();
-//                tDlg->setLimitChanged(false);
-//                qobject_cast<GLObjWidget*>(tabWidget->widget(0))->repaint();
-                lcProcess();
-                qobject_cast<TGLMesh*>(tabWidget->widget(0))->repaint();
-            }
+        pForm->changeLanguage();
+        pForm->setup();
+        scroll = new QScrollArea();
+        scroll->setWidget(pForm);
+        tabWidget->insertTab(1, scroll, tr("Setup"));
+        tabWidget->setTabsClosable(true);
+        tabWidget->setCurrentIndex(1);
     }
+
 }
 
 // Запуск процедуры расчета задачи
@@ -1255,7 +1258,7 @@ bool TMainWindow::loadJSON(QString fileName)
     int dir;
     string expr,
            pred;
-    ParameterType type;
+    int type;
     matrix<double> ssc;
 
 
@@ -1326,10 +1329,10 @@ bool TMainWindow::loadJSON(QString fileName)
             dir = bc.at(i)["Direct"].toVariant().toInt();
             expr = bc.at(i)["Expression"].toVariant().toString().toStdString();
             pred = bc.at(i)["Predicate"].toVariant().toString().toStdString();
-            type = ParameterType(bc.at(i)["Type"].toVariant().toInt());
+            type = bc.at(i)["Type"].toVariant().toInt();
             if (type == STRESS_STRAIN_CURVE_PARAMETER)
             {
-                if (!tDlg->decodeStressStarinCurve(expr, ssc))
+                if (!pForm->decodeStressStarinCurve(expr, ssc))
                     return false;
                 params.plist.addStressStrainCurve(ssc, pred);
             }

@@ -1,17 +1,17 @@
-#ifndef LCPROCESSOR_H
-#define LCPROCESSOR_H
+#ifndef BCPROCESSOR_H
+#define BCPROCESSOR_H
 
 #include <QObject>
-#include "lclist.h"
+#include <QVector3D>
 
 class TFEMObject;
-class LimitList;
+class TParameter;
 
 using namespace std;
 
-/***********************************************************************/
-/* Обертка для класса, реализующего построение списка краевых условий  */
-/***********************************************************************/
+/************************************************************************/
+/* Реализация построения вектора узловых нагрузок, краевых условий, etc */
+/************************************************************************/
 class TLCProcessor : public QObject
 {
     Q_OBJECT
@@ -23,18 +23,20 @@ signals:
 private:
     // Объект рассчета (содержит геометрию)
     TFEMObject* object;
-    // Список краевых условий
-    LimitList lcVertex;
+    // Вектор значений нагрузок, краевых условий, etc
+    QVector<QVector3D> vertex;
     // Признак того, что процесс прерван
     bool isStoped;
     // Формирование списка краевых условий
-    void processBoundaryVertex(void);
-    void calc(unsigned, unsigned, int, int, string, string, int&);
+    void processVertex(void);
+    void calc(int, unsigned, unsigned, int&);
+    void calcPressureLoad(unsigned, TParameter&, int&);
+    void calcSurfaceLoad(unsigned, TParameter&, int&);
 public slots:
     // запуск расчета
     void start(void)
     {
-        processBoundaryVertex();
+        processVertex();
         emit finished();
     }
     // остановка расчета
@@ -48,14 +50,14 @@ public:
         object = p;
     }
     ~TLCProcessor(void) {}
-    LimitList& getLCVertex(void)
+    QVector<QVector3D>& getVertex(void)
     {
-        return lcVertex;
+        return vertex;
     }
     void clear(void)
     {
-        lcVertex.clear();
+        vertex.clear();
     }
 };
 
-#endif // LCPROCESSOR_H
+#endif // BCPROCESSOR_H

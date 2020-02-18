@@ -9,7 +9,6 @@
 
 class TSetupTaskDialog;
 class TMesh;
-class LimitList;
 
 class TGLMesh : public QGLWidget, protected QOpenGLFunctions_3_0
 // class TGLMesh : public QGLWidget, protected QOpenGLFunctions
@@ -24,7 +23,7 @@ private:
     float diffuse;
     float ambient;
     float specular;
-    LimitList* sVtx;
+    QVector<QVector3D>* vertex;
     bool isRotate;
     bool isScale;
     bool isTranslate;
@@ -71,7 +70,7 @@ protected:
     void saveImage(const QString&);
 
 public:
-    TGLMesh(TMesh*, LimitList* llist = nullptr, QWidget *parent = nullptr);
+    TGLMesh(TMesh*, QVector<QVector3D>* = nullptr, QWidget* = nullptr);
     ~TGLMesh(void);
 
     QSize minimumSizeHint() const;

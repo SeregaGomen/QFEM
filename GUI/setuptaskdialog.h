@@ -63,14 +63,14 @@ private:
     void setThickness(void);
     void setDirect(QTableWidget*, int, int);
     void setDirect(QTableWidget*, int);
-    void setTableValue(ParameterType, QTableWidget*, bool = true);
+    void setTableValue(int, QTableWidget*, bool = true);
     void createMenu(void);
     void removeAllRows(QTableWidget*);
     void addRow(QTableWidget*);
     void removeRow(QTableWidget*);
     void setEnabledBtn(QToolButton*, QTableWidget*);
     void reload(void);
-    void getTableValue(ParameterType, QTableWidget*, bool = true);
+    void getTableValue(int, QTableWidget*, bool = true);
     void getBoundaryConditionValue(void);
     void getFunNames(void);
     void getVariables(void);

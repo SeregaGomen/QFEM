@@ -31,7 +31,9 @@ unix {
 
 SOURCES += main.cpp\
     ../core/solver/eigensolver.cpp \
+    bcprocessor.cpp \
     mainwindow.cpp \
+    problemsetupform.cpp \
     setuptaskdialog.cpp \
     fldialog.cpp \
     glfun.cpp \
@@ -41,7 +43,6 @@ SOURCES += main.cpp\
     appsetupdialog.cpp \
     helpdialog.cpp \
     femprocessor.cpp \
-    lcprocessor.cpp \
     glmesh.cpp \
     ../core/mesh/mesh.cpp \
     ../core/parser/binary.cpp \
@@ -55,6 +56,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \
+    bcprocessor.h \
+    problemsetupform.h \
     qstdredirector.h \
     setuptaskdialog.h \
     fldialog.h \
@@ -67,9 +70,7 @@ HEADERS  += mainwindow.h \
     appesetupdialog.h \
     helpdialog.h \
     femprocessor.h \
-    lcprocessor.h \
     terminal.h \
-    lclist.h \
     glmesh.h \
     ../core/analyse/analyse.h \
     ../core/msg/msg.h \
@@ -97,6 +98,7 @@ HEADERS  += mainwindow.h \
     ../core/fe/fe3ds.h
 
 FORMS    += mainwindow.ui \
+    problemsetupform.ui \
     setuptaskdialog.ui \
     funlistdialog.ui \
     setupimagedialog.ui \

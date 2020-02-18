@@ -12,12 +12,12 @@ class TTerminal;
 class QProgressBar;
 class QDockWidget;
 class QTabWidget;
-class TSetupTaskDialog;
 class TSetupImageDialog;
 class QTranslator;
 class QThread;
 class TFEMProcessor;
 class TLCProcessor;
+class TProblemSetupForm;
 
 
 const int maxRecentFiles = 5;
@@ -83,10 +83,10 @@ private:
     QAction* recentFileActs[maxRecentFiles];
     QAction* separatorAct;
     QStringList files;
-    QStdRedirector<>* myCout;
-    QStdRedirector<>* myCerr;
-    TSetupTaskDialog* tDlg;
-    TSetupImageDialog* iDlg;
+    QStdRedirector<> *myCout;
+    QStdRedirector<> *myCerr;
+    TSetupImageDialog *iDlg;
+    TProblemSetupForm *pForm;
     QProgressBar *pb;
     bool isUntitled;
     bool isAutoScroll;

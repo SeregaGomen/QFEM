@@ -9,7 +9,6 @@
 #include "setuptaskdialog.h"
 #include "ui_setuptaskdialog.h"
 #include "glmesh.h"
-#include "lclist.h"
 #include "msg/msg.h"
 #include "parser/parser.h"
 #include "object/object.h"
@@ -436,7 +435,7 @@ void TSetupTaskDialog::getBoundaryConditionValue(void)
     getTableValue(BOUNDARY_CONDITION_PARAMETER, ui->twBC);
 }
 
-void TSetupTaskDialog::getTableValue(ParameterType type, QTableWidget* tw, bool isDirect)
+void TSetupTaskDialog::getTableValue(int type, QTableWidget* tw, bool isDirect)
 {
     int direct = 0;
 
@@ -448,7 +447,7 @@ void TSetupTaskDialog::getTableValue(ParameterType type, QTableWidget* tw, bool 
     }
 }
 
-void TSetupTaskDialog::setTableValue(ParameterType type, QTableWidget* tw, bool isDirect)
+void TSetupTaskDialog::setTableValue(int type, QTableWidget* tw, bool isDirect)
 {
     int count = 0;
     QString ssc;

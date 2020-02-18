@@ -27,23 +27,23 @@
 using namespace std;
 
 // Типы параметров расчета:
-enum ParameterType {
-                        EMPTY_PARAMETER,
-                        INITIAL_CONDITION_PARAMETER,    // Начальные условия
-                        BOUNDARY_CONDITION_PARAMETER,   // Граничное условие, заданноe выражением
-                        VOLUME_LOAD_PARAMETER,          // Объемная нагрузка
-                        SURFACE_LOAD_PARAMETER,         // Поверхностная ...
-                        CONCENTRATED_LOAD_PARAMETER,    // Сосредоточенная ...
-                        PRESSURE_LOAD_PARAMETER,        // Нагрузка давлением
-                        YOUNG_MODULUS_PARAMETER,        // Модуль Юнга
-                        POISSON_RATIO_PARAMETER,        // Коэффициент Пуассона
-                        THICKNESS_PARAMETER,            // Толщина элемента
-                        TEMPERATURE_PARAMETER,          // Разность температур
-                        ALPHA_PARAMETER,                // Коэффициент теплового расширения
-                        DENSITY_PARAMETER,              // Плотность
-                        DAMPING_PARAMETER,              // Параметр демпфирования
-                        STRESS_STRAIN_CURVE_PARAMETER   // Диаграмма деформирования
-                    };
+enum {
+    EMPTY_PARAMETER,
+    INITIAL_CONDITION_PARAMETER,    // Начальные условия
+    BOUNDARY_CONDITION_PARAMETER,   // Граничное условие, заданноe выражением
+    VOLUME_LOAD_PARAMETER,          // Объемная нагрузка
+    SURFACE_LOAD_PARAMETER,         // Поверхностная ...
+    CONCENTRATED_LOAD_PARAMETER,    // Сосредоточенная ...
+    PRESSURE_LOAD_PARAMETER,        // Нагрузка давлением
+    YOUNG_MODULUS_PARAMETER,        // Модуль Юнга
+    POISSON_RATIO_PARAMETER,        // Коэффициент Пуассона
+    THICKNESS_PARAMETER,            // Толщина элемента
+    TEMPERATURE_PARAMETER,          // Разность температур
+    ALPHA_PARAMETER,                // Коэффициент теплового расширения
+    DENSITY_PARAMETER,              // Плотность
+    DAMPING_PARAMETER,              // Параметр демпфирования
+    STRESS_STRAIN_CURVE_PARAMETER   // Диаграмма деформирования
+};
 
 extern TMessenger* msg;
 
@@ -76,7 +76,7 @@ class TParameter
 {
 private:
     // Тип параметра
-    ParameterType type;
+    int type;
     // Направление (для краевого условия )
     int direct = 0;
     // Значение параметра в виде числовой константы
@@ -89,28 +89,28 @@ public:
     {
         type = EMPTY_PARAMETER;
     }
-    TParameter(ParameterType t, double v, string p, int d)
+    TParameter(int t, double v, string p, int d)
     {
         type = t;
         d_value = v;
         predicate = p;
         direct = d;
     }
-    TParameter(ParameterType t, string e, string p, int d)
+    TParameter(int t, string e, string p, int d)
     {
         type = t;
         e_value = e;
         predicate = p;
         direct = d;
     }
-    TParameter(ParameterType t, double v, function<double (double, double, double, double)> p, int d)
+    TParameter(int t, double v, function<double (double, double, double, double)> p, int d)
     {
         type = t;
         d_value = v;
         predicate = p;
         direct = d;
     }
-    TParameter(ParameterType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    TParameter(int t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
     {
         type = t;
         e_value = e;
@@ -163,7 +163,7 @@ public:
     {
         return e_value.s_value;
     }
-    ParameterType getType(void) const
+    int getType(void) const
     {
         return type;
     }
@@ -200,25 +200,25 @@ class TParameterList : public list<TParameter>
 public:
     TParameterList(void) {}
     ~TParameterList(void) {}
-    void addParameter(ParameterType t, double v, string p, int d = 0)
+    void addParameter(int t, double v, string p, int d = 0)
     {
         TParameter c(t, v, p, d);
 
         push_back(c);
     }
-    void addParameter(ParameterType t, string e, string p, int d = 0)
+    void addParameter(int t, string e, string p, int d = 0)
     {
         TParameter c(t, e, p, d);
 
         push_back(c);
     }
-    void addParameter(ParameterType t, double v, function<double (double, double, double, double)> p, int d = 0)
+    void addParameter(int t, double v, function<double (double, double, double, double)> p, int d = 0)
     {
         TParameter c(t, v, p, d);
 
         push_back(c);
     }
-    void addParameter(ParameterType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d = 0)
+    void addParameter(int t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d = 0)
     {
         TParameter c(t, e, p, d);
 
@@ -440,7 +440,7 @@ public:
     {
         addParameter(PRESSURE_LOAD_PARAMETER, e, p, 0);
     }
-    unsigned findParameter(ParameterType type)
+    unsigned findParameter(int type)
     {
         unsigned counter = 0;
 

@@ -3,14 +3,13 @@
 #include <QWheelEvent>
 #include <cmath>
 #include "glmesh.h"
-#include "lclist.h"
 #include "mesh/mesh.h"
 #include "fem/fem.h"
 
 /*******************************************************************/
-TGLMesh::TGLMesh(TMesh* m, LimitList* p, QWidget* parent) : QGLWidget(parent)
+TGLMesh::TGLMesh(TMesh* m, QVector<QVector3D>* v, QWidget* parent) : QGLWidget(parent)
 {
-    sVtx = p;
+    vertex = v;
     mesh = m;
 
     params.init();
@@ -35,7 +34,7 @@ TGLMesh::TGLMesh(TMesh* m, LimitList* p, QWidget* parent) : QGLWidget(parent)
 
     minX = { float(mesh->getMinX(0)), float(mesh->getMinX(1)), float(mesh->getMinX(2)) };
     maxX = { float(mesh->getMaxX(0)), float(mesh->getMaxX(1)), float(mesh->getMaxX(2)) };
-    x0   = { (maxX[0] + minX[0])*0.5f, (maxX[1] + minX[1])*0.5f, (maxX[2] + minX[2])*0.5f };
+    x0   = { (maxX[0] + minX[0]) * 0.5f, (maxX[1] + minX[1]) * 0.5f, (maxX[2] + minX[2]) * 0.5f };
     radius = float(sqrt(pow(maxX[0] - minX[0], 2) + pow(maxX[1] - minX[1], 2) + pow(maxX[2] - minX[2], 2)));
 
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -605,44 +604,27 @@ void TGLMesh::drawMesh3D(void)
 /*******************************************************************/
 void TGLMesh::drawLoad(void)
 {
-    QVector<QVector3D> v(int(mesh->getNumVertex()));
     float x1[3],
           x2[3],
-          K = 0.005f * radius,
+          K = 0.010f * radius,
           maxValue = 0,
-          coef,
-          value;
-    unsigned i,
-             direct;
+          coef;
+    QVector<QVector3D> &v = *vertex;
 
-    // Формируем направление нагрузки
-    foreach (auto c, *sVtx)
-        if (c.getType() != LimitValue)
-        {
-            direct = c.getDirect();
-            if ((value = float(c.getValue())) == 0.0f)
-                continue;
-            i = c.getIndex();
-            if ((direct & DIR_X) == DIR_X) // X
-                v[int(i)] += QVector3D(value, 0, 0);
-            if ((direct & DIR_Y) == DIR_Y) // Y
-                v[int(i)] += QVector3D(0, value, 0);
-            if ((direct & DIR_Z) == DIR_Z) // Z
-                v[int(i)] += QVector3D(0, 0, value);
-            if (fabs(value) > maxValue)
-                maxValue = fabs(value);
-        }
+    // Нормируем нагрузку
+    for (int i = 0; i < int(mesh->getNumVertex()); i++)
+        if (v[i].length() > maxValue)
+            maxValue = v[i].length();
+
     // Изображаем нагрузку
-    setColor(0,0,1,params.alpha);
+    setColor(0, 0, 1, params.alpha);
 //    glPointSize(2);
-    foreach (auto c, *sVtx)
+    coef = K / maxValue;
+    for (unsigned i = 0; i < mesh->getNumVertex(); i++)
     {
-        if (c.getType() == LimitValue)
+        if (v[int(i)].length() == 0.0f)
             continue;
-        i = c.getIndex();
-        if ((value = float(c.getValue())) == 0.0f)
-            continue;
-        coef = K / maxValue;
+
         // Нагрузка
         if (mesh->getDimension() == 1)
         {
@@ -680,56 +662,39 @@ void TGLMesh::drawLoad(void)
         }
         glPointSize(3);
         glBegin(GL_POINTS);
-            glVertex3f(x1[0], x1[1], x1[2]);
+        glVertex3f(x1[0], x1[1], x1[2]);
         glEnd();
         glBegin(GL_LINES);
-            glVertex3f(x1[0], x1[1], x1[2]);
-            glVertex3f(x2[0], x2[1], x2[2]);
+        glVertex3f(x1[0], x1[1], x1[2]);
+        glVertex3f(x2[0], x2[1], x2[2]);
         glEnd();
     }
 }
 /*******************************************************************/
 void TGLMesh::drawLimit(void)
 {
-    unsigned i;
+    QVector<QVector3D> &v = *vertex;
 
     setColor(1,0,0,params.alpha);
     glPointSize(4);
     glBegin(GL_POINTS);
-        foreach (auto c, *sVtx)
-        {
-            if (c.getType() != LimitValue) continue;
-            i = c.getIndex();
-            switch (mesh->getTypeFE())
-            {
-                case FE1D2:
-                    glVertex2f(float(mesh->getX(i, 0)) - x0[0], 0);
-                    break;
-                case FE2D3:
-                case FE2D4:
-                case FE2D3P:
-                case FE2D4P:
-                case FE2D6P:
-                    glVertex2f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1]);
-                    break;
-                case FE3D4:
-                case FE3D8:
-                case FE3D10:
-                case FE3D3S:
-                case FE3D4S:
-                case FE3D6S:
-                    glVertex3f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1], float(mesh->getX(i, 2)) - x0[2]);
-                    break;
-                default:
-                    break;
-            }
-        }
+    for (unsigned i = 0; i < mesh->getNumBE(); i++)
+    {
+        if (v[int(i)].x() == 0.0f)
+            continue;
+        if (mesh->is1D())
+            glVertex2f(float(mesh->getX(i, 0)) - x0[0], 0);
+        else if (mesh->is2D())
+            glVertex2f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1]);
+        else
+            glVertex3f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1], float(mesh->getX(i, 2)) - x0[2]);
+    }
     glEnd();
 }
 /*******************************************************************/
 bool TGLMesh::isSelectedVertex(void)
 {
-    return (sVtx->size()) ? true : false;
+    return (vertex->size()) ? true : false;
 }
 /*******************************************************************/
 void TGLMesh::showContextMenu(const QPoint &pos)
