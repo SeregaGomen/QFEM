@@ -207,7 +207,11 @@ void TMainWindow::slotCloseTab(int nTab)
     int i;
 
     if (nTab != 0)
+    {
         tabWidget->removeTab(nTab);
+        if (nTab == 1 && ui->actionObjectParameters->isChecked())
+            ui->actionObjectParameters->setChecked(false);
+    }
     else
     {
         if (thread->isRunning())
@@ -234,6 +238,7 @@ void TMainWindow::slotCloseTab(int nTab)
         setWindowTitle("QFEM");
         isUntitled = true;
         checkMenuState();
+        ui->actionObjectParameters->setChecked(false);
     }
 
 }
@@ -389,7 +394,9 @@ void TMainWindow::loadFile(QString fileName)
         updateRecentFileActions(fileName);
         slotSetRotate(0);
         setCurrentFile(fileName);
+        pForm->setup();
         QApplication::restoreOverrideCursor();
+
 
 
         if (iDlg->getImageParams().isLimit || iDlg->getImageParams().isLoad)
@@ -626,9 +633,28 @@ void TMainWindow::lcProcess(void)
 
 void TMainWindow::slotSetupTaskParams(void)
 {
-    bool isFind = false;
+//    bool isFind = false;
     QScrollArea *scroll;
 
+    if (ui->actionObjectParameters->isChecked())
+    {
+        // Включаем режим отображения закладки параметров расчета
+        ui->actionObjectParameters->setChecked(true);
+        pForm->changeLanguage();
+//        pForm->setup();
+        scroll = new QScrollArea();
+        scroll->setWidget(pForm);
+        tabWidget->insertTab(1, scroll, tr("Setup"));
+        tabWidget->setTabsClosable(true);
+        tabWidget->setCurrentIndex(1);
+    }
+    else
+    {
+        ui->actionObjectParameters->setChecked(false);
+        tabWidget->removeTab(1);
+    }
+
+/*
 
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
@@ -647,7 +673,7 @@ void TMainWindow::slotSetupTaskParams(void)
         tabWidget->setTabsClosable(true);
         tabWidget->setCurrentIndex(1);
     }
-
+*/
 }
 
 // Запуск процедуры расчета задачи
@@ -761,7 +787,7 @@ bool TMainWindow::checkParams(void)
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping parameter!"));
             return false;
         }
-        if (femObject->getParams().th == 0 || femObject->getParams().t0 < 0 || femObject->getParams().t1 <= 0 || (femObject->getParams().t0 >= femObject->getParams().t1))
+        if (femObject->getParams().th == 0.0 || femObject->getParams().t0 < 0 || femObject->getParams().t1 <= 0 || (femObject->getParams().t0 >= femObject->getParams().t1))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified time!"));
             return false;
