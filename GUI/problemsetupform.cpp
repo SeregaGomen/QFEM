@@ -1210,7 +1210,15 @@ bool TProblemSetupForm::checkExpression(QString e)
     if (ui->rbDynamic->isChecked())
         parser.set_variable(ui->textTime->text().toStdString());
 
-    parser.set_expression(e.toStdString());
+    try
+    {
+        parser.set_expression(e.toStdString());
+    }
+    catch (ErrorCode& err)
+    {
+        cerr << endl << sayError(err) << endl;
+        return false;
+    }
     return (parser.get_error() == NO_ERR) ? true : false;
 }
 
