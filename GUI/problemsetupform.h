@@ -38,7 +38,7 @@ public:
     void clear(void);
     void setup(void);
     bool decodeStressStarinCurve(string, matrix<double>&);
-
+    bool getParams(void);
 
 private slots:
     void slotShowContextMenu1(const QPoint&);
@@ -76,8 +76,48 @@ private:
     void setConcentratedLoad(void);
     void setPlasticityParam(void);
     void setBoundaryConditionValue(void);
+    void getVariables(void);
+    void getTableValue(int, QTableWidget*, bool = true);
+    void getElasticParam(void);
+    void getEps(void);
+    void getThickness();
+    void getWidth(void);
+    void getPrecission(void);
+    void getTime(void);
+    void getTheta(void);
+    void getThermalExpansionParam(void);
+    void getDensity(void);
+    void getDamping(void);
+    void getInitialParam(void);
+    void getFunNames(void);
+    void getVolumeLoad(void);
+    void getSurfaceLoad(void);
+    void getConcentratedLoad(void);
+    void getPressureLoad(void);
+    void getBoundaryConditionValue(void);
+    void getPlasticityParam(void);
 
+    bool check(void);
+    bool checkTable(QTableWidget*, int = -1);
+    bool checkYoungModulus(void);
+    bool checkPoissonRatio(void);
+    bool checkPredicate(QString);
+    bool checkExpression(QString);
+    bool checkExpression(QString, double&);
+    bool checkThermalExpansion(void);
+    bool checkTemperature(void);
+    bool checkThickness(void);
+    bool checkDynamicParams(void);
+    bool checkVolumeLoad(void);
+    bool checkSurfaceLoad(void);
+    bool checkConcentratedLoad(void);
+    bool checkPressureLoad(void);
+    bool checkLimitValue(void);
+    bool checkFuncNames(void);
+    bool checkPlasticity(void);
+    bool checkVariables(void);
 
+    int getDirect(QTableWidget*, int);
     QTableWidget* getLoadTab(void);
 };
 

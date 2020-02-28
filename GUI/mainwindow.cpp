@@ -799,6 +799,7 @@ bool TMainWindow::checkParams(void)
     return true;
 }
 
+
 // Запуск расчета по функционалу Лагранжа (статика) или Гамильтона-Остроградского (динамика)
 void TMainWindow::startSolvingProblem(void)
 {
@@ -806,7 +807,9 @@ void TMainWindow::startSolvingProblem(void)
     QString htmlFile = QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + ".html",
             qresFile = QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + ".qres";
 
-    if (!checkParams())
+//    if (!checkParams())
+//        return;
+    if (!pForm->getParams())
         return;
 
     try
