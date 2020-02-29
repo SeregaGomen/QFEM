@@ -979,7 +979,7 @@
       <rect>
        <x>40</x>
        <y>50</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1020,7 +1020,7 @@
       <rect>
        <x>40</x>
        <y>80</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1061,7 +1061,7 @@
       <rect>
        <x>120</x>
        <y>20</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1102,7 +1102,7 @@
       <rect>
        <x>120</x>
        <y>50</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1143,7 +1143,7 @@
       <rect>
        <x>120</x>
        <y>80</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1184,7 +1184,7 @@
       <rect>
        <x>200</x>
        <y>80</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1203,7 +1203,7 @@
       <rect>
        <x>200</x>
        <y>50</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1244,7 +1244,7 @@
       <rect>
        <x>40</x>
        <y>20</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1304,7 +1304,7 @@
       <rect>
        <x>200</x>
        <y>20</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1370,7 +1370,7 @@
       <rect>
        <x>40</x>
        <y>30</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1389,7 +1389,7 @@
       <rect>
        <x>120</x>
        <y>30</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -1430,7 +1430,7 @@
       <rect>
        <x>200</x>
        <y>30</y>
-       <width>41</width>
+       <width>50</width>
        <height>31</height>
       </rect>
      </property>
@@ -2444,7 +2444,10 @@
     </rect>
    </property>
    <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    <set>QDialogButtonBox::Cancel</set>
+   </property>
+   <property name="centerButtons">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>

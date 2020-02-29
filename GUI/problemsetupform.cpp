@@ -3,7 +3,7 @@
 #include <QTextEdit>
 #include <QPainter>
 #include <QTextDocument>
-#include <QToolButton>
+#include <QDialogButtonBox>
 #include <QTableWidget>
 #include "problemsetupform.h"
 #include "ui_problemsetupform.h"
@@ -95,6 +95,7 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
 
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, ([=](void) { slotCancelButton(); }));
 
     createMenu();
 
@@ -1164,11 +1165,21 @@ bool TProblemSetupForm::checkLimitValue(void)
 // Проверка упругих параметров
 bool TProblemSetupForm::checkYoungModulus(void)
 {
+    if (!ui->twYoungModulus->rowCount())
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Young's modulus not defined!"));
+        return false;
+    }
     return checkTable(ui->twYoungModulus);
 }
 
 bool TProblemSetupForm::checkPoissonRatio(void)
 {
+    if (!ui->twPoissonsRatio->rowCount() && !femObject->getMesh().is1D())
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Poisson's ratio not defined!"));
+        return false;
+    }
     return checkTable(ui->twPoissonsRatio);
 }
 
@@ -1670,3 +1681,9 @@ void TProblemSetupForm::getElasticParam(void)
     getTableValue(YOUNG_MODULUS_PARAMETER, ui->twYoungModulus, false);
     getTableValue(POISSON_RATIO_PARAMETER, ui->twPoissonsRatio, false);
 }
+
+void TProblemSetupForm::slotCancelButton(void)
+{
+    setup();
+}
+
