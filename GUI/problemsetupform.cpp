@@ -568,13 +568,13 @@ void TProblemSetupForm::setElasticParam(void)
 
     Titles << tr("Expression") << tr("Predicate");
     ui->twYoungModulus->setHorizontalHeaderLabels(Titles);
-    ui->twYoungModulus->setColumnWidth(0, 100);
-    ui->twYoungModulus->setColumnWidth(1, 200);
+//    ui->twYoungModulus->setColumnWidth(0, 100);
+//    ui->twYoungModulus->setColumnWidth(1, 200);
     setTableValue(YOUNG_MODULUS_PARAMETER, ui->twYoungModulus, false);
 
     ui->twPoissonsRatio->setHorizontalHeaderLabels(Titles);
-    ui->twPoissonsRatio->setColumnWidth(0, 100);
-    ui->twPoissonsRatio->setColumnWidth(1, 200);
+//    ui->twPoissonsRatio->setColumnWidth(0, 100);
+//    ui->twPoissonsRatio->setColumnWidth(1, 200);
     setTableValue(POISSON_RATIO_PARAMETER, ui->twPoissonsRatio, false);
 }
 
