@@ -62,6 +62,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->twThickness->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveThickness, ui->twThickness); }));
     connect(ui->twDensity->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->twDamping->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
+//    connect(ui->twYoungModulus->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbShowYoungModulus, ui->twYoungModulus); }));
+
 
     connect(ui->rbStatic, &QRadioButton::clicked, this, &TProblemSetupForm::enabledParams);
     connect(ui->rbDynamic, &QRadioButton::clicked, this, &TProblemSetupForm::enabledParams);
@@ -92,6 +94,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveThickness, &QToolButton::clicked, ([=](void) { removeRow(ui->twThickness); setEnabledBtn(ui->tbRemoveThickness, ui->twThickness); }));
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus); setEnabledBtn(ui->tbShowYoungModulus, ui->twYoungModulus); }));
+
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
 
@@ -1687,3 +1691,8 @@ void TProblemSetupForm::slotCancelButton(void)
     setup();
 }
 
+
+void TProblemSetupForm::showParams(QTableWidget* tw)
+{
+
+}
