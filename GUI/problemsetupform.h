@@ -97,6 +97,7 @@ private:
     void getPressureLoad(void);
     void getBoundaryConditionValue(void);
     void getPlasticityParam(void);
+    void showParams(QTableWidget*);
 
     bool check(void);
     bool checkTable(QTableWidget*, int = -1);

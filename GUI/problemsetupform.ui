@@ -580,7 +580,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -603,7 +603,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
@@ -614,6 +614,32 @@
      <property name="icon">
       <iconset resource="QFEM.qrc">
        <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="tbShowYoungModulus">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>160</y>
+       <width>24</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Visualization parameter</string>
+     </property>
+     <property name="statusTip">
+      <string>Visualization parameter</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="QFEM.qrc">
+       <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
      </property>
     </widget>
    </widget>

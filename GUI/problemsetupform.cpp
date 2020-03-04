@@ -62,6 +62,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->twThickness->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveThickness, ui->twThickness); }));
     connect(ui->twDensity->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->twDamping->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
+//    connect(ui->twYoungModulus->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbShowYoungModulus, ui->twYoungModulus); }));
+
 
     connect(ui->rbStatic, &QRadioButton::clicked, this, &TProblemSetupForm::enabledParams);
     connect(ui->rbDynamic, &QRadioButton::clicked, this, &TProblemSetupForm::enabledParams);
@@ -92,6 +94,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveThickness, &QToolButton::clicked, ([=](void) { removeRow(ui->twThickness); setEnabledBtn(ui->tbRemoveThickness, ui->twThickness); }));
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus); setEnabledBtn(ui->tbShowYoungModulus, ui->twYoungModulus); }));
+
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
 
@@ -768,8 +772,8 @@ void TProblemSetupForm::setVolumeLoad(void)
     Titles << ui->textCoordY->text(); // y
     Titles << ui->textCoordZ->text(); // z
     ui->twVV->setHorizontalHeaderLabels(Titles);
-    ui->twVV->setColumnWidth(0, 200);
-    ui->twVV->setColumnWidth(1, 200);
+    ui->twVV->setColumnWidth(0, 300);
+    ui->twVV->setColumnWidth(1, 300);
     ui->twVV->setColumnWidth(2, 24);
     ui->twVV->setColumnWidth(3, 24);
     ui->twVV->setColumnWidth(4, 24);
@@ -800,8 +804,8 @@ void TProblemSetupForm::setPressureLoad(void)
     Titles << tr("Expression");
     Titles << tr("Predicate");
     ui->twPV->setHorizontalHeaderLabels(Titles);
-    ui->twPV->setColumnWidth(0, 200);
-    ui->twPV->setColumnWidth(1, 200);
+    ui->twPV->setColumnWidth(0, 340);
+    ui->twPV->setColumnWidth(1, 340);
 
     setTableValue(PRESSURE_LOAD_PARAMETER, ui->twPV, false);
 }
@@ -818,8 +822,8 @@ void TProblemSetupForm::setSurfaceLoad(void)
     Titles << ui->textCoordZ->text(); // z
     ui->twSV->setHorizontalHeaderLabels(Titles);
 
-    ui->twSV->setColumnWidth(0, 200);
-    ui->twSV->setColumnWidth(1, 200);
+    ui->twSV->setColumnWidth(0, 300);
+    ui->twSV->setColumnWidth(1, 300);
     ui->twSV->setColumnWidth(2, 24);
     ui->twSV->setColumnWidth(3, 24);
     ui->twSV->setColumnWidth(4, 24);
@@ -857,8 +861,8 @@ void TProblemSetupForm::setConcentratedLoad(void)
     Titles << ui->textCoordZ->text(); // z
     ui->twCV->setHorizontalHeaderLabels(Titles);
 
-    ui->twCV->setColumnWidth(0, 200);
-    ui->twCV->setColumnWidth(1, 200);
+    ui->twCV->setColumnWidth(0, 300);
+    ui->twCV->setColumnWidth(1, 300);
     ui->twCV->setColumnWidth(2, 24);
     ui->twCV->setColumnWidth(3, 24);
     ui->twCV->setColumnWidth(4, 24);
@@ -908,8 +912,8 @@ void TProblemSetupForm::setBoundaryConditionValue(void)
     }
     ui->twBC->setHorizontalHeaderLabels(Titles);
 
-    ui->twBC->setColumnWidth(0, 200);
-    ui->twBC->setColumnWidth(1, 200);
+    ui->twBC->setColumnWidth(0, 320);
+    ui->twBC->setColumnWidth(1, 320);
     ui->twBC->setColumnWidth(2, 24);
     ui->twBC->setColumnWidth(3, 24);
     ui->twBC->setColumnWidth(4, 24);
@@ -949,8 +953,8 @@ void TProblemSetupForm::setPlasticityParam(void)
 
     Titles << tr("Stress-Strain curve") << tr("Predicate");
     ui->twStressStrainCurve->setHorizontalHeaderLabels(Titles);
-    ui->twStressStrainCurve->setColumnWidth(0, 300);
-    ui->twStressStrainCurve->setColumnWidth(1, 200);
+    ui->twStressStrainCurve->setColumnWidth(0, 370);
+    ui->twStressStrainCurve->setColumnWidth(1, 370);
     setTableValue(STRESS_STRAIN_CURVE_PARAMETER, ui->twStressStrainCurve, false);
 }
 
@@ -1687,3 +1691,8 @@ void TProblemSetupForm::slotCancelButton(void)
     setup();
 }
 
+
+void TProblemSetupForm::showParams(QTableWidget* tw)
+{
+
+}
