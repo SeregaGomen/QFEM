@@ -98,14 +98,13 @@ private:
     void getBoundaryConditionValue(void);
     void getPlasticityParam(void);
     void showParams(QTableWidget*);
+    void calcParams(QTableWidget*, vector<double>&, unsigned, unsigned, int&, bool&);
+
 
     bool check(void);
     bool checkTable(QTableWidget*, int = -1);
     bool checkYoungModulus(void);
     bool checkPoissonRatio(void);
-    bool checkPredicate(QString);
-    bool checkExpression(QString);
-    bool checkExpression(QString, double&);
     bool checkThermalExpansion(void);
     bool checkTemperature(void);
     bool checkThickness(void);
@@ -119,6 +118,8 @@ private:
     bool checkPlasticity(void);
     bool checkVariables(void);
 
+    int getExpression(QString, double&, double = 0, double = 0, double = 0);
+    int checkExpression(QString);
     int getDirect(QTableWidget*, int);
     QTableWidget* getLoadTab(void);
 };

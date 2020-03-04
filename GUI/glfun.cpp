@@ -13,7 +13,7 @@
 #include "mesh/mesh.h"
 
 /*******************************************************************/
-TGLFunction::TGLFunction(TMesh* m,TResultList* r, unsigned i,unsigned j,QString exp,QWidget *parent) : TGLMesh(m, nullptr, parent)
+TGLFunction::TGLFunction(TMesh* m,TResultList* r, unsigned i, unsigned j, QString exp, QWidget *parent) : TGLMesh(m, nullptr, parent)
 {
     mesh = m;
     results = r;
@@ -350,7 +350,7 @@ void TGLFunction::showLegend(void)
         glFont.setStyleStrategy(QFont::OpenGLCompatible);
         renderText(rc.width() - fontW1 - fontW2 - 10, int(cy) ,"█",glFont);
         glColor3f(1.0f - float(params.bkgColor.redF()), 1.0f - float(params.bkgColor.greenF()), 1.0f - float(params.bkgColor.blueF()));
-        renderText(rc.width() - fontW2 - 10, int(cy), val.sprintf("%+5.3E", double(v)), glFont);
+        renderText(rc.width() - fontW2 - 10, int(cy), val.asprintf("%+5.3E", double(v)), glFont);
         cy += fontH;
         v -= step;
     }

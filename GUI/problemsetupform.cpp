@@ -62,7 +62,9 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->twThickness->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveThickness, ui->twThickness); }));
     connect(ui->twDensity->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->twDamping->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
-//    connect(ui->twYoungModulus->selectionModel(), &QItemSelectionModel::selectionChanged, ([=](void) { setEnabledBtn(ui->tbShowYoungModulus, ui->twYoungModulus); }));
+
+    connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowYoungModulus->setEnabled(true); }));
+    connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowYoungModulus->setEnabled(bool(ui->twYoungModulus->rowCount())); }));
 
 
     connect(ui->rbStatic, &QRadioButton::clicked, this, &TProblemSetupForm::enabledParams);
@@ -94,7 +96,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveThickness, &QToolButton::clicked, ([=](void) { removeRow(ui->twThickness); setEnabledBtn(ui->tbRemoveThickness, ui->twThickness); }));
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
-    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus); setEnabledBtn(ui->tbShowYoungModulus, ui->twYoungModulus); }));
+
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus); }));
 
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
@@ -998,7 +1001,6 @@ bool TProblemSetupForm::decodeStressStarinCurve(string str, matrix<double>& ssc)
 bool TProblemSetupForm::check(void)
 {
     double val;
-    bool ret;
     unsigned w;
 
     if (!checkYoungModulus())
@@ -1014,8 +1016,7 @@ bool TProblemSetupForm::check(void)
 
     if (ui->textEps->text().length())
     {
-        ret = checkExpression(ui->textEps->text(), val);
-        if (!ret || val <= 0)
+        if (getExpression(ui->textEps->text(), val) || val <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified calculation errors!"));
             return false;
@@ -1029,8 +1030,7 @@ bool TProblemSetupForm::check(void)
 
     if (ui->textWidth->text().length())
     {
-        ret = checkExpression(ui->textWidth->text(),val);
-        if (!ret || val <= 0)
+        if (getExpression(ui->textWidth->text(), val) || val <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set output parameters!"));
             return false;
@@ -1045,8 +1045,7 @@ bool TProblemSetupForm::check(void)
 
     if (ui->textPrecision->text().length())
     {
-        ret = checkExpression(ui->textPrecision->text(),val);
-        if (!ret || val <= 0 || unsigned(val) >= w)
+        if (getExpression(ui->textPrecision->text(), val) || val <= 0 || unsigned(val) >= w)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set output parameters!"));
             return false;
@@ -1150,7 +1149,7 @@ bool TProblemSetupForm::checkPlasticity(void)
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set stress-strain curve in a row: %1!").arg(i + 1));
             return false;
         }
-        if (ui->twStressStrainCurve->item(i, 1)->text().length() && !checkExpression(ui->twStressStrainCurve->item(i, 1)->text()))
+        if (ui->twStressStrainCurve->item(i, 1)->text().length() && checkExpression(ui->twStressStrainCurve->item(i, 1)->text()) != 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set predicate in a row: %1!").arg(i + 1));
             return false;
@@ -1192,14 +1191,14 @@ bool TProblemSetupForm::checkTable(QTableWidget* tw, int tab_no)
 {
     for (int i = 0; i < tw->rowCount(); i++)
     {
-        if (!tw->item(i, 0)->text().length() || !checkExpression(tw->item(i, 0)->text()))
+        if (!tw->item(i, 0)->text().length() || checkExpression(tw->item(i, 0)->text()) != 0)
         {
             if (tab_no != -1)
                 ui->tabWidgetLoads->setCurrentIndex(tab_no);
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified expression in a row: %1!").arg(i + 1));
             return false;
         }
-        if (tw->item(i, 1)->text().length() && !checkPredicate(tw->item(i, 1)->text()))
+        if (tw->item(i, 1)->text().length() && checkExpression(tw->item(i, 1)->text()) != 0)
         {
             if (tab_no != -1)
                 ui->tabWidgetLoads->setCurrentIndex(tab_no);
@@ -1211,7 +1210,7 @@ bool TProblemSetupForm::checkTable(QTableWidget* tw, int tab_no)
 }
 
 // Проверка правильности ввода выражения
-bool TProblemSetupForm::checkExpression(QString e)
+int TProblemSetupForm::checkExpression(QString e)
 {
     TParser parser;
 
@@ -1232,60 +1231,34 @@ bool TProblemSetupForm::checkExpression(QString e)
     catch (ErrorCode& err)
     {
         cerr << endl << sayError(err) << endl;
-        return false;
     }
-    return (parser.get_error() == NO_ERR) ? true : false;
+    return parser.get_error();
 }
 
-bool TProblemSetupForm::checkExpression(QString e, double& val)
+int TProblemSetupForm::getExpression(QString e, double& val, double x, double y, double z)
 {
     TParser parser;
 
     getVariables();
     parser.set_variables(femObject->getParams().variables);
-    parser.set_variable(ui->textCoordX->text().toStdString());
+    parser.set_variable(ui->textCoordX->text().toStdString(), x);
     if (femObject->getMesh().getDimension() > 1)
-        parser.set_variable(ui->textCoordY->text().toStdString());
+        parser.set_variable(ui->textCoordY->text().toStdString(), y);
     if (femObject->getMesh().getDimension() > 2)
-        parser.set_variable(ui->textCoordZ->text().toStdString());
+        parser.set_variable(ui->textCoordZ->text().toStdString(), z);
     if (ui->rbDynamic->isChecked())
         parser.set_variable(ui->textTime->text().toStdString());
 
     try
     {
         parser.set_expression(e.toStdString());
+        val = parser.run();
     }
     catch (ErrorCode& err)
     {
         cerr << endl << sayError(err) << endl;
-        return false;
     }
-    val = parser.run();
-    return true;
-}
-
-bool TProblemSetupForm::checkPredicate(QString e)
-{
-    TParser parser;
-
-    getVariables();
-    parser.set_variables(femObject->getParams().variables);
-    parser.set_variable(ui->textCoordX->text().toStdString());
-    if (femObject->getMesh().getDimension() > 1)
-        parser.set_variable(ui->textCoordY->text().toStdString());
-    if (femObject->getMesh().getDimension() > 2)
-        parser.set_variable(ui->textCoordZ->text().toStdString());
-
-    try
-    {
-        parser.set_expression(e.toStdString());
-    }
-    catch (ErrorCode& err)
-    {
-        cerr << endl << sayError(err) << endl;
-        return false;
-    }
-    return true;
+    return parser.get_error();
 }
 
 void TProblemSetupForm::getVariables(void)
@@ -1314,7 +1287,6 @@ bool TProblemSetupForm::checkThickness(void)
 // Проверка корректности ввода параметров расчета в динамике
 bool TProblemSetupForm::checkDynamicParams(void)
 {
-    bool ret;
     double theta,
            t0,
            t1,
@@ -1327,8 +1299,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
 
     if (ui->textThetaWilson->text().length())
     {
-        ret = checkExpression(ui->textThetaWilson->text(),theta);
-        if (!ret || theta <= 0)
+        if (getExpression(ui->textThetaWilson->text(), theta) || theta <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Wilson-theta!"));
             return false;
@@ -1341,8 +1312,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textT0->text().length())
     {
-        ret = checkExpression(ui->textT0->text(),t0);
-        if (!ret || t0 < 0)
+        if (getExpression(ui->textT0->text(), t0) || t0 < 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the start time!"));
             return false;
@@ -1355,8 +1325,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textT1->text().length())
     {
-        ret = checkExpression(ui->textT1->text(),t1);
-        if (!ret || t1 <= t0)
+        if (getExpression(ui->textT1->text(), t1) || t1 <= t0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the stop time!"));
             return false;
@@ -1369,8 +1338,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textTH->text().length())
     {
-        ret = checkExpression(ui->textTH->text(),th);
-        if (!ret || th > t1 - t0)
+        if (getExpression(ui->textTH->text(), th) || th > t1 - t0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the time step!"));
             return false;
@@ -1384,8 +1352,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
 
     if (ui->textU->text().length())
     {
-        ret = checkExpression(ui->textU->text());
-        if (!ret)
+        if (checkExpression(ui->textU->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1393,8 +1360,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textV->text().length())
     {
-        ret = checkExpression(ui->textV->text());
-        if (!ret)
+        if (checkExpression(ui->textV->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1402,8 +1368,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textW->text().length())
     {
-        ret = checkExpression(ui->textW->text());
-        if (!ret)
+        if (checkExpression(ui->textW->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1411,8 +1376,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textUt->text().length())
     {
-        ret = checkExpression(ui->textUt->text());
-        if (!ret)
+        if (checkExpression(ui->textUt->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1420,8 +1384,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textVt->text().length())
     {
-        ret = checkExpression(ui->textVt->text());
-        if (!ret)
+        if (checkExpression(ui->textVt->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1429,8 +1392,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textWt->text().length())
     {
-        ret = checkExpression(ui->textWt->text());
-        if (!ret)
+        if (checkExpression(ui->textWt->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1438,8 +1400,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textUtt->text().length())
     {
-        ret = checkExpression(ui->textUtt->text());
-        if (!ret)
+        if (checkExpression(ui->textUtt->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1447,8 +1408,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textVtt->text().length())
     {
-        ret = checkExpression(ui->textVtt->text());
-        if (!ret)
+        if (checkExpression(ui->textVtt->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1456,8 +1416,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textWtt->text().length())
     {
-        ret = checkExpression(ui->textWtt->text());
-        if (!ret)
+        if (checkExpression(ui->textWtt->text()))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the initial conditions!"));
             return false;
@@ -1692,7 +1651,54 @@ void TProblemSetupForm::slotCancelButton(void)
 }
 
 
-void TProblemSetupForm::showParams(QTableWidget* tw)
+void TProblemSetupForm::showParams(QTableWidget *tw)
 {
+    unsigned numThread = 8, //std::thread::hardware_concurrency(),
+             step = femObject->getMesh().getNumBE() / numThread;
+    int error = NO_ERR;
+    bool isStoped = false;
+    vector<std::thread> thr(numThread);
+    vector<double> vertex(int(femObject->getMesh().getNumVertex()));
 
+    msg->setProcess(BC_CREATE_PROCESS, 1, int(femObject->getMesh().getNumBE()), 5);
+    // Обработка граничных условий
+//    for (unsigned i = 0; i < numThread; i++)
+//        thr[i] = std::thread(&TProblemSetupForm::calcParams, this, tw, ref(vertex), i * step, (i == numThread - 1) ? femObject->getMesh().getNumBE() : (i + 1) * step, ref(error), ref(isStoped));
+//    for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
+    calcParams(tw, ref(vertex), 0, femObject->getMesh().getNumBE(), ref(error), ref(isStoped));
+    msg->stopProcess();
+    if (error)
+        cerr << endl << sayError(ErrorCode(error)) << endl;
+}
+
+void TProblemSetupForm::calcParams(QTableWidget *tw, vector<double> &vertex, unsigned begin, unsigned end, int &error, bool &stop)
+{
+    double value;
+    matrix<double> coord;
+    QString predicate,
+            expression;
+
+    for (unsigned i = begin; i < end; i++)
+    {
+        msg->addProgress();
+        if (stop)
+        {
+            error = ABORT_ERR;
+            return;
+        }
+        femObject->getMesh().getCoordBE(i, coord);
+        for (unsigned j = 0; j < coord.size1(); j++)
+            for (int k = 0; k < tw->rowCount(); k++)
+            {
+                expression = tw->item(k, 0)->text();
+                predicate = tw->item(k, 1)->text();
+                if (predicate.length() && (error = getExpression(predicate, value, coord[j][0], coord[j][10], coord[j][2])) != 0)
+                    continue;
+                if ((error = getExpression(expression, value, coord[j][0], coord[j][10], coord[j][2])) != 0)
+                    continue;
+                vertex[femObject->getMesh().getBE(i, j)] = value;
+            }
+        if (error)
+            return;
+    }
 }

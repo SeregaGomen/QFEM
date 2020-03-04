@@ -108,9 +108,9 @@ private:
     void sayParams(QString&);
     void sayParam(QString&, const QString&, int, bool = true);
     void saveDocument(QString);
-    void addFuncToAnalyse(QString,QString);
+    void addFuncToAnalyse(QString, QString);
     void setupLanguage(void);
-    bool calcExpression(QString,QString&);
+    bool calcExpression(QString, QString&);
     bool loadMesh(QString);
     bool saveJSON(QString);
     bool loadJSON(QString);

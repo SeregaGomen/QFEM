@@ -1385,7 +1385,7 @@ bool TMainWindow::loadJSON(QString fileName)
     return true;
 }
 
-void TMainWindow::addFuncToAnalyse(QString funName,QString expression)
+void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
     bool isFind = false;
@@ -1399,7 +1399,7 @@ void TMainWindow::addFuncToAnalyse(QString funName,QString expression)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femObject->getMesh(),&femObject->getResult(), unsigned(femObject->getResult().index(funName.toStdString())),getTimeDeltaIndex(funName),expression,this),funName);
+        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(), unsigned(femObject->getResult().index(funName.toStdString())), getTimeDeltaIndex(funName), expression, this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 }
