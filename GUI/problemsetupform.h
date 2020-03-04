@@ -97,7 +97,7 @@ private:
     void getPressureLoad(void);
     void getBoundaryConditionValue(void);
     void getPlasticityParam(void);
-    void showParams(QTableWidget*);
+    void showParams(QTableWidget*, QString);
     void calcParams(QTableWidget*, vector<double>&, unsigned, unsigned, int&, bool&);
 
 

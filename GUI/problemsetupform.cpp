@@ -65,6 +65,9 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
 
     connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowYoungModulus->setEnabled(true); }));
     connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowYoungModulus->setEnabled(bool(ui->twYoungModulus->rowCount())); }));
+    connect(ui->twThickness->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowThickness->setEnabled(true); }));
+    connect(ui->twThickness->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowThickness->setEnabled(bool(ui->twThickness->rowCount())); }));
+
 
 
     connect(ui->rbStatic, &QRadioButton::clicked, this, &TProblemSetupForm::enabledParams);
@@ -97,7 +100,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
 
-    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus); }));
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus, "Young modulus"); }));
+    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { showParams(ui->twThickness, "Thickness"); }));
 
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
@@ -1651,7 +1655,7 @@ void TProblemSetupForm::slotCancelButton(void)
 }
 
 
-void TProblemSetupForm::showParams(QTableWidget *tw)
+void TProblemSetupForm::showParams(QTableWidget *tw, QString name)
 {
     unsigned numThread = 8, //std::thread::hardware_concurrency(),
              step = femObject->getMesh().getNumBE() / numThread;
@@ -1669,6 +1673,8 @@ void TProblemSetupForm::showParams(QTableWidget *tw)
     msg->stopProcess();
     if (error)
         cerr << endl << sayError(ErrorCode(error)) << endl;
+
+    femObject->getResult().addResult(vertex, name.toUtf8().toStdString());
 }
 
 void TProblemSetupForm::calcParams(QTableWidget *tw, vector<double> &vertex, unsigned begin, unsigned end, int &error, bool &stop)
