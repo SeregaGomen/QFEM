@@ -1680,10 +1680,12 @@ void TProblemSetupForm::showParams(QTableWidget *tw, QString name)
 void TProblemSetupForm::calcParams(QTableWidget *tw, vector<double> &vertex, unsigned begin, unsigned end, int &error, bool &stop)
 {
     double value;
-    matrix<double> coord;
+    vector<double> coord;
     QString predicate,
             expression;
 
+//    cerr << begin << ' ' << end << endl;
+//    return;
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
@@ -1692,18 +1694,23 @@ void TProblemSetupForm::calcParams(QTableWidget *tw, vector<double> &vertex, uns
             error = ABORT_ERR;
             return;
         }
-        femObject->getMesh().getCoordBE(i, coord);
-        for (unsigned j = 0; j < coord.size1(); j++)
-            for (int k = 0; k < tw->rowCount(); k++)
-            {
-                expression = tw->item(k, 0)->text();
-                predicate = tw->item(k, 1)->text();
-                if (predicate.length() && (error = getExpression(predicate, value, coord[j][0], coord[j][10], coord[j][2])) != 0)
-                    continue;
-                if ((error = getExpression(expression, value, coord[j][0], coord[j][10], coord[j][2])) != 0)
-                    continue;
-                vertex[femObject->getMesh().getBE(i, j)] = value;
-            }
+        femObject->getMesh().getCenterBE(i, coord);
+        for (int j = 0; j < tw->rowCount(); j++)
+        {
+            expression = tw->item(j, 0)->text();
+            predicate = tw->item(j, 1)->text();
+            if (predicate.length() && (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) != 0)
+                continue;
+            if (value == 0)
+                continue;
+            if ((error = getExpression(expression, value, coord[0], coord[1], coord[2])) != 0)
+                continue;
+            if (value == 0)
+                continue;
+            for (int k = 0; k < femObject->getMesh().getSizeBE(); k++)
+                vertex[femObject->getMesh().getBE(i, k)] = value;
+            break;
+        }
         if (error)
             return;
     }

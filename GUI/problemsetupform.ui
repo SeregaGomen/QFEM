@@ -483,7 +483,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -506,7 +506,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
@@ -722,7 +722,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -745,7 +745,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
@@ -819,7 +819,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -842,7 +842,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
@@ -917,7 +917,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Remove the current row</string>
     </property>
     <property name="statusTip">
      <string>Remove the current row</string>
@@ -940,7 +940,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Add new row</string>
     </property>
     <property name="statusTip">
      <string>Add new row</string>
@@ -1591,7 +1591,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -1614,7 +1614,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
@@ -1685,7 +1685,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -1708,7 +1708,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
@@ -1954,7 +1954,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Remove the current row</string>
     </property>
     <property name="statusTip">
      <string>Remove the current row</string>
@@ -1977,7 +1977,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Add new row</string>
     </property>
     <property name="statusTip">
      <string>Add new row</string>
@@ -2063,7 +2063,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Remove the current row</string>
     </property>
     <property name="statusTip">
      <string>Remove the current row</string>
@@ -2086,7 +2086,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Add new row</string>
     </property>
     <property name="statusTip">
      <string>Add new row</string>
@@ -2160,7 +2160,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Remove the current row</string>
     </property>
     <property name="statusTip">
      <string>Remove the current row</string>
@@ -2183,7 +2183,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>Add new row</string>
     </property>
     <property name="statusTip">
      <string>Add new row</string>
@@ -2469,7 +2469,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Remove the current row</string>
      </property>
      <property name="statusTip">
       <string>Remove the current row</string>
@@ -2492,7 +2492,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
+      <string>Add new row</string>
      </property>
      <property name="statusTip">
       <string>Add new row</string>
