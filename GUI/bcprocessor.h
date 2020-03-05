@@ -21,6 +21,8 @@ signals:
     void finished(void);
 
 private:
+    // Тип визуализируемого параметра
+    int paramType;
     // Объект рассчета (содержит геометрию)
     TFEMObject* object;
     // Вектор значений нагрузок, краевых условий, etc
@@ -57,6 +59,10 @@ public:
     void clear(void)
     {
         vertex.clear();
+    }
+    void setType(int type)
+    {
+        paramType = type;
     }
 };
 

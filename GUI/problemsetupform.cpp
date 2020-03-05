@@ -9,7 +9,6 @@
 #include "ui_problemsetupform.h"
 #include "object/object.h"
 
-
 TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TProblemSetupForm)
@@ -100,8 +99,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
 
-    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { emit clicked(ui->twYoungModulus, "Young modulus"); }));
-    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { emit clicked(ui->twThickness, "Thickness"); }));
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(YOUNG_MODULUS_PARAMETER); }));
+    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(THICKNESS_PARAMETER); }));
 
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));

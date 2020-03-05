@@ -69,7 +69,7 @@ private slots:
     void slotOpenRecentFile(void);
     void slotErorrMsg(QString);
     void slotMsg(QString);
-    void slotShowParam(QTableWidget*, QString);
+    void slotShowParam(int);
 
 private:
     QThread* thread;

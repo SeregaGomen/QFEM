@@ -151,7 +151,7 @@ void TMainWindow::init(void)
 
 
 //    connect(pForm, &TProblemSetupForm::clicked, ([=](void) { testSignal(); }));
-    connect(pForm, SIGNAL(clicked(QTableWidget*, QString)), this, SLOT(slotShowParam(QTableWidget*, QString)));
+    connect(pForm, SIGNAL(clicked(int)), this, SLOT(slotShowParam(int)));
 }
 
 void TMainWindow::slotErorrMsg(QString msg)
@@ -1680,12 +1680,8 @@ void TMainWindow::slotDataCopy(void)
 
 }
 
-void TMainWindow::slotShowParam(QTableWidget* tw, QString name)
+void TMainWindow::slotShowParam(int type)
 {
-//    cerr << name.toStdString() << endl;
-//    for (int i = 0; i < tw->rowCount(); i++)
-//        cerr << tw->item(i, 0)->text().toStdString() << ' ' << tw->item(i, 1)->text().toStdString() << endl;
-
     QTextCursor textCursor = terminal->textCursor(),
                 saveCursor = textCursor;
 
@@ -1696,6 +1692,7 @@ void TMainWindow::slotShowParam(QTableWidget* tw, QString name)
     pb->show();
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(true);
+    bcProcessor->setType(type);
     bcProcessor->moveToThread(thread);
     connect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
     connect(bcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));

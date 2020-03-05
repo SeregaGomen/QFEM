@@ -32,7 +32,7 @@ class TProblemSetupForm : public QWidget
     Q_OBJECT
 
 signals:
-    void clicked(QTableWidget*, QString);
+    void clicked(int);
 
 public:
     explicit TProblemSetupForm(TFEMObject*, QWidget* = nullptr);
