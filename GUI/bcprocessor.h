@@ -12,7 +12,7 @@ using namespace std;
 /************************************************************************/
 /* Реализация построения вектора узловых нагрузок, краевых условий, etc */
 /************************************************************************/
-class TLCProcessor : public QObject
+class TBCProcessor : public QObject
 {
     Q_OBJECT
 
@@ -45,11 +45,11 @@ public slots:
         isStoped = true;
     }
 public:
-    TLCProcessor(TFEMObject* p)
+    TBCProcessor(TFEMObject* p)
     {
         object = p;
     }
-    ~TLCProcessor(void) {}
+    ~TBCProcessor(void) {}
     QVector<QVector3D>& getVertex(void)
     {
         return vertex;

@@ -31,8 +31,11 @@ class TProblemSetupForm : public QWidget
 {
     Q_OBJECT
 
+signals:
+    void clicked(QTableWidget*, QString);
+
 public:
-    explicit TProblemSetupForm(TFEMObject *, QWidget * = nullptr);
+    explicit TProblemSetupForm(TFEMObject*, QWidget* = nullptr);
     ~TProblemSetupForm();
     void changeLanguage(void);
     void clear(void);
@@ -97,9 +100,6 @@ private:
     void getPressureLoad(void);
     void getBoundaryConditionValue(void);
     void getPlasticityParam(void);
-    void showParams(QTableWidget*, QString);
-    void calcParams(QTableWidget*, vector<double>&, unsigned, unsigned, int&, bool&);
-
 
     bool check(void);
     bool checkTable(QTableWidget*, int = -1);

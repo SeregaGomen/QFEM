@@ -20,7 +20,6 @@
 #include "vcdialog.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include "setuptaskdialog.h"
 #include "setupimagedialog.h"
 #include "fldialog.h"
 #include "glfun.h"
@@ -50,7 +49,7 @@ TMainWindow::~TMainWindow()
     delete msg;
     delete thread;
     delete femProcessor;
-    delete lcProcessor;
+    delete bcProcessor;
     delete myCout;
     delete myCerr;
     delete terminal;
@@ -78,7 +77,7 @@ void TMainWindow::init(void)
     isAutoSaveProtocol = isAutoScroll = isBlackBkg = isUntitled = true;
 
     femProcessor = new TFEMProcessor();
-    lcProcessor = new TLCProcessor(femProcessor->getFEMObject());
+    bcProcessor = new TBCProcessor(femProcessor->getFEMObject());
 
     setupRecentActions();
     readSettings();
@@ -142,12 +141,17 @@ void TMainWindow::init(void)
     statusBar()->addPermanentWidget(pb);
 
     msg = new SProcessMessenger();
-    connect(dynamic_cast<QObject*>(msg),SIGNAL(signalSetValue(int)),pb,SLOT(setValue(int)));
-    connect(dynamic_cast<QObject*>(msg),SIGNAL(signalSetMinimum(int)),pb,SLOT(setMinimum(int)));
-    connect(dynamic_cast<QObject*>(msg),SIGNAL(signalSetMaximum(int)),pb,SLOT(setMaximum(int)));
+    connect(dynamic_cast<QObject*>(msg), SIGNAL(signalSetValue(int)), pb, SLOT(setValue(int)));
+    connect(dynamic_cast<QObject*>(msg), SIGNAL(signalSetMinimum(int)), pb, SLOT(setMinimum(int)));
+    connect(dynamic_cast<QObject*>(msg), SIGNAL(signalSetMaximum(int)), pb, SLOT(setMaximum(int)));
 
-    connect(dynamic_cast<QObject*>(msg),SIGNAL(signalSetTextVisible(bool)),pb,SLOT(slotSetTextVisible(bool)));
-    connect(dynamic_cast<QObject*>(msg),SIGNAL(signalSetFormat(const QString&)),pb,SLOT(slotSetFormat(const QString&)));
+    connect(dynamic_cast<QObject*>(msg), SIGNAL(signalSetTextVisible(bool)), pb, SLOT(slotSetTextVisible(bool)));
+    connect(dynamic_cast<QObject*>(msg), SIGNAL(signalSetFormat(const QString&)), pb, SLOT(slotSetFormat(const QString&)));
+
+
+
+//    connect(pForm, &TProblemSetupForm::clicked, ([=](void) { testSignal(); }));
+    connect(pForm, SIGNAL(clicked(QTableWidget*, QString)), this, SLOT(slotShowParam(QTableWidget*, QString)));
 }
 
 void TMainWindow::slotErorrMsg(QString msg)
@@ -218,13 +222,13 @@ void TMainWindow::slotCloseTab(int nTab)
         {
             QApplication::setOverrideCursor(Qt::BusyCursor);
             femProcessor->stop();
-            lcProcessor->stop();
+            bcProcessor->stop();
             while (thread->isRunning())
                 QApplication::processEvents();
             QApplication::restoreOverrideCursor();
         }
         femProcessor->clear();
-        lcProcessor->clear();
+        bcProcessor->clear();
         pb->setValue(0);
         i = tabWidget->count() - 1;
         while (tabWidget->count() > 0)
@@ -383,7 +387,7 @@ void TMainWindow::loadFile(QString fileName)
 
     if (isOk)
     {
-        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), &lcProcessor->getVertex(), this), tr("Object"));
+        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), &bcProcessor->getVertex(), this), tr("Object"));
         tabWidget->setTabsClosable(true);
         tabWidget->setCurrentIndex(0);
 
@@ -534,7 +538,7 @@ void TMainWindow::slotCloseDocument(void)
 {
     slotCloseTab(0);
     femProcessor->clear();
-    lcProcessor->clear();
+    bcProcessor->clear();
     isUntitled = true;
     setWindowTitle("QFEM");
     iDlg->clear();
@@ -615,14 +619,14 @@ void TMainWindow::lcProcess(void)
     pb->show();
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(true);
-    lcProcessor->moveToThread(thread);
-    connect(thread, SIGNAL(started()), lcProcessor, SLOT(start()));
-    connect(lcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
+    bcProcessor->moveToThread(thread);
+    connect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
+    connect(bcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
     thread->start();
     while (thread->isRunning())
         QApplication::processEvents();
-    disconnect(thread, SIGNAL(started()), lcProcessor, SLOT(start()));
-    disconnect(lcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
+    disconnect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
+    disconnect(bcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
     pb->hide();
@@ -707,7 +711,7 @@ void TMainWindow::slotStartProcess(void)
 // Остановка процедуры расчета задачи (или любого вычислительного процесса)
 void TMainWindow::slotStopProcess(void)
 {
-    lcProcessor->stop();
+    bcProcessor->stop();
     femProcessor->stop();
     while (thread->isRunning())
         QApplication::processEvents();
@@ -1674,4 +1678,35 @@ void TMainWindow::slotDataCopy(void)
         qobject_cast<QTextEdit*>(tabWidget->currentWidget())->setTextCursor(cursor);
     }
 
+}
+
+void TMainWindow::slotShowParam(QTableWidget* tw, QString name)
+{
+//    cerr << name.toStdString() << endl;
+//    for (int i = 0; i < tw->rowCount(); i++)
+//        cerr << tw->item(i, 0)->text().toStdString() << ' ' << tw->item(i, 1)->text().toStdString() << endl;
+
+    QTextCursor textCursor = terminal->textCursor(),
+                saveCursor = textCursor;
+
+    textCursor.clearSelection();
+    terminal->setTextCursor(textCursor);
+
+    pb->reset();
+    pb->show();
+    ui->actionStart->setEnabled(false);
+    ui->actionStop->setEnabled(true);
+    bcProcessor->moveToThread(thread);
+    connect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
+    connect(bcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
+    thread->start();
+    while (thread->isRunning())
+        QApplication::processEvents();
+    disconnect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
+    disconnect(bcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
+    ui->actionStart->setEnabled(true);
+    ui->actionStop->setEnabled(false);
+    pb->hide();
+
+    terminal->setTextCursor(saveCursor);
 }

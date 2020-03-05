@@ -5,7 +5,7 @@
 
 extern TMessenger* msg;
 
-void TLCProcessor::processVertex(void)
+void TBCProcessor::processVertex(void)
 {
     unsigned numThread = 8, //std::thread::hardware_concurrency(),
              step = object->getMesh().getNumBE() / numThread;
@@ -17,7 +17,7 @@ void TLCProcessor::processVertex(void)
     msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumBE()), 5);
     // Обработка граничных условий
     for (unsigned i = 0; i < numThread; i++)
-        thr[i] = std::thread(&TLCProcessor::calc, this, PRESSURE_LOAD_PARAMETER, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, ref(error));
+        thr[i] = std::thread(&TBCProcessor::calc, this, PRESSURE_LOAD_PARAMETER, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, ref(error));
     for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
 //    calc(PRESSURE_LOAD_PARAMETER, 0, object->getMesh().getNumBE(), ref(error));
 //    calc(BOUNDARY_CONDITION_PARAMETER, 0, object->getMesh().getNumBE(), ref(error));
@@ -26,7 +26,7 @@ void TLCProcessor::processVertex(void)
         cerr << endl << sayError(ErrorCode(error)) << endl;
 }
 
-void TLCProcessor::calc(int type, unsigned begin, unsigned end, int& error)
+void TBCProcessor::calc(int type, unsigned begin, unsigned end, int& error)
 {
     bool isOK;
     double value;
@@ -98,7 +98,7 @@ void TLCProcessor::calc(int type, unsigned begin, unsigned end, int& error)
 
 }
 
-void TLCProcessor::calcPressureLoad(unsigned index, TParameter& p, int &error)
+void TBCProcessor::calcPressureLoad(unsigned index, TParameter& p, int &error)
 {
     double value;
     vector<double> coord,
@@ -135,7 +135,7 @@ void TLCProcessor::calcPressureLoad(unsigned index, TParameter& p, int &error)
     }
 }
 
-void TLCProcessor::calcSurfaceLoad(unsigned index, TParameter& p, int &error)
+void TBCProcessor::calcSurfaceLoad(unsigned index, TParameter& p, int &error)
 {
     double value;
     vector<double> coord;

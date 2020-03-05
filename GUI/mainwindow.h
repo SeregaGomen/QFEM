@@ -16,8 +16,9 @@ class TSetupImageDialog;
 class QTranslator;
 class QThread;
 class TFEMProcessor;
-class TLCProcessor;
+class TBCProcessor;
 class TProblemSetupForm;
+class QTableWidget;
 
 
 const int maxRecentFiles = 5;
@@ -68,6 +69,7 @@ private slots:
     void slotOpenRecentFile(void);
     void slotErorrMsg(QString);
     void slotMsg(QString);
+    void slotShowParam(QTableWidget*, QString);
 
 private:
     QThread* thread;
@@ -77,7 +79,7 @@ private:
     QDockWidget* dock;
     QTabWidget* tabWidget;
     TFEMProcessor* femProcessor;
-    TLCProcessor* lcProcessor;
+    TBCProcessor* bcProcessor;
     QString curFile;
     QMenu* recentFilesMenu;
     QAction* recentFileActs[maxRecentFiles];

@@ -100,8 +100,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
 
-    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { showParams(ui->twYoungModulus, "Young modulus"); }));
-    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { showParams(ui->twThickness, "Thickness"); }));
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { emit clicked(ui->twYoungModulus, "Young modulus"); }));
+    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { emit clicked(ui->twThickness, "Thickness"); }));
 
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
@@ -1655,63 +1655,66 @@ void TProblemSetupForm::slotCancelButton(void)
 }
 
 
-void TProblemSetupForm::showParams(QTableWidget *tw, QString name)
-{
-    unsigned numThread = 8, //std::thread::hardware_concurrency(),
-             step = femObject->getMesh().getNumBE() / numThread;
-    int error = NO_ERR;
-    bool isStoped = false;
-    vector<std::thread> thr(numThread);
-    vector<double> vertex(int(femObject->getMesh().getNumVertex()));
+//void TProblemSetupForm::showParams(QTableWidget *tw, QString name)
+//{
+//    emit clicked(tw, name);
 
-    msg->setProcess(BC_CREATE_PROCESS, 1, int(femObject->getMesh().getNumBE()), 5);
-    // Обработка граничных условий
-//    for (unsigned i = 0; i < numThread; i++)
-//        thr[i] = std::thread(&TProblemSetupForm::calcParams, this, tw, ref(vertex), i * step, (i == numThread - 1) ? femObject->getMesh().getNumBE() : (i + 1) * step, ref(error), ref(isStoped));
-//    for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
-    calcParams(tw, ref(vertex), 0, femObject->getMesh().getNumBE(), ref(error), ref(isStoped));
-    msg->stopProcess();
-    if (error)
-        cerr << endl << sayError(ErrorCode(error)) << endl;
 
-    femObject->getResult().addResult(vertex, name.toUtf8().toStdString());
-}
+//    unsigned numThread = 8, //std::thread::hardware_concurrency(),
+//             step = femObject->getMesh().getNumBE() / numThread;
+//    int error = NO_ERR;
+//    bool isStoped = false;
+//    vector<std::thread> thr(numThread);
+//    vector<double> vertex(int(femObject->getMesh().getNumVertex()));
 
-void TProblemSetupForm::calcParams(QTableWidget *tw, vector<double> &vertex, unsigned begin, unsigned end, int &error, bool &stop)
-{
-    double value;
-    vector<double> coord;
-    QString predicate,
-            expression;
+//    msg->setProcess(BC_CREATE_PROCESS, 1, int(femObject->getMesh().getNumBE()), 5);
+//    // Обработка граничных условий
+////    for (unsigned i = 0; i < numThread; i++)
+////        thr[i] = std::thread(&TProblemSetupForm::calcParams, this, tw, ref(vertex), i * step, (i == numThread - 1) ? femObject->getMesh().getNumBE() : (i + 1) * step, ref(error), ref(isStoped));
+////    for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
+//    calcParams(tw, ref(vertex), 0, femObject->getMesh().getNumBE(), ref(error), ref(isStoped));
+//    msg->stopProcess();
+//    if (error)
+//        cerr << endl << sayError(ErrorCode(error)) << endl;
 
-//    cerr << begin << ' ' << end << endl;
-//    return;
-    for (unsigned i = begin; i < end; i++)
-    {
-        msg->addProgress();
-        if (stop)
-        {
-            error = ABORT_ERR;
-            return;
-        }
-        femObject->getMesh().getCenterBE(i, coord);
-        for (int j = 0; j < tw->rowCount(); j++)
-        {
-            expression = tw->item(j, 0)->text();
-            predicate = tw->item(j, 1)->text();
-            if (predicate.length() && (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) != 0)
-                continue;
-            if (value == 0)
-                continue;
-            if ((error = getExpression(expression, value, coord[0], coord[1], coord[2])) != 0)
-                continue;
-            if (value == 0)
-                continue;
-            for (int k = 0; k < femObject->getMesh().getSizeBE(); k++)
-                vertex[femObject->getMesh().getBE(i, k)] = value;
-            break;
-        }
-        if (error)
-            return;
-    }
-}
+//    femObject->getResult().addResult(vertex, name.toUtf8().toStdString());
+//}
+
+//void TProblemSetupForm::calcParams(QTableWidget *tw, vector<double> &vertex, unsigned begin, unsigned end, int &error, bool &stop)
+//{
+//    double value;
+//    vector<double> coord;
+//    QString predicate,
+//            expression;
+
+////    cerr << begin << ' ' << end << endl;
+////    return;
+//    for (unsigned i = begin; i < end; i++)
+//    {
+//        msg->addProgress();
+//        if (stop)
+//        {
+//            error = ABORT_ERR;
+//            return;
+//        }
+//        femObject->getMesh().getCenterBE(i, coord);
+//        for (int j = 0; j < tw->rowCount(); j++)
+//        {
+//            expression = tw->item(j, 0)->text();
+//            predicate = tw->item(j, 1)->text();
+//            if (predicate.length() && (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) != 0)
+//                continue;
+//            if (value == 0)
+//                continue;
+//            if ((error = getExpression(expression, value, coord[0], coord[1], coord[2])) != 0)
+//                continue;
+//            if (value == 0)
+//                continue;
+//            for (int k = 0; k < femObject->getMesh().getSizeBE(); k++)
+//                vertex[femObject->getMesh().getBE(i, k)] = value;
+//            break;
+//        }
+//        if (error)
+//            return;
+//    }
+//}
