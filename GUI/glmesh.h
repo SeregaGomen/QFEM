@@ -23,7 +23,6 @@ private:
     float diffuse;
     float ambient;
     float specular;
-    QVector<QVector3D>* vertex;
     bool isRotate;
     bool isScale;
     bool isTranslate;
@@ -37,8 +36,6 @@ private:
     void drawMesh1D(void);
     void drawMesh2D(void);
     void drawMesh3D(void);
-    void drawLoad(void);
-    void drawLimit(void);
     void drawNormal(void);
 
 protected:
@@ -70,7 +67,7 @@ protected:
     void saveImage(const QString&);
 
 public:
-    TGLMesh(TMesh*, QVector<QVector3D>* = nullptr, QWidget* = nullptr);
+    TGLMesh(TMesh*, QWidget* = nullptr);
     ~TGLMesh(void);
 
     QSize minimumSizeHint() const;
@@ -83,7 +80,6 @@ public:
     }
     void setColor(float r,float g,float b,float a = 1);
     void loadPaint(void);
-    bool isSelectedVertex(void);
     bool getRotate(void)
     {
         return isRotate;

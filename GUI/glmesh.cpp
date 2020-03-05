@@ -7,9 +7,8 @@
 #include "fem/fem.h"
 
 /*******************************************************************/
-TGLMesh::TGLMesh(TMesh* m, QVector<QVector3D>* v, QWidget* parent) : QGLWidget(parent)
+TGLMesh::TGLMesh(TMesh* m, QWidget* parent) : QGLWidget(parent)
 {
-    vertex = v;
     mesh = m;
 
     params.init();
@@ -491,10 +490,6 @@ void TGLMesh::displayMesh(void)
     }
     if (params.isNormal)
         drawNormal();
-    if (params.isLimit)
-        drawLimit();
-    if (params.isLoad)
-        drawLoad();
     glEndList();
     QApplication::restoreOverrideCursor();
 }
@@ -600,101 +595,6 @@ void TGLMesh::drawMesh3D(void)
             glVertex3f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1], float(mesh->getX(i, 2)) - x0[2]);
         glEnd();
     }
-}
-/*******************************************************************/
-void TGLMesh::drawLoad(void)
-{
-    float x1[3],
-          x2[3],
-          K = 0.010f * radius,
-          maxValue = 0,
-          coef;
-    QVector<QVector3D> &v = *vertex;
-
-    // Нормируем нагрузку
-    for (int i = 0; i < int(mesh->getNumVertex()); i++)
-        if (v[i].length() > maxValue)
-            maxValue = v[i].length();
-
-    // Изображаем нагрузку
-    setColor(0, 0, 1, params.alpha);
-//    glPointSize(2);
-    coef = K / maxValue;
-    for (unsigned i = 0; i < mesh->getNumVertex(); i++)
-    {
-        if (v[int(i)].length() == 0.0f)
-            continue;
-
-        // Нагрузка
-        if (mesh->getDimension() == 1)
-        {
-            x1[0] = float(mesh->getX(i, 0)) - x0[0];
-            x1[1] = x1[2] = 0;
-            x2[0] = float(mesh->getX(i, 0)) + v[int(i)].x() * coef - x0[0];
-            x2[1] = x2[2] = 0;
-        }
-        else if (mesh->getDimension() == 2)
-        {
-            x1[0] = float(mesh->getX(i, 0)) - x0[0];
-            x1[1] = float(mesh->getX(i, 1)) - x0[1];
-            if (mesh->isPlate())
-            {
-                x1[2] = 0;
-                x2[0] = float(mesh->getX(i, 0)) + v[int(i)].x() * coef - x0[0];
-                x2[1] = float(mesh->getX(i, 1)) + v[int(i)].y() * coef - x0[1];
-                x2[2] = v[int(i)].z() * coef - x0[2];
-            }
-            else
-            {
-                x2[0] = float(mesh->getX(i, 0)) + v[int(i)].x() * coef - x0[0];
-                x2[1] = float(mesh->getX(i, 1)) + v[int(i)].y() * coef - x0[1];
-                x1[2] = x2[2] = 0;
-            }
-        }
-        else
-        {
-            x1[0] = float(mesh->getX(i, 0)) - x0[0];
-            x1[1] = float(mesh->getX(i, 1)) - x0[1];
-            x1[2] = float(mesh->getX(i, 2)) - x0[2];
-            x2[0] = float(mesh->getX(i, 0)) + v[int(i)].x() * coef - x0[0];
-            x2[1] = float(mesh->getX(i, 1)) + v[int(i)].y() * coef - x0[1];
-            x2[2] = float(mesh->getX(i, 2)) + v[int(i)].z() * coef - x0[2];
-        }
-        glPointSize(3);
-        glBegin(GL_POINTS);
-        glVertex3f(x1[0], x1[1], x1[2]);
-        glEnd();
-        glBegin(GL_LINES);
-        glVertex3f(x1[0], x1[1], x1[2]);
-        glVertex3f(x2[0], x2[1], x2[2]);
-        glEnd();
-    }
-}
-/*******************************************************************/
-void TGLMesh::drawLimit(void)
-{
-    QVector<QVector3D> &v = *vertex;
-
-    setColor(1,0,0,params.alpha);
-    glPointSize(4);
-    glBegin(GL_POINTS);
-    for (unsigned i = 0; i < mesh->getNumBE(); i++)
-    {
-        if (v[int(i)].x() == 0.0f)
-            continue;
-        if (mesh->is1D())
-            glVertex2f(float(mesh->getX(i, 0)) - x0[0], 0);
-        else if (mesh->is2D())
-            glVertex2f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1]);
-        else
-            glVertex3f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1], float(mesh->getX(i, 2)) - x0[2]);
-    }
-    glEnd();
-}
-/*******************************************************************/
-bool TGLMesh::isSelectedVertex(void)
-{
-    return (vertex->size()) ? true : false;
 }
 /*******************************************************************/
 void TGLMesh::showContextMenu(const QPoint &pos)

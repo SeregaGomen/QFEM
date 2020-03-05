@@ -387,7 +387,7 @@ void TMainWindow::loadFile(QString fileName)
 
     if (isOk)
     {
-        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), &bcProcessor->getVertex(), this), tr("Object"));
+        tabWidget->insertTab(0, new TGLMesh(&(femProcessor->getFEMObject()->getMesh()), this), tr("Object"));
         tabWidget->setTabsClosable(true);
         tabWidget->setCurrentIndex(0);
 
@@ -400,16 +400,6 @@ void TMainWindow::loadFile(QString fileName)
         setCurrentFile(fileName);
         pForm->setup();
         QApplication::restoreOverrideCursor();
-
-
-
-        if (iDlg->getImageParams().isLimit || iDlg->getImageParams().isLoad)
-        {
-            lcProcess();
-            if (tabWidget->count())
-                qobject_cast<TGLMesh*>(tabWidget->widget(0))->repaint();
-        }
-
     }
     else
     {
@@ -692,7 +682,7 @@ void TMainWindow::slotStartProcess(void)
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(true);
     ui->actionAnalyse->setEnabled(false);
-    ui->actionObjectParameters->setEnabled(false);
+//    ui->actionObjectParameters->setEnabled(false);
 
 //    QApplication::setOverrideCursor(Qt::BusyCursor);
     startSolvingProblem();
@@ -700,7 +690,7 @@ void TMainWindow::slotStartProcess(void)
     qApp->beep();
 //    QApplication::restoreOverrideCursor();
 
-    ui->actionObjectParameters->setEnabled(true);
+//    ui->actionObjectParameters->setEnabled(true);
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
     checkMenuState();
@@ -1440,24 +1430,11 @@ void TMainWindow::slotSetupImageParams(void)
         iDlg->changeLanguage();
         iDlg->setImageParams(qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams(),int(femObject->getMesh().getFreedom()),isFunc);
         if (iDlg->exec() == QDialog::Accepted)
-        {
-            if ((iDlg->getImageParams().isLoad || iDlg->getImageParams().isLimit) && !qobject_cast<TGLMesh*>(tabWidget->widget(0))->isSelectedVertex())
-            {
-//                pb->show();
-//                ui->actionStart->setEnabled(false);
-//                ui->actionStop->setEnabled(true);
-//                qobject_cast<GLObjWidget*>(tabWidget->widget(0))->setSelectedVertex();
-//                ui->actionStop->setEnabled(false);
-//                ui->actionStart->setEnabled(true);
-//                pb->hide();
-                lcProcess();
-            }
             if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
             {
                 qobject_cast<TGLMesh*>(tabWidget->currentWidget())->setImageParams(iDlg->getImageParams());
                 qobject_cast<TGLMesh*>(tabWidget->currentWidget())->repaint();
             }
-        }
     }
 }
 
@@ -1704,6 +1681,31 @@ void TMainWindow::slotShowParam(int type)
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
     pb->hide();
-
     terminal->setTextCursor(saveCursor);
+
+
+    // Отображаем параметр
+    TFEMObject* femObject = femProcessor->getFEMObject();
+    bool isFind = false;
+    vector<double> data(femObject->getMesh().getNumVertex());
+    QString funName = "Young's modulus";
+
+    for (unsigned i = 0; i < data.size(); i++)
+        data[i] = bcProcessor->getVertex()[i].w();
+    femObject->getResult().addResult(data, funName.toStdString());
+
+
+    // Проверка наличия такой функции в уже открытых закладках
+    for (int i = 0; i < tabWidget->count(); i++)
+        if (tabWidget->tabText(i).replace("&","") == funName)
+        {
+            isFind = true;
+            tabWidget->setCurrentIndex(i);
+        }
+    if (!isFind)
+    {
+        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(), unsigned(femObject->getResult().index(funName.toStdString())), getTimeDeltaIndex(funName), "", this), funName);
+        tabWidget->setCurrentIndex(tabWidget->count() - 1);
+    }
+
 }

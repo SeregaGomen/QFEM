@@ -13,7 +13,7 @@
 #include "mesh/mesh.h"
 
 /*******************************************************************/
-TGLFunction::TGLFunction(TMesh* m,TResultList* r, unsigned i, unsigned j, QString exp, QWidget *parent) : TGLMesh(m, nullptr, parent)
+TGLFunction::TGLFunction(TMesh* m, TResultList* r, unsigned i, unsigned j, QString exp, QWidget *parent) : TGLMesh(m, parent)
 {
     mesh = m;
     results = r;

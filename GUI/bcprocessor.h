@@ -2,7 +2,7 @@
 #define BCPROCESSOR_H
 
 #include <QObject>
-#include <QVector3D>
+#include <QVector4D>
 
 class TFEMObject;
 class TParameter;
@@ -26,12 +26,12 @@ private:
     // Объект рассчета (содержит геометрию)
     TFEMObject* object;
     // Вектор значений нагрузок, краевых условий, etc
-    QVector<QVector3D> vertex;
+    QVector<QVector4D> vertex;
     // Признак того, что процесс прерван
     bool isStoped;
     // Формирование списка краевых условий
     void processVertex(void);
-    void calc(int, unsigned, unsigned, int&);
+    void calc(unsigned, unsigned, int&);
     void calcPressureLoad(unsigned, TParameter&, int&);
     void calcSurfaceLoad(unsigned, TParameter&, int&);
 public slots:
@@ -52,7 +52,7 @@ public:
         object = p;
     }
     ~TBCProcessor(void) {}
-    QVector<QVector3D>& getVertex(void)
+    QVector<QVector4D>& getVertex(void)
     {
         return vertex;
     }

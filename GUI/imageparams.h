@@ -17,8 +17,6 @@ public:
     bool isCoord;      // ... осей координат
     bool isLight;      // ... освещения
     bool isShowLegend; // ... шкалы значений
-    bool isLimit;      // ... граничных условий
-    bool isLoad;      // ... нагрузок
     bool isNormal;     // ... нормалей к поверхности
     bool isDoubleSided;// Двусторонее освещение полигонов (может тормозить)
     bool isColor;      // Цветная (RGB) визуализация
@@ -57,8 +55,6 @@ public:
         isNegative = right.isNegative;
         isBW = right.isBW;
         isShowLegend = right.isShowLegend;
-        isLimit = right.isLimit;
-        isLoad = right.isLoad;
         isNormal = right.isNormal;
         bkgColor = right.bkgColor;
         scale = right.scale;
@@ -86,8 +82,6 @@ public:
         file << isNegative;
         file << isBW;
         file << isShowLegend;
-        file << isLimit;
-        file << isLoad;
         file << bkgColor;
         file << scale;
         file << angleX;
@@ -114,8 +108,6 @@ public:
         file >> isNegative;
         file >> isBW;
         file >> isShowLegend;
-        file >> isLimit;
-        file >> isLoad;
         file >> bkgColor;
         file >> scale;
         file >> angleX;
@@ -147,8 +139,6 @@ public:
         isVertex =
         isSpectral =
         isNegative =
-        isLimit =
-        isLoad =
         isNormal =
         isBW = false;
         bkgColor = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0).darker();

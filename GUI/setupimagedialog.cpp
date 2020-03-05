@@ -74,8 +74,6 @@ void TSetupImageDialog::setup(bool isFunc)
     ui->chbCoord->setChecked(params.isCoord);
     ui->chbNegative->setChecked(params.isNegative);
     ui->chbValueScale->setChecked(params.isShowLegend);
-    ui->chbLimit->setChecked(params.isLimit);
-    ui->chbLoad->setChecked(params.isLoad);
     ui->chbNormal->setChecked(params.isNormal);
 
     ui->rbBW->setChecked(params.isBW);
@@ -153,8 +151,6 @@ bool TSetupImageDialog::reload(void)
     params.isBW = ui->rbBW->isChecked();
     params.isNegative = ui->chbNegative->isChecked();
     params.isShowLegend = ui->chbValueScale->isChecked();
-    params.isLimit = ui->chbLimit->isChecked();
-    params.isLoad = ui->chbLoad->isChecked();
     params.isNormal = ui->chbNormal->isChecked();
     params.koff = ui->leKoff->text().toFloat();
     params.alpha = float(ui->hsAlpha->sliderPosition())*0.1f;

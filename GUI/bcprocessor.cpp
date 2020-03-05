@@ -17,7 +17,7 @@ void TBCProcessor::processVertex(void)
     msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumBE()), 5);
     // Обработка граничных условий
     for (unsigned i = 0; i < numThread; i++)
-        thr[i] = std::thread(&TBCProcessor::calc, this, PRESSURE_LOAD_PARAMETER, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, ref(error));
+        thr[i] = std::thread(&TBCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, ref(error));
     for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
 //    calc(PRESSURE_LOAD_PARAMETER, 0, object->getMesh().getNumBE(), ref(error));
 //    calc(BOUNDARY_CONDITION_PARAMETER, 0, object->getMesh().getNumBE(), ref(error));
@@ -26,12 +26,10 @@ void TBCProcessor::processVertex(void)
         cerr << endl << sayError(ErrorCode(error)) << endl;
 }
 
-void TBCProcessor::calc(int type, unsigned begin, unsigned end, int& error)
+void TBCProcessor::calc(unsigned begin, unsigned end, int& error)
 {
-    bool isOK;
     double value;
-    vector<double> v(3),
-                   coord;
+    vector<double> coord;
 
     for (unsigned i = begin; i < end; i++)
     {
@@ -43,59 +41,27 @@ void TBCProcessor::calc(int type, unsigned begin, unsigned end, int& error)
         }
         for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
         {
-            if (type != it->getType())
+            if (paramType != it->getType())
                 continue;
-            if ((type == VOLUME_LOAD_PARAMETER || type == SURFACE_LOAD_PARAMETER || type == CONCENTRATED_LOAD_PARAMETER || type == BOUNDARY_CONDITION_PARAMETER) && it->getDirect() == 0)
-                continue;
-            if (type == PRESSURE_LOAD_PARAMETER)
-                calcPressureLoad(i, *it, error);
-            else if (type == SURFACE_LOAD_PARAMETER)
-                calcSurfaceLoad(i, *it, error);
-            else
+            object->getMesh().getCenterBE(i, coord);
+
+
+            try
             {
-                try
-                {
-                    for (unsigned j = 0; j < object->getMesh().getBaseSizeBE(); j++)
-                    {
-                        if (it->getPredicate().length())
-                        {
-                            object->getMesh().getCoordVertex(object->getMesh().getBE(i, j), coord);
-                            if (!(isOK = object->getParams().getPredicateValue(*it, coord)))
-                                break;
-                        }
-                        if (!isOK)
-                            continue;
-                        object->getMesh().getCoordVertex(i, coord);
-                        value = object->getParams().getExpressionValue(*it, coord);
-                        if (type == VOLUME_LOAD_PARAMETER || type == CONCENTRATED_LOAD_PARAMETER  || type == BOUNDARY_CONDITION_PARAMETER)
-                        {
-                            if (type == BOUNDARY_CONDITION_PARAMETER && it->getDirect())
-                                vertex[int(object->getMesh().getBE(i, j))].setX(1.0);
-                            else
-                            {
-                                if (it->getDirect() & DIR_X)
-                                    vertex[int(object->getMesh().getBE(i, j))].setX(float(value));
-                                if (it->getDirect() & DIR_Y)
-                                    vertex[int(object->getMesh().getBE(i, j))].setY(float(value));
-                                if (it->getDirect() & DIR_Z)
-                                    vertex[int(object->getMesh().getBE(i, j))].setZ(float(value));
-                            }
-                        }
-                        else
-                            vertex[int(object->getMesh().getBE(i, j))].setX(float(value));
-                    }
-                }
-                catch (ErrorCode err)
-                {
-                    error = err;
-                    return;
-                }
+                if (it->getPredicate().length() && !object->getParams().getPredicateValue(*it, coord))
+                    break;
+                value = object->getParams().getExpressionValue(*it, coord);
+                for (unsigned j = 0; j < object->getMesh().getSizeBE(); j++)
+                    vertex[int(object->getMesh().getBE(i, j))].setW(float(value));
+                break;
             }
-            if (error)
+            catch (ErrorCode err)
+            {
+                error = err;
                 return;
+            }
         }
     }
-
 }
 
 void TBCProcessor::calcPressureLoad(unsigned index, TParameter& p, int &error)
