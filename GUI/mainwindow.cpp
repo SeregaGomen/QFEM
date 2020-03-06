@@ -1383,6 +1383,8 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
     bool isFind = false;
+    unsigned ind_f = unsigned(femObject->getResult().index(funName.toStdString())),
+             ind_d = getTimeDeltaIndex(funName);
 
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
@@ -1393,7 +1395,7 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(), unsigned(femObject->getResult().index(funName.toStdString())), getTimeDeltaIndex(funName), expression, this), funName);
+        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), femObject->getResult(ind_f).getResults(), &femObject->getResult(ind_d + 0).getResults(), &femObject->getResult(ind_d + 1).getResults(), &femObject->getResult(ind_d + 2).getResults(), expression, this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 }
@@ -1692,7 +1694,6 @@ void TMainWindow::slotShowParam(int type)
 
     for (unsigned i = 0; i < data.size(); i++)
         data[i] = bcProcessor->getVertex()[i].w();
-    femObject->getResult().addResult(data, funName.toStdString());
 
 
     // Проверка наличия такой функции в уже открытых закладках
@@ -1704,7 +1705,7 @@ void TMainWindow::slotShowParam(int type)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(), unsigned(femObject->getResult().index(funName.toStdString())), getTimeDeltaIndex(funName), "", this), funName);
+        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), data, nullptr, nullptr, nullptr, "", this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 

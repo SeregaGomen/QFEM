@@ -11,9 +11,10 @@ class TGLFunction : public TGLMesh
 {
     Q_OBJECT
 private:
-    TResultList *results;   // Результаты расчета
-    unsigned funIndex;      // Индекс функции в списке
-    unsigned deltaIndex;    // Индекс перемещений (U) в списке
+    vector<double> results; // Результаты расчета
+    vector<double>* dx;     // Смещения
+    vector<double>* dy;     // ...
+    vector<double>* dz;     // ...
     QString expression;     // Выражение, с помощью которого вычислена визуализируемая функция
     QVector<QColor> colorTable;
     float min_u;
@@ -42,7 +43,7 @@ public slots:
     void mouseDoubleClickEvent(QMouseEvent*);
 
 public:
-    TGLFunction(TMesh*, TResultList*, unsigned, unsigned, QString, QWidget* = nullptr);
+    TGLFunction(TMesh*, vector<double>&, vector<double>*, vector<double>*, vector<double>*, QString, QWidget* = nullptr);
     ~TGLFunction(void) {}
     QString getExpression(void)
     {

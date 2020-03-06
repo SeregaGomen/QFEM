@@ -13,13 +13,13 @@
 #include "mesh/mesh.h"
 
 /*******************************************************************/
-TGLFunction::TGLFunction(TMesh* m, TResultList* r, unsigned i, unsigned j, QString exp, QWidget *parent) : TGLMesh(m, parent)
+TGLFunction::TGLFunction(TMesh* m, vector<double>& r, vector<double>* x, vector<double>* y, vector<double>* z, QString exp, QWidget *parent) : TGLMesh(m, parent)
 {
     mesh = m;
     results = r;
-    funIndex = i;
-    deltaIndex = j;
-    expression = exp;
+    dx = x;
+    dy = y;
+    dz = z;
     isIdle = true;
 
     minX = { float(mesh->getMinX(0)), float(mesh->getMinX(1)), float(mesh->getMinX(2)) };
@@ -89,7 +89,7 @@ void TGLFunction::drawFun1D(void)
             data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
             data[int(j)].setY(0);
             data[int(j)].setZ(0);
-            data[int(j)].setW(float((*results)[funIndex].getResults(mesh->getFE(i, j))));
+            data[int(j)].setW(float(results[mesh->getFE(i, j)]));
         }
         drawSegment(data);
     }
@@ -109,7 +109,7 @@ void TGLFunction::drawFun2D(void)
             data[int(j)].setY(cY(mesh->getFE(i, j)) - x0[1]);
             data[int(j)].setZ(cZ_2D(mesh->getFE(i, j)) - x0[2]);
 //            data[int(j)].setZ(0);
-            data[int(j)].setW(float((*results)[funIndex].getResults(mesh->getFE(i, j))));
+            data[int(j)].setW(float(results[mesh->getFE(i, j)]));
         }
         drawPolygon(data);
     }
@@ -126,7 +126,7 @@ void TGLFunction::drawFun3D(void)
             data[int(j)].setX(cX(mesh->getBE(i, j)) - x0[0]);
             data[int(j)].setY(cY(mesh->getBE(i, j)) - x0[1]);
             data[int(j)].setZ(cZ(mesh->getBE(i, j)) - x0[2]);
-            data[int(j)].setW(float((*results)[funIndex].getResults(mesh->getBE(i, j))));
+            data[int(j)].setW(float(results[mesh->getBE(i, j)]));
         }
         drawPolygon(data);
     }
@@ -250,8 +250,8 @@ void TGLFunction::initColorTable(void)
           blue = 255;
 
     colorTable.clear();
-    min_u = float(*min_element((*results)[funIndex].getResults().begin(), (*results)[funIndex].getResults().end()));
-    max_u = float(*max_element((*results)[funIndex].getResults().begin(),(*results)[funIndex].getResults().end()));
+    min_u = float(*min_element(results.begin(), results.end()));
+    max_u = float(*max_element(results.begin(), results.end()));
 //    if (min_u == max_u)
 //        max_u += 1.0f;
 
@@ -469,29 +469,29 @@ void TGLFunction::drawTriangle3D(QVector<QVector4D>& tri)
 /*******************************************************************/
 int TGLFunction::getColorIndex(float u)
 {
-    int ret = int(floor((u - min_u)/(max_u - min_u)*float(params.numColor)));
+    int ret = int(floor((u - min_u) / (max_u - min_u) * float(params.numColor)));
 
     return (ret < 0) ? 0 : ((ret > params.numColor - 1) ? params.numColor - 1 : ret);
 }
 /*******************************************************************/
 float TGLFunction::cX(unsigned i)
 {
-    return float(mesh->getX(i, 0)) + params.koff*float((*results)[deltaIndex + 0].getResults(i));
+    return float(mesh->getX(i, 0)) + params.koff * ((dx) ? float((*dx)[i]) : 0);
 }
 /*******************************************************************/
 float TGLFunction::cY(unsigned i)
 {
-    return float(mesh->getX(i, 1)) + params.koff*float((*results)[deltaIndex + 1].getResults(i));
+    return float(mesh->getX(i, 1)) + params.koff * ((dy) ? float((*dy)[i]) : 0);
 }
 /*******************************************************************/
 float TGLFunction::cZ(unsigned i)
 {
-    return float(mesh->getX(i, 2)) + params.koff*float((*results)[deltaIndex + 2].getResults(i));
+    return float(mesh->getX(i, 2)) + params.koff * ((dz) ? float((*dz)[i]) : 0);
 }
 /*******************************************************************/
 float TGLFunction::cZ_2D(unsigned i)
 {
-    return (mesh->isPlate()) ? params.koff*float((*results)[deltaIndex + 2].getResults(i)) : 0;
+    return (mesh->isPlate()) ? params.koff * ((dz) ? float((*dz)[i]) : 0) : 0;
 }
 /*******************************************************************/
 void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
