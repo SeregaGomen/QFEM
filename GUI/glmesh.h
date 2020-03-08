@@ -31,7 +31,6 @@ private:
     void scale(int,int);
     void translate(int,int);
     void rotate(int,int,int);
-    void displayMesh(void);
     void drawMesh1D(void);
     void drawMesh2D(void);
     void drawMesh3D(void);
@@ -49,10 +48,11 @@ protected:
     float radius;
     bool isIdle;
 
-    void initializeGL(void);
+    virtual void createObject(void);
     virtual void paintGL(void);
     virtual void displayObject(void);
     virtual void displaySkeleton(void);
+    void initializeGL(void);
     void resizeGL(int,int);
     void mousePressEvent(QMouseEvent*);
     void mouseReleaseEvent(QMouseEvent*);
@@ -67,7 +67,7 @@ protected:
 
 public:
     TGLMesh(TMesh*, QWidget* = nullptr);
-    ~TGLMesh(void);
+    virtual ~TGLMesh(void);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;

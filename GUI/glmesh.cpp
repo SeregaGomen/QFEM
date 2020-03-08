@@ -454,11 +454,11 @@ void TGLMesh::displaySkeleton(void)
 void TGLMesh::displayObject(void)
 {
     if (!xList1)
-        displayMesh();
+        createObject();
     glCallList(xList1);
 }
 /*******************************************************************/
-void TGLMesh::displayMesh(void)
+void TGLMesh::createObject(void)
 {
     QApplication::setOverrideCursor(Qt::BusyCursor);
 

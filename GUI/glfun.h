@@ -22,8 +22,8 @@ private:
     float min_u;
     float max_u;
 
-    void displayObject(void);
-    void createFunction(void);
+    virtual void displayObject(void);
+    virtual void createObject(void);
     void drawFun1D(void);
     void drawFun2D(void);
     void drawFun3D(void);

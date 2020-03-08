@@ -21,14 +21,6 @@ TGLFunction::TGLFunction(TMesh *m, vector<double> *r, vector<double> *x, vector<
     dz = z;
     expression = exp;
     isIdle = true;
-
-    minX = { float(mesh->getMinX(0)), float(mesh->getMinX(1)), float(mesh->getMinX(2)) };
-    maxX = { float(mesh->getMaxX(0)), float(mesh->getMaxX(1)), float(mesh->getMaxX(2)) };
-    x0   = { (maxX[0] + minX[0]) * 0.5f, (maxX[1] + minX[1]) * 0.5f, (maxX[2] + minX[2]) * 0.5f };
-    radius = float(sqrt(pow(maxX[0] - minX[0], 2) + pow(maxX[1] - minX[1], 2) + pow(maxX[2] - minX[2], 2)));
-
-    if (mesh->getFreedom() < 3)
-        params.isLight = false;
 }
 /*******************************************************************/
 TGLFunction::TGLFunction(TMesh *m, QVector<QVector4D> &v, QWidget *parent) : TGLMesh(m, parent)
@@ -36,29 +28,16 @@ TGLFunction::TGLFunction(TMesh *m, QVector<QVector4D> &v, QWidget *parent) : TGL
     results = dx = dy = dz = nullptr;
     vertex = v;
     isIdle = true;
-
-    minX = { float(mesh->getMinX(0)), float(mesh->getMinX(1)), float(mesh->getMinX(2)) };
-    maxX = { float(mesh->getMaxX(0)), float(mesh->getMaxX(1)), float(mesh->getMaxX(2)) };
-    x0   = { (maxX[0] + minX[0]) * 0.5f, (maxX[1] + minX[1]) * 0.5f, (maxX[2] + minX[2]) * 0.5f };
-    radius = float(sqrt(pow(maxX[0] - minX[0], 2) + pow(maxX[1] - minX[1], 2) + pow(maxX[2] - minX[2], 2)));
-
-    if (mesh->getFreedom() < 3)
-        params.isLight = false;
 }
 /*******************************************************************/
 void TGLFunction::displayObject(void)
 {
-    if (mesh->getTypeFE() == NOTYPE)
-        return;
-
-    if (!xList1)
-        createFunction();
-    glCallList(xList1);
+    TGLMesh::displayObject();
     if (params.isShowLegend)
         showLegend();
 }
 /*******************************************************************/
-void TGLFunction::createFunction(void)
+void TGLFunction::createObject(void)
 {
     initColorTable();
 
