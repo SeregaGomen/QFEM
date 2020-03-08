@@ -1697,11 +1697,12 @@ void TMainWindow::slotShowParam(int type)
         if (tabWidget->tabText(i).replace("&","") == funName)
         {
             isFind = true;
+            qobject_cast<TGLFunction*>(tabWidget->widget(i))->redraw(bcProcessor->getVertex());
             tabWidget->setCurrentIndex(i);
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femProcessor->getFEMObject()->getMesh(), &bcProcessor->getVertex(), this), funName);
+        tabWidget->addTab(new TGLFunction(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 

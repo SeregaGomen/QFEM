@@ -19,7 +19,6 @@ TGLFunction::TGLFunction(TMesh *m, vector<double> *r, vector<double> *x, vector<
     dx = x;
     dy = y;
     dz = z;
-    vertex = nullptr;
     expression = exp;
     isIdle = true;
 
@@ -32,7 +31,7 @@ TGLFunction::TGLFunction(TMesh *m, vector<double> *r, vector<double> *x, vector<
         params.isLight = false;
 }
 /*******************************************************************/
-TGLFunction::TGLFunction(TMesh *m, QVector<QVector4D> *v, QWidget *parent) : TGLMesh(m, parent)
+TGLFunction::TGLFunction(TMesh *m, QVector<QVector4D> &v, QWidget *parent) : TGLMesh(m, parent)
 {
     results = dx = dy = dz = nullptr;
     vertex = v;
@@ -105,7 +104,7 @@ void TGLFunction::drawFun1D(void)
             data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
             data[int(j)].setY(0);
             data[int(j)].setZ(0);
-            data[int(j)].setW( (results) ? float((*results)[mesh->getFE(i, j)]) : (*vertex)[mesh->getFE(i, j)].w());
+            data[int(j)].setW( (results) ? float((*results)[mesh->getFE(i, j)]) : vertex[mesh->getFE(i, j)].w());
         }
         drawSegment(data);
     }
@@ -124,7 +123,7 @@ void TGLFunction::drawFun2D(void)
             data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
             data[int(j)].setY(cY(mesh->getFE(i, j)) - x0[1]);
             data[int(j)].setZ(cZ2D(mesh->getFE(i, j)) - x0[2]);
-            data[int(j)].setW( (results) ? float((*results)[mesh->getFE(i, j)]) : (*vertex)[mesh->getFE(i, j)].w());
+            data[int(j)].setW( (results) ? float((*results)[mesh->getFE(i, j)]) : vertex[mesh->getFE(i, j)].w());
         }
         drawPolygon(data);
     }
@@ -141,7 +140,7 @@ void TGLFunction::drawFun3D(void)
             data[int(j)].setX(cX(mesh->getBE(i, j)) - x0[0]);
             data[int(j)].setY(cY(mesh->getBE(i, j)) - x0[1]);
             data[int(j)].setZ(cZ(mesh->getBE(i, j)) - x0[2]);
-            data[int(j)].setW( (results) ? float((*results)[mesh->getBE(i, j)]) : (*vertex)[mesh->getBE(i, j)].w());
+            data[int(j)].setW( (results) ? float((*results)[mesh->getBE(i, j)]) : vertex[mesh->getBE(i, j)].w());
         }
         drawPolygon(data);
     }
@@ -274,10 +273,10 @@ void TGLFunction::initColorTable(void)
     {
         min_u = std::numeric_limits<float>::max();
         max_u = std::numeric_limits<float>::min();
-        foreach (QVector4D p, *vertex)
+        foreach (QVector4D v, vertex)
         {
-            min_u = qMin(min_u, p.w());
-            max_u = qMax(max_u, p.w());
+            min_u = qMin(min_u, v.w());
+            max_u = qMax(max_u, v.w());
         }
     }
 //    if (min_u == max_u)

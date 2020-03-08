@@ -1,6 +1,7 @@
 #ifndef GLFUN_H
 #define GLFUN_H
 
+#include <QVector4D>
 #include "glmesh.h"
 #include "util/matrix.h"
 
@@ -16,7 +17,7 @@ private:
     vector<double> *dy;         // ...
     vector<double> *dz;         // ...
     QString expression;         // Выражение, с помощью которого вычислена визуализируемая функция
-    QVector<QVector4D> *vertex; // Данные для визуализации нагрузок, гр. условий, etc
+    QVector<QVector4D> vertex;  // Данные для визуализации нагрузок, гр. условий, etc
     QVector<QColor> colorTable;
     float min_u;
     float max_u;
@@ -45,11 +46,17 @@ public slots:
 
 public:
     TGLFunction(TMesh*, vector<double>*, vector<double>*, vector<double>*, vector<double>*, QString, QWidget* = nullptr);
-    TGLFunction(TMesh*, QVector<QVector4D>*, QWidget* = nullptr);
+    TGLFunction(TMesh*, QVector<QVector4D>&, QWidget* = nullptr);
     ~TGLFunction(void) {}
     QString getExpression(void)
     {
         return expression;
+    }
+    void redraw(QVector<QVector4D>& v)
+    {
+        vertex = v;
+        initColorTable();
+        repaint();
     }
 };
 
