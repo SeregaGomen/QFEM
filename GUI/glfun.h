@@ -11,11 +11,12 @@ class TGLFunction : public TGLMesh
 {
     Q_OBJECT
 private:
-    vector<double> results; // Результаты расчета
-    vector<double>* dx;     // Смещения
-    vector<double>* dy;     // ...
-    vector<double>* dz;     // ...
-    QString expression;     // Выражение, с помощью которого вычислена визуализируемая функция
+    vector<double> *results;    // Результаты расчета
+    vector<double> *dx;         // Смещения
+    vector<double> *dy;         // ...
+    vector<double> *dz;         // ...
+    QString expression;         // Выражение, с помощью которого вычислена визуализируемая функция
+    QVector<QVector4D> *vertex; // Данные для визуализации нагрузок, гр. условий, etc
     QVector<QColor> colorTable;
     float min_u;
     float max_u;
@@ -38,12 +39,13 @@ private:
     float cX(unsigned);
     float cY(unsigned);
     float cZ(unsigned);
-    float cZ_2D(unsigned);
+    float cZ2D(unsigned);
 public slots:
     void mouseDoubleClickEvent(QMouseEvent*);
 
 public:
-    TGLFunction(TMesh*, vector<double>&, vector<double>*, vector<double>*, vector<double>*, QString, QWidget* = nullptr);
+    TGLFunction(TMesh*, vector<double>*, vector<double>*, vector<double>*, vector<double>*, QString, QWidget* = nullptr);
+    TGLFunction(TMesh*, QVector<QVector4D>*, QWidget* = nullptr);
     ~TGLFunction(void) {}
     QString getExpression(void)
     {

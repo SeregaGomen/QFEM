@@ -26,6 +26,7 @@ void TBCProcessor::processVertex(void)
         cerr << endl << sayError(ErrorCode(error)) << endl;
 }
 
+
 void TBCProcessor::calc(unsigned begin, unsigned end, int& error)
 {
     double value;
@@ -39,6 +40,7 @@ void TBCProcessor::calc(unsigned begin, unsigned end, int& error)
             error = ABORT_ERR;
             return;
         }
+
         for (auto it = object->getParams().plist.begin(); it != object->getParams().plist.end(); it++)
         {
             if (paramType != it->getType())

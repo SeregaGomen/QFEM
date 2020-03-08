@@ -1160,7 +1160,7 @@ void TMainWindow::slotAnalyseFunction(void)
     dlg->setup(femProcessor->getFEMObject());
     dlg->changeLanguage();
     if (dlg->exec() == QDialog::Accepted)
-        addFuncToAnalyse(dlg->getName(),"");
+        addFuncToAnalyse(dlg->getName(), "");
     delete dlg;
 }
 
@@ -1388,14 +1388,14 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
 
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
-        if (tabWidget->tabText(i).replace("&","") == funName)
+        if (tabWidget->tabText(i).replace("&", "") == funName)
         {
             isFind = true;
             tabWidget->setCurrentIndex(i);
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), femObject->getResult(ind_f).getResults(), &femObject->getResult(ind_d + 0).getResults(), &femObject->getResult(ind_d + 1).getResults(), &femObject->getResult(ind_d + 2).getResults(), expression, this), funName);
+        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(ind_f).getResults(), &femObject->getResult(ind_d + 0).getResults(), &femObject->getResult(ind_d + 1).getResults(), &femObject->getResult(ind_d + 2).getResults(), expression, this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 }
@@ -1485,21 +1485,21 @@ bool TMainWindow::loadQRES(QString fileName)
 
 void TMainWindow::slotAddFunction(void)
 {
-    TVCDialog* vdlg = new TVCDialog(this);
+    TVCDialog *vdlg = new TVCDialog(this);
     QString name;
 
     vdlg->changeLanguage();
     if (vdlg->exec() == QDialog::Accepted)
     {
-        if (calcExpression(vdlg->getExpression(),name))
-            addFuncToAnalyse(name,vdlg->getExpression());
+        if (calcExpression(vdlg->getExpression(), name))
+            addFuncToAnalyse(name, vdlg->getExpression());
     }
     delete vdlg;
 }
 
-bool TMainWindow::calcExpression(QString expression ,QString& name)
+bool TMainWindow::calcExpression(QString expression, QString& name)
 {
-    TFEMObject* femObject = femProcessor->getFEMObject();
+    TFEMObject *femObject = femProcessor->getFEMObject();
     TParser parser;
     unsigned n = unsigned(femObject->getMesh().getNumVertex()),
              m = unsigned(femObject->getResult().size());
@@ -1685,16 +1685,12 @@ void TMainWindow::slotShowParam(int type)
     pb->hide();
     terminal->setTextCursor(saveCursor);
 
-
+/////////////////////////////////////////////////////////////
     // Отображаем параметр
-    TFEMObject* femObject = femProcessor->getFEMObject();
     bool isFind = false;
-    vector<double> data(femObject->getMesh().getNumVertex());
     QString funName = "Young's modulus";
 
-    for (unsigned i = 0; i < data.size(); i++)
-        data[i] = bcProcessor->getVertex()[i].w();
-
+////////////////////////////////////////////////////////////
 
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
@@ -1705,7 +1701,7 @@ void TMainWindow::slotShowParam(int type)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femObject->getMesh(), data, nullptr, nullptr, nullptr, "", this), funName);
+        tabWidget->addTab(new TGLFunction(&femProcessor->getFEMObject()->getMesh(), &bcProcessor->getVertex(), this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 

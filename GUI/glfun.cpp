@@ -13,18 +13,34 @@
 #include "mesh/mesh.h"
 
 /*******************************************************************/
-TGLFunction::TGLFunction(TMesh* m, vector<double>& r, vector<double>* x, vector<double>* y, vector<double>* z, QString exp, QWidget *parent) : TGLMesh(m, parent)
+TGLFunction::TGLFunction(TMesh *m, vector<double> *r, vector<double> *x, vector<double> *y, vector<double> *z, QString exp, QWidget *parent) : TGLMesh(m, parent)
 {
-    mesh = m;
     results = r;
     dx = x;
     dy = y;
     dz = z;
+    vertex = nullptr;
+    expression = exp;
     isIdle = true;
 
     minX = { float(mesh->getMinX(0)), float(mesh->getMinX(1)), float(mesh->getMinX(2)) };
     maxX = { float(mesh->getMaxX(0)), float(mesh->getMaxX(1)), float(mesh->getMaxX(2)) };
-    x0   = { (maxX[0] + minX[0])*0.5f, (maxX[1] + minX[1])*0.5f, (maxX[2] + minX[2])*0.5f };
+    x0   = { (maxX[0] + minX[0]) * 0.5f, (maxX[1] + minX[1]) * 0.5f, (maxX[2] + minX[2]) * 0.5f };
+    radius = float(sqrt(pow(maxX[0] - minX[0], 2) + pow(maxX[1] - minX[1], 2) + pow(maxX[2] - minX[2], 2)));
+
+    if (mesh->getFreedom() < 3)
+        params.isLight = false;
+}
+/*******************************************************************/
+TGLFunction::TGLFunction(TMesh *m, QVector<QVector4D> *v, QWidget *parent) : TGLMesh(m, parent)
+{
+    results = dx = dy = dz = nullptr;
+    vertex = v;
+    isIdle = true;
+
+    minX = { float(mesh->getMinX(0)), float(mesh->getMinX(1)), float(mesh->getMinX(2)) };
+    maxX = { float(mesh->getMaxX(0)), float(mesh->getMaxX(1)), float(mesh->getMaxX(2)) };
+    x0   = { (maxX[0] + minX[0]) * 0.5f, (maxX[1] + minX[1]) * 0.5f, (maxX[2] + minX[2]) * 0.5f };
     radius = float(sqrt(pow(maxX[0] - minX[0], 2) + pow(maxX[1] - minX[1], 2) + pow(maxX[2] - minX[2], 2)));
 
     if (mesh->getFreedom() < 3)
@@ -89,7 +105,7 @@ void TGLFunction::drawFun1D(void)
             data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
             data[int(j)].setY(0);
             data[int(j)].setZ(0);
-            data[int(j)].setW(float(results[mesh->getFE(i, j)]));
+            data[int(j)].setW( (results) ? float((*results)[mesh->getFE(i, j)]) : (*vertex)[mesh->getFE(i, j)].w());
         }
         drawSegment(data);
     }
@@ -107,9 +123,8 @@ void TGLFunction::drawFun2D(void)
         {
             data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
             data[int(j)].setY(cY(mesh->getFE(i, j)) - x0[1]);
-            data[int(j)].setZ(cZ_2D(mesh->getFE(i, j)) - x0[2]);
-//            data[int(j)].setZ(0);
-            data[int(j)].setW(float(results[mesh->getFE(i, j)]));
+            data[int(j)].setZ(cZ2D(mesh->getFE(i, j)) - x0[2]);
+            data[int(j)].setW( (results) ? float((*results)[mesh->getFE(i, j)]) : (*vertex)[mesh->getFE(i, j)].w());
         }
         drawPolygon(data);
     }
@@ -126,7 +141,7 @@ void TGLFunction::drawFun3D(void)
             data[int(j)].setX(cX(mesh->getBE(i, j)) - x0[0]);
             data[int(j)].setY(cY(mesh->getBE(i, j)) - x0[1]);
             data[int(j)].setZ(cZ(mesh->getBE(i, j)) - x0[2]);
-            data[int(j)].setW(float(results[mesh->getBE(i, j)]));
+            data[int(j)].setW( (results) ? float((*results)[mesh->getBE(i, j)]) : (*vertex)[mesh->getBE(i, j)].w());
         }
         drawPolygon(data);
     }
@@ -243,15 +258,28 @@ void TGLFunction::drawPolygon(QVector<QVector4D>& vertex)
 /*******************************************************************/
 void TGLFunction::initColorTable(void)
 {
-    float step = float(params.numColor)/6.0f,
-          h = 256.0f/step,
-          red = 148, //255,
-          green = 0,
-          blue = 255;
+    float step = float(params.numColor) / 6.0f,
+          h = 256.0f / step,
+          red = 148.0f, //255,
+          green = 0.0f,
+          blue = 255.0f;
 
     colorTable.clear();
-    min_u = float(*min_element(results.begin(), results.end()));
-    max_u = float(*max_element(results.begin(), results.end()));
+    if (results)
+    {
+        min_u = float(*min_element(results->begin(), results->end()));
+        max_u = float(*max_element(results->begin(), results->end()));
+    }
+    else
+    {
+        min_u = std::numeric_limits<float>::max();
+        max_u = std::numeric_limits<float>::min();
+        foreach (QVector4D p, *vertex)
+        {
+            min_u = qMin(min_u, p.w());
+            max_u = qMax(max_u, p.w());
+        }
+    }
 //    if (min_u == max_u)
 //        max_u += 1.0f;
 
@@ -489,7 +517,7 @@ float TGLFunction::cZ(unsigned i)
     return float(mesh->getX(i, 2)) + params.koff * ((dz) ? float((*dz)[i]) : 0);
 }
 /*******************************************************************/
-float TGLFunction::cZ_2D(unsigned i)
+float TGLFunction::cZ2D(unsigned i)
 {
     return (mesh->isPlate()) ? params.koff * ((dz) ? float((*dz)[i]) : 0) : 0;
 }
