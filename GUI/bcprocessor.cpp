@@ -8,19 +8,18 @@ extern TMessenger* msg;
 void TBCProcessor::processVertex(void)
 {
     unsigned numThread = 8, //std::thread::hardware_concurrency(),
-             step = object->getMesh().getNumBE() / numThread;
+             step = object->getMesh().getNumVertex() / numThread;
     int error = NO_ERR;
     vector<std::thread> thr(numThread);
 
     vertex.resize(int(object->getMesh().getNumVertex()));
     isStoped = false;
-    msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumBE()), 5);
+    msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumVertex()), 5);
     // Обработка граничных условий
     for (unsigned i = 0; i < numThread; i++)
-        thr[i] = std::thread(&TBCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumBE() : (i + 1) * step, ref(error));
+        thr[i] = std::thread(&TBCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumVertex() : (i + 1) * step, ref(error));
     for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
-//    calc(PRESSURE_LOAD_PARAMETER, 0, object->getMesh().getNumBE(), ref(error));
-//    calc(BOUNDARY_CONDITION_PARAMETER, 0, object->getMesh().getNumBE(), ref(error));
+//    calc(0, object->getMesh().getNumVertex(), ref(error));
     msg->stopProcess();
     if (error)
         cerr << endl << sayError(ErrorCode(error)) << endl;
@@ -29,7 +28,6 @@ void TBCProcessor::processVertex(void)
 
 void TBCProcessor::calc(unsigned begin, unsigned end, int& error)
 {
-    double value;
     vector<double> coord;
 
     for (unsigned i = begin; i < end; i++)
@@ -45,16 +43,13 @@ void TBCProcessor::calc(unsigned begin, unsigned end, int& error)
         {
             if (paramType != it->getType())
                 continue;
-            object->getMesh().getCenterBE(i, coord);
-
+            object->getMesh().getCoordVertex(i, coord);
 
             try
             {
                 if (it->getPredicate().length() && !object->getParams().getPredicateValue(*it, coord))
-                    break;
-                value = object->getParams().getExpressionValue(*it, coord);
-                for (unsigned j = 0; j < object->getMesh().getSizeBE(); j++)
-                    vertex[int(object->getMesh().getBE(i, j))].setW(float(value));
+                    continue;
+                vertex[i].setW(float(object->getParams().getExpressionValue(*it, coord)));
                 break;
             }
             catch (ErrorCode err)

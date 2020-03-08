@@ -34,7 +34,6 @@ SOURCES += main.cpp\
     bcprocessor.cpp \
     mainwindow.cpp \
     problemsetupform.cpp \
-    setuptaskdialog.cpp \
     fldialog.cpp \
     glfun.cpp \
     setupimagedialog.cpp \
@@ -59,7 +58,6 @@ HEADERS  += mainwindow.h \
     bcprocessor.h \
     problemsetupform.h \
     qstdredirector.h \
-    setuptaskdialog.h \
     fldialog.h \
     glfun.h \
     setupimagedialog.h \
@@ -99,7 +97,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     problemsetupform.ui \
-    setuptaskdialog.ui \
     funlistdialog.ui \
     setupimagedialog.ui \
     vcdialog.ui \

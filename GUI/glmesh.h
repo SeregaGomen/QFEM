@@ -3,8 +3,7 @@
 
 #include <QGLWidget>
 #include <QOpenGLFunctions_3_0>
-// #include <QOpenGLFunctions>
-#include "setuptaskdialog.h"
+#include <QMenu>
 #include "imageparams.h"
 
 class TSetupTaskDialog;
