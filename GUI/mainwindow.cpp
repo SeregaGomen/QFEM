@@ -1661,8 +1661,10 @@ void TMainWindow::slotDataCopy(void)
 
 void TMainWindow::slotShowParam(int type)
 {
+    bool isFind = false;
     QTextCursor textCursor = terminal->textCursor(),
                 saveCursor = textCursor;
+    QString funName = paramName(type).c_str();
 
     textCursor.clearSelection();
     terminal->setTextCursor(textCursor);
@@ -1685,13 +1687,7 @@ void TMainWindow::slotShowParam(int type)
     pb->hide();
     terminal->setTextCursor(saveCursor);
 
-/////////////////////////////////////////////////////////////
     // Отображаем параметр
-    bool isFind = false;
-    QString funName = "Young's modulus";
-
-////////////////////////////////////////////////////////////
-
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
         if (tabWidget->tabText(i).replace("&","") == funName)

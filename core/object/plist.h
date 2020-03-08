@@ -47,6 +47,58 @@ enum {
 
 extern TMessenger* msg;
 
+// Названия параметров
+inline string paramName(int type)
+{
+    string ret;
+
+    switch (type)
+    {
+        case INITIAL_CONDITION_PARAMETER:
+            ret = S_INITIAL_CONDITION_PARAMETER;
+            break;
+        case BOUNDARY_CONDITION_PARAMETER:
+            ret = S_BOUNDARY_CONDITION_PARAMETER;
+            break;
+        case VOLUME_LOAD_PARAMETER:
+            ret = S_VOLUME_LOAD_PARAMETER;
+            break;
+        case SURFACE_LOAD_PARAMETER:
+            ret = S_SURFACE_LOAD_PARAMETER;
+            break;
+        case CONCENTRATED_LOAD_PARAMETER:
+            ret = S_CONCENTRATED_LOAD_PARAMETER;
+            break;
+        case PRESSURE_LOAD_PARAMETER:
+            ret = S_PRESSURE_LOAD_PARAMETER;
+            break;
+        case YOUNG_MODULUS_PARAMETER:
+            ret = S_YOUNG_MODULUS_PARAMETER;
+            break;
+        case POISSON_RATIO_PARAMETER:
+            ret = S_POISSON_RATIO_PARAMETER;
+            break;
+        case THICKNESS_PARAMETER:
+            ret = S_THICKNESS_PARAMETER;
+            break;
+        case TEMPERATURE_PARAMETER:
+            ret = S_TEMPERATURE_PARAMETER;
+            break;
+        case ALPHA_PARAMETER:
+            ret = S_ALPHA_PARAMETER;
+            break;
+        case DENSITY_PARAMETER:
+            ret = S_DENSITY_PARAMETER;
+            break;
+        case DAMPING_PARAMETER:
+            ret = S_DAMPING_PARAMETER;
+            break;
+        case STRESS_STRAIN_CURVE_PARAMETER:
+            ret = S_STRESS_STRAIN_CURVE_PARAMETER;
+    }
+    return ret;
+}
+
 //--------------------------------------------------------------
 //  Представление параметра в виде строки, функции или матрицы
 //--------------------------------------------------------------

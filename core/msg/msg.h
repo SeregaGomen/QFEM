@@ -87,6 +87,20 @@ extern int langCode;
 #define S_MSG_CALC_STANDART_RESULTS     ((langCode) ? "Расчет стандартных результатов КЭ" : "Calculation of standard FE results")
 #define S_MSG_MESH_NAME                 ((langCode) ? "Файл сетки: " : "Mesh file: ")
 #define S_NUM_THREAD                    ((langCode) ? "Использовано потоков: " : "Using threads: ")
+#define S_INITIAL_CONDITION_PARAMETER   ((langCode) ? "Начальные условия" : "Initial condition")
+#define S_BOUNDARY_CONDITION_PARAMETER  ((langCode) ? "Граничные условия" : "Boundary condition")
+#define S_VOLUME_LOAD_PARAMETER         ((langCode) ? "Объемная нагрузка" : "Volume load")
+#define S_SURFACE_LOAD_PARAMETER        ((langCode) ? "Поверхностная нагрузка" : "Surface load")
+#define S_CONCENTRATED_LOAD_PARAMETER   ((langCode) ? "Сосредоточенная нагрузка" : "Concentrated load")
+#define S_PRESSURE_LOAD_PARAMETER       ((langCode) ? "Нагрузка давлением" : "Pressure load")
+#define S_YOUNG_MODULUS_PARAMETER       ((langCode) ? "Модуль Юнга" : "Young's modulus")
+#define S_POISSON_RATIO_PARAMETER       ((langCode) ? "Коэффициент Пуассона" : "Poisson's ratio")
+#define S_THICKNESS_PARAMETER           ((langCode) ? "Толщина КЭ" : "FE thickness")
+#define S_TEMPERATURE_PARAMETER         ((langCode) ? "Разность температур" : "Temperature difference")
+#define S_ALPHA_PARAMETER               ((langCode) ? "Температурное расширение" : "Thermal expansion")
+#define S_DENSITY_PARAMETER             ((langCode) ? "Плотность" : "Density")
+#define S_DAMPING_PARAMETER             ((langCode) ? "Демпфирование" : "Damping")
+#define S_STRESS_STRAIN_CURVE_PARAMETER ((langCode) ? "Диаграмма деформирования" : "Stress–strain curve")
 
 using namespace std;
 
