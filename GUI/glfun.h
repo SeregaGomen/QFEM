@@ -12,12 +12,11 @@ class TGLFunction : public TGLMesh
 {
     Q_OBJECT
 private:
-    vector<double> *results;    // Результаты расчета
+    QVector<QVector4D> results; // Результаты расчета
     vector<double> *dx;         // Смещения
     vector<double> *dy;         // ...
     vector<double> *dz;         // ...
     QString expression;         // Выражение, с помощью которого вычислена визуализируемая функция
-    QVector<QVector4D> vertex;  // Данные для визуализации нагрузок, гр. условий, etc
     QVector<QColor> colorTable;
     float min_u;
     float max_u;
@@ -54,7 +53,7 @@ public:
     }
     void redraw(QVector<QVector4D>& v)
     {
-        vertex = v;
+        results = v;
         initColorTable();
         repaint();
     }
