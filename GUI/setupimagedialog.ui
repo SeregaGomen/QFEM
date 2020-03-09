@@ -117,7 +117,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Scale values</string>
+     <string>Legend</string>
     </property>
     <property name="checked">
      <bool>true</bool>

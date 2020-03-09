@@ -22,7 +22,7 @@
 #include "ui_mainwindow.h"
 #include "setupimagedialog.h"
 #include "fldialog.h"
-#include "glfun.h"
+#include "glparam.h"
 #include "gbdialog.h"
 #include "qmsg.h"
 #include "helpdialog.h"
@@ -500,8 +500,11 @@ void TMainWindow::saveDocument(QString fileName)
     if (QFileInfo(curFile).suffix().toUpper() == "QRES")
     {
         QString name = QString(QFileInfo(curFile).absolutePath() + "/" +  QFileInfo(curFile).baseName() + ".trpa"),
-//                meshFile = QFileDialog::getSaveFileName(this,tr("Save mesh"),windowFilePath(),tr("Mesh files (*.trpa)")); // Запрос имени файла для сетки
-                meshFile = QFileDialog::getSaveFileName(this,tr("Save mesh"),name,tr("Mesh files (*.trpa)")); // Запрос имени файла для сетки
+                meshFile = QFileDialog::getSaveFileName(this, tr("Save mesh"), name, tr("Mesh files (*.trpa)")); // Запрос имени файла для сетки
+
+        // Загрузка текущих параметров из диалога
+        if (!pForm->getParams())
+            return;
 
         if (meshFile.isEmpty())
             return;
@@ -513,7 +516,7 @@ void TMainWindow::saveDocument(QString fileName)
     if (saveJSON(fileName))
     {
         setCurrentFile(fileName);
-        statusBar()->showMessage(tr("File successfully saved"),5000);
+        statusBar()->showMessage(tr("File successfully saved"), 5000);
         updateRecentFileActions(fileName);
     }
     else
@@ -1453,7 +1456,7 @@ void TMainWindow::repaintResults(void)
             if (isCalc)
             {
                 if ((exp = ptr->getExpression()).length())
-                    calcExpression(exp,name);
+                    calcExpression(exp, name);
                 ptr->repaint();
             }
             else
@@ -1693,12 +1696,12 @@ void TMainWindow::slotShowParam(int type)
         if (tabWidget->tabText(i).replace("&","") == funName)
         {
             isFind = true;
-            qobject_cast<TGLFunction*>(tabWidget->widget(i))->redraw(bcProcessor->getVertex());
+            qobject_cast<TGLParameter*>(tabWidget->widget(i))->redraw(bcProcessor->getVertex());
             tabWidget->setCurrentIndex(i);
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLFunction(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), this), funName);
+        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 

@@ -99,6 +99,14 @@ public:
     {
         return fe.size1();
     }
+    matrix<unsigned>& getFE(void)
+    {
+        return fe;
+    }
+    matrix<unsigned>& getBE(void)
+    {
+        return be;
+    }
     unsigned getFE(unsigned i, unsigned j)
     {
         return fe(i, j);

@@ -15,19 +15,11 @@
 /*******************************************************************/
 TGLFunction::TGLFunction(TMesh *m, vector<double> *r, vector<double> *x, vector<double> *y, vector<double> *z, QString exp, QWidget *parent) : TGLMesh(m, parent)
 {
-    std::for_each(r->begin(), r->end(), [=](double &v){ results.push_back(QVector4D(0, 0, 0, v)); });
+    results = r;
     dx = x;
     dy = y;
     dz = z;
     expression = exp;
-    isIdle = true;
-}
-/*******************************************************************/
-TGLFunction::TGLFunction(TMesh *m, QVector<QVector4D> &v, QWidget *parent) : TGLMesh(m, parent)
-{
-    results = v;
-    dx = dy = dz = nullptr;
-    isIdle = true;
 }
 /*******************************************************************/
 void TGLFunction::displayObject(void)
@@ -39,90 +31,32 @@ void TGLFunction::displayObject(void)
 /*******************************************************************/
 void TGLFunction::createObject(void)
 {
-    initColorTable();
+    int sizeEl = (mesh->is3D()) ? int(mesh->getSizeBE()) : int(mesh->getSizeFE()),
+        numEl = (mesh->is3D()) ? int(mesh->getNumBE()) : int(mesh->getNumFE());
+    matrix<unsigned> &el = (mesh->is3D()) ? mesh->getBE() : mesh->getFE();
+    QVector<QVector4D> data(sizeEl);
 
+    initColorTable();
     xList1 = glGenLists(1);
-    setupCamera(width(),height());
+    setupCamera(width(), height());
     glNewList (xList1, GL_COMPILE);
 
-    switch (mesh->getTypeFE())
+    for (int i = 0; i < numEl; i++)
     {
-        case FE1D2:
-            drawFun1D();
-            break;
-        case FE2D3:
-        case FE2D4:
-        case FE2D6:
-        case FE2D3P:
-        case FE2D4P:
-        case FE2D6P:
-            drawFun2D();
-            break;
-        case FE3D4:
-        case FE3D8:
-        case FE3D10:
-        case FE3D3S:
-        case FE3D4S:
-        case FE3D6S:
-            drawFun3D();
-            break;
-        default:
-            break;
+        for (int j = 0; j < sizeEl; j++)
+        {
+            data[j].setX(cX(el(i, j)) - x0[0]);
+            data[j].setY(mesh->is1D() ? 0 : cY(el(i, j)) - x0[1]);
+            data[j].setZ(mesh->is1D() ? 0 : cZ(el(i, j)) - x0[2]);
+//            data[j].setW(float((*results)[el(i, j)]));
+            data[j].setW(float(getValue(el(i, j))));
+        }
+        if (mesh->is1D())
+            drawSegment(data);
+        else
+            drawPolygon(data);
     }
     glEndList();
-}
-/*******************************************************************/
-void TGLFunction::drawFun1D(void)
-{
-    QVector<QVector4D> data(int(mesh->getSizeFE()));
-
-    for (unsigned i = 0; i < mesh->getNumFE(); i++)
-    {
-        for (unsigned j = 0; j < mesh->getSizeFE(); j++)
-        {
-            data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
-            data[int(j)].setY(0);
-            data[int(j)].setZ(0);
-            data[int(j)].setW(float(results[mesh->getFE(i, j)].w()));
-        }
-        drawSegment(data);
-    }
-}
-/*******************************************************************/
-void TGLFunction::drawFun2D(void)
-{
-    QVector<QVector4D> data(int(mesh->getSizeFE()));
-
-    for (unsigned i = 0; i < mesh->getNumFE(); i++)
-    {
-//        if (i != 212 && i != 213)
-//            continue;
-        for (unsigned j = 0; j < mesh->getSizeFE(); j++)
-        {
-            data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
-            data[int(j)].setY(cY(mesh->getFE(i, j)) - x0[1]);
-            data[int(j)].setZ(cZ(mesh->getFE(i, j)) - x0[2]);
-            data[int(j)].setW(float(results[mesh->getFE(i, j)].w()));
-        }
-        drawPolygon(data);
-    }
-}
-/*******************************************************************/
-void TGLFunction::drawFun3D(void)
-{
-    QVector<QVector4D> data(int(mesh->getSizeBE()));
-
-    for (unsigned i = 0; i < mesh->getNumBE(); i++)
-    {
-        for (unsigned j = 0; j < mesh->getSizeBE(); j++)
-        {
-            data[int(j)].setX(cX(mesh->getBE(i, j)) - x0[0]);
-            data[int(j)].setY(cY(mesh->getBE(i, j)) - x0[1]);
-            data[int(j)].setZ(cZ(mesh->getBE(i, j)) - x0[2]);
-            data[int(j)].setW(float(results[mesh->getBE(i, j)].w()));
-        }
-        drawPolygon(data);
-    }
 }
 /*******************************************************************/
 void TGLFunction::drawSegment(QVector<QVector4D>& vertex)
@@ -243,13 +177,7 @@ void TGLFunction::initColorTable(void)
           blue = 255.0f;
 
     colorTable.clear();
-    min_u = std::numeric_limits<float>::max();
-    max_u = std::numeric_limits<float>::min();
-    foreach (QVector4D v, results)
-    {
-        min_u = qMin(min_u, v.w());
-        max_u = qMax(max_u, v.w());
-    }
+    getMinMax(min_u, max_u);
 
     if (params.isBW)
     {

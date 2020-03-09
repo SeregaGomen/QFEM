@@ -32,6 +32,7 @@ unix {
 SOURCES += main.cpp\
     ../core/solver/eigensolver.cpp \
     bcprocessor.cpp \
+    glparam.cpp \
     mainwindow.cpp \
     problemsetupform.cpp \
     fldialog.cpp \
@@ -56,6 +57,7 @@ HEADERS  += mainwindow.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \
     bcprocessor.h \
+    glparam.h \
     problemsetupform.h \
     qstdredirector.h \
     fldialog.h \
