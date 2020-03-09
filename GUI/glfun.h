@@ -39,7 +39,6 @@ private:
     float cX(unsigned);
     float cY(unsigned);
     float cZ(unsigned);
-    float cZ2D(unsigned);
 public slots:
     void mouseDoubleClickEvent(QMouseEvent*);
 

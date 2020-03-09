@@ -101,7 +101,7 @@ void TGLFunction::drawFun2D(void)
         {
             data[int(j)].setX(cX(mesh->getFE(i, j)) - x0[0]);
             data[int(j)].setY(cY(mesh->getFE(i, j)) - x0[1]);
-            data[int(j)].setZ(cZ2D(mesh->getFE(i, j)) - x0[2]);
+            data[int(j)].setZ(cZ(mesh->getFE(i, j)) - x0[2]);
             data[int(j)].setW(float(results[mesh->getFE(i, j)].w()));
         }
         drawPolygon(data);
@@ -472,22 +472,17 @@ int TGLFunction::getColorIndex(float u)
 /*******************************************************************/
 float TGLFunction::cX(unsigned i)
 {
-    return float(mesh->getX(i, 0)) + params.koff * ((dx) ? float((*dx)[i]) : 0);
+    return float(mesh->getX(i, 0)) + (((mesh->isPlate()) ? 0 : params.koff * ((dx) ? float((*dx)[i]) : 0)));
 }
 /*******************************************************************/
 float TGLFunction::cY(unsigned i)
 {
-    return float(mesh->getX(i, 1)) + params.koff * ((dy) ? float((*dy)[i]) : 0);
+    return float(mesh->getX(i, 1)) + (((mesh->isPlate()) ? 0 : params.koff * ((dy) ? float((*dy)[i]) : 0)));
 }
 /*******************************************************************/
 float TGLFunction::cZ(unsigned i)
 {
-    return float(mesh->getX(i, 2)) + params.koff * ((dz) ? float((*dz)[i]) : 0);
-}
-/*******************************************************************/
-float TGLFunction::cZ2D(unsigned i)
-{
-    return (mesh->isPlate()) ? params.koff * ((dz) ? float((*dz)[i]) : 0) : 0;
+    return (mesh->is3D() || mesh->isShell()) ? (float(mesh->getX(i, 2)) + params.koff * ((dz) ? float((*dz)[i]) : 0)) : ((mesh->isPlate()) ? params.koff * ((dx) ? float((*dx)[i]) : 0) : 0);
 }
 /*******************************************************************/
 void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
