@@ -8,25 +8,38 @@ extern TMessenger* msg;
 void TBCProcessor::processVertex(void)
 {
     unsigned numThread = 4, //std::thread::hardware_concurrency(),
-             step = object->getMesh().getNumVertex() / numThread;
+             size = object->getMesh().getNumVertex(),
+             step = size / numThread;
     int error = NO_ERR;
     vector<std::thread> thr(numThread);
+//    std::function <void(unsigned, unsigned, int&)> f_ptr;
+    auto f_ptr = std::mem_fn(&TBCProcessor::calcParam);
+
+
+//    f_ptr = std::bind(&TBCProcessor::calc, this);
+    if (paramType == PRESSURE_LOAD_PARAMETER)
+        f_ptr = std::mem_fn(&TBCProcessor::calcLoad);
 
     vertex.resize(int(object->getMesh().getNumVertex()));
     isStoped = false;
-    msg->setProcess(BC_CREATE_PROCESS, 1, int(object->getMesh().getNumVertex()), 5);
+    msg->setProcess(BC_CREATE_PROCESS, 1, int(size), 5);
     // Обработка граничных условий
     for (unsigned i = 0; i < numThread; i++)
-        thr[i] = std::thread(&TBCProcessor::calc, this, i * step, (i == numThread - 1) ? object->getMesh().getNumVertex() : (i + 1) * step, ref(error));
+//        thr[i] = std::thread(&TBCProcessor::calc, this, i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
+        thr[i] = std::thread(f_ptr, this, i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
     for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
-//    calc(0, object->getMesh().getNumVertex(), ref(error));
+//    calc(0, size, ref(error));
     msg->stopProcess();
     if (error)
         cerr << endl << sayError(ErrorCode(error)) << endl;
 }
 
+void TBCProcessor::calcLoad(unsigned begin, unsigned end, int& error)
+{
 
-void TBCProcessor::calc(unsigned begin, unsigned end, int& error)
+}
+
+void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
 {
     vector<double> coord;
 

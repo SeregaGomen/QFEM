@@ -31,7 +31,8 @@ private:
     bool isStoped;
     // Формирование списка краевых условий
     void processVertex(void);
-    void calc(unsigned, unsigned, int&);
+    void calcParam(unsigned, unsigned, int&);
+    void calcLoad(unsigned, unsigned, int&);
     void calcPressureLoad(unsigned, TParameter&, int&);
     void calcSurfaceLoad(unsigned, TParameter&, int&);
 public slots:
