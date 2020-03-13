@@ -3,9 +3,10 @@
 #include "mesh/mesh.h"
 
 /*******************************************************************/
-TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, QWidget *parent) : TGLFunction(m, nullptr, nullptr, nullptr, nullptr, "", parent)
+TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, int t, QWidget *parent) : TGLFunction(m, nullptr, nullptr, nullptr, nullptr, "", parent)
 {
     vertex = v;
+    paramType = t;
 }
 /*******************************************************************/
 

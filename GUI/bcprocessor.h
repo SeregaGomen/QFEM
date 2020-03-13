@@ -32,9 +32,10 @@ private:
     // Формирование списка краевых условий
     void processVertex(void);
     void calcParam(unsigned, unsigned, int&);
-    void calcLoad(unsigned, unsigned, int&);
-    void calcPressureLoad(unsigned, TParameter&, int&);
-    void calcSurfaceLoad(unsigned, TParameter&, int&);
+    void calcPressureLoad(unsigned, unsigned, int&);
+    void calcSurfaceLoad(unsigned, unsigned, int&);
+    void calcVolumeLoad(unsigned, unsigned, int&);
+    void calcConcentratedLoad(unsigned, unsigned, int&);
 public slots:
     // запуск расчета
     void start(void)

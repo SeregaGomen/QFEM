@@ -193,6 +193,8 @@ public:
     double getMinStress(void);
     bool getPredicateValue(TParameter&, vector<double>&);
     double getExpressionValue(TParameter&, vector<double>&);
+    bool getPredicateValue(TParameter&, double, double, double);
+    double getExpressionValue(TParameter&, double, double, double, double = 0);
 };
 
 #endif // PARAMS_H

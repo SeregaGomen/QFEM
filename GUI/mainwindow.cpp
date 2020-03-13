@@ -1693,7 +1693,7 @@ void TMainWindow::slotShowParam(int type)
     // Отображаем параметр
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
-        if (tabWidget->tabText(i).replace("&","") == funName)
+        if (tabWidget->tabText(i).replace("&", "") == funName)
         {
             isFind = true;
             qobject_cast<TGLParameter*>(tabWidget->widget(i))->redraw(bcProcessor->getVertex());
@@ -1701,7 +1701,7 @@ void TMainWindow::slotShowParam(int type)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), this), funName);
+        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), type, this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 

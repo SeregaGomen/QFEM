@@ -10,6 +10,7 @@ class TGLParameter : public TGLFunction
 {
     Q_OBJECT
 private:
+    int paramType;
     QVector<QVector4D> vertex;
     void getMinMax(float &min, float &max)
     {
@@ -23,11 +24,11 @@ private:
     }
     double getValue(unsigned i)
     {
-        return vertex[i].w();
+        return double(vertex[int(i)].w());
     }
 
 public:
-    TGLParameter(TMesh*, QVector<QVector4D>&, QWidget* = nullptr);
+    TGLParameter(TMesh*, QVector<QVector4D>&, int, QWidget* = nullptr);
     ~TGLParameter(void) {}
     void redraw(QVector<QVector4D>& v)
     {

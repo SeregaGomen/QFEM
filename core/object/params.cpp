@@ -149,6 +149,23 @@ bool TFEMParams::getPredicateValue(TParameter& p, vector<double>& cx)
     return bool(parser.run());
 }
 //--------------------------------------------------------------------
+bool TFEMParams::getPredicateValue(TParameter& p, double cx, double cy, double cz)
+{
+    TParser parser;
+
+    if (p.isFuncPredicate())
+        return bool(p.getFuncPredicate(cx, cy, cz));
+    if (!p.getPredicate().length())
+        return true;
+
+    parser.set_variables(variables);
+    parser.set_variable(names[0], cx);
+    parser.set_variable(names[1], cy);
+    parser.set_variable(names[2], cz);
+    parser.set_expression(p.getPredicate());
+    return bool(parser.run());
+}
+//--------------------------------------------------------------------
 //          Вычисление значения выражения в заданной точке
 //--------------------------------------------------------------------
 double TFEMParams::getExpressionValue(TParameter& p, vector<double>& cx)
@@ -168,5 +185,24 @@ double TFEMParams::getExpressionValue(TParameter& p, vector<double>& cx)
     return parser.run();
 }
 //--------------------------------------------------------------------
+double TFEMParams::getExpressionValue(TParameter& p, double cx, double cy, double cz, double t)
+{
+    TParser parser;
+
+    if (p.isFuncExpression())
+        return p.getFuncExpression(cx, cy, cz, t);
+    if (!p.getExpression().length())
+        return p.getValue();
+
+    parser.set_variables(variables);
+    parser.set_variable(names[0], cx);
+    parser.set_variable(names[1], cy);
+    parser.set_variable(names[2], cz);
+    parser.set_expression(p.getExpression());
+    return parser.run();
+}
+//--------------------------------------------------------------------
+
+
 
 

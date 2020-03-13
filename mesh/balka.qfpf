@@ -1,19 +1,37 @@
 {
     "Header": {
-        "DateTime": "2019-12-09T09:18:11.439",
+        "DateTime": "2020-03-12T12:54:13.677",
         "Object": "balka",
         "Title": "QFEM problem file"
     },
     "Mesh": {
-        "File": "balka.trpa"
+        "File": "/home/serg/work/Qt/QFEM/mesh/balka.trpa"
     },
     "Parameters": {
         "Accuracy": "1e-10",
         "BoundaryConditions": [
             {
                 "Direct": "0",
-                "Expression": "6.5e+10",
-                "Predicate": "",
+                "Expression": "1.0e+10",
+                "Predicate": "y < 1",
+                "Type": "7"
+            },
+            {
+                "Direct": "0",
+                "Expression": "2.0e+10",
+                "Predicate": "y >= 1 and y< 2",
+                "Type": "7"
+            },
+            {
+                "Direct": "0",
+                "Expression": "3.0e+10",
+                "Predicate": "y >= 2 and y< 3",
+                "Type": "7"
+            },
+            {
+                "Direct": "0",
+                "Expression": "4.0e+10",
+                "Predicate": "y>=3",
                 "Type": "7"
             },
             {
@@ -107,7 +125,7 @@
             "Ty",
             "Tz",
             "Exx",
-            "Eyy",                   
+            "Eyy",
             "Ezz",
             "Exy",
             "Exz",
@@ -127,11 +145,11 @@
         ],
         "Nonlinearity": {
             "CalculationMethod": 0,
-            "LoadStep": "0.01"
+            "LoadStep": "1"
         },
         "OutputParameters": {
             "Precision": "5",
-            "Width": "12"
+            "Width": "15"
         },
         "ProblemType": "Static",
         "Variables": [
