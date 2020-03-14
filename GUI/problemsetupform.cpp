@@ -66,6 +66,14 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowYoungModulus->setEnabled(bool(ui->twYoungModulus->rowCount())); }));
     connect(ui->twThickness->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowThickness->setEnabled(true); }));
     connect(ui->twThickness->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowThickness->setEnabled(bool(ui->twThickness->rowCount())); }));
+    connect(ui->twVV->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowLoads->setEnabled(true); }));
+    connect(ui->twVV->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowLoads->setEnabled(bool(ui->twVV->rowCount())); }));
+    connect(ui->twSV->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowLoads->setEnabled(true); }));
+    connect(ui->twSV->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowLoads->setEnabled(bool(ui->twSV->rowCount())); }));
+    connect(ui->twPV->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowLoads->setEnabled(true); }));
+    connect(ui->twPV->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowLoads->setEnabled(bool(ui->twPV->rowCount())); }));
+    connect(ui->twCV->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowLoads->setEnabled(true); }));
+    connect(ui->twCV->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowLoads->setEnabled(bool(ui->twCV->rowCount())); }));
 
 
 
@@ -101,6 +109,8 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
 
     connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(YOUNG_MODULUS_PARAMETER); }));
     connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(THICKNESS_PARAMETER); }));
+
+    connect(ui->tbShowLoads, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(PRESSURE_LOAD_PARAMETER); }));
 
 
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));

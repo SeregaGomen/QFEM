@@ -22,10 +22,15 @@ private:
             max = qMax(max, v.w());
         }
     }
+    void displayLoads(void);
+    void displayBoundaryConditions(void);
     double getValue(unsigned i)
     {
         return double(vertex[int(i)].w());
     }
+
+protected:
+    void displayObject(void);
 
 public:
     TGLParameter(TMesh*, QVector<QVector4D>&, int, QWidget* = nullptr);

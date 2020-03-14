@@ -1990,6 +1990,32 @@
       <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
     </property>
    </widget>
+   <widget class="QToolButton" name="tbShowLoads">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>190</y>
+      <width>24</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Visualization parameter</string>
+    </property>
+    <property name="statusTip">
+     <string>Visualization parameter</string>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+    <property name="icon">
+     <iconset resource="QFEM.qrc">
+      <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="gbBoundaryConditions">
    <property name="geometry">
