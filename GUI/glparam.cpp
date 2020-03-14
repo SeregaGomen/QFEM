@@ -10,14 +10,14 @@ TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, int t, QWidget *pare
     paramType = t;
 }
 /*******************************************************************/
-void TGLParameter::displayObject(void)
+void TGLParameter::createObject(void)
 {
     if (paramType == PRESSURE_LOAD_PARAMETER || paramType == SURFACE_LOAD_PARAMETER || paramType == VOLUME_LOAD_PARAMETER || paramType == CONCENTRATED_LOAD_PARAMETER)
         displayLoads();
     else if (paramType == BOUNDARY_CONDITION_PARAMETER)
         displayBoundaryConditions();
     else
-        TGLFunction::displayObject();
+        TGLFunction::createObject();
 }
 /*******************************************************************/
 void TGLParameter::displayLoads(void)
@@ -32,7 +32,7 @@ void TGLParameter::displayLoads(void)
         if (vertex[i].length() > maxValue)
             maxValue = vertex[i].length();
 
-    TGLMesh::displayObject();
+    TGLMesh::createObject();
     for (int i = 0; i < vertex.size(); i++)
     {
         x1 = QVector4D(0, 0, 0, 0);
@@ -82,7 +82,7 @@ void TGLParameter::displayLoads(void)
 /*******************************************************************/
 void TGLParameter::displayBoundaryConditions(void)
 {
-    TGLMesh::displayObject();
+    TGLMesh::createObject();
     TGLMesh::setColor(1, 0, 0, params.alpha);
     glPointSize(4);
     glBegin(GL_POINTS);

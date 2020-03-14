@@ -18,7 +18,6 @@ private:
     QString expression;         // Выражение, с помощью которого вычислена визуализируемая функция
     QVector<QColor> colorTable;
 
-    virtual void createObject(void);
     virtual void getMinMax(float &min, float &max)
     {
         min = float(*min_element(results->begin(), results->end()));
@@ -31,6 +30,7 @@ private:
     float cZ(unsigned);
 
 protected:
+    virtual void createObject(void);
     virtual void displayObject(void);
     virtual void drawPolygon(QVector<QVector4D>&);
     virtual void drawTriangle3D(QVector<QVector4D>&);

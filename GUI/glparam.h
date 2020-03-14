@@ -30,7 +30,7 @@ private:
     }
 
 protected:
-    void displayObject(void);
+    void createObject(void);
 
 public:
     TGLParameter(TMesh*, QVector<QVector4D>&, int, QWidget* = nullptr);
