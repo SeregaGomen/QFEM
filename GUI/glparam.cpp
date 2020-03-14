@@ -13,17 +13,17 @@ TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, int t, QWidget *pare
 void TGLParameter::createObject(void)
 {
     if (paramType == PRESSURE_LOAD_PARAMETER || paramType == SURFACE_LOAD_PARAMETER || paramType == VOLUME_LOAD_PARAMETER || paramType == CONCENTRATED_LOAD_PARAMETER)
-        displayLoads();
+        createLoads();
     else if (paramType == BOUNDARY_CONDITION_PARAMETER)
-        displayBoundaryConditions();
+        createBoundaryConditions();
     else
         TGLFunction::createObject();
 }
 /*******************************************************************/
-void TGLParameter::displayLoads(void)
+void TGLParameter::createLoads(void)
 {
     double maxValue = 0,
-           w = 0.005f * radius;
+           w = 0.01f * radius;
     QVector4D x1,
               x2;
 
@@ -33,8 +33,13 @@ void TGLParameter::displayLoads(void)
             maxValue = vertex[i].length();
 
     TGLMesh::createObject();
+
+    TGLMesh::setColor(0, 0, 1, params.alpha);
+    glPointSize(3);
     for (int i = 0; i < vertex.size(); i++)
     {
+        if (!vertex[i].length())
+            continue;
         x1 = QVector4D(0, 0, 0, 0);
         x2 = QVector4D(0, 0, 0, 0);
         if (mesh->getDimension() == 1)
@@ -67,8 +72,7 @@ void TGLParameter::displayLoads(void)
             x2.setY(mesh->getX(i, 1) + vertex[i].y() * w / maxValue - x0[1]);
             x2.setZ(mesh->getX(i, 2) + vertex[i].z() * w / maxValue - x0[2]);
         }
-        TGLMesh::setColor(0, 1, 0, params.alpha);
-        glPointSize(3);
+
         glBegin(GL_POINTS);
             glVertex3f(x1.x(), x1.y(), x1.z());
         glEnd();
@@ -76,11 +80,10 @@ void TGLParameter::displayLoads(void)
             glVertex3f(x1.x(), x1.y(), x1.z());
             glVertex3f(x2.x(), x2.y(), x2.z());
         glEnd();
-        TGLMesh::setColor(0.8f, 0.8f, 0.8f, params.alpha);
     }
 }
 /*******************************************************************/
-void TGLParameter::displayBoundaryConditions(void)
+void TGLParameter::createBoundaryConditions(void)
 {
     TGLMesh::createObject();
     TGLMesh::setColor(1, 0, 0, params.alpha);

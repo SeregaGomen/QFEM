@@ -22,8 +22,8 @@ private:
             max = qMax(max, v.w());
         }
     }
-    void displayLoads(void);
-    void displayBoundaryConditions(void);
+    void createLoads(void);
+    void createBoundaryConditions(void);
     double getValue(unsigned i)
     {
         return double(vertex[int(i)].w());

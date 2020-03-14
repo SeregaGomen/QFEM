@@ -37,9 +37,9 @@ void TGLFunction::createObject(void)
     QVector<QVector4D> data(sizeEl);
 
     initColorTable();
-    xList1 = glGenLists(1);
     setupCamera(width(), height());
-    glNewList (xList1, GL_COMPILE);
+//    xList1 = glGenLists(1);
+//    glNewList (xList1, GL_COMPILE);
 
     for (int i = 0; i < numEl; i++)
     {
@@ -56,7 +56,7 @@ void TGLFunction::createObject(void)
         else
             drawPolygon(data);
     }
-    glEndList();
+ //   glEndList();
 }
 /*******************************************************************/
 void TGLFunction::drawSegment(QVector<QVector4D>& vertex)

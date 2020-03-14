@@ -454,7 +454,12 @@ void TGLMesh::displaySkeleton(void)
 void TGLMesh::displayObject(void)
 {
     if (!xList1)
+    {
+        xList1 = glGenLists(1);
+        glNewList(xList1, GL_COMPILE);
         createObject();
+        glEndList();
+    }
     glCallList(xList1);
 }
 /*******************************************************************/
@@ -462,8 +467,6 @@ void TGLMesh::createObject(void)
 {
     QApplication::setOverrideCursor(Qt::BusyCursor);
 
-    xList1 = glGenLists(1);
-    glNewList(xList1, GL_COMPILE);
     switch (mesh->getTypeFE())
     {
         case FE1D2:
@@ -490,7 +493,6 @@ void TGLMesh::createObject(void)
     }
     if (params.isNormal)
         drawNormal();
-    glEndList();
     QApplication::restoreOverrideCursor();
 }
 /*******************************************************************/
