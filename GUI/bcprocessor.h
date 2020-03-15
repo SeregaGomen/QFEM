@@ -33,7 +33,6 @@ private:
     void processVertex(void);
     void calcParam(unsigned, unsigned, int&);
     void calcPressureLoad(unsigned, unsigned, int&);
-    void calcSurfaceLoad(unsigned, unsigned, int&);
     void calcVolumeLoad(unsigned, unsigned, int&);
     void calcConcentratedLoad(unsigned, unsigned, int&);
 public slots:

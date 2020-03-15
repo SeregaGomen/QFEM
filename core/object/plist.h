@@ -28,21 +28,21 @@ using namespace std;
 
 // Типы параметров расчета:
 enum {
-    EMPTY_PARAMETER,
-    INITIAL_CONDITION_PARAMETER,    // Начальные условия
-    BOUNDARY_CONDITION_PARAMETER,   // Граничное условие, заданноe выражением
-    VOLUME_LOAD_PARAMETER,          // Объемная нагрузка
-    SURFACE_LOAD_PARAMETER,         // Поверхностная ...
-    CONCENTRATED_LOAD_PARAMETER,    // Сосредоточенная ...
-    PRESSURE_LOAD_PARAMETER,        // Нагрузка давлением
-    YOUNG_MODULUS_PARAMETER,        // Модуль Юнга
-    POISSON_RATIO_PARAMETER,        // Коэффициент Пуассона
-    THICKNESS_PARAMETER,            // Толщина элемента
-    TEMPERATURE_PARAMETER,          // Разность температур
-    ALPHA_PARAMETER,                // Коэффициент теплового расширения
-    DENSITY_PARAMETER,              // Плотность
-    DAMPING_PARAMETER,              // Параметр демпфирования
-    STRESS_STRAIN_CURVE_PARAMETER   // Диаграмма деформирования
+    EMPTY_PARAMETER = 0,
+    INITIAL_CONDITION_PARAMETER = 1,        // Начальные условия
+    BOUNDARY_CONDITION_PARAMETER = 2,       // Граничное условие, заданноe выражением
+    VOLUME_LOAD_PARAMETER = 4,              // Объемная нагрузка
+    SURFACE_LOAD_PARAMETER = 8,             // Поверхностная ...
+    CONCENTRATED_LOAD_PARAMETER = 16,       // Сосредоточенная ...
+    PRESSURE_LOAD_PARAMETER = 32,           // Нагрузка давлением
+    YOUNG_MODULUS_PARAMETER = 64,           // Модуль Юнга
+    POISSON_RATIO_PARAMETER = 128,          // Коэффициент Пуассона
+    THICKNESS_PARAMETER = 256,              // Толщина элемента
+    TEMPERATURE_PARAMETER = 512,            // Разность температур
+    ALPHA_PARAMETER = 1024,                 // Коэффициент теплового расширения
+    DENSITY_PARAMETER = 2048,               // Плотность
+    DAMPING_PARAMETER = 4096,               // Параметр демпфирования
+    STRESS_STRAIN_CURVE_PARAMETER = 8192    // Диаграмма деформирования
 };
 
 extern TMessenger* msg;

@@ -497,14 +497,13 @@ void TMainWindow::saveDocument(QString fileName)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
 
+    // Загрузка текущих параметров из диалога
+    if (!pForm->getParams())
+        return;
     if (QFileInfo(curFile).suffix().toUpper() == "QRES")
     {
         QString name = QString(QFileInfo(curFile).absolutePath() + "/" +  QFileInfo(curFile).baseName() + ".trpa"),
                 meshFile = QFileDialog::getSaveFileName(this, tr("Save mesh"), name, tr("Mesh files (*.trpa)")); // Запрос имени файла для сетки
-
-        // Загрузка текущих параметров из диалога
-        if (!pForm->getParams())
-            return;
 
         if (meshFile.isEmpty())
             return;
@@ -1662,12 +1661,24 @@ void TMainWindow::slotDataCopy(void)
 
 }
 
+QString parameterName(int type)
+{
+    QString ret;
+
+    if ((type & VOLUME_LOAD_PARAMETER) == VOLUME_LOAD_PARAMETER || (type & SURFACE_LOAD_PARAMETER) == SURFACE_LOAD_PARAMETER ||
+        (type & PRESSURE_LOAD_PARAMETER) == PRESSURE_LOAD_PARAMETER || (type & CONCENTRATED_LOAD_PARAMETER) == CONCENTRATED_LOAD_PARAMETER)
+        ret = "Loads";
+    else
+        ret = paramName(type).c_str();
+    return ret;
+}
+
 void TMainWindow::slotShowParam(int type)
 {
     bool isFind = false;
     QTextCursor textCursor = terminal->textCursor(),
                 saveCursor = textCursor;
-    QString funName = paramName(type).c_str();
+    QString tabName = parameterName(type);
 
     textCursor.clearSelection();
     terminal->setTextCursor(textCursor);
@@ -1693,7 +1704,7 @@ void TMainWindow::slotShowParam(int type)
     // Отображаем параметр
     // Проверка наличия такой функции в уже открытых закладках
     for (int i = 0; i < tabWidget->count(); i++)
-        if (tabWidget->tabText(i).replace("&", "") == funName)
+        if (tabWidget->tabText(i).replace("&", "") == tabName)
         {
             isFind = true;
             qobject_cast<TGLParameter*>(tabWidget->widget(i))->redraw(bcProcessor->getVertex());
@@ -1701,7 +1712,7 @@ void TMainWindow::slotShowParam(int type)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), type, this), funName);
+        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), type, this), tabName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 
