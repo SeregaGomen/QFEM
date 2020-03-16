@@ -36,7 +36,7 @@ void TGLParameter::createLoads(void)
     TGLMesh::createObject();
 
     TGLMesh::setColor(0, 0, 1, params.alpha);
-    glPointSize(3);
+    glPointSize(2);
     for (int i = 0; i < vertex.size(); i++)
     {
         if (!vertex[i].length())

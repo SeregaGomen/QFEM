@@ -6,13 +6,13 @@
 #include "fem/fem.h"
 
 
-//#define OPENMP // Многопоточный расчет
+#define OPENMP // Многопоточный расчет
 
 #ifdef OPENMP
-#include <omp.h>
-const int numThread = 8;//omp_get_max_threads() - 1;
+    #include <omp.h>
+    const int numThread = 4; //omp_get_max_threads() - 1;
 #else
-const int numThread = 1;
+    const int numThread = 1;
 #endif
 
 extern TMessenger* msg;
