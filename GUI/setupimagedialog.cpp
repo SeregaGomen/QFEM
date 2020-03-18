@@ -114,8 +114,6 @@ void TSetupImageDialog::setup(bool isFunc)
     ui->gbFunc->setEnabled(isFunc);
     ui->gbKoff->setEnabled(isFunc);
     ui->chbValueScale->setEnabled(isFunc);
-    ui->chbLimit->setEnabled(!isFunc);
-    ui->chbLoad->setEnabled(!isFunc);
     ui->chbNormal->setEnabled(!isFunc);
 
     // Цвет фона

@@ -211,13 +211,13 @@ void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
                     {
                         // X
                         if ((it.getDirect() & DIR_X) == DIR_X || (object->getMesh().isPlate() && (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
-                            vertex[int(object->getMesh().getFE(i, j))].setX(vertex[int(object->getMesh().getFE(i, j))].x() + float(value));
+                            vertex[int(object->getMesh().getFE(i, j))].setX(float(value));
                         // Y
                         if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
-                            vertex[int(object->getMesh().getFE(i, j))].setY(vertex[int(object->getMesh().getFE(i, j))].y() + float(value));
+                            vertex[int(object->getMesh().getFE(i, j))].setY(float(value));
                         // Z
                         if ((it.getDirect() & DIR_Z) == DIR_Z) // Z
-                            vertex[int(object->getMesh().getFE(i, j))].setZ(vertex[int(object->getMesh().getFE(i, j))].z() + float(value));
+                            vertex[int(object->getMesh().getFE(i, j))].setZ(float(value));
                     }
                 }
         }

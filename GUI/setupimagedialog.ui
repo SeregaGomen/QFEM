@@ -69,7 +69,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>The coordinate axes</string>
+     <string>Coordinate axes</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -206,7 +206,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Display normal</string>
+     <string>Surface normal</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -268,38 +268,6 @@
     </property>
     <property name="checked">
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="chbLimit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>181</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Boundary conditions</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="chbLoad">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>181</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Loads</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -1291,8 +1259,6 @@
   <tabstop>chbMesh</tabstop>
   <tabstop>chbVertex</tabstop>
   <tabstop>chbFace</tabstop>
-  <tabstop>chbLimit</tabstop>
-  <tabstop>chbLoad</tabstop>
   <tabstop>chbCoord</tabstop>
   <tabstop>chbLight</tabstop>
   <tabstop>chbDoubleSided</tabstop>
