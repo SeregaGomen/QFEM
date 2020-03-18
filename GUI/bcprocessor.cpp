@@ -18,11 +18,14 @@ void TBCProcessor::processVertex(void)
     vertex.clear();
     vertex.resize(int(object->getMesh().getNumVertex()));
 
-    if ((paramType & PRESSURE_LOAD_PARAMETER)  == PRESSURE_LOAD_PARAMETER || (paramType & SURFACE_LOAD_PARAMETER) == SURFACE_LOAD_PARAMETER)
+    if (paramType == PRESSURE_LOAD_PARAMETER || paramType == SURFACE_LOAD_PARAMETER)
         f_ptr = std::mem_fn(&TBCProcessor::calcPressureLoad);
-    else if ((paramType & VOLUME_LOAD_PARAMETER) == VOLUME_LOAD_PARAMETER)
+    else if (paramType == VOLUME_LOAD_PARAMETER)
+    {
+        step = (size = object->getMesh().getNumFE()) / numThread;
         f_ptr = std::mem_fn(&TBCProcessor::calcVolumeLoad);
-    else if ((paramType & CONCENTRATED_LOAD_PARAMETER) == CONCENTRATED_LOAD_PARAMETER)
+    }
+    else if (paramType == CONCENTRATED_LOAD_PARAMETER)
     {
         step = (size = object->getMesh().getNumVertex()) / numThread;
         f_ptr = std::mem_fn(&TBCProcessor::calcConcentratedLoad);
@@ -33,10 +36,10 @@ void TBCProcessor::processVertex(void)
     isStoped = false;
     msg->setProcess(BC_CREATE_PROCESS, 1, int(size), 5);
     // Обработка граничных условий
-//    for (unsigned i = 0; i < numThread; i++)
-//        thr[i] = std::thread(f_ptr, this, i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
-//    for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
-    calcConcentratedLoad(0, size, ref(error));
+    for (unsigned i = 0; i < numThread; i++)
+        thr[i] = std::thread(f_ptr, this, i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
+    for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
+//    calcConcentratedLoad(0, size, ref(error));
     msg->stopProcess();
     if (error)
         cerr << endl << sayError(ErrorCode(error)) << endl;
@@ -173,5 +176,55 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
 
 void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
 {
+    bool isTrue;
+    matrix<double> coord;
+    vector<double> c_coord;
+    double value;
 
+    try
+    {
+        for (unsigned i = begin; i < end; i++)
+        {
+            msg->addProgress();
+            if (isStoped)
+            {
+                error = ABORT_ERR;
+                return;
+            }
+
+            foreach (auto it, object->getParams().plist)
+                if (it.getType() == VOLUME_LOAD_PARAMETER)
+                {
+                    object->getMesh().getCoordFE(i, coord);
+                    isTrue = true;
+                    for (unsigned j = 0; j < object->getMesh().getBaseSizeFE(); j++)
+                        if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord[j][0], coord[j][1], coord[j][2]))
+                        {
+                            isTrue = false;
+                            break;
+                        }
+                    if (!isTrue)
+                        continue;
+                    object->getMesh().getCenterFE(i, c_coord);
+                    value = object->getParams().getExpressionValue(it, c_coord);
+                    for (unsigned j = 0; j < object->getMesh().getBaseSizeFE(); j++)
+                    {
+                        // X
+                        if ((it.getDirect() & DIR_X) == DIR_X || (object->getMesh().isPlate() && (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                            vertex[int(object->getMesh().getFE(i, j))].setX(vertex[int(object->getMesh().getFE(i, j))].x() + float(value));
+                        // Y
+                        if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
+                            vertex[int(object->getMesh().getFE(i, j))].setY(vertex[int(object->getMesh().getFE(i, j))].y() + float(value));
+                        // Z
+                        if ((it.getDirect() & DIR_Z) == DIR_Z) // Z
+                            vertex[int(object->getMesh().getFE(i, j))].setZ(vertex[int(object->getMesh().getFE(i, j))].z() + float(value));
+                    }
+                }
+        }
+    }
+    catch (ErrorCode err)
+    {
+        error = err;
+        return;
+    }
 }

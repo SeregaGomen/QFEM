@@ -35,7 +35,7 @@ void TGLParameter::createLoads(void)
 
     TGLMesh::createObject();
 
-    TGLMesh::setColor(0, 0, 1, params.alpha);
+    TGLMesh::setColor(0, 1, 0, params.alpha);
     glPointSize(2);
     for (int i = 0; i < vertex.size(); i++)
     {
@@ -95,7 +95,7 @@ void TGLParameter::createBoundaryConditions(void)
             {
                 if (mesh->is1D())
                     glVertex2f(float(mesh->getX(i, 0)) - x0[0], 0);
-                else if (mesh->is1D())
+                else if (mesh->is2D())
                     glVertex2f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1]);
                 else
                     glVertex3f(float(mesh->getX(i, 0)) - x0[0], float(mesh->getX(i, 1)) - x0[1], float(mesh->getX(i, 2)) - x0[2]);

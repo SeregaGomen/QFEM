@@ -1661,24 +1661,12 @@ void TMainWindow::slotDataCopy(void)
 
 }
 
-QString parameterName(int type)
-{
-    QString ret;
-
-    if ((type & VOLUME_LOAD_PARAMETER) == VOLUME_LOAD_PARAMETER || (type & SURFACE_LOAD_PARAMETER) == SURFACE_LOAD_PARAMETER ||
-        (type & PRESSURE_LOAD_PARAMETER) == PRESSURE_LOAD_PARAMETER || (type & CONCENTRATED_LOAD_PARAMETER) == CONCENTRATED_LOAD_PARAMETER)
-        ret = "Loads";
-    else
-        ret = paramName(type).c_str();
-    return ret;
-}
-
 void TMainWindow::slotShowParam(int type)
 {
     bool isFind = false;
     QTextCursor textCursor = terminal->textCursor(),
                 saveCursor = textCursor;
-    QString tabName = parameterName(type);
+    QString tabName = paramName(type).c_str();
 
     textCursor.clearSelection();
     terminal->setTextCursor(textCursor);

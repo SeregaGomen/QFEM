@@ -58,6 +58,7 @@ private:
     QMenu menu3;
     void createMenu(void);
     void setEnabledBtn(QToolButton*, QTableWidget*);
+    void setEnabledBtn(QToolButton*, QToolButton*, QTableWidget*);
     void enabledParams(void);
     void addRow(QTableWidget*);
     void removeRow(QTableWidget*);
