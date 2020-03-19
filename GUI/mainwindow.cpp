@@ -1427,12 +1427,17 @@ unsigned TMainWindow::getTimeDeltaIndex(QString funName)
 void TMainWindow::slotSetupImageParams(void)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
-    bool isFunc = (qobject_cast<TGLFunction*>(tabWidget->currentWidget())) ? true : false;
+    int type = (qobject_cast<TGLFunction*>(tabWidget->currentWidget())) ? ( (qobject_cast<TGLParameter*>(tabWidget->currentWidget())) ? V_PARAM : V_FUNC ) : V_MESH;
 
+    if (qobject_cast<TGLParameter*>(tabWidget->currentWidget()))
+        if (qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == VOLUME_LOAD_PARAMETER || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == SURFACE_LOAD_PARAMETER ||
+            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == CONCENTRATED_LOAD_PARAMETER || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == PRESSURE_LOAD_PARAMETER ||
+            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == BOUNDARY_CONDITION_PARAMETER)
+            type = V_MESH;
     if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
     {
         iDlg->changeLanguage();
-        iDlg->setImageParams(qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams(),int(femObject->getMesh().getFreedom()),isFunc);
+        iDlg->setImageParams(qobject_cast<TGLMesh*>(tabWidget->currentWidget())->getImageParams(),int(femObject->getMesh().getFreedom()), type);
         if (iDlg->exec() == QDialog::Accepted)
             if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
             {

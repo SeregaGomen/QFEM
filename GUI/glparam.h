@@ -41,6 +41,10 @@ public:
         initColorTable();
         repaint();
     }
+    int getType(void) const
+    {
+        return paramType;
+    }
 };
 
 #endif // GLPARAM_H
