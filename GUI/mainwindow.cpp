@@ -496,22 +496,9 @@ void TMainWindow::slotSaveAsDocument(void)
 
 void TMainWindow::saveDocument(QString fileName)
 {
-    TFEMObject* femObject = femProcessor->getFEMObject();
-
     // Загрузка текущих параметров из диалога
     if (!pForm->getParams())
         return;
-    if (QFileInfo(curFile).suffix().toUpper() == "QRES")
-    {
-        QString name = QString(QFileInfo(curFile).absolutePath() + "/" +  QFileInfo(curFile).baseName() + ".trpa"),
-                meshFile = QFileDialog::getSaveFileName(this, tr("Save mesh"), name, tr("Mesh files (*.trpa)")); // Запрос имени файла для сетки
-
-        if (meshFile.isEmpty())
-            return;
-        // Формирование файла с сеткой в случае, если исходный файл - QRES
-        femObject->getMesh().write(meshFile.toStdString());
-        femObject->setFileName(meshFile.toStdString());
-    }
 
     if (saveJSON(fileName))
     {
