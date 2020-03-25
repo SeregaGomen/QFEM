@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include <QScrollArea>
 #include <fstream>
+#include <ctime>
 
 #include "problemsetupform.h"
 #include "appesetupdialog.h"
@@ -819,6 +820,7 @@ void TMainWindow::startSolvingProblem(void)
 //            showResults(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("txt").toLower());
             QApplication::setOverrideCursor(Qt::BusyCursor);
             showProtocol(htmlFile);
+            saveDocument(qresFile);
             QApplication::restoreOverrideCursor();
         }
     }
@@ -833,11 +835,11 @@ void TMainWindow::startSolvingProblem(void)
 void TMainWindow::showProtocol(QString fileName)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
-    int d = femObject->getResult().getSolutionTime().tm_mday,
-        m = femObject->getResult().getSolutionTime().tm_mon + 1,
-        y = femObject->getResult().getSolutionTime().tm_year + 1900,
-        hour = femObject->getResult().getSolutionTime().tm_hour,
-        min = femObject->getResult().getSolutionTime().tm_min;
+    int d = localtime(&(femObject->getResult().getSolutionTime()))->tm_mday,
+        m = localtime(&(femObject->getResult().getSolutionTime()))->tm_mon + 1,
+        y = localtime(&(femObject->getResult().getSolutionTime()))->tm_year + 1900,
+        hour = localtime(&(femObject->getResult().getSolutionTime()))->tm_hour,
+        min = localtime(&(femObject->getResult().getSolutionTime()))->tm_min;
     QString webOut,
             tm;
     bool isFind = false;
@@ -846,7 +848,7 @@ void TMainWindow::showProtocol(QString fileName)
 
     // Получение времени и даты формирования отчета
     webOut += "<h1>";
-    webOut += tr("The problem has been solving %1 at %2").arg(QString("%1.%2.%3").arg(d,2,10,QChar('0')).arg(m,2,10,QChar('0')).arg(y,2,10,QChar('0'))).arg(QString("%1:%2").arg(hour,2,10,QChar('0')).arg(min,2,10,QChar('0')));
+    webOut += tr("The problem has been solving %1 at %2").arg(QString("%1.%2.%3").arg(d, 2, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(y, 2, 10, QChar('0'))).arg(QString("%1:%2").arg(hour, 2, 10, QChar('0')).arg(min, 2, 10, QChar('0')));
     webOut += "</h1>";
 
     webOut += tr("Object: <b>%1</b> (nodes: <b>%2</b>, finite elements: <b>%3</b>)").arg(femObject->getObjectName().c_str()).arg(femObject->getMesh().getNumVertex()).arg(femObject->getMesh().getNumFE());

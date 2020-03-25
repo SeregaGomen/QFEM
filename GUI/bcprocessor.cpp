@@ -151,19 +151,27 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
                     value = object->getParams().getExpressionValue(it, c_coord);
                     if (it.getType() == PRESSURE_LOAD_PARAMETER)
                         object->getMesh().normal(i, v);
-                    else
-                        v[0] = v[1] = v[2] = 1;
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeBE(); j++)
-                    {
-                        // X
-                        vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value * v[0]));
-                        // Y
-                        if (object->getMesh().getFreedom() > 1)
-                            vertex[int(object->getMesh().getBE(i, j))].setY(vertex[int(object->getMesh().getBE(i, j))].y() + float(value * v[1]));
-                        // Z
-                        if (object->getMesh().getFreedom() > 2)
-                            vertex[int(object->getMesh().getBE(i, j))].setZ(vertex[int(object->getMesh().getBE(i, j))].z() + float(value * v[2]));
-                    }
+                        if (it.getType() == PRESSURE_LOAD_PARAMETER)
+                        {
+                            // X
+                            vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value * v[0]));
+                            // Y
+                            if (object->getMesh().getFreedom() > 1)
+                                vertex[int(object->getMesh().getBE(i, j))].setY(vertex[int(object->getMesh().getBE(i, j))].y() + float(value * v[1]));
+                            // Z
+                            if (object->getMesh().getFreedom() > 2)
+                                vertex[int(object->getMesh().getBE(i, j))].setZ(vertex[int(object->getMesh().getBE(i, j))].z() + float(value * v[2]));
+                        }
+                        else
+                        {
+                            if ((it.getDirect() & DIR_X) == DIR_X || (object->getMesh().isPlate() && (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                                vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value));
+                            if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
+                                vertex[int(object->getMesh().getBE(i, j))].setY(vertex[int(object->getMesh().getBE(i, j))].y() + float(value));
+                            if ((it.getDirect() & DIR_Z) == DIR_Z) // Y
+                                vertex[int(object->getMesh().getBE(i, j))].setZ(vertex[int(object->getMesh().getBE(i, j))].z() + float(value));
+                        }
                 }
         }
     }

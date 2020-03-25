@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include <ctime>
+#include <chrono>
 
 
 using namespace std;
@@ -134,22 +135,20 @@ public:
 class TResultList
 {
 private:
-    tm sdt;
+    time_t sdt;
     vector<TResult> result;
 public:
     TResultList(void) {}
     ~TResultList(void) {}
-    void setSolutionTime(tm& t)
+    void setSolutionTime(time_t& t)
     {
         sdt = t;
     }
     void setCurrentSolutionTime(void)
     {
-        time_t now = time(nullptr);
-
-        sdt = *localtime(&now);
+        sdt = chrono::system_clock::to_time_t(chrono::system_clock::now());
     }
-    tm getSolutionTime(void)
+    time_t& getSolutionTime(void)
     {
         return sdt;
     }
@@ -207,7 +206,8 @@ public:
     }
     bool write(ofstream& out)
     {
-        out << sdt.tm_mday << ' ' << sdt.tm_mon << ' ' << sdt.tm_year << ' ' << sdt.tm_hour << ' ' << sdt.tm_min << ' ' << sdt.tm_sec << endl;
+//        out <<  localtime(&sdt)->tm_mday << ' ' << localtime(&sdt)->tm_mon << ' ' << localtime(&sdt)->tm_year << ' ' << localtime(&sdt)->tm_hour << ' ' << localtime(&sdt)->tm_min << ' ' << localtime(&sdt)->tm_sec << endl;
+        out << sdt << endl;
         out << result.size() << endl;
         if (out.fail())
             return false;
@@ -223,7 +223,8 @@ public:
         TResult c;
 
         result.clear();
-        in >> sdt.tm_mday >> sdt.tm_mon >> sdt.tm_year >> sdt.tm_hour >> sdt.tm_min >> sdt.tm_sec;
+//        in >> sdt.tm_mday >> sdt.tm_mon >> sdt.tm_year >> sdt.tm_hour >> sdt.tm_min >> sdt.tm_sec;
+        in >> sdt;
         getline(in, str);
         in >> num;
         getline(in, str);
