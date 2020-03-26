@@ -35,6 +35,10 @@ public:
         clear();
     }
     void clear(void);
+    void setProcessCalculated(bool p)
+    {
+        isProcessCalculated = p;
+    }
     bool setMeshFile(string);
     TFEMParams& getParams(void)
     {
