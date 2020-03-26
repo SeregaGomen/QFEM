@@ -1545,14 +1545,16 @@ void TMainWindow::saveMesh(QJsonObject &main)
 bool TMainWindow::saveQRES(QString fileName)
 {
     QFile file;
+    QDateTime dt;
     QJsonDocument doc;
     QJsonObject main,
                 header;
 
     // ------------- Заголовок -----------------
+    dt.setTime_t(femProcessor->getFEMObject()->getResult().getSolutionTime());
     header.insert("Title", QJsonValue::fromVariant("QFEM results file"));
     header.insert("Object", QJsonValue::fromVariant(femProcessor->getFEMObject()->getObjectName().c_str()));
-    header.insert("DateTime", QJsonValue::fromVariant(QDateTime::currentDateTime()));
+    header.insert("DateTime", QJsonValue::fromVariant(dt.currentDateTime()));
     main.insert("Header", header);
 
     // ---------------- Сетка ------------------
@@ -1568,28 +1570,143 @@ bool TMainWindow::saveQRES(QString fileName)
     // Запись в файл
     file.setFileName(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-           return false;
+        return false;
     file.write(doc.toJson(), doc.toJson().length());
     file.close();
     return true;
 }
 
+// Чтение сетки из JSON-объекта
+void TMainWindow::loadMesh(const QJsonObject &meshObj)
+{
+    QJsonArray ja_x = meshObj["Coordinates"].toArray(),
+               ja_fe = meshObj["FE"].toArray(),
+               ja_be = meshObj["BE"].toArray();
+    unsigned fe_type = unsigned(meshObj["FEType"].toInt()),
+             fe_dim,
+             fe_size,
+             be_size;
+    matrix<double> x;
+    matrix<unsigned> fe,
+                     be;
+    TMesh &mesh = femProcessor->getFEMObject()->getMesh();
+
+    mesh.getDataFE(mesh.convertFEType(FEType(fe_type)), fe_size, be_size, fe_dim);
+    x.resize(ja_x.size(), fe_dim);
+    for (unsigned i = 0; i < unsigned(ja_x.size()); i++)
+    {
+        QJsonArray arr = ja_x[i].toArray();
+
+        for (unsigned j = 0; j < fe_dim; j++)
+            x[i][j] = arr[j].toDouble();
+    }
+    fe.resize(ja_fe.size(), fe_size);
+    for (unsigned i = 0; i < unsigned(ja_fe.size()); i++)
+    {
+        QJsonArray arr = ja_fe[i].toArray();
+
+        for (unsigned j = 0; j < fe_size; j++)
+            fe[i][j] = unsigned(arr[j].toInt());
+    }
+    be.resize(ja_be.size(), be_size);
+    for (unsigned i = 0; i < unsigned(ja_be.size()); i++)
+    {
+        QJsonArray arr = ja_be[i].toArray();
+
+        for (unsigned j = 0; j < be_size; j++)
+            be[i][j] = unsigned(arr[j].toInt());
+    }
+    mesh.setMesh(FEType(fe_type), x, fe, be);
+}
+
+// Чтение параметров из JSON-объекта
+void TMainWindow::loadParam(const QJsonObject &paramObj)
+{
+    QJsonArray lbc = paramObj["BoundaryConditions"].toArray();
+    TFEMParams &params = femProcessor->getFEMObject()->getParams();
+
+    // Тип задачи
+    params.fType = (paramObj["ProblemType"].toString() == "Static") ? StaticProblem : DynamicProblem;
+
+    // Точность вычислений
+    params.eps = paramObj["Accuracy"].toDouble();
+
+    // Параметры для динамического расчета
+    params.t0 = (paramObj["DynamicParameters"].toObject())["T0"].toDouble();
+    params.t1 = (paramObj["DynamicParameters"].toObject())["T1"].toDouble();
+    params.th = (paramObj["DynamicParameters"].toObject())["TH"].toDouble();
+    params.theta = (paramObj["DynamicParameters"].toObject())["WilsonTheta"].toDouble();
+
+    // Параметры вывода
+    params.width = (paramObj["OutputParameters"].toObject())["Width"].toInt();
+    params.precision = (paramObj["OutputParameters"].toObject())["Precision"].toInt();
+
+    // Параметры нелинейного расчета
+    params.pMethod = PlasticityMethod((paramObj["Nonlinearity"].toObject())["CalculationMethod"].toInt());
+    params.loadStep = (paramObj["Nonlinearity"].toObject())["CalculationMethod"].toDouble();
+
+    // Краевые условия и прочие параметры
+    params.plist.clear();
+    foreach (const QJsonValue &value, lbc)
+    {
+        int type = value["Type"].toInt(),
+            direct = value["Direct"].toInt();
+        QString predicate = value["Predicate"].toString(),
+                expression = value["Expression"].toString();
+        TParameter p(type, predicate.toStdString(), expression.toStdString(), direct);
+
+        params.plist.push_back(p);
+    }
+
+//    // Названия
+//    for (unsigned i = 0; i < params.stdNames().size(); i++)
+//        names.push_back(QJsonValue::fromVariant(QString("%1").arg(params.names[i].c_str())));
+//    paramObj.insert("Names", names);
+
+//    // Вспомагательные параметры (для парсера)
+//    for (auto it = params.variables.begin(); it != params.variables.end(); ++it)
+//        variables.push_back(QString("%1 %2").arg(it->first.c_str()).arg(it->second));
+//    paramObj.insert("Variables", variables);
+
+}
 
 bool TMainWindow::loadQRES(QString fileName)
 {
-    bool ret;
-    QString htmlFile = QFileInfo(fileName).absolutePath() + "/" +  QFileInfo(fileName).baseName() + ".html";
+//    bool ret;
+//    QString htmlFile = QFileInfo(fileName).absolutePath() + "/" +  QFileInfo(fileName).baseName() + ".html";
 
-    QApplication::setOverrideCursor(Qt::BusyCursor);
-    ret = femProcessor->getFEMObject()->loadResult(fileName.toStdString());
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    if (!ret)
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
+//    QApplication::setOverrideCursor(Qt::BusyCursor);
+//    ret = femProcessor->getFEMObject()->loadResult(fileName.toStdString());
+//    QApplication::setOverrideCursor(Qt::ArrowCursor);
+//    if (!ret)
+//    {
+//        QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
+//        return false;
+//    }
+//    showProtocol(htmlFile);
+//    checkMenuState();
+//    return true;
+
+    QString val;
+    QFile file;
+    QJsonDocument doc;
+    QJsonObject obj;
+
+    // Чтение из файла
+    file.setFileName(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
-    }
-    showProtocol(htmlFile);
-    checkMenuState();
+    val = file.readAll();
+    file.close();
+
+    doc = QJsonDocument::fromJson(val.toUtf8());
+    obj = doc.object();
+
+    // Чтение сетки
+    loadMesh(obj["Mesh"].toObject());
+    // Чтение параметров
+    loadParam(obj["Parameters"].toObject());
+
     return true;
 }
 
