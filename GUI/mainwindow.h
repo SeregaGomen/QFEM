@@ -18,7 +18,6 @@ class QThread;
 class TFEMProcessor;
 class TBCProcessor;
 class TProblemSetupForm;
-class QTableWidget;
 
 
 const int maxRecentFiles = 5;
@@ -114,13 +113,17 @@ private:
     void setupLanguage(void);
     bool calcExpression(QString, QString&);
     bool loadMesh(QString);
-    bool saveJSON(QString);
-    bool loadJSON(QString);
+    bool saveQFPF(QString);
+    bool loadQFPF(QString);
+    bool saveQRES(QString);
     bool loadQRES(QString);
     bool checkParams(void);
     void lcProcess(void);
     void femProcess(void);
     void repaintResults(void);
+    void saveMesh(QJsonObject&);
+    void saveParam(QJsonObject&);
+    void saveResults(QJsonObject&);
 };
 
 

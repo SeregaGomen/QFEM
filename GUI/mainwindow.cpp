@@ -384,7 +384,7 @@ void TMainWindow::loadFile(QString fileName)
     else if (QFileInfo(fileName).completeSuffix().toUpper() == "QRES")
         isOk = loadQRES(fileName);
     else if (QFileInfo(fileName).completeSuffix().toUpper() == "QFPF")
-        isOk = loadJSON(fileName);
+        isOk = loadQFPF(fileName);
 
     if (isOk)
     {
@@ -500,7 +500,7 @@ void TMainWindow::saveDocument(QString fileName)
     if (!pForm->getParams())
         return;
 
-    if (saveJSON(fileName))
+    if (saveQFPF(fileName))
     {
         setCurrentFile(fileName);
         statusBar()->showMessage(tr("File successfully saved"), 5000);
@@ -806,8 +806,9 @@ void TMainWindow::startSolvingProblem(void)
             // Отображение результатов
 //            showResults(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("txt").toLower());
             QApplication::setOverrideCursor(Qt::BusyCursor);
+            // femObject->saveResult(qresFile.toStdString());
+            saveQRES(qresFile);
             showProtocol(htmlFile);
-            saveDocument(qresFile);
             QApplication::restoreOverrideCursor();
         }
     }
@@ -821,12 +822,8 @@ void TMainWindow::startSolvingProblem(void)
 // Формирование протокола расчета (QRES)
 void TMainWindow::showProtocol(QString fileName)
 {
+    QDateTime dt;
     TFEMObject* femObject = femProcessor->getFEMObject();
-    int d = localtime(&(femObject->getResult().getSolutionTime()))->tm_mday,
-        m = localtime(&(femObject->getResult().getSolutionTime()))->tm_mon + 1,
-        y = localtime(&(femObject->getResult().getSolutionTime()))->tm_year + 1900,
-        hour = localtime(&(femObject->getResult().getSolutionTime()))->tm_hour,
-        min = localtime(&(femObject->getResult().getSolutionTime()))->tm_min;
     QString webOut,
             tm;
     bool isFind = false;
@@ -834,8 +831,9 @@ void TMainWindow::showProtocol(QString fileName)
     webOut = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
 
     // Получение времени и даты формирования отчета
+    dt.setTime_t(femObject->getResult().getSolutionTime());
     webOut += "<h1>";
-    webOut += tr("The problem has been solving %1 at %2").arg(QString("%1.%2.%3").arg(d, 2, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(y, 2, 10, QChar('0'))).arg(QString("%1:%2").arg(hour, 2, 10, QChar('0')).arg(min, 2, 10, QChar('0')));
+    webOut += tr("The problem has been solving %1 at %2").arg(QString("%1.%2.%3").arg(dt.date().day(), 2, 10, QChar('0')).arg(dt.date().month(), 2, 10, QChar('0')).arg(dt.date().year(), 2, 10, QChar('0'))).arg(QString("%1:%2").arg(dt.time().hour(), 2, 10, QChar('0')).arg(dt.time().minute(), 2, 10, QChar('0')));
     webOut += "</h1>";
 
     webOut += tr("Object: <b>%1</b> (nodes: <b>%2</b>, finite elements: <b>%3</b>)").arg(femObject->getObjectName().c_str()).arg(femObject->getMesh().getNumVertex()).arg(femObject->getMesh().getNumFE());
@@ -1155,7 +1153,7 @@ void TMainWindow::slotAnalyseFunction(void)
     delete dlg;
 }
 
-bool TMainWindow::saveJSON(QString fileName)
+bool TMainWindow::saveQFPF(QString fileName)
 {
     QDateTime dt;
     QFile file;
@@ -1177,74 +1175,20 @@ bool TMainWindow::saveJSON(QString fileName)
     TFEMObject* femObject = femProcessor->getFEMObject();
 
     // ------------- Заголовок -----------------
+    dt.setTime_t(femObject->getResult().getSolutionTime());
     header.insert("Title", QJsonValue::fromVariant("QFEM problem file"));
     header.insert("Object", QJsonValue::fromVariant(femObject->getObjectName().c_str()));
     header.insert("DateTime", QJsonValue::fromVariant(dt.currentDateTime()));
 
     // ---------------- Сетка ------------------
     mesh.insert("File", QJsonValue::fromVariant(QString("%1").arg(femObject->getFileName().c_str())));
+    main.insert("Mesh", mesh);
+    main.insert("Header", header);
 
     // ------------- Параметры расчета ---------------------
-    // Тип задачи
-    params.insert("ProblemType", (femObject->getParams().fType == StaticProblem) ? QJsonValue::fromVariant("Static") : QJsonValue::fromVariant("Dynamic"));
-
-    // Точность вычислений
-    params.insert("Accuracy", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().eps)));
-
-    // Параметры для динамического расчета
-    time.insert("T0", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().t0)));
-    time.insert("T1", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().t1)));
-    time.insert("TH", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().th)));
-    time.insert("WilsonTheta", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().theta)));
-    params.insert("DynamicParameters", time);
-
-    // Параметры вывода
-    out.insert("Width", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().width)));
-    out.insert("Precision", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().precision)));
-    params.insert("OutputParameters", out);
-
-    // Параметры нелинейного расчета
-    nonlin.insert("CalculationMethod", QJsonValue::fromVariant(femObject->getParams().pMethod));
-    nonlin.insert("LoadStep", QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().loadStep)));
-    params.insert("Nonlinearity", nonlin);
-
-    // Краевые условия и прочие параметры
-    for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
-    {
-        QJsonObject bc;
-
-        bc.insert("Type", QJsonValue::fromVariant(QString("%1").arg(it->getType())));
-        bc.insert("Direct", QJsonValue::fromVariant(QString("%1").arg(it->getDirect())));
-        bc.insert("Predicate", QJsonValue::fromVariant(QString("%1").arg(it->getPredicate().c_str())));
-        if (it->getType() == STRESS_STRAIN_CURVE_PARAMETER)
-        {
-            val = "{";
-            for (unsigned i = 0; i < it->getStressStrainCurve().size1(); i++)
-                val += QString("{%1, %2}%3 ").arg(it->getStressStrainCurve(i, 0)).arg(it->getStressStrainCurve(i, 1)).arg((i < it->getStressStrainCurve().size1() - 1) ? "," : "");
-            val += "}";
-            bc.insert("Expression", QJsonValue::fromVariant(val));
-        }
-        else
-            bc.insert("Expression", QJsonValue::fromVariant(QString("%1").arg(it->getExpression().c_str())));
-
-        lbc.push_back(bc);
-    }
-    params.insert("BoundaryConditions", lbc);
-
-    // Названия
-    for (unsigned i = 0; i < femObject->getParams().stdNames().size(); i++)
-        names.push_back(QJsonValue::fromVariant(QString("%1").arg(femObject->getParams().names[i].c_str())));
-    params.insert("Names", names);
-
-    // Вспомагательные параметры (для парсера)
-    for (auto it = femObject->getParams().variables.begin(); it != femObject->getParams().variables.end(); ++it)
-        variables.push_back(QString("%1 %2").arg(it->first.c_str()).arg(it->second));
-    params.insert("Variables", variables);
+    saveParam(main);
 
     // Формирование итогового документа
-    main.insert("Header", header);
-    main.insert("Mesh", mesh);
-    main.insert("Parameters", params);
     doc.setObject(main);
 
     // Запись в файл
@@ -1256,7 +1200,7 @@ bool TMainWindow::saveJSON(QString fileName)
     return true;
 }
 
-bool TMainWindow::loadJSON(QString fileName)
+bool TMainWindow::loadQFPF(QString fileName)
 {
     QString jsonText,
             meshFile,
@@ -1460,6 +1404,176 @@ void TMainWindow::repaintResults(void)
             }
         }
 }
+
+// Запись результатов расчета в JSON
+void TMainWindow::saveResults(QJsonObject &main)
+{
+    TResultList &result = femProcessor->getFEMObject()->getResult();
+    QJsonObject res;
+    QJsonArray resultObj;
+
+    for (unsigned i = 0; i < result.size(); i++)
+    {
+        QJsonArray arr;
+
+        res.insert("Function", result[i].getName().c_str());
+        res.insert("Time", result[i].getTime());
+        for (unsigned j = 0; j < result[i].getResults().size(); j++)
+            arr.push_back(result[i].getResults(j));
+        res.insert("Values", arr);
+        resultObj.push_back(res);
+    }
+    main.insert("Results", resultObj);
+}
+// Запись параметров расчета в JSON
+void TMainWindow::saveParam(QJsonObject &main)
+{
+    QString val;
+    QJsonObject paramObj,
+                out,
+                time,
+                thermal,
+                nonlin,
+                geometrical,
+                physical;
+    QJsonArray names,
+               lbc,
+               variables;
+    TFEMParams &params = femProcessor->getFEMObject()->getParams();
+    
+    // Тип задачи
+    paramObj.insert("ProblemType", (params.fType == StaticProblem) ? QJsonValue::fromVariant("Static") : QJsonValue::fromVariant("Dynamic"));
+
+    // Точность вычислений
+    paramObj.insert("Accuracy", QJsonValue::fromVariant(QString("%1").arg(params.eps)));
+
+    // Параметры для динамического расчета
+    time.insert("T0", QJsonValue::fromVariant(QString("%1").arg(params.t0)));
+    time.insert("T1", QJsonValue::fromVariant(QString("%1").arg(params.t1)));
+    time.insert("TH", QJsonValue::fromVariant(QString("%1").arg(params.th)));
+    time.insert("WilsonTheta", QJsonValue::fromVariant(QString("%1").arg(params.theta)));
+    paramObj.insert("DynamicParameters", time);
+
+    // Параметры вывода
+    out.insert("Width", QJsonValue::fromVariant(QString("%1").arg(params.width)));
+    out.insert("Precision", QJsonValue::fromVariant(QString("%1").arg(params.precision)));
+    paramObj.insert("OutputParameters", out);
+
+    // Параметры нелинейного расчета
+    nonlin.insert("CalculationMethod", QJsonValue::fromVariant(params.pMethod));
+    nonlin.insert("LoadStep", QJsonValue::fromVariant(QString("%1").arg(params.loadStep)));
+    paramObj.insert("Nonlinearity", nonlin);
+
+    // Краевые условия и прочие параметры
+    for (auto it = params.plist.begin(); it != params.plist.end(); it++)
+    {
+        QJsonObject bc;
+
+        bc.insert("Type", QJsonValue::fromVariant(QString("%1").arg(it->getType())));
+        bc.insert("Direct", QJsonValue::fromVariant(QString("%1").arg(it->getDirect())));
+        bc.insert("Predicate", QJsonValue::fromVariant(QString("%1").arg(it->getPredicate().c_str())));
+        if (it->getType() == STRESS_STRAIN_CURVE_PARAMETER)
+        {
+            val = "{";
+            for (unsigned i = 0; i < it->getStressStrainCurve().size1(); i++)
+                val += QString("{%1, %2}%3 ").arg(it->getStressStrainCurve(i, 0)).arg(it->getStressStrainCurve(i, 1)).arg((i < it->getStressStrainCurve().size1() - 1) ? "," : "");
+            val += "}";
+            bc.insert("Expression", QJsonValue::fromVariant(val));
+        }
+        else
+            bc.insert("Expression", QJsonValue::fromVariant(QString("%1").arg(it->getExpression().c_str())));
+
+        lbc.push_back(bc);
+    }
+    paramObj.insert("BoundaryConditions", lbc);
+
+    // Названия
+    for (unsigned i = 0; i < params.stdNames().size(); i++)
+        names.push_back(QJsonValue::fromVariant(QString("%1").arg(params.names[i].c_str())));
+    paramObj.insert("Names", names);
+
+    // Вспомагательные параметры (для парсера)
+    for (auto it = params.variables.begin(); it != params.variables.end(); ++it)
+        variables.push_back(QString("%1 %2").arg(it->first.c_str()).arg(it->second));
+    paramObj.insert("Variables", variables);
+
+    main.insert("Parameters", paramObj);
+}
+
+// Запись сетки в JSON-объект
+void TMainWindow::saveMesh(QJsonObject &main)
+{
+    QJsonObject meshObj;
+    QJsonArray x,
+               fe,
+               be;
+    TMesh &mesh = femProcessor->getFEMObject()->getMesh();
+    
+    // ---------------- Сетка ------------------
+    meshObj.insert("FEType", QJsonValue::fromVariant(mesh.getTypeFE()));
+    for (unsigned i = 0; i < mesh.getNumVertex(); i++)
+    {
+        QJsonArray arr;
+
+        for (unsigned j = 0; j < mesh.getDimension(); j++)
+            arr.push_back(mesh.getX(i, j));
+        x.push_back(arr);
+    }
+    meshObj.insert("Coordinates", x);
+    for (unsigned i = 0; i < mesh.getNumFE(); i++)
+    {
+        QJsonArray arr;
+
+        for (unsigned j = 0; j < mesh.getSizeFE(); j++)
+            arr.push_back(QJsonValue::fromVariant(mesh.getFE(i, j)));
+        fe.push_back(arr);
+    }
+    meshObj.insert("FE", fe);
+    for (unsigned i = 0; i < mesh.getNumBE(); i++)
+    {
+        QJsonArray arr;
+
+        for (unsigned j = 0; j < mesh.getSizeBE(); j++)
+            arr.push_back(QJsonValue::fromVariant(mesh.getBE(i, j)));
+        be.push_back(arr);
+    }
+    meshObj.insert("BE", be);
+    
+    main.insert("Mesh", meshObj);
+}
+
+bool TMainWindow::saveQRES(QString fileName)
+{
+    QFile file;
+    QJsonDocument doc;
+    QJsonObject main,
+                header;
+
+    // ------------- Заголовок -----------------
+    header.insert("Title", QJsonValue::fromVariant("QFEM results file"));
+    header.insert("Object", QJsonValue::fromVariant(femProcessor->getFEMObject()->getObjectName().c_str()));
+    header.insert("DateTime", QJsonValue::fromVariant(QDateTime::currentDateTime()));
+    main.insert("Header", header);
+
+    // ---------------- Сетка ------------------
+    saveMesh(main);
+    // ---------------- Параметры ----------------
+    saveParam(main);
+    // ---------------- Результаты расчета ----------------
+    saveResults(main);
+
+    // Формирование итогового документа
+    doc.setObject(main);
+
+    // Запись в файл
+    file.setFileName(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+           return false;
+    file.write(doc.toJson(), doc.toJson().length());
+    file.close();
+    return true;
+}
+
 
 bool TMainWindow::loadQRES(QString fileName)
 {
