@@ -101,9 +101,9 @@ bool TFEMObject::saveResult(string fname)
         cerr << sayError(WRITE_FILE_ERR) << endl;
         return false;
     }
-//    // Запись параметров
-//    if (!params.write(out))
-//        msg->setError(WRITE_FILE_ERR);
+    // Запись параметров
+    if (!params.write(out))
+        cerr << sayError(WRITE_FILE_ERR) << endl;
 
     ret = out.fail();
     out.close();
@@ -149,14 +149,14 @@ bool TFEMObject::loadResult(string fname)
         cerr << sayError(READ_FILE_ERR) << endl;
         return false;
     }
-//    // Считывание параметров
-//    if (!params.read(in))
-//    {
-//        msg->stop();
-//        in.close();
-//        msg->setError(READ_FILE_ERR);
-//        return false;
-//    }
+    // Считывание параметров
+    if (!params.read(in))
+    {
+        msg->stop();
+        in.close();
+        cerr << sayError(READ_FILE_ERR) << endl;
+        return false;
+    }
     isProcessCalculated = true;
     in.close();
     msg->stop();

@@ -191,6 +191,7 @@ public:
         fe = p_fe;
         be = p_be;
         getMinMax();
+        createMeshMap();
     }
     void clear(void)
     {

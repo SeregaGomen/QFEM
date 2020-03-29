@@ -195,6 +195,8 @@ public:
     double getExpressionValue(TParameter&, vector<double>&);
     bool getPredicateValue(TParameter&, double, double, double);
     double getExpressionValue(TParameter&, double, double, double, double = 0);
+    bool write(ofstream&);
+    bool read(ifstream&);
 };
 
 #endif // PARAMS_H

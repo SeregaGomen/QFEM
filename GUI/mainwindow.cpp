@@ -1655,7 +1655,7 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
             direct = value["Direct"].toInt();
         QString predicate = value["Predicate"].toString(),
                 expression = value["Expression"].toString();
-        TParameter p(type, predicate.toStdString(), expression.toStdString(), direct);
+        TParameter p(type, expression.toStdString(), predicate.toStdString(), direct);
 
         params.plist.push_back(p);
     }
