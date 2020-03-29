@@ -206,58 +206,42 @@ bool TFEMParams::write(ofstream& out)
 {
     out << "Problem parameters" << endl;
     // Тип задачи
-    out << "Problem type" << endl;
     out << fType << endl;
 
     // Способ аппроксимации по времени
-    out << "Method of time approximation" << endl;
     out << tMethod << endl;
 
     // Метод решения упруго-пластических задач
-    out << "Method of solving elastic-plastic problems" << endl;
     out << pMethod << endl;
 
     // Погрешность расчета
-    out << "Calculation error" << endl;
     out << eps << endl;
 
     // Ширина и точность вывода
-    out << "Output width and precision" << endl;
     out << width << ' ' << precision << endl;
 
     // Шаг по нагрузке
-    out << "Forse step" << endl;
     out << loadStep << endl;
 
     // Параметры времени
-    out << "Time parameters (T0, T1, TH)" << endl;
     out << t0 << ' ' << t1 << ' ' << th << endl;
 
     // Названия функций
-    out << "Function names" << endl;
-    out << "# Size" << endl;
     out << names.size() << endl;
-    out << "# Values" << endl;
     for (unsigned i = 0; i < names.size(); i++)
         out << names[i].c_str() << endl;
 
     // Краевые условия, нагрузки, etc
-    out << "Boundary condition, etc" << endl;
     out << plist.size() << endl;
     for (auto it = plist.begin(); it != plist.end(); it++)
     {
-        out << "Type" << endl;
         out << it->getType() << endl;   // Тип условия
-        out << "Direct" << endl;
         out << it->getDirect() << endl; // Номер функции: 0 - X, ...
-        out << "Expression" << endl;
         out << it->getExpression() << endl;
-        out << "Predicate" << endl;
         out << it->getPredicate() << endl;
     }
 
     // Вспомогательные параметры
-    out << "Global variables" << endl;
     out << variables.size() << endl;
     for (map<string, double>::iterator it = variables.begin(); it != variables.end(); ++it)
         out << it->first.c_str() << ' ' << it->second << endl;
@@ -275,66 +259,50 @@ bool TFEMParams::read(ifstream& in)
 
     getline(in, str);
     // Тип задачи
-    getline(in, str);
     in >> reinterpret_cast<int&>(fType);
     getline(in, str);
 
     // Способ аппроксимации по времени
-    getline(in, str);
     in >> reinterpret_cast<int&>(tMethod);
     getline(in, str);
 
     // Метод решения упруго-пластических задач
-    getline(in, str);
     in >> reinterpret_cast<int&>(pMethod);
     getline(in, str);
 
     // Погрешность расчета
-    getline(in, str);
     in >> eps;
     getline(in, str);
 
     // Ширина и точность вывода
-    getline(in, str);
     in >> width >> precision;
     getline(in, str);
 
     // Шаг по нагрузке
-    getline(in, str);
     in >> loadStep;
     getline(in, str);
 
     // Параметры времени
-    getline(in, str);
     in >> t0 >> t1 >> th;
     getline(in, str);
 
     // Функции
-    getline(in, str);
-    getline(in, str);
     in >> len;
-    getline(in, str);
     getline(in, str);
     for (unsigned i = 0; i < len; i++)
     {
         in >> names[i];
-        getline(in,str);
+        getline(in, str);
     }
 
     // Краевые условия, нагрузки, etc
-    getline(in, str);
-    getline(in, str);
     in >> len;
     plist.clear();
     for (unsigned i = 0; i < len; i++)
     {
-        getline(in, str);
-        getline(in, str);
         in >> type;   // Тип условия
         getline(in, str);
-        getline(in, str);
         in >> dir; // Номер функции: 0 - X, ...
-        getline(in, str);
         getline(in, str);
         getline(in, str);
         getline(in, key);
@@ -343,10 +311,7 @@ bool TFEMParams::read(ifstream& in)
 
     // Вспомогательные параметры
     variables.clear();
-    getline(in, str);
-    getline(in, str);
     in >> len;
-    getline(in, str);
     getline(in, str);
     for (unsigned i = 0; i < len; i++)
     {

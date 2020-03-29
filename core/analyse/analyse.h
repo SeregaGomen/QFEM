@@ -207,6 +207,7 @@ public:
     bool write(ofstream& out)
     {
 //        out <<  localtime(&sdt)->tm_mday << ' ' << localtime(&sdt)->tm_mon << ' ' << localtime(&sdt)->tm_year << ' ' << localtime(&sdt)->tm_hour << ' ' << localtime(&sdt)->tm_min << ' ' << localtime(&sdt)->tm_sec << endl;
+        out << "Results" << endl;
         out << sdt << endl;
         out << result.size() << endl;
         if (out.fail())
@@ -223,6 +224,7 @@ public:
         TResult c;
 
         result.clear();
+        getline(in, str);
 //        in >> sdt.tm_mday >> sdt.tm_mon >> sdt.tm_year >> sdt.tm_hour >> sdt.tm_min >> sdt.tm_sec;
         in >> sdt;
         getline(in, str);

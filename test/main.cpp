@@ -96,7 +96,7 @@ void calcTank(void)
 
     if (object.start())
     {
-        object.saveResult(object.stdQResName());
+        object.saveResult(object.stdResName());
         object.printResult(object.stdTxtResName());
     }
 }
@@ -124,7 +124,11 @@ void calcBalka(void)
     object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, "0", "y == 0");
 
     // Запуск расчета
-    object.start();
+    if (object.start())
+    {
+        object.saveResult(object.stdResName());
+        object.printResult(object.stdTxtResName());
+    }
 }
 
 // Тестовый расчет оболочки
@@ -166,7 +170,7 @@ void calcShell(void)
     // Запуск расчета
     if (object.start())
     {
-        object.saveResult(object.stdQResName());
+        object.saveResult(object.stdResName());
         object.printResult(object.stdTxtResName());
     }
 
@@ -197,7 +201,7 @@ void pyfem_test(void)
     // Запуск расчета
     if (object.start())
     {
-        object.saveResult(object.stdQResName());
+        object.saveResult(object.stdResName());
         object.printResult(object.stdTxtResName());
     }
 
@@ -236,7 +240,7 @@ void calcTank3ds(void)
     // Запуск расчета
     if (object.start())
     {
-        object.saveResult(object.stdQResName());
+        object.saveResult(object.stdResName());
         object.printResult(object.stdTxtResName());
     }
 }
@@ -269,7 +273,7 @@ void calcTank3s6(void)
     // Запуск расчета
     if (object.start())
     {
-        object.saveResult(object.stdQResName());
+        object.saveResult(object.stdResName());
         object.printResult(object.stdTxtResName());
     }
 
@@ -385,7 +389,7 @@ void calcNewTank3(void)
     // Запуск расчета
     if (object.start())
     {
-        object.saveResult(object.stdQResName());
+        object.saveResult(object.stdResName());
         object.printResult(object.stdTxtResName());
     }
 
@@ -395,9 +399,9 @@ int main()
 {
     msg = new TMessenger();
 
-    calcNewTank3();
+    // calcNewTank3();
     // calcTank();
-    // calcBalka();
+    calcBalka();
     // calcShell();
     // pyfem_test();
     // calcTank3ds();

@@ -117,6 +117,7 @@ private:
     bool loadQFPF(QString);
     bool saveQRES(QString);
     bool loadQRES(QString);
+    bool loadRES(QString);
     bool checkParams(void);
     void lcProcess(void);
     void femProcess(void);

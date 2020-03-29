@@ -499,9 +499,9 @@ public:
     {
         return getFileName().substr(0, getFileName().find_last_of(".")) + ".txt";
     }
-    string stdQResName(void)
+    string stdResName(void)
     {
-        return getFileName().substr(0, getFileName().find_last_of(".")) + ".qres";
+        return getFileName().substr(0, getFileName().find_last_of(".")) + ".res";
     }
 };
 

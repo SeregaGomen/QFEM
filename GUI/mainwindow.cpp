@@ -368,7 +368,7 @@ void TMainWindow::setupRecentActions(void)
 
 void TMainWindow::slotOpenDocument(void)
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Opening a document"),windowFilePath(),tr("QFEM Problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh);; Result files (*.qres)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM Problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh);; Result files (*.qres *.res)"));
 
     if (!fileName.isEmpty())
         loadFile(fileName);
@@ -383,6 +383,8 @@ void TMainWindow::loadFile(QString fileName)
         isOk = loadMesh(fileName);
     else if (QFileInfo(fileName).completeSuffix().toUpper() == "QRES")
         isOk = loadQRES(fileName);
+    else if (QFileInfo(fileName).completeSuffix().toUpper() == "RES")
+        isOk = loadRES(fileName);
     else if (QFileInfo(fileName).completeSuffix().toUpper() == "QFPF")
         isOk = loadQFPF(fileName);
 
@@ -1695,6 +1697,24 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
             res.push_back(v.toDouble());
         result.setResult(res, name.toStdString(), t);
     }
+}
+
+bool TMainWindow::loadRES(QString fileName)
+{
+    bool ret;
+    QString htmlFile = QFileInfo(fileName).absolutePath() + "/" +  QFileInfo(fileName).baseName() + ".html";
+
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+    ret = femProcessor->getFEMObject()->loadResult(fileName.toStdString());
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    if (!ret)
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
+        return false;
+    }
+    showProtocol(htmlFile);
+    checkMenuState();
+    return true;
 }
 
 bool TMainWindow::loadQRES(QString fileName)

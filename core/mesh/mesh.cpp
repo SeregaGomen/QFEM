@@ -540,6 +540,7 @@ bool TMesh::writeTRPA(string fname)
 // -----------------------------------------------------
 bool TMesh::write(ofstream& out)
 {
+    out << "Mesh" << endl;
     out << convertFEType(feType) << endl;
     out << x.size1() << endl;
     for (unsigned i = 0; i < x.size1(); i++)
@@ -583,6 +584,7 @@ bool TMesh::read(ifstream& in)
              feSize,
              feDim;
 
+    getline(in, str);
     // Cчитываем тип КЭ
     in >> val;
     getline(in, str);

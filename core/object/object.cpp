@@ -83,7 +83,7 @@ bool TFEMObject::saveResult(string fname)
 
     msg->setProcess(WRITE_RESULT_PROCESS);
     // Запись подписи
-    out << "QFEM results file" << endl;
+    out << "Core QFEM results file" << endl;
     // Запись сетки
     mesh.write(out);
     if (out.fail())
@@ -116,7 +116,7 @@ bool TFEMObject::loadResult(string fname)
     ifstream in;
     string str;
 
-    in.open(fname.c_str(),ios::in);
+    in.open(fname.c_str(), ios::in);
     if (in.fail())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
@@ -125,7 +125,7 @@ bool TFEMObject::loadResult(string fname)
     msg->setProcess(READ_RESULT_PROCESS);
     // Считывание заголовка
     getline(in, str);
-    if (str != "QFEM results file")
+    if (str != "Core QFEM results file")
     {
         msg->stop();
         in.close();
