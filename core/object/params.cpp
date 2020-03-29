@@ -204,7 +204,7 @@ double TFEMParams::getExpressionValue(TParameter& p, double cx, double cy, doubl
 //--------------------------------------------------------------------
 bool TFEMParams::write(ofstream& out)
 {
-    out << "Problem parameters" << endl;
+    out << "Parameters" << endl;
     // Тип задачи
     out << fType << endl;
 
@@ -257,53 +257,40 @@ bool TFEMParams::read(ifstream& in)
     unsigned len;
     double value;
 
-    getline(in, str);
+    in >> str;
     // Тип задачи
     in >> reinterpret_cast<int&>(fType);
-    getline(in, str);
 
     // Способ аппроксимации по времени
     in >> reinterpret_cast<int&>(tMethod);
-    getline(in, str);
 
     // Метод решения упруго-пластических задач
     in >> reinterpret_cast<int&>(pMethod);
-    getline(in, str);
 
     // Погрешность расчета
     in >> eps;
-    getline(in, str);
 
     // Ширина и точность вывода
     in >> width >> precision;
-    getline(in, str);
 
     // Шаг по нагрузке
     in >> loadStep;
-    getline(in, str);
 
     // Параметры времени
     in >> t0 >> t1 >> th;
-    getline(in, str);
 
     // Функции
     in >> len;
-    getline(in, str);
     for (unsigned i = 0; i < len; i++)
-    {
         in >> names[i];
-        getline(in, str);
-    }
 
     // Краевые условия, нагрузки, etc
     in >> len;
     plist.clear();
     for (unsigned i = 0; i < len; i++)
     {
-        in >> type;   // Тип условия
-        getline(in, str);
-        in >> dir; // Номер функции: 0 - X, ...
-        getline(in, str);
+        in >> type >> dir;
+        getline(in, str); // endl
         getline(in, str);
         getline(in, key);
         plist.addParameter(type, str, key, dir);
@@ -312,12 +299,10 @@ bool TFEMParams::read(ifstream& in)
     // Вспомогательные параметры
     variables.clear();
     in >> len;
-    getline(in, str);
     for (unsigned i = 0; i < len; i++)
     {
         in >> key >> value;
         variables[key] = value;
-        getline(in, str);
     }
     return !in.fail();
 }

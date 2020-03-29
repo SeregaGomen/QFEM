@@ -584,10 +584,10 @@ bool TMesh::read(ifstream& in)
              feSize,
              feDim;
 
-    getline(in, str);
+    //    getline(in, str);
+    in >> str;
     // Cчитываем тип КЭ
     in >> val;
-    getline(in, str);
     if ((feType = getDataFE(val, feSize, surfaceSize, feDim)) == NOTYPE)
     {
         in.close();
@@ -596,15 +596,11 @@ bool TMesh::read(ifstream& in)
     }
     // Считываем кол-во узлов
     in >> val;
-    getline(in, str);
     x.resize(val, feDim);
     // Cчитываем узлы
     for (unsigned i = 0; i < x.size1(); i++)
-    {
         for (unsigned j = 0; j < x.size2(); j++)
             in >> x(i, j);
-        getline(in, str);
-    }
     if (in.fail())
     {
         cerr << sayError(READ_FILE_ERR) << endl;
@@ -612,14 +608,10 @@ bool TMesh::read(ifstream& in)
     }
     // Cчитываем КЭ
     in >> val;
-    getline(in, str);
     fe.resize(val,feSize);
     for (unsigned i = 0; i < fe.size1(); i++)
-    {
         for (unsigned j = 0; j < fe.size2(); j++)
             in >> fe(i, j);
-        getline(in, str);
-    }
     if (in.fail())
     {
         cerr << sayError(READ_FILE_ERR) << endl;
@@ -631,14 +623,10 @@ bool TMesh::read(ifstream& in)
     {
         // Cчитываем ГЭ
         in >> val;
-        getline(in, str);
         be.resize(val,surfaceSize);
         for (unsigned i = 0; i < be.size1(); i++)
-        {
             for (unsigned j = 0; j < be.size2(); j++)
                 in >> be(i, j);
-            getline(in, str);
-        }
         if (in.fail())
         {
             cerr << sayError(READ_FILE_ERR) << endl;
@@ -647,6 +635,7 @@ bool TMesh::read(ifstream& in)
     }
     if (!error)
     {
+        in.putback('\n');
         cout << *this << endl;
         createMeshMap();
         getMinMax();

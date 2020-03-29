@@ -368,7 +368,7 @@ void TMainWindow::setupRecentActions(void)
 
 void TMainWindow::slotOpenDocument(void)
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM Problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh);; Result files (*.qres *.res)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh);; QFEM result files (*.qres *.res)"));
 
     if (!fileName.isEmpty())
         loadFile(fileName);
@@ -1901,10 +1901,17 @@ void TMainWindow::slotAppSettings(void)
 
 void TMainWindow::slotSaveResults(void)
 {
-    QString fileName = QFileDialog::getSaveFileName(this,tr("Saving results"),QString(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("txt").toLower()),tr("Results files (*.txt)"));
+//    QString fileName = QFileDialog::getSaveFileName(this, tr("Saving results"), QString(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("qres").toLower()), tr("QFEM result files (*.qres)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Saving results"), QString(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("qres").toLower()), tr("QFEM result files (*.qres);; QFEM report files (*.txt)"));
+    QFileInfo info(fileName);
 
     if (!fileName.isEmpty())
-        femProcessor->getFEMObject()->printResult(fileName.toStdString());
+    {
+        if (info.suffix().toUpper() == "TXT")
+            femProcessor->getFEMObject()->printResult(fileName.toStdString());
+        else if (info.suffix().toUpper() == "QRES")
+            saveQRES(fileName);
+    }
 }
 
 void TMainWindow::slotAboutProgramm(void)

@@ -72,25 +72,19 @@ public:
 
         // Считываем имя функции
         in >> name;
-        getline(in,str);
         if (in.fail())
             return false;
         in >> time;
-        getline(in,str);
 
         in >> len;
-        getline(in,str);
         if (in.fail())
             return false;
         results.resize(len, 0);
         for (unsigned i = 0; i < len; i++)
-        {
             in >> results[i];
-            getline(in,str);
-        }
         if (in.fail())
             return false;
-        return (in.fail()) ? false: true;
+        return true;
     }
     vector<double>& getResults(void)
     {
@@ -224,12 +218,9 @@ public:
         TResult c;
 
         result.clear();
-        getline(in, str);
-//        in >> sdt.tm_mday >> sdt.tm_mon >> sdt.tm_year >> sdt.tm_hour >> sdt.tm_min >> sdt.tm_sec;
+        in >> str;
         in >> sdt;
-        getline(in, str);
         in >> num;
-        getline(in, str);
         if (in.fail())
             return false;
         for (int i = 0; i < num; i++)
@@ -238,6 +229,7 @@ public:
                 return false;
             result.push_back(c);
         }
+        in.putback('\n');
         return !in.fail();
     }
     unsigned size(void)
