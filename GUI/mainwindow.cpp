@@ -1552,9 +1552,9 @@ bool TMainWindow::saveQRES(QString fileName)
 
     // ------------- Заголовок -----------------
     dt.setTime_t(femProcessor->getFEMObject()->getResult().getSolutionTime());
-    header.insert("Title", QJsonValue::fromVariant("QFEM results file"));
-    header.insert("Object", QJsonValue::fromVariant(femProcessor->getFEMObject()->getObjectName().c_str()));
-    header.insert("DateTime", QJsonValue::fromVariant(dt.currentDateTime()));
+    header.insert("Title", "QFEM results file");
+    header.insert("Object", femProcessor->getFEMObject()->getObjectName().c_str());
+    header.insert("DateTime", dt.currentDateTime().toString());
     main.insert("Header", header);
 
     // ---------------- Сетка ------------------
