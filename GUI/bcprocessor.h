@@ -2,10 +2,10 @@
 #define BCPROCESSOR_H
 
 #include <QObject>
+#include <QVector>
 #include <QVector4D>
 
 class TFEMObject;
-class TParameter;
 
 using namespace std;
 

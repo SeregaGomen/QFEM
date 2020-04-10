@@ -103,8 +103,7 @@ public:
     }
     void add(const TResult& r)
     {
-        for (unsigned i = 0; i < results.size(); i++)
-            results[i] += r.results[i];
+        results += r.results;
     }
     double min(void) const
     {

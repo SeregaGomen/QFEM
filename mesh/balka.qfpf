@@ -5,7 +5,7 @@
         "Title": "QFEM problem file"
     },
     "Mesh": {
-        "File": "/home/serg/work/Qt/QFEM/mesh/balka.trpa"
+        "File": "balka.trpa"
     },
     "Parameters": {
         "Accuracy": "1e-10",
