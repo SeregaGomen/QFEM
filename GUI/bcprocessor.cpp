@@ -59,7 +59,7 @@ void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
                 error = ABORT_ERR;
                 return;
             }
-            foreach (auto it, object->getParams().plist)
+            for (auto it: object->getParams().plist)
                 if (paramType == it.getType())
                 {
                     object->getMesh().getCoordVertex(i, coord);
@@ -92,7 +92,7 @@ void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error
                 error = ABORT_ERR;
                 return;
             }
-            foreach (auto it, object->getParams().plist)
+            for (auto it: object->getParams().plist)
                 if (it.getType() == CONCENTRATED_LOAD_PARAMETER)
                 {
                     object->getMesh().getCoordVertex(i, coord);
@@ -134,7 +134,7 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
                 return;
             }
 
-            foreach (auto it, object->getParams().plist)
+            for (auto it: object->getParams().plist)
                 if (it.getType() == PRESSURE_LOAD_PARAMETER || it.getType() == SURFACE_LOAD_PARAMETER)
                 {
                     object->getMesh().getCoordBE(i, coord);
@@ -200,7 +200,7 @@ void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
                 return;
             }
 
-            foreach (auto it, object->getParams().plist)
+            for (auto it: object->getParams().plist)
                 if (it.getType() == VOLUME_LOAD_PARAMETER)
                 {
                     object->getMesh().getCoordFE(i, coord);

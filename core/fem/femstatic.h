@@ -239,17 +239,17 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double>& load, 
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it = params.plist.begin(); it != params.plist.end(); it++)
-            if (it->getType() == CONCENTRATED_LOAD_PARAMETER && (direct = unsigned(it->getDirect())))
+        for (auto it : params.plist)
+            if (it.getType() == CONCENTRATED_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)
                     throw ABORT_ERR;
                 mesh->getCoordVertex(i, coord);
                 coord.push_back(t);
 
-                if (!params.getPredicateValue(*it, coord))
+                if (!params.getPredicateValue(it, coord))
                     continue;
-                val = params.getExpressionValue(*it, coord);
+                val = params.getExpressionValue(it, coord);
                 if ((direct & DIR_X) == DIR_X || (mesh->isPlate() && (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
                 {
                     load[i * mesh->getFreedom() + 0] += val;
@@ -283,18 +283,18 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double>& load, doubl
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it = params.plist.begin(); it != params.plist.end(); it++)
-            if (it->getType() == SURFACE_LOAD_PARAMETER && (direct = unsigned(it->getDirect())))
+        for (auto it :  params.plist)
+            if (it.getType() == SURFACE_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)
                     throw ABORT_ERR;
                 // Проверка, все ли узлы ГЭ удвлетворяют предикату
-                if (!checkBE(i, *it))
+                if (!checkBE(i, it))
                     continue;
                 share = mesh->surfaceLoadShare() * mesh->beVolume(i);
                 mesh->getCenterBE(i, coord);
                 coord.push_back(t);
-                val = params.getExpressionValue(*it, coord);
+                val = params.getExpressionValue(it, coord);
                 for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                 {
                     if ((direct & DIR_X) == DIR_X || (mesh->isPlate() && (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
@@ -331,19 +331,19 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double>& load, doub
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it = params.plist.begin(); it != params.plist.end(); it++)
-            if (it->getType() == PRESSURE_LOAD_PARAMETER)
+        for (auto it : params.plist)
+            if (it.getType() == PRESSURE_LOAD_PARAMETER)
             {
                 if (isProcessAborted)
                     throw ABORT_ERR;
                 // Проверка, все ли узлы ГЭ удвлетворяют предикату
-                if (!checkBE(i, *it))
+                if (!checkBE(i, it))
                     continue;
                 // Вычисление нагрузки
                 share = mesh->surfaceLoadShare() * mesh->beVolume(i);
                 mesh->getCenterBE(i, coord);
                 coord.push_back(t);
-                val = params.getExpressionValue(*it, coord);
+                val = params.getExpressionValue(it, coord);
                 // Вычисление нормали к ГЭ
                 mesh->normal(i, v);
 
@@ -391,18 +391,18 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double>& load, double
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it = params.plist.begin(); it != params.plist.end(); it++)
-            if (it->getType() == VOLUME_LOAD_PARAMETER && (direct = unsigned(it->getDirect())))
+        for (auto it : params.plist)
+            if (it.getType() == VOLUME_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)
                     throw ABORT_ERR;
                 // Проверка, все ли узлы КЭ удовлетворяют предикату
-                if (!checkFE(i, *it))
+                if (!checkFE(i, it))
                     continue;
                 share = mesh->volumeLoadShare() * mesh->feVolume(i);
                 mesh->getCenterFE(i, coord);
                 coord.push_back(t);
-                val = params.getExpressionValue(*it, coord);
+                val = params.getExpressionValue(it, coord);
                 for (unsigned k = 0; k < mesh->getSizeFE(); k++)
                 {
                     if ((direct & DIR_X) == DIR_X || (mesh->isPlate() && (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
@@ -438,16 +438,16 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it = params.plist.begin(); it != params.plist.end(); it++)
-            if (it->getType() == BOUNDARY_CONDITION_PARAMETER && (direct = unsigned(it->getDirect())))
+        for (auto it : params.plist)
+            if (it.getType() == BOUNDARY_CONDITION_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)
                     throw ABORT_ERR;
                 mesh->getCoordVertex(i, coord);
                 coord.push_back(0.0); // t = 0
-                if (params.getPredicateValue(*it, coord))
+                if (params.getPredicateValue(it, coord))
                 {
-                    val = params.getExpressionValue(*it, coord);
+                    val = params.getExpressionValue(it, coord);
                     if ((direct & DIR_X) == DIR_X)
                         solver.setBoundaryCondition(i * freedom + 0, val);
                     if ((direct & DIR_Y) == DIR_Y)

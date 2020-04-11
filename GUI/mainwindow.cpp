@@ -882,9 +882,9 @@ void TMainWindow::showProtocol(QString fileName)
 
     // Вывод примечаний к расчету
     webOut += "<br>";
-    for (auto it = femObject->getNotes().begin(); it != femObject->getNotes().end(); it++)
+    for (auto it: femObject->getNotes())
     {
-        webOut += it->c_str();
+        webOut += it.c_str();
         webOut += "<br>";
     }
 //    webOut += "<br>";
@@ -965,16 +965,16 @@ void TMainWindow::sayParams(QString& webOut)
 
         webOut += tr("Stress-strain curve:");
 
-        for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
-            if (it->getType() == STRESS_STRAIN_CURVE_PARAMETER)
+        for (auto it: femObject->getParams().plist)
+            if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
             {
                 webOut += "<br>";
-                webOut += QString("<b>%1</b>: %2").arg(tr("Predicate")).arg(it->getPredicate().c_str());
+                webOut += QString("<b>%1</b>: %2").arg(tr("Predicate")).arg(it.getPredicate().c_str());
                 webOut += "<br>";
 
                 webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("N")).arg(tr("Stress")).arg(tr("Deformation"));
-                for (unsigned i = 0; i < it->getStressStrainCurve().size1(); i++)
-                    webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>").arg(i + 1).arg(it->getStressStrainCurve(i, 0), int(femObject->getParams().width), 'e', int(femObject->getParams().precision)).arg(it->getStressStrainCurve(i, 1), int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
+                for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
+                    webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>").arg(i + 1).arg(it.getStressStrainCurve(i, 0), int(femObject->getParams().width), 'e', int(femObject->getParams().precision)).arg(it.getStressStrainCurve(i, 1), int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
                 webOut += "</table><br>";
 
             }
@@ -1012,8 +1012,8 @@ void TMainWindow::sayParams(QString& webOut)
         webOut += "<br>";
         num = 0;
 
-        for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
-            if (it->getType() == INITIAL_CONDITION_PARAMETER)
+        for (auto it: femObject->getParams().plist)
+            if (it.getType() == INITIAL_CONDITION_PARAMETER)
             {
                 num++;
                 break;
@@ -1023,52 +1023,52 @@ void TMainWindow::sayParams(QString& webOut)
             webOut += "<br>";
             webOut += tr("initial conditions:");
             webOut += "<br>";
-            for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
-                if (it->getType() == INITIAL_CONDITION_PARAMETER)
+            for (auto it: femObject->getParams().plist)
+                if (it.getType() == INITIAL_CONDITION_PARAMETER)
                 {
-                    if ((it->getDirect() & FUN_U) == FUN_U)
+                    if ((it.getDirect() & FUN_U) == FUN_U)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[4].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[4].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_V) == FUN_V)
+                    if ((it.getDirect() & FUN_V) == FUN_V)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[5].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[5].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_W) == FUN_W)
+                    if ((it.getDirect() & FUN_W) == FUN_W)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[6].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[6].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_UT) == FUN_UT)
+                    if ((it.getDirect() & FUN_UT) == FUN_UT)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[19].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[19].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_VT) == FUN_VT)
+                    if ((it.getDirect() & FUN_VT) == FUN_VT)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[20].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[20].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_WT) == FUN_WT)
+                    if ((it.getDirect() & FUN_WT) == FUN_WT)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[21].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[21].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_UTT) == FUN_UTT)
+                    if ((it.getDirect() & FUN_UTT) == FUN_UTT)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[22].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[22].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_VTT) == FUN_VTT)
+                    if ((it.getDirect() & FUN_VTT) == FUN_VTT)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[23].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[23].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
-                    if ((it->getDirect() & FUN_WTT) == FUN_WTT)
+                    if ((it.getDirect() & FUN_WTT) == FUN_WTT)
                     {
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[24].c_str()).arg(it->getExpression().c_str());
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[24].c_str()).arg(it.getExpression().c_str());
                         webOut += "<br>";
                     }
                 }
@@ -1080,9 +1080,9 @@ void TMainWindow::sayParams(QString& webOut)
         webOut += "<br>";
         webOut += tr("variables:");
         webOut += "<br>";
-        for (auto it = femObject->getParams().variables.begin(); it != femObject->getParams().variables.end(); ++it)
+        for (auto it: femObject->getParams().variables)
         {
-            webOut += tr("name: <b>%1</b>, value: <b>%2</b>").arg(it->first.c_str()).arg(it->second);
+            webOut += tr("name: <b>%1</b>, value: <b>%2</b>").arg(it.first.c_str()).arg(it.second);
             webOut += "<br>";
         }
     }
@@ -1096,8 +1096,8 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, int param, boo
     QString predicate;
     TFEMObject* femObject = femProcessor->getFEMObject();
 
-    for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
-        if (it->getType() == param)
+    for (auto it: femObject->getParams().plist)
+        if (it.getType() == param)
         {
             num++;
             break;
@@ -1117,23 +1117,23 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, int param, boo
                 webOut += QString("<th>%1</th>").arg(femObject->getParams().names[2].c_str());
             webOut += "</tr>";
         }
-        for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
+        for (auto it: femObject->getParams().plist)
         {
-            if (it->getType() != param)
+            if (it.getType() != param)
                 continue;
-            predicate = QString(it->getPredicate().c_str()).replace(QString("<="), QString("&lt;=")).replace(QString(">="), QString("&gt;="));
-            webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td>").arg(num++).arg(it->getExpression().c_str()).arg(predicate);
+            predicate = QString(it.getPredicate().c_str()).replace(QString("<="), QString("&lt;=")).replace(QString(">="), QString("&gt;="));
+            webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td>").arg(num++).arg(it.getExpression().c_str()).arg(predicate);
             if (isDirect)
             {
-                if ((it->getDirect() & DIR_X) == DIR_X)
+                if ((it.getDirect() & DIR_X) == DIR_X)
                     webOut += QString("<td>%1</td>").arg("+");
                 else
                     webOut += QString("<td>%1</td>").arg("");
-                if ((it->getDirect() & DIR_Y) == DIR_Y)
+                if ((it.getDirect() & DIR_Y) == DIR_Y)
                     webOut += QString("<td>%1</td>").arg("+");
                 else if (femObject->getMesh().getFreedom() > 1)
                     webOut += QString("<td>%1</td>").arg("");
-                if ((it->getDirect() & DIR_Z) == DIR_Z)
+                if ((it.getDirect() & DIR_Z) == DIR_Z)
                     webOut += QString("<td>%1</td>").arg("+");
                 else if (femObject->getMesh().getFreedom() > 2)
                     webOut += QString("<td>%1</td>").arg("");
@@ -1467,23 +1467,23 @@ void TMainWindow::saveParam(QJsonObject &main)
     paramObj.insert("Nonlinearity", nonlin);
 
     // Краевые условия и прочие параметры
-    for (auto it = params.plist.begin(); it != params.plist.end(); it++)
+    for (auto it: params.plist)
     {
         QJsonObject bc;
 
-        bc.insert("Type", it->getType());
-        bc.insert("Direct", it->getDirect());
-        bc.insert("Predicate", it->getPredicate().c_str());
-        if (it->getType() == STRESS_STRAIN_CURVE_PARAMETER)
+        bc.insert("Type", it.getType());
+        bc.insert("Direct", it.getDirect());
+        bc.insert("Predicate", it.getPredicate().c_str());
+        if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
         {
             val = "{";
-            for (unsigned i = 0; i < it->getStressStrainCurve().size1(); i++)
-                val += QString("{%1, %2}%3 ").arg(it->getStressStrainCurve(i, 0)).arg(it->getStressStrainCurve(i, 1)).arg((i < it->getStressStrainCurve().size1() - 1) ? "," : "");
+            for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
+                val += QString("{%1, %2}%3 ").arg(it.getStressStrainCurve(i, 0)).arg(it.getStressStrainCurve(i, 1)).arg((i < it.getStressStrainCurve().size1() - 1) ? "," : "");
             val += "}";
             bc.insert("Expression", val);
         }
         else
-            bc.insert("Expression", it->getExpression().c_str());
+            bc.insert("Expression", it.getExpression().c_str());
 
         lbc.push_back(bc);
     }
@@ -1495,8 +1495,8 @@ void TMainWindow::saveParam(QJsonObject &main)
     paramObj.insert("Names", names);
 
     // Вспомагательные параметры (для парсера)
-    for (auto it = params.variables.begin(); it != params.variables.end(); ++it)
-        variables.push_back(QString("%1 %2").arg(it->first.c_str()).arg(it->second));
+    for (auto it: params.variables)
+        variables.push_back(QString("%1 %2").arg(it.first.c_str()).arg(it.second));
     paramObj.insert("Variables", variables);
 
     main.insert("Parameters", paramObj);

@@ -58,7 +58,7 @@ void TParser::set_expression(string prog)
     compile();
 }
 /********************************************************************/
-bool TParser::is_find(idToken table[],string id,int& token)
+bool TParser::is_find(idToken table[], string id, int& token)
 {
     int  i = 0;
 
@@ -364,15 +364,15 @@ void TParser::token_func(Tree& code)
     }
 }
 /********************************************************************/
-void TParser::set_variable(string name,double value)
+void TParser::set_variable(string name, double value)
 {
     variables[name] = value;
 }
 /********************************************************************/
-void TParser::set_variables(map<string,double>& m)
+void TParser::set_variables(map<string, double>& m)
 {
-    for (auto it = m.begin(); it != m.end(); ++it)
-        variables[it->first] = it->second;
+    for (auto it : m)
+        variables[it.first] = it.second;
 }
 /********************************************************************/
 

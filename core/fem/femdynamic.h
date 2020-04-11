@@ -131,12 +131,12 @@ template<class T> void TFEMDynamic<T>::getInitialCondition(void)
     double value;
 
     u0.resize(9, TFEM::mesh->getNumVertex());
-    for (auto it = TFEM::params.plist.begin(); it != TFEM::params.plist.end(); it++)
-        if (it->getType() == INITIAL_CONDITION_PARAMETER)
+    for (auto it : TFEM::params.plist)
+        if (it.getType() == INITIAL_CONDITION_PARAMETER)
         {
-            parser.set_expression(it->getExpression());
+            parser.set_expression(it.getExpression());
             value = parser.run();
-            direct = unsigned(it->getDirect());
+            direct = unsigned(it.getDirect());
 
             for (unsigned j = 0; j < TFEM::mesh->getNumVertex(); j++)
             {

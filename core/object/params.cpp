@@ -103,15 +103,15 @@ void TFEMParams::getMatrixParam(vector<double>& cx, matrix<double>& res)
 //--------------------------------------------------------------------
 void TFEMParams::getParam(int p, vector<double>& cx, double& d, matrix<double>& m)
 {
-    for (auto it = plist.begin(); it != plist.end(); it++)
-        if (it->getType() == p)
+    for (auto it : plist)
+        if (it.getType() == p)
         {
-            if (!getPredicateValue(*it, cx))
+            if (!getPredicateValue(it, cx))
                 continue;
             if (p == STRESS_STRAIN_CURVE_PARAMETER)
-                m = it->getStressStrainCurve();
+                m = it.getStressStrainCurve();
             else
-                d = getExpressionValue(*it, cx);
+                d = getExpressionValue(it, cx);
             break;
         }
 }
@@ -120,13 +120,13 @@ double TFEMParams::getMinStress(void)
 {
     double res = DBL_MAX;
 
-    for (auto it = plist.begin(); it != plist.end(); it++)
-        if (it->getType() == STRESS_STRAIN_CURVE_PARAMETER)
+    for (auto it : plist)
+        if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
         {
-            if (!it->getStressStrainCurve().size1())
+            if (!it.getStressStrainCurve().size1())
                 throw NONLINEAR_PARAM_ERR;
-            if (it->getStressStrainCurve().size1() && it->getStressStrainCurve(1, 0) < res)
-                res = it->getStressStrainCurve(1, 0);
+            if (it.getStressStrainCurve().size1() && it.getStressStrainCurve(1, 0) < res)
+                res = it.getStressStrainCurve(1, 0);
         }
     return res;
 }
@@ -233,12 +233,12 @@ bool TFEMParams::write(ofstream& out)
 
     // Краевые условия, нагрузки, etc
     out << plist.size() << endl;
-    for (auto it = plist.begin(); it != plist.end(); it++)
+    for (auto it : plist)
     {
-        out << it->getType() << endl;   // Тип условия
-        out << it->getDirect() << endl; // Номер функции: 0 - X, ...
-        out << it->getExpression() << endl;
-        out << it->getPredicate() << endl;
+        out << it.getType() << endl;   // Тип условия
+        out << it.getDirect() << endl; // Номер функции: 0 - X, ...
+        out << it.getExpression() << endl;
+        out << it.getPredicate() << endl;
     }
 
     // Вспомогательные параметры

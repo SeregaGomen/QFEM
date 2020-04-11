@@ -16,7 +16,7 @@ private:
     {
         min = std::numeric_limits<float>::max();
         max = std::numeric_limits<float>::min();
-        foreach (QVector4D v, vertex)
+        for (auto v: vertex)
         {
             min = qMin(min, v.w());
             max = qMax(max, v.w());
