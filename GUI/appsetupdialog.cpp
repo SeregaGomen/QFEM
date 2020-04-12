@@ -1,7 +1,7 @@
 #include "appesetupdialog.h"
 #include "ui_appsetupdialog.h"
 
-TAppSetupDialog::TAppSetupDialog(int lang,bool black, bool scroll,bool protocol,QWidget *parent) :
+TAppSetupDialog::TAppSetupDialog(int lang, bool results, bool scroll, bool protocol, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TAppSetupDialog)
 {
@@ -14,8 +14,8 @@ TAppSetupDialog::TAppSetupDialog(int lang,bool black, bool scroll,bool protocol,
         case 1:
             ui->rbRU->setChecked(true);
     }
-    ui->cbBlackBkg->setChecked(black);
     ui->cbAutoScroll->setChecked(scroll);
+    ui->cbAutoSaveResults->setChecked(results);
     ui->cbAutoSaveProtocol->setChecked(protocol);
 }
 
@@ -38,9 +38,9 @@ int TAppSetupDialog::getLangNo(void)
     return 2;
 }
 
-bool TAppSetupDialog::getIsBlackBkg(void)
+bool TAppSetupDialog::getIsAutoSaveResults(void)
 {
-    return ui->cbBlackBkg->isChecked();
+    return ui->cbAutoSaveResults->isChecked();
 }
 
 bool TAppSetupDialog::getIsAutoScroll(void)

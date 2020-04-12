@@ -75,7 +75,7 @@ void TMainWindow::init(void)
 //        setWindowIcon(QIcon(":/images/main.png"));
     #endif
 
-    isAutoSaveProtocol = isAutoScroll = isBlackBkg = isUntitled = true;
+    isAutoSaveProtocol = isAutoScroll = isAutoSaveResults = isUntitled = true;
 
     femProcessor = new TFEMProcessor();
     bcProcessor = new TBCProcessor(femProcessor->getFEMObject());
@@ -97,9 +97,9 @@ void TMainWindow::init(void)
     thread = new QThread(this);
 
     terminal = new TTerminal(thread, this);
-    terminal->setFontWeight( QFont::DemiBold );
-    terminal->setTextColor( QColor( "gray" ) );
-    terminal->setStyleSheet((isBlackBkg) ? "QTextEdit { background-color: rgb(0, 0, 0) }" : "QTextEdit { background-color: rgb(255, 255, 255) }");
+//    terminal->setFontWeight( QFont::DemiBold );
+    terminal->setTextColor( QColor( "white" ) );
+    terminal->setStyleSheet("QTextEdit { background-color: rgb(0, 0, 0) }");
     terminal->setReadOnly(true);
     terminal->setWordWrapMode(QTextOption::NoWrap);
     terminal->setFont(QFont("Courier"));
@@ -118,6 +118,7 @@ void TMainWindow::init(void)
     myCout = new QStdRedirector<>(std::cout, this);
 //    connect(myCout, SIGNAL(messageChanged(QString)), terminal, SLOT(insertPlainText(QString)));
     connect(myCout, SIGNAL(messageChanged(QString)), this, SLOT(slotMsg(QString)));
+    cout << ' ';
 
     myCerr = new QStdRedirector<>(std::cerr, this);
 //    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(setErrColor()));
@@ -437,7 +438,7 @@ void TMainWindow::readSettings(void)
     bool isTerminal = settings.value("terminal").toBool();
     int states = settings.value("state").toInt();
 
-    isBlackBkg = settings.value("black").toBool();
+    isAutoSaveResults = settings.value("results").toBool();
     isAutoScroll = settings.value("scroll").toBool();
     isAutoSaveProtocol = settings.value("protocol").toBool();
     ui->actionTerminal->setChecked(isTerminal);
@@ -464,7 +465,7 @@ void TMainWindow::writeSettings(void)
     settings.setValue("terminal", ui->actionTerminal->isChecked());
     settings.setValue("recentFileList", files);
     settings.setValue("lang", langNo);
-    settings.setValue("black", isBlackBkg);
+    settings.setValue("results", isAutoSaveResults);
     settings.setValue("scroll", isAutoScroll);
     settings.setValue("protocol", isAutoSaveProtocol);
 }
@@ -809,7 +810,8 @@ void TMainWindow::startSolvingProblem(void)
 //            showResults(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("txt").toLower());
             QApplication::setOverrideCursor(Qt::BusyCursor);
             // femObject->saveResult(qresFile.toStdString());
-            saveQRES(qresFile);
+            if (isAutoSaveResults)
+                saveQRES(qresFile);
             showProtocol(htmlFile);
             QApplication::restoreOverrideCursor();
         }
@@ -1719,27 +1721,13 @@ bool TMainWindow::loadRES(QString fileName)
 
 bool TMainWindow::loadQRES(QString fileName)
 {
-//    bool ret;
-//    QString htmlFile = QFileInfo(fileName).absolutePath() + "/" +  QFileInfo(fileName).baseName() + ".html";
-
-//    QApplication::setOverrideCursor(Qt::BusyCursor);
-//    ret = femProcessor->getFEMObject()->loadResult(fileName.toStdString());
-//    QApplication::setOverrideCursor(Qt::ArrowCursor);
-//    if (!ret)
-//    {
-//        QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
-//        return false;
-//    }
-//    showProtocol(htmlFile);
-//    checkMenuState();
-//    return true;
-
     QString val,
             htmlFile = QFileInfo(fileName).absolutePath() + "/" +  QFileInfo(fileName).baseName() + ".html";
     QFile file;
     QJsonDocument doc;
     QJsonObject obj;
 
+//    cout << endl;
     // Чтение из файла
     file.setFileName(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -1861,7 +1849,7 @@ void TMainWindow::setupLanguage(void)
 
 void TMainWindow::slotAppSettings(void)
 {
-    TAppSetupDialog* dlg = new TAppSetupDialog(langNo, isBlackBkg, isAutoScroll, isAutoSaveProtocol, this);
+    TAppSetupDialog* dlg = new TAppSetupDialog(langNo, isAutoSaveResults, isAutoScroll, isAutoSaveProtocol, this);
 
     dlg->changeLanguage();
     if (dlg->exec() != QDialog::Accepted)
@@ -1879,24 +1867,9 @@ void TMainWindow::slotAppSettings(void)
     }
     ui->retranslateUi(this);
     femProcessor->getFEMObject()->setLanguage(langNo);
-
-    if ((isBlackBkg = dlg->getIsBlackBkg()) == true)
-    {
-        terminal->setStyleSheet("QTextEdit { background-color: rgb(0, 0, 0) }");
-//        terminal->setPalette(QPalette(QPalette::Base, QColor("black")));
-//        terminal->selectAll();
-//        terminal->setTextColor(QColor("white"));
-    }
-    else
-    {
-        terminal->setStyleSheet("QTextEdit { background-color: rgb(255, 255, 255) }");
-//        terminal->setPalette(QPalette(QPalette::Base, QColor("white")));
-//        terminal->selectAll();
-//        terminal->setTextColor(QColor("black"));
-    }
-
     isAutoScroll = dlg->getIsAutoScroll();
     isAutoSaveProtocol = dlg->getIsAutoSaveProtocol();
+    isAutoSaveResults = dlg->getIsAutoSaveResults();
 }
 
 void TMainWindow::slotSaveResults(void)

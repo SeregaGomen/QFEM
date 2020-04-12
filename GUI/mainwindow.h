@@ -91,7 +91,7 @@ private:
     QProgressBar *pb;
     bool isUntitled;
     bool isAutoScroll;
-    bool isBlackBkg;
+    bool isAutoSaveResults;
     bool isAutoSaveProtocol;
     int curTabIndex;
     unsigned getTimeDeltaIndex(QString);

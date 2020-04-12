@@ -95,17 +95,17 @@
    <property name="title">
     <string>Terminal</string>
    </property>
-   <widget class="QCheckBox" name="cbBlackBkg">
+   <widget class="QCheckBox" name="cbAutoSaveResults">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>40</y>
       <width>151</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Black background</string>
+     <string>Autosave results</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -115,7 +115,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>20</y>
       <width>151</width>
       <height>22</height>
      </rect>

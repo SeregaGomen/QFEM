@@ -12,11 +12,11 @@ class TAppSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TAppSetupDialog(int,bool,bool,bool,QWidget *parent = nullptr);
+    explicit TAppSetupDialog(int, bool, bool, bool, QWidget *parent = nullptr);
     ~TAppSetupDialog();
     void changeLanguage(void);
     int getLangNo(void);
-    bool getIsBlackBkg(void);
+    bool getIsAutoSaveResults(void);
     bool getIsAutoScroll(void);
     bool getIsAutoSaveProtocol(void);
 
