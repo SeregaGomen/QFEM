@@ -1651,12 +1651,12 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
 
     // Краевые условия и прочие параметры
     params.plist.clear();
-    foreach (const QJsonValue &value, lbc)
+    for (auto value: lbc)
     {
-        int type = value["Type"].toInt(),
-            direct = value["Direct"].toInt();
-        QString predicate = value["Predicate"].toString(),
-                expression = value["Expression"].toString();
+        int type = static_cast<QJsonValue>(value)["Type"].toInt(),
+            direct = static_cast<QJsonValue>(value)["Direct"].toInt();
+        QString predicate = static_cast<QJsonValue>(value)["Predicate"].toString(),
+                expression = static_cast<QJsonValue>(value)["Expression"].toString();
         TParameter p(type, expression.toStdString(), predicate.toStdString(), direct);
 
         params.plist.push_back(p);
@@ -1664,12 +1664,12 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
 
     // Названия
     params.names.clear();
-    foreach (const QJsonValue &value, nm)
+    for (auto value: nm)
         params.names.push_back(value.toString().toStdString());
 
     // Вспомагательные параметры (для парсера)
     params.variables.clear();
-    foreach (const QJsonValue &value, var)
+    for (auto value: var)
     {
         QStringList sl = value.toString().split(" ");
 
@@ -1687,13 +1687,13 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
     TResultList &result = femProcessor->getFEMObject()->getResult();
 
     result.clear();
-    foreach (const QJsonValue &value, resultArr)
+    for (auto value: resultArr)
     {
         res.clear();
         name = value["Function"].toString();
         t = value["Time"].toDouble();
         arr = value["Values"].toArray();
-        foreach (const QJsonValue &v, arr)
+        for (auto v: arr)
             res.push_back(v.toDouble());
         result.setResult(res, name.toStdString(), t);
     }
