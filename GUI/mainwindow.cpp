@@ -1810,8 +1810,9 @@ bool TMainWindow::calcExpression(QString expression, QString& name)
             QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
             return false;
         }
-        if ((results[i] = parser.run()) == 0.0)
-            return false;
+        results[i] = parser.run();
+//        if ((results[i] = parser.run()) == 0.0)
+//            return false;
     }
     femObject->getResult().addResult(reinterpret_cast<double*>(&(results[0])), unsigned(results.size()), name.toStdString());
     return true;

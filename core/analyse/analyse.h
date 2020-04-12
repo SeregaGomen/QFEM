@@ -149,10 +149,10 @@ public:
     {
         TResult c(res,n,t);
 
-        for (unsigned i = 0; i < result.size(); i++)
-            if (!n.compare(result[i].getName()))
+        for (auto it: result)
+            if (!n.compare(it.getName()))
             {
-                result[i] = c;
+                it = c;
                 return;
             }
         result.push_back(c);
@@ -161,10 +161,10 @@ public:
     {
         TResult c(res,n);
 
-        for (unsigned i = 0; i < result.size(); i++)
-            if (!n.compare(result[i].getName()))
+        for (auto it: result)
+            if (!n.compare(it.getName()))
             {
-                result[i].add(c);
+                it.add(c);
                 return;
             }
         result.push_back(c);
@@ -173,10 +173,10 @@ public:
     {
         TResult c(res,sz,n,t);
 
-        for (unsigned i = 0; i < result.size(); i++)
-            if (!n.compare(result[i].getName()))
+        for (auto it: result)
+            if (!n.compare(it.getName()))
             {
-                result[i] = c;
+                it = c;
                 return;
             }
         result.push_back(c);
@@ -185,10 +185,10 @@ public:
     {
         TResult c(res,sz,n);
 
-        for (unsigned i = 0; i < result.size(); i++)
-            if (!n.compare(result[i].getName()))
+        for (auto it: result)
+            if (!n.compare(it.getName()))
             {
-                result[i].add(c);
+                it.add(c);
                 return;
             }
         result.push_back(c);
@@ -205,8 +205,8 @@ public:
         out << result.size() << endl;
         if (out.fail())
             return false;
-        for (unsigned i = 0; i < result.size(); i++)
-            if (!result[i].write(out))
+        for (auto it: result)
+            if (!it.write(out))
                 return false;
         return !out.fail();
     }
@@ -241,17 +241,9 @@ public:
     }
     int index(string n)
     {
-        int num = 0;
-        bool isFind = false;
+        auto res = find_if(result.begin(), result.end(), [=](auto& it) -> bool { return it.getName() == n; });
 
-        for (unsigned i = 0; i < result.size(); i++)
-            if (!n.compare(result[i].getName()))
-            {
-                num = int(i);
-                isFind = true;
-                break;
-            }
-        return (isFind) ? num : -1;
+        return (res == result.end()) ? -1 : int(res - result.begin());
     }
 };
 
