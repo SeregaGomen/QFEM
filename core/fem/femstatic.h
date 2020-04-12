@@ -283,7 +283,7 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double>& load, doubl
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it :  params.plist)
+        for (auto it:  params.plist)
             if (it.getType() == SURFACE_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)
@@ -331,7 +331,7 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double>& load, doub
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it : params.plist)
+        for (auto it: params.plist)
             if (it.getType() == PRESSURE_LOAD_PARAMETER)
             {
                 if (isProcessAborted)
@@ -391,7 +391,7 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double>& load, double
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it : params.plist)
+        for (auto it: params.plist)
             if (it.getType() == VOLUME_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)
@@ -438,7 +438,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
     for (unsigned i = begin; i < end; i++)
     {
         msg->addProgress();
-        for (auto it : params.plist)
+        for (auto it: params.plist)
             if (it.getType() == BOUNDARY_CONDITION_PARAMETER && (direct = unsigned(it.getDirect())))
             {
                 if (isProcessAborted)

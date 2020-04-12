@@ -223,16 +223,16 @@ template<class T> void TFEMDynamic<T>::calcDynamicResult(matrix<double>& results
 template<class T> void TFEMDynamic<T>::createDynamicVector(void)
 {
     unsigned nvtx = TFEM::mesh->getNumVertex(),
-            freedom = TFEM::mesh->getFreedom(),
-            size = nvtx * freedom;
+             freedom = TFEM::mesh->getFreedom(),
+             size = nvtx * freedom;
     double k1 = 3.0 / (TFEM::params.theta * TFEM::params.th),
-            k2 = 6.0 / (TFEM::params.theta * TFEM::params.theta * TFEM::params.th * TFEM::params.th),
-            k3 = 0.5 * TFEM::params.theta * TFEM::params.th;
+           k2 = 6.0 / (TFEM::params.theta * TFEM::params.theta * TFEM::params.th * TFEM::params.th),
+           k3 = 0.5 * TFEM::params.theta * TFEM::params.th;
     vector<double> load(size),
-            u1(size),
-            u2(size),
-            r1(size),
-            r2(size);
+                   u1(size),
+                   u2(size),
+                   r1(size),
+                   r2(size);
 
     // Вычисление вектора нагрузок для текущего момента времени
     TFEMStatic<T>::calcLoad(load, t);

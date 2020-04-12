@@ -176,7 +176,7 @@ public:
     // Вывод рез-тов по каждой функции на экран
     void printResultSummary(double t = 0)
     {
-        cout << "-------------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------------" << endl;
         cout.setf(ios::left);
         cout << setw(10) << ' ' << setw(params.width) << "\tmin" << ' ' << setw(params.width) << "\tmax" << endl;
         cout.flags (ios::floatfield | ios::scientific | ios::showpos);
@@ -185,7 +185,7 @@ public:
                 cout << setw(10) << (*results)[i].getName() << '\t' << std::scientific << setw(params.width) <<
                         setprecision(params.precision) << (*results)[i].min() << '\t' << setw(params.width) << (*results)[i].max() << endl;
         cout.unsetf(ios::showpos);
-        cout << "-------------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------------" << endl;
     }
     bool isCalculated(void)
     {
