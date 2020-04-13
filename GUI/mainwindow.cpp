@@ -98,8 +98,10 @@ void TMainWindow::init(void)
 
     terminal = new TTerminal(thread, this);
 //    terminal->setFontWeight( QFont::DemiBold );
-    terminal->setTextColor( QColor( "white" ) );
-    terminal->setStyleSheet("QTextEdit { background-color: rgb(0, 0, 0) }");
+//    terminal->setTextColor( QColor( "white" ) );
+    terminal->setTextColor( QColor( "black" ) );
+//    terminal->setStyleSheet("QTextEdit { background-color: rgb(0, 0, 0) }");
+    terminal->setStyleSheet("QTextEdit { background-color: rgb(255, 255, 255) }");
     terminal->setReadOnly(true);
     terminal->setWordWrapMode(QTextOption::NoWrap);
     terminal->setFont(QFont("Courier"));
@@ -991,6 +993,10 @@ void TMainWindow::sayParams(QString& webOut)
     if (femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D())
         sayParam(webOut, "FE thickness", THICKNESS_PARAMETER, false);
 
+
+    // --------------- Термоупругие параметры ---------------
+    sayParam(webOut, "Thermal expansion", ALPHA_PARAMETER, false);
+    sayParam(webOut, "Temperatire", TEMPERATURE_PARAMETER, false);
 
     // --------------- Краевые условия задачи ---------------
     sayParam(webOut, "Boundary condition", BOUNDARY_CONDITION_PARAMETER);
