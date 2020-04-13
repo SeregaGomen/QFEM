@@ -112,6 +112,20 @@ public:
         cols = r.cols;
         buffer = r.buffer;
     }
+    matrix(initializer_list< initializer_list<T> > r)
+    {
+        rows = unsigned(r.size());
+        cols = unsigned(r.begin()[0].size());
+        for (auto i: r)
+            for (auto j: i)
+            {
+#ifdef DEBUG
+                if (i.size() != cols)
+                    cerr << "initializer_list error" << endl;
+#endif
+                buffer.push_back(j);
+            }
+    }
    ~matrix()
     {
         buffer.clear();
