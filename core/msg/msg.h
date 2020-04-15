@@ -347,7 +347,7 @@ private:
             //std::this_thread::yield();
             this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-        cout << '\r' << sayProcess(processCode) << "... 100%" << endl << flush;
+        cout << '\r' << sayProcess(processCode) << "... 100%" << endl;
     }
 protected:
     ProcessCode processCode;    // Код процесса
@@ -391,7 +391,7 @@ public:
 
         if (processCurrent == processStop)
         {
-            ss << '\r' << sayProcess(processCode) << "... 100%"/* << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl << endl*/;
+            ss << '\r' << sayProcess(processCode) << "... 100%";
             cout << ss.str() << flush;
             return;
         }
@@ -410,14 +410,14 @@ public:
 
 //        if (processCurrent == processStop)
 //            return;
-        ss << '\r' << sayProcess(processCode) << "... 100%" << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl << endl;
+        ss << '\r' << sayProcess(processCode) << "... 100%" << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl;
         cout << ss.str() << flush;
     }
     virtual void stop(void)
     {
         isStopped = true;
         this_thread::sleep_for(std::chrono::milliseconds(200));
-        cout << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl << endl;
+        cout << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl;
     }
 };
 

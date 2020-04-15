@@ -522,7 +522,7 @@ void TProblemSetupForm::clear(void)
     removeAllRows(ui->twDensity);
     removeAllRows(ui->twDamping);
 
-    ui->textLoadStep->setText("0.01");
+    ui->textLoadStep->setText("1");
     ui->rbLinear->setChecked(true);
     ui->rbMVS->setChecked(false);
     ui->rbMES->setChecked(false);

@@ -20,7 +20,7 @@ template <typename T> vector<T> operator + (const vector<T>& left, const vector<
         cerr << "vector<T> operator + (const vector<T>& left, const vector<T>& right) " << left.size() << ' ' << right.size() << endl;
 #endif
 
-    transform(left.begin(), left.end(), right.begin(), r.begin(), plus<T>());
+    transform(left.begin(), left.end(), right.begin(), r.begin(), std::plus<T>());
     return r;
 }
 

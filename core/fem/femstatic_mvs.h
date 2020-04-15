@@ -45,7 +45,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
            maxLoad,
            loadFactor,
            addLoad = 0,
-           step = loadStep / 100;
+           step = loadStep * 0.01;
     unsigned hour,
              min,
              sec,

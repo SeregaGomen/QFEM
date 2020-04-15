@@ -147,10 +147,10 @@ public:
     }
     void setResult(vector<double>& res, string n, double t = 0)
     {
-        TResult c(res,n,t);
+        TResult c(res, n, t);
 
-        for (auto it: result)
-            if (!n.compare(it.getName()))
+        for (auto &it: result)
+            if (n == it.getName())
             {
                 it = c;
                 return;
@@ -159,10 +159,10 @@ public:
     }
     void addResult(vector<double>& res, string n)
     {
-        TResult c(res,n);
+        TResult c(res, n);
 
-        for (auto it: result)
-            if (!n.compare(it.getName()))
+        for (auto &it: result)
+            if (n == it.getName())
             {
                 it.add(c);
                 return;
@@ -171,10 +171,10 @@ public:
     }
     void setResult(double* res, unsigned sz, string n, double t = 0)
     {
-        TResult c(res,sz,n,t);
+        TResult c(res, sz, n, t);
 
-        for (auto it: result)
-            if (!n.compare(it.getName()))
+        for (auto &it: result)
+            if (n == it.getName())
             {
                 it = c;
                 return;
@@ -183,10 +183,10 @@ public:
     }
     void addResult(double* res, unsigned sz, string n)
     {
-        TResult c(res,sz,n);
+        TResult c(res, sz, n);
 
-        for (auto it: result)
-            if (!n.compare(it.getName()))
+        for (auto &it: result)
+            if (n == it.getName())
             {
                 it.add(c);
                 return;
