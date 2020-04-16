@@ -14,9 +14,9 @@ INCLUDEPATH += ../core \
                ../../../eigen
 
 
-msvc:QMAKE_CXXFLAGS+= /openmp
-gcc:QMAKE_CXXFLAGS+= -fopenmp
-gcc:QMAKE_LFLAGS += -fopenmp
+#msvc:QMAKE_CXXFLAGS+= /openmp
+#gcc:QMAKE_CXXFLAGS+= -fopenmp
+#gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
     INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
