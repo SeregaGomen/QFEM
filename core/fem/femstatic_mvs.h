@@ -57,6 +57,8 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
          isStopRewind = false;
     ostringstream out;
 
+    cout << S_NUM_THREAD << numThread << endl;
+
     maxLoad = 0;
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
@@ -107,7 +109,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             // Вывод информации об итерации
             cout << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxLoad << endl;
             cout << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi << endl;
-            cout << S_MSG_ITERATION << count++ << endl << endl;
+            cout << S_MSG_ITERATION << count++ << endl;
             cout.unsetf(ios::scientific);
 
             if (iterNo == 0)

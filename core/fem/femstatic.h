@@ -9,7 +9,7 @@
 #define MULTI_THREAD // Многопоточный расчет
 
 #ifdef MULTI_THREAD
-    const int numThread = thread::hardware_concurrency() - 1;
+    const int numThread = 4; //thread::hardware_concurrency() - 1;
 #else
     const int numThread = 0;
 #endif
@@ -711,7 +711,7 @@ template<class T> double TFEMStatic<T>::calcStressIntensity(TResultList &res, ve
         getStressIntensity(res, si, 0, TFEM::mesh->getNumVertex());
     else
     {
-        step = TFEM::mesh->getNumFE() / numThread;
+        step = TFEM::mesh->getNumVertex() / numThread;
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<T>::getStressIntensity, this, ref(res), ref(si), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });

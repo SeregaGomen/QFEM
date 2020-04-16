@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
-//#include <mutex>
 
 extern int langCode;
 
@@ -335,7 +334,6 @@ private:
     time_t timer;
     bool isStopped = false;
     thread progress_thread;
-    //mutex mtx;
     void backgroundRun(bool& isStopped)
     {
         char chr[] = { '|', '/', '-', '\\' };

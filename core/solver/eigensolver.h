@@ -1,6 +1,7 @@
 #ifndef EIGENSOLVER_H
 #define EIGENSOLVER_H
 
+#include <mutex>
 #include <Eigen/Sparse>
 #include "solver.h"
 
@@ -13,6 +14,7 @@ class TEigenSolver : public TSolver< SparseMatrix<double> >
 {
 private:
     VectorXi memMap;
+    mutex mtx;
     bool loadMatrix(string, SparseMatrix<double>&);
     bool saveMatrix(string, SparseMatrix<double>&);
 public:
@@ -43,17 +45,17 @@ public:
     }
     void addStiffness(double value, unsigned i, unsigned j)
     {
-#pragma omp critical
-            stiffnessMatrix.coeffRef(i, j) += value;
+        lock_guard<mutex> guard(mtx);
+        stiffnessMatrix.coeffRef(i, j) += value;
     }
     void addMass(double value, unsigned i, unsigned j)
     {
-#pragma omp critical
+        lock_guard<mutex> guard(mtx);
         massMatrix.coeffRef(i, j) += value;
     }
     void addDamping(double value, unsigned i, unsigned j)
     {
-#pragma omp critical
+        lock_guard<mutex> guard(mtx);
         dampingMatrix.coeffRef(i, j) += value;
     }
     void print(string);
