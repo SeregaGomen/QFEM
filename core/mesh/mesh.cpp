@@ -618,7 +618,10 @@ bool TMesh::read(ifstream& in)
         return (error = true);
     }
     if (isPlate() || isShell())
+    {
+        in >> val;
         be = fe;
+    }
     else
     {
         // Cчитываем ГЭ

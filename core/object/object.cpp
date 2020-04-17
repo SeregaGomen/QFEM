@@ -80,7 +80,7 @@ bool TFEMObject::saveResult(string fname)
     }
     out.precision(16);
 
-    msg->setProcess(WRITE_RESULT_PROCESS);
+//    msg->setProcess(WRITE_RESULT_PROCESS);
     // Запись подписи
     out << "Core QFEM results file" << endl;
     // Запись сетки
@@ -88,7 +88,7 @@ bool TFEMObject::saveResult(string fname)
     if (out.fail())
     {
         out.close();
-        msg->stop();
+//        msg->stop();
         cerr << sayError(WRITE_FILE_ERR) << endl;
         return false;
     }
@@ -96,7 +96,7 @@ bool TFEMObject::saveResult(string fname)
     if (!results.write(out))
     {
         out.close();
-        msg->stop();
+//        msg->stop();
         cerr << sayError(WRITE_FILE_ERR) << endl;
         return false;
     }
@@ -111,7 +111,7 @@ bool TFEMObject::saveResult(string fname)
 
     ret = out.fail();
     out.close();
-    msg->stop();
+//    msg->stop();
     return !ret;
 }
 //-------------------------------------------------------------
@@ -126,12 +126,12 @@ bool TFEMObject::loadResult(string fname)
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return false;
     }
-    msg->setProcess(READ_RESULT_PROCESS);
+//    msg->setProcess(READ_RESULT_PROCESS);
     // Считывание заголовка
     getline(in, str);
     if (str != "Core QFEM results file")
     {
-        msg->stop();
+//        msg->stop();
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
         return false;
@@ -140,7 +140,7 @@ bool TFEMObject::loadResult(string fname)
     mesh.read(in);
     if (in.fail())
     {
-        msg->stop();
+//        msg->stop();
         in.close();
         cerr << sayError(READ_FILE_ERR) << endl;
         return false;
@@ -148,7 +148,7 @@ bool TFEMObject::loadResult(string fname)
     // Загрузка результатов
     if (!results.read(in))
     {
-        msg->stop();
+//        msg->stop();
         in.close();
         cerr << sayError(READ_FILE_ERR) << endl;
         return false;
@@ -156,13 +156,14 @@ bool TFEMObject::loadResult(string fname)
     // Считывание параметров
     if (!params.read(in))
     {
-        msg->stop();
+//        msg->stop();
         in.close();
         cerr << sayError(READ_FILE_ERR) << endl;
         return false;
     }
     // Считывание примечаний к расчету
     in >> len;
+    getline(in, str);
     notes.clear();
     for (unsigned i = 0;  i < len; i++)
     {
@@ -172,7 +173,7 @@ bool TFEMObject::loadResult(string fname)
 
     isProcessCalculated = true;
     in.close();
-    msg->stop();
+//    msg->stop();
     return true;
 }
 //-------------------------------------------------------------
