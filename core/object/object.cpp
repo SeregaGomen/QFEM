@@ -70,11 +70,10 @@ void TFEMObject::setTaskParam(FEMType t)
 //---------------------------------------------------------
 bool TFEMObject::saveResult(string fname)
 {
-    ofstream out;
+    ofstream out(fname.c_str(), ios::out);
     bool ret;
 
-    out.open(fname.c_str(),ios::out);
-    if (out.fail())
+    if (!out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return false;
@@ -105,6 +104,11 @@ bool TFEMObject::saveResult(string fname)
     if (!params.write(out))
         cerr << sayError(WRITE_FILE_ERR) << endl;
 
+    // Запись примечаний к расчету
+    out << notes.size() << endl;
+    for (auto it : notes)
+        out << it << endl;
+
     ret = out.fail();
     out.close();
     msg->stop();
@@ -113,11 +117,11 @@ bool TFEMObject::saveResult(string fname)
 //-------------------------------------------------------------
 bool TFEMObject::loadResult(string fname)
 {
-    ifstream in;
+    unsigned len;
+    ifstream in(fname.c_str(), ios::in);
     string str;
 
-    in.open(fname.c_str(), ios::in);
-    if (in.fail())
+    if (!in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return false;
@@ -157,6 +161,15 @@ bool TFEMObject::loadResult(string fname)
         cerr << sayError(READ_FILE_ERR) << endl;
         return false;
     }
+    // Считывание примечаний к расчету
+    in >> len;
+    notes.clear();
+    for (unsigned i = 0;  i < len; i++)
+    {
+        getline(in, str);
+        notes.push_back(str);
+    }
+
     isProcessCalculated = true;
     in.close();
     msg->stop();

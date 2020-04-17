@@ -125,9 +125,11 @@ private:
     void saveMesh(QJsonObject&);
     void saveParam(QJsonObject&);
     void saveResults(QJsonObject&);
+    void saveNotes(QJsonObject&);
     void loadMesh(const QJsonObject&);
     void loadParam(const QJsonObject&);
     void loadResults(const QJsonArray&);
+    void loadNotes(const QJsonArray&);
 };
 
 

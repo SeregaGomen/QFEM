@@ -1552,6 +1552,17 @@ void TMainWindow::saveMesh(QJsonObject &main)
     main.insert("Mesh", meshObj);
 }
 
+// Запись примечаний к расчету в JSON-объект
+void TMainWindow::saveNotes(QJsonObject &main)
+{
+    list<string> &notes = femProcessor->getFEMObject()->getNotes();
+    QJsonArray str;
+
+    for (auto it: notes)
+        str.push_back(QString("%1").arg(it.c_str()));
+    main.insert("Notes", str);
+}
+
 bool TMainWindow::saveQRES(QString fileName)
 {
     QFile file;
@@ -1573,6 +1584,8 @@ bool TMainWindow::saveQRES(QString fileName)
     saveParam(main);
     // ---------------- Результаты расчета ----------------
     saveResults(main);
+    // ---------------- Примечания к расчету ----------------
+    saveNotes(main);
 
     // Формирование итогового документа
     doc.setObject(main);
@@ -1707,6 +1720,18 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
     }
 }
 
+// Чтение примечаний из JSON-объекта
+void TMainWindow::loadNotes(const QJsonArray &notesArr)
+{
+    QJsonArray arr;
+    QString str;
+    list<string> &notes = femProcessor->getFEMObject()->getNotes();
+
+    notes.clear();
+    for (auto value: notesArr)
+        notes.push_back(value.toString().toStdString());
+}
+
 bool TMainWindow::loadRES(QString fileName)
 {
     bool ret;
@@ -1753,6 +1778,8 @@ bool TMainWindow::loadQRES(QString fileName)
     loadParam(obj["Parameters"].toObject());
     // Чтение результатов
     loadResults(obj["Results"].toArray());
+    // Чтение примечаний
+    loadNotes(obj["Notes"].toArray());
 
     femProcessor->getFEMObject()->setProcessCalculated(true);
     showProtocol(htmlFile);
