@@ -640,7 +640,7 @@ bool TMesh::read(ifstream& in)
     {
         in.putback('\n');
         cout << *this << endl;
-        createMeshMap();
+//        createMeshMap();
         getMinMax();
     }
     return error;

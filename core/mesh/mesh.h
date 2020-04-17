@@ -30,7 +30,6 @@ private:
     // Связи между узлами граничных элементов
     matrix<unsigned> be;
     void createFE(void);
-    void createMeshMap(void);
     void getMinMax(void);
     bool readTRP(string);
     bool readVOL(string);
@@ -129,6 +128,7 @@ public:
     {
         return be.size1();
     }
+    void createMeshMap(void);
     void getCoordVertex(unsigned i, vector<double>& coord)
     {
 //        coord.resize(x.size2());

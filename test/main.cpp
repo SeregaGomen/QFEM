@@ -384,9 +384,9 @@ int main()
 {
     msg = new TMessenger();
 
-    calcNewTank3();
+    // calcNewTank3();
     // calcTank();
-    // calcBalka();
+    calcBalka();
     // calcShell();
     // pyfem_test();
     // calcTank3ds();
