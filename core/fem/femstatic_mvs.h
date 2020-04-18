@@ -42,10 +42,8 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
 {
     double maxSi,
            maxSsc,
-           maxLoad,
            coef = 1,
            loadFactor,
-           addLoad = 0,
            addCount = 0,
            step = loadStep * 0.01;
     unsigned hour,
@@ -55,19 +53,17 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     vector<double> result,
                    load(TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom());
     time_t full_timer;
-    bool isLoaded = false,
-         isStopRewind = false;
+    bool isLoaded = false;
     ostringstream out;
 
     cout << S_NUM_THREAD << TFEMStatic<T>::numThread << endl;
 
-    maxLoad = 0;
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
 
     full_timer = clock();
     // Предварительное вычисление компонент нагрузки
-    maxLoad = TFEMStatic<T>::calcLoad(load);
+    TFEMStatic<T>::calcLoad(load);
 
     maxSsc = TFEM::params.getMinStress();
 
@@ -109,24 +105,18 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             // Вывод рез-тов по каждой функции на экран
             TFEM::printResultSummary();
             // Вывод информации об итерации
-            cout << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxLoad << endl;
+            cout << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << " x " << (coef * (1 + addCount * step)) << endl;
             cout << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi << endl;
             cout << S_MSG_ITERATION << count++ << endl;
             cout.unsetf(ios::scientific);
 
             if (iterNo == 0)
             {
-                if (maxSi > maxSsc && !isStopRewind)
+                if (maxSi > maxSsc)
                 {
                     // Задана слишком большая первоначальная нагрузка, уменьшаем ее на порядок
                     coef *= 0.1;
                     for_each(load.begin(), load.end(), [](double& i) -> double{ return i *= 0.1; });
-                    maxLoad *= 0.1;
-                    if (maxLoad < TFEM::params.eps) // Если не удается вернуться в упругую зону
-                    {
-                        isStopRewind = true;
-                        isLoaded = true;
-                    }
                     iterNo--;
                 }
                 else
@@ -135,22 +125,16 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
                     {
                         // Вычисляем поправочный коэффициент для "пропуска" упругой зоны
                         coef *= (loadFactor = 0.95 * (maxSsc / maxSi));
-                        maxLoad *= loadFactor;
                         for_each(load.begin(), load.end(), [loadFactor](double& i) -> double{ return i *= loadFactor; });
                         isLoaded = true;
                         iterNo--;
                     }
-                    else
-                    {
-                        // Устанавливаем нагрузку в значение "шаг по нагрузке"
+                    else // Устанавливаем нагрузку в значение "шаг по нагрузке"
                         for_each(load.begin(), load.end(), [step](double& i) -> double{ return i *= step; });
-                        addLoad = maxLoad * step;
-                    }
                 }
             }
             if (++iterNo > 0 && isStopLocalIteration)
             {
-                maxLoad += addLoad;
                 addCount += 1;
                 isStopLocalIteration = false;
             }
@@ -176,7 +160,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     sec = unsigned(full_timer / CLOCKS_PER_SEC) - hour * 3600 - min * 60;
 
     // Выводим и сохраняем информацию об итерационном процессе
-    out << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxLoad;
+    out << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << " x " << (coef * (1 + addCount * step)) << endl;
     TFEM::notes->push_back(out.str());
     out.str("");
     out << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi;
@@ -192,7 +176,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     // k1 - коэффициент пропуска упругой зоны (возврата в упругую зону);
     // k2 - коэффициент увеличения нагрузки (loadStep / 100);
     // n - количество итераций по приращению нагрузки.
-    cout << "P = P0 * " << (coef * (1 + addCount * step)) << endl;
+//    cout << "P = P0 * " << (coef * (1 + addCount * step)) << endl;
 }
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ
