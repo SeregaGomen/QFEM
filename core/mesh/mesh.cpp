@@ -289,7 +289,7 @@ ostream& operator << (ostream& out, TMesh& r)
 // --------------- Чтение TRP-файла ----------------------
 bool TMesh::readTRP(string fname)
 {
-    ifstream in;
+    ifstream in(fname.c_str(), ios::in | ios::binary);
     char signature[7];
     unsigned temp,
              surfaceSize,
@@ -298,8 +298,7 @@ bool TMesh::readTRP(string fname)
 
 
     clear();
-    in.open(fname.c_str(), ios::in | ios::binary);
-    if (in.fail())
+    if (!in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -372,15 +371,14 @@ bool TMesh::readTRP(string fname)
 // ------------------- Чтение TRPA-файла -----------------------
 bool TMesh::readTRPA(string fname)
 {
-    fstream in;
+    fstream in(fname.c_str(), ios::in | ios::binary);
     unsigned temp,
              surfaceSize,
              feSize,
              feDim;
 
     clear();
-    in.open(fname.c_str(), ios::in | ios::binary);
-    if (in.fail())
+    if (!in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -462,12 +460,11 @@ bool TMesh::readTRPA(string fname)
 // --------------- Запись TRP-файла --------------
 bool TMesh::writeTRP(string fname)
 {
-    ofstream out;
+    ofstream out(fname.c_str(), ios::out | ios::binary);
     const char* signature = "NTRout";
     unsigned temp = 0;
 
-    out.open(fname.c_str(), ios::out | ios::binary);
-    if (out.bad())
+    if (!out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -499,10 +496,9 @@ bool TMesh::writeTRP(string fname)
 // -----------------------------------------------------
 bool TMesh::writeTRPA(string fname)
 {
-    ofstream out;
+    ofstream out(fname.c_str(), ios::out);
 
-    out.open(fname.c_str(), ios::out);
-    if (out.bad())
+    if (!out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -649,7 +645,7 @@ bool TMesh::read(ifstream& in)
 bool TMesh::readVOL(string fname)
 {
     const int maxLen = 1001;
-    ifstream in;
+    ifstream in(fname.c_str(), ios::in);
     char str[maxLen];
     unsigned num,
              tmp,
@@ -659,8 +655,7 @@ bool TMesh::readVOL(string fname)
              i4;
 
     clear();
-    in.open(fname.c_str(), ios::in);
-    if (in.fail())
+    if (!in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -749,7 +744,6 @@ bool TMesh::readVOL(string fname)
 // --------------- Чтение MESH-файла (GRUMMP) ----------------------
 bool TMesh::readMESH(string fname)
 {
-    ifstream in;
     unsigned num1,
              num2,
              numFE,
@@ -757,11 +751,11 @@ bool TMesh::readMESH(string fname)
              v1,
              v2,
              v3;
+    ifstream in(fname.c_str(), ios::in);
     matrix<unsigned> tmp;
 
     clear();
-    in.open(fname.c_str(), ios::in);
-    if (in.fail())
+    if (!in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);

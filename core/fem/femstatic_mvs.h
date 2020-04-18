@@ -43,8 +43,9 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     double maxSi,
            maxSsc,
            maxLoad,
-           loadFactor,
+           loadFactor = 1,
            addLoad = 0,
+           addCount = 0,
            step = loadStep * 0.01;
     unsigned hour,
              min,
@@ -148,6 +149,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             if (++iterNo > 0 && isStopLocalIteration)
             {
                 maxLoad += addLoad;
+                addCount += 1;
                 isStopLocalIteration = false;
             }
         }
@@ -184,6 +186,11 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
     TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
+    // Вывод коэффициента изменения нагрузки P = P0 * k1 * (1 + k2 * n), где:
+    // k1 - коэффициент пропуска упругой зоны;
+    // k2 - коэффициент увеличения нагрузки (loadStep / 100);
+    // n - количество итераций по приращению нагрузки.
+    cout << "P = P0 * " << (loadFactor * (1 + addCount * step)) << endl;
 }
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ

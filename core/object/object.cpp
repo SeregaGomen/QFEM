@@ -182,19 +182,18 @@ bool TFEMObject::loadResult(string fname)
 //-------------------------------------------------------------
 void TFEMObject::printResult(string fname)
 {
-    double tmp = -1.0123456789e-15;
-    stringstream ss;
     size_t lenStr,
            lenNo;
-    ofstream out;
-    double t = (params.fType == StaticProblem) ? 0 : params.t0 + params.th;
+    double t = (params.fType == StaticProblem) ? 0 : params.t0 + params.th,
+           tmp = -1.0123456789e-15;
     unsigned size = 0,
              index = 0,
              counter_size = 1;
     string name;
+    stringstream ss;
+    ofstream out(fname.c_str(), ios::out);
 
-    out.open(fname.c_str(),ios::out);
-    if (out.fail())
+    if (!out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return;

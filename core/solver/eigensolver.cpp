@@ -84,11 +84,9 @@ void TEigenSolver::print(string fname)
 {
     unsigned sz = unsigned(loadVector.size());
     double res;
-    fstream out;
+    fstream out(fname, ios::out);
 
-    out.open(fname, ios::out);
     out << sz << 'x' << sz + 1 << endl;
-
     out.setf( std::ios::fixed, std:: ios::floatfield );
     for (unsigned i = 0; i < sz; i++)
     {
