@@ -5,17 +5,7 @@
 #include <iomanip>
 #include "fem/fem.h"
 
-
-#define MULTI_THREAD // Многопоточный расчет
-
-#ifdef MULTI_THREAD
-    const int numThread = 4; //thread::hardware_concurrency() - 1;
-#else
-    const int numThread = 0;
-#endif
-
 extern TMessenger* msg;
-
 
 //----------------------------------------------------------
 //  Реализация конечно-элементного расчета в соответствии с
@@ -24,6 +14,7 @@ extern TMessenger* msg;
 template <class T> class TFEMStatic : public TFEM
 {
 protected:
+    int numThread;
     T solver;
     void ansambleLocalMatrix(TFE*, unsigned);
     void setLoad(vector<double>&);
@@ -54,9 +45,14 @@ public:
     TFEMStatic(string n, TMesh *m, TResultList *r, list<string> *l) : TFEM(n, m, r, l)
     {
         TFEM::params.fType = StaticProblem;
+        numThread = thread::hardware_concurrency() - 1;
     }
     virtual ~TFEMStatic(void) {}
     void startProcess(void);
+    void setNumThread(int n)
+    {
+        numThread = n;
+    }
 };
 //----------------------------------------------------------
 //                     Запуск расчета
@@ -233,21 +229,15 @@ template<class T> void TFEMStatic<T>::avgResults(matrix<double> &result, vector<
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
 {
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumFE() / numThread;
     ErrorCode error = NO_ERR;
     vector<double> maxVal(numThread);
     vector<thread> thr(numThread);
 
     msg->setProcess((isStatic) ? GENERATE_FE_STATIC_PROCESS : GENERATE_FE_DYNAMIC_PROCESS, 1, TFEM::mesh->getNumFE());
-    if (numThread == 0)
-        getMatrix(0, TFEM::mesh->getNumFE(), isStatic, error);
-    else
-    {
-        step = TFEM::mesh->getNumFE() / numThread;
-        for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
-        for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
-    }
+    for (int i = 0; i < numThread; i++)
+        thr[i] = thread(&TFEMStatic<T>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
+    for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
     if (error)
         throw error;
     msg->stopProcess();
@@ -285,22 +275,16 @@ template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bo
 template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
 {
     ErrorCode error = NO_ERR;
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<double> maxVal(numThread);
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(BOUNDARY_CONDITION_PARAMETER))
     {
         msg->setProcess(CALC_BOUNDARY_CONDITION_PROCESS, 1, TFEM::mesh->getNumVertex());
-        if (numThread == 0)
-            getBoundaryCondition(0, TFEM::mesh->getNumVertex(), error);
-        else
-        {
-            step = TFEM::mesh->getNumVertex() / numThread;
-            for (int i = 0; i < numThread; i++)
-                thr[i] = thread(&TFEMStatic<T>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
-            for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        }
+        for (int i = 0; i < numThread; i++)
+            thr[i] = thread(&TFEMStatic<T>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
+        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error)
             throw error;
         msg->stopProcess();
@@ -352,7 +336,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
 template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double> &load, double t)
 {
     ErrorCode error = NO_ERR;
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumVertex() / numThread;
     double max_val = 0;
     vector<double> maxVal(numThread);
     vector<thread> thr(numThread);
@@ -360,18 +344,12 @@ template<class T> double TFEMStatic<T>::calcConcentratedLoad(vector<double> &loa
     if (params.plist.findParameter(CONCENTRATED_LOAD_PARAMETER))
     {
         msg->setProcess(CALCULATION_CONCENTRATED_LOAD_PROCESS, 1, TFEM::mesh->getNumVertex());
-        if (numThread == 0)
-            getConcentratedLoad(load, max_val, 0, TFEM::mesh->getNumVertex(), t, error);
+        for (int i = 0; i < numThread; i++)
+            thr[i] = thread(&TFEMStatic<T>::getConcentratedLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
+        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
+        if (error == NO_ERR)
+            max_val = *max_element(maxVal.begin(), maxVal.end());
         else
-        {
-            step = TFEM::mesh->getNumVertex() / numThread;
-            for (int i = 0; i < numThread; i++)
-                thr[i] = thread(&TFEMStatic<T>::getConcentratedLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
-            for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-            if (error == NO_ERR)
-                max_val = *max_element(maxVal.begin(), maxVal.end());
-        }
-        if (error)
             throw error;
         msg->stopProcess();
     }
@@ -434,28 +412,22 @@ template<class T> double TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, do
 {
     ErrorCode error = NO_ERR;
     double max_val = 0;
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<double> maxVal(numThread);
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(SURFACE_LOAD_PARAMETER))
     {
-        if (numThread == 0)
-            getSurfaceLoad(load, max_val, 0, TFEM::mesh->getNumBE(), t, error);
+        msg->setProcess(CALCULATION_SURFACE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
+        for (int i = 0; i < numThread; i++)
+            thr[i] = thread(&TFEMStatic<T>::getSurfaceLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
+        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
+        if (error == NO_ERR)
+            max_val = *max_element(maxVal.begin(), maxVal.end());
         else
-        {
-            msg->setProcess(CALCULATION_SURFACE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
-            step = TFEM::mesh->getNumBE() / numThread;
-            for (int i = 0; i < numThread; i++)
-                thr[i] = thread(&TFEMStatic<T>::getSurfaceLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
-            for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-            if (error == NO_ERR)
-                max_val = *max_element(maxVal.begin(), maxVal.end());
-        }
+            throw error;
+        msg->stopProcess();
     }
-    if (error)
-        throw error;
-    msg->stopProcess();
     return max_val;
 }
 //-----------------------------------------------------------------------------------------
@@ -520,27 +492,19 @@ template<class T> double TFEMStatic<T>::calcPressureLoad(vector<double> &load, d
 {
     ErrorCode error = NO_ERR;
     double max_val = 0;
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<double> maxVal(numThread);
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(PRESSURE_LOAD_PARAMETER))
     {
-        msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, mesh->getNumBE());
-
-        if (numThread == 0)
-            getPressureLoad(load, max_val, 0, TFEM::mesh->getNumBE(), t, error);
+        msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
+        for (int i = 0; i < numThread; i++)
+            thr[i] = thread(&TFEMStatic<T>::getPressureLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
+        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
+        if (error == NO_ERR)
+            max_val = *max_element(maxVal.begin(), maxVal.end());
         else
-        {
-            msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
-            step = TFEM::mesh->getNumBE() / numThread;
-            for (int i = 0; i < numThread; i++)
-                thr[i] = thread(&TFEMStatic<T>::getPressureLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
-            for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-            if (error == NO_ERR)
-                max_val = *max_element(maxVal.begin(), maxVal.end());
-        }
-        if (error)
             throw error;
         msg->stopProcess();
     }
@@ -620,24 +584,18 @@ template<class T> double TFEMStatic<T>::calcVolumeLoad(vector<double> &load, dou
 {
     ErrorCode error = NO_ERR;
     double max_val = 0;
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumFE() / numThread;
     vector<double> maxVal(numThread);
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(VOLUME_LOAD_PARAMETER))
     {
         msg->setProcess(CALCULATION_VOLUME_LOAD_PROCESS, 1, mesh->getNumFE());
-        if (numThread == 0)
-            getVolumeLoad(load, max_val, 0, TFEM::mesh->getNumFE(), t, error);
-        else
-        {
-            step = TFEM::mesh->getNumFE() / numThread;
-            for (int i = 0; i < numThread; i++)
-                thr[i] = thread(&TFEMStatic<T>::getVolumeLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
-            for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-            if (error == NO_ERR)
-                max_val = *max_element(maxVal.begin(), maxVal.end());
-        }
+        for (int i = 0; i < numThread; i++)
+            thr[i] = thread(&TFEMStatic<T>::getVolumeLoad, this, ref(load), ref(maxVal[i]), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
+        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
+        if (error == NO_ERR)
+            max_val = *max_element(maxVal.begin(), maxVal.end());
         if (error)
             throw error;
         msg->stopProcess();
@@ -704,18 +662,12 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, double
 //-----------------------------------------------------------------------------------------
 template<class T> double TFEMStatic<T>::calcStressIntensity(TResultList &res, vector<double> &si)
 {
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<thread> thr(numThread);
 
-    if (numThread == 0)
-        getStressIntensity(res, si, 0, TFEM::mesh->getNumVertex());
-    else
-    {
-        step = TFEM::mesh->getNumVertex() / numThread;
-        for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getStressIntensity, this, ref(res), ref(si), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
-        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    }
+    for (int i = 0; i < numThread; i++)
+        thr[i] = thread(&TFEMStatic<T>::getStressIntensity, this, ref(res), ref(si), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
+    for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     return *std::max_element(si.begin(), si.end());
 }
 //--------------------------------------------------------------------------------------------------------------
@@ -762,7 +714,7 @@ template<class T> void TFEMStatic<T>::getStressIntensity(TResultList &res, vecto
 template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<double> &u)
 {
     ErrorCode error = NO_ERR;
-    unsigned step;
+    unsigned step = TFEM::mesh->getNumFE() / numThread;
     vector<int> counter(TFEM::mesh->getNumVertex()); // Счетчик кол-ва вхождения узлов для осреднения результатов
     vector<thread> thr(numThread);
 
@@ -774,15 +726,9 @@ template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<dou
 
     // Вычисляем стандартные результаты по всем КЭ
     msg->setProcess(CALCULATION_STANDART_RESULT_PROCESS, 1, TFEM::mesh->getNumFE());
-    if (numThread == 0)
-        getFEResult(res, u, counter, 0, TFEM::mesh->getNumFE(), error);
-    else
-    {
-        step = TFEM::mesh->getNumFE() / numThread;
-        for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
-        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    }
+    for (int i = 0; i < numThread; i++)
+        thr[i] = thread(&TFEMStatic<T>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
+    for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     if (error)
         throw error;
     // Осредняем результаты
@@ -834,19 +780,13 @@ template<class T> void TFEMStatic<T>::setLoad(vector<double> &load)
 {
     ErrorCode error = NO_ERR;
     int size = mesh->getNumVertex() * mesh->getFreedom();
-    unsigned step;
+    unsigned step = size / numThread;
     vector<thread> thr(numThread);
 
     msg->setProcess(CREATE_LOAD_PROCESS, 1, size);
-    if (numThread == 0)
-        getLoad(load, 0, size, error);
-    else
-    {
-        step = size / numThread;
-        for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
-        for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    }
+    for (int i = 0; i < numThread; i++)
+        thr[i] = thread(&TFEMStatic<T>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
+    for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     if (error)
         throw error;
     msg->stopProcess();

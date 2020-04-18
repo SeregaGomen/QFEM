@@ -58,7 +58,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
          isStopRewind = false;
     ostringstream out;
 
-    cout << S_NUM_THREAD << numThread << endl;
+    cout << S_NUM_THREAD << TFEMStatic<T>::numThread << endl;
 
     maxLoad = 0;
     TFEM::isProcessStarted = true;
