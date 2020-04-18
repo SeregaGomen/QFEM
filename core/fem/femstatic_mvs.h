@@ -105,8 +105,8 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             // Вывод рез-тов по каждой функции на экран
             TFEM::printResultSummary();
             // Вывод информации об итерации
-            cout << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << " x " << (coef * (1 + addCount * step)) << endl;
-            cout << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi << endl;
+            cout << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
+            cout << S_MSG_SI << maxSi << endl;
             cout << S_MSG_ITERATION << count++ << endl;
             cout.unsetf(ios::scientific);
 
@@ -160,10 +160,10 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     sec = unsigned(full_timer / CLOCKS_PER_SEC) - hour * 3600 - min * 60;
 
     // Выводим и сохраняем информацию об итерационном процессе
-    out << S_MSG_LOAD << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << " x " << (coef * (1 + addCount * step)) << endl;
+    out << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
     TFEM::notes->push_back(out.str());
     out.str("");
-    out << S_MSG_SI << setw(TFEM::params.width) << setprecision(TFEM::params.precision) << maxSi;
+    out << S_MSG_SI << maxSi;
     TFEM::notes->push_back(out.str());
     out.str("");
     out << S_MSG_ITERATION << --count;

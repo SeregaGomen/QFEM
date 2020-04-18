@@ -366,7 +366,7 @@ void calcNewTank3(void)
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc);
     // Шаг по нагрузке
-    object.setLoadStep(25);
+    object.setLoadStep(5);
     // Способ расчета пластичности
     object.setPlasticityMethod(MVS);
 
