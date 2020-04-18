@@ -43,7 +43,8 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     double maxSi,
            maxSsc,
            maxLoad,
-           loadFactor = 1,
+           coef = 1,
+           loadFactor,
            addLoad = 0,
            addCount = 0,
            step = loadStep * 0.01;
@@ -118,6 +119,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
                 if (maxSi > maxSsc && !isStopRewind)
                 {
                     // Задана слишком большая первоначальная нагрузка, уменьшаем ее на порядок
+                    coef *= 0.1;
                     for_each(load.begin(), load.end(), [](double& i) -> double{ return i *= 0.1; });
                     maxLoad *= 0.1;
                     if (maxLoad < TFEM::params.eps) // Если не удается вернуться в упругую зону
@@ -132,7 +134,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
                     if (!isLoaded)
                     {
                         // Вычисляем поправочный коэффициент для "пропуска" упругой зоны
-                        loadFactor = 0.95 * (maxSsc / maxSi);
+                        coef *= (loadFactor = 0.95 * (maxSsc / maxSi));
                         maxLoad *= loadFactor;
                         for_each(load.begin(), load.end(), [loadFactor](double& i) -> double{ return i *= loadFactor; });
                         isLoaded = true;
@@ -187,10 +189,10 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
     // Вывод коэффициента изменения нагрузки P = P0 * k1 * (1 + k2 * n), где:
-    // k1 - коэффициент пропуска упругой зоны;
+    // k1 - коэффициент пропуска упругой зоны (возврата в упругую зону);
     // k2 - коэффициент увеличения нагрузки (loadStep / 100);
     // n - количество итераций по приращению нагрузки.
-    cout << "P = P0 * " << (loadFactor * (1 + addCount * step)) << endl;
+    cout << "P = P0 * " << (coef * (1 + addCount * step)) << endl;
 }
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ

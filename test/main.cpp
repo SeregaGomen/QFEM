@@ -317,7 +317,7 @@ void calcNewTank3(void)
     double eps = 0.001,
            L = 0.22,
            Lt = 0.0435,
-           P = 10000;
+           P = 1.0E+7;
     matrix<double> ssc = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
 
     if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new.trpa"))
@@ -366,7 +366,7 @@ void calcNewTank3(void)
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc);
     // Шаг по нагрузке
-    object.setLoadStep(5);
+    object.setLoadStep(25);
     // Способ расчета пластичности
     object.setPlasticityMethod(MVS);
 
