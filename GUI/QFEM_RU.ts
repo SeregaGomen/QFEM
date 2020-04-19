@@ -832,34 +832,26 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QObject</name>
     <message>
-        <location filename="xmlprocessor.cpp" line="18"/>
-        <location filename="xmlprocessor.cpp" line="227"/>
-        <location filename="xmlprocessor.cpp" line="248"/>
-        <location filename="xmlprocessor.cpp" line="337"/>
-        <location filename="xmlprocessor.cpp" line="359"/>
+        <location filename="mainwindow.cpp" line="1224"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="xmlprocessor.cpp" line="18"/>
-        <location filename="xmlprocessor.cpp" line="248"/>
         <source>Error opening file %1</source>
-        <translation>Ошибка открытия файла %1</translation>
+        <translation type="vanished">Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="xmlprocessor.cpp" line="227"/>
         <source>Error writing file %1</source>
-        <translation>Ошибка записи файла %1</translation>
+        <translation type="vanished">Ошибка записи файла %1</translation>
     </message>
     <message>
-        <location filename="xmlprocessor.cpp" line="337"/>
+        <location filename="mainwindow.cpp" line="1224"/>
         <source>Wrong format file %1</source>
         <translation>Некорректный формат файла %1</translation>
     </message>
     <message>
-        <location filename="xmlprocessor.cpp" line="359"/>
         <source>Error reading file %1</source>
-        <translation>Ошибка чтения файла %1</translation>
+        <translation type="vanished">Ошибка чтения файла %1</translation>
     </message>
 </context>
 <context>
@@ -1746,7 +1738,8 @@ p, li { white-space: pre-wrap; }
     <name>TAppSetupDialog</name>
     <message>
         <location filename="appsetupdialog.ui" line="26"/>
-        <source>Setup programm</source>
+        <source>Setup program</source>
+        <oldsource>Setup programm</oldsource>
         <translation>Настройки программы</translation>
     </message>
     <message>
@@ -1771,8 +1764,12 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="appsetupdialog.ui" line="108"/>
+        <source>Autosave results</source>
+        <translation>Автосохранение результата</translation>
+    </message>
+    <message>
         <source>Black background</source>
-        <translation>Темный цвет фона</translation>
+        <translation type="vanished">Темный цвет фона</translation>
     </message>
     <message>
         <location filename="appsetupdialog.ui" line="124"/>
@@ -1780,17 +1777,15 @@ p, li { white-space: pre-wrap; }
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="appsetupdialog.ui" line="141"/>
         <source>Task</source>
-        <translation>Задача</translation>
+        <translation type="vanished">Задача</translation>
     </message>
     <message>
-        <location filename="appsetupdialog.ui" line="153"/>
         <source>Autosave task</source>
-        <translation>Автосохранение задачи</translation>
+        <translation type="vanished">Автосохранение задачи</translation>
     </message>
     <message>
-        <location filename="appsetupdialog.ui" line="169"/>
+        <location filename="appsetupdialog.ui" line="140"/>
         <source>Autosave protocol</source>
         <translation>Автосохранение протокола</translation>
     </message>
@@ -1889,44 +1884,67 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TGLFunWidget</name>
     <message>
-        <location filename="glfun.cpp" line="39"/>
         <source>&amp;Condition on nodes selection...</source>
-        <translation>&amp;Условие отбора узлов...</translation>
+        <translation type="vanished">&amp;Условие отбора узлов...</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="40"/>
         <source>&amp;Save image...</source>
-        <translation>&amp;Сохранить изображение...</translation>
+        <translation type="vanished">&amp;Сохранить изображение...</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="858"/>
         <source>Selection condition nodes</source>
-        <translation>Условие отбора узлов</translation>
+        <translation type="vanished">Условие отбора узлов</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="858"/>
         <source>Predicate:</source>
-        <translation>Предикат:</translation>
+        <translation type="vanished">Предикат:</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="868"/>
         <source>Saving the image</source>
-        <translation>Сохранение изображения</translation>
+        <translation type="vanished">Сохранение изображения</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="868"/>
         <source>Image files (*.png)</source>
-        <translation>Файлы изображений (*.png)</translation>
+        <translation type="vanished">Файлы изображений (*.png)</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="942"/>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Turn off lights!</source>
+        <translation type="vanished">Выключите режим освещения!</translation>
+    </message>
+</context>
+<context>
+    <name>TGLFunction</name>
+    <message>
+        <location filename="glfun.cpp" line="425"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="glfun.cpp" line="942"/>
+        <location filename="glfun.cpp" line="425"/>
         <source>Turn off lights!</source>
         <translation>Выключите режим освещения!</translation>
+    </message>
+</context>
+<context>
+    <name>TGLMesh</name>
+    <message>
+        <location filename="glmesh.cpp" line="40"/>
+        <source>&amp;Save image...</source>
+        <translation>&amp;Сохранить изображение...</translation>
+    </message>
+    <message>
+        <location filename="glmesh.cpp" line="617"/>
+        <source>Saving the image</source>
+        <translation>Сохранение изображения</translation>
+    </message>
+    <message>
+        <location filename="glmesh.cpp" line="617"/>
+        <source>Image files (*.png)</source>
+        <translation>Файлы изображений (*.png)</translation>
     </message>
 </context>
 <context>
@@ -2129,497 +2147,1331 @@ p, li { white-space: pre-wrap; }
         <translation>Масштабирование</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="255"/>
+        <location filename="mainwindow.ui" line="258"/>
         <source>Сo&amp;mputation parameters...</source>
         <translation>&amp;Параметры расчета...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="258"/>
+        <location filename="mainwindow.ui" line="261"/>
         <source>Сomputation parameters</source>
         <translation>Параметры расчета</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="261"/>
         <location filename="mainwindow.ui" line="264"/>
+        <location filename="mainwindow.ui" line="267"/>
         <source>The calculation parameters (elastic characteristics, boundary conditions, ...)</source>
         <translation>Параметры расчета (упругие характеристики, краевые условия, ...)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="273"/>
+        <location filename="mainwindow.ui" line="276"/>
         <source>&amp;Start</source>
         <translation>&amp;Старт</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="276"/>
         <location filename="mainwindow.ui" line="279"/>
+        <location filename="mainwindow.ui" line="282"/>
         <source>Start calculation problem</source>
         <translation>Начать расчет задачи</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="284"/>
+        <location filename="mainwindow.ui" line="287"/>
         <source>&amp;Restore</source>
         <translation>&amp;Восстановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="287"/>
         <location filename="mainwindow.ui" line="290"/>
+        <location filename="mainwindow.ui" line="293"/>
         <source>Restore</source>
         <translation>Восстановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="293"/>
+        <location filename="mainwindow.ui" line="296"/>
         <source>To restore the initial image settings</source>
         <translation>Восстановить начальные параметры изображения</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="302"/>
+        <location filename="mainwindow.ui" line="305"/>
         <source>&amp;Analyse...</source>
         <translation>&amp;Анализ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="305"/>
+        <location filename="mainwindow.ui" line="308"/>
         <source>Analyse</source>
         <translation>Анализ</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="308"/>
+        <location filename="mainwindow.ui" line="311"/>
         <source>Select the function for the visualization</source>
         <translation>Выбрать функцию для визуализации</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="313"/>
+        <location filename="mainwindow.ui" line="316"/>
         <source>Save &amp;As...</source>
         <translation>Сохранить &amp;как...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="316"/>
+        <location filename="mainwindow.ui" line="319"/>
         <source>Save As</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="319"/>
+        <location filename="mainwindow.ui" line="322"/>
         <source>Save the current file with a new name</source>
         <translation>Сохранить текущий файл с новым именем</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="331"/>
+        <location filename="mainwindow.ui" line="334"/>
         <source>Imaging &amp;parameters...</source>
         <translation>Параметры &amp;визуализации...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="334"/>
+        <location filename="mainwindow.ui" line="337"/>
         <source>Imaging parameters</source>
         <translation>Параметры визуализации</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="337"/>
+        <location filename="mainwindow.ui" line="340"/>
         <source>Setting visualization</source>
         <translation>Настройка параметров визуализации</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="342"/>
+        <location filename="mainwindow.ui" line="345"/>
         <source>In&amp;fo...</source>
         <translation>Ин&amp;формация...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="345"/>
         <location filename="mainwindow.ui" line="348"/>
+        <location filename="mainwindow.ui" line="351"/>
         <source>About object (dimension, mesh, ...)</source>
         <translation>Информация об объекте (габариты, дискретизация,...)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="353"/>
+        <location filename="mainwindow.ui" line="356"/>
         <source>Add &amp;expression...</source>
         <translation>&amp;Добавить выражение...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="356"/>
+        <location filename="mainwindow.ui" line="359"/>
         <source>Add expression</source>
         <translation>Добавить выражение</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="359"/>
+        <location filename="mainwindow.ui" line="362"/>
         <source>Add a new expression for the analysis</source>
         <translation>Добавить новое выражение для анализа</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="368"/>
+        <location filename="mainwindow.ui" line="371"/>
         <source>&amp;Setup...</source>
         <translation>&amp;Настройки...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="371"/>
         <location filename="mainwindow.ui" line="374"/>
+        <location filename="mainwindow.ui" line="377"/>
         <source>Setting the parameters of the program</source>
         <translation>Настройки параметров работы программы</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="383"/>
+        <location filename="mainwindow.ui" line="386"/>
         <source>S&amp;top</source>
         <translation>Сто&amp;п</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="386"/>
         <location filename="mainwindow.ui" line="389"/>
+        <location filename="mainwindow.ui" line="392"/>
         <source>Stop current calculation process</source>
         <translation>Прервать текущий вычислительный процесс</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="394"/>
+        <location filename="mainwindow.ui" line="397"/>
         <source>Save &amp;results...</source>
         <translation>Сохранить &amp;результаты...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="397"/>
+        <location filename="mainwindow.ui" line="400"/>
+        <location filename="mainwindow.ui" line="403"/>
         <source>Save calculation results</source>
         <translation>Сохранить результаты решения задачи в текстовый файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="402"/>
+        <location filename="mainwindow.ui" line="408"/>
         <source>&amp;Help...</source>
         <translation>&amp;Справка...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="405"/>
-        <location filename="mainwindow.ui" line="408"/>
+        <location filename="mainwindow.ui" line="411"/>
+        <location filename="mainwindow.ui" line="414"/>
         <source>Open Help Browser with Documentation</source>
         <translation>Справка по использованию программы</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="417"/>
+        <location filename="mainwindow.ui" line="423"/>
         <source>&amp;Copy</source>
         <translation>&amp;Копировать</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="420"/>
-        <location filename="mainwindow.ui" line="423"/>
+        <location filename="mainwindow.ui" line="426"/>
+        <location filename="mainwindow.ui" line="429"/>
         <source>Copy current data to Clipboard</source>
         <translation>Копировать данные текущей вкладки в буффер обмена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="115"/>
-        <location filename="mainwindow.cpp" line="120"/>
+        <location filename="mainwindow.cpp" line="111"/>
+        <location filename="mainwindow.cpp" line="116"/>
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="366"/>
+        <location filename="mainwindow.cpp" line="375"/>
         <source>Opening a document</source>
         <translation>Открытие документа</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="366"/>
         <source>Problem files (*.xml);; Mesh files (*.trp *.trpa *.vol *.mesh *.msh);; Result files (*.qres)</source>
-        <translation>Файлы задач (*.xml);; Файлы сеток (*.trp *.trpa *.vol *.mesh *.msh);; Файлы результатов (*.qres)</translation>
+        <translation type="vanished">Файлы задач (*.xml);; Файлы сеток (*.trp *.trpa *.vol *.mesh *.msh);; Файлы результатов (*.qres)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="386"/>
+        <location filename="mainwindow.cpp" line="397"/>
         <source>Object</source>
         <translation>Объект</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="393"/>
+        <location filename="mainwindow.cpp" line="404"/>
         <source>File successfully downloaded</source>
         <translation>Файл успешно загружен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="410"/>
+        <location filename="mainwindow.cpp" line="414"/>
         <source>Error opening file</source>
         <translation>Ошибка открытия файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="494"/>
+        <location filename="mainwindow.cpp" line="497"/>
         <source>Saving the document</source>
         <translation>Сохранение документа</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="494"/>
         <source>Problem files (*.xml)</source>
-        <translation>Файлы задач (*.xml)</translation>
+        <translation type="vanished">Файлы задач (*.xml)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="516"/>
+        <location filename="mainwindow.cpp" line="508"/>
         <source>File successfully saved</source>
         <translation>Файл успешно сохранен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="522"/>
+        <location filename="mainwindow.cpp" line="514"/>
         <source>Error writing file</source>
         <translation>Ошибка записи файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="550"/>
-        <location filename="mainwindow.cpp" line="718"/>
-        <location filename="mainwindow.cpp" line="724"/>
-        <location filename="mainwindow.cpp" line="850"/>
-        <location filename="mainwindow.cpp" line="1315"/>
-        <location filename="mainwindow.cpp" line="1326"/>
-        <location filename="mainwindow.cpp" line="1346"/>
-        <location filename="mainwindow.cpp" line="1356"/>
-        <location filename="mainwindow.cpp" line="1364"/>
-        <location filename="mainwindow.cpp" line="1399"/>
-        <location filename="mainwindow.cpp" line="1405"/>
-        <location filename="mainwindow.cpp" line="1411"/>
-        <location filename="mainwindow.cpp" line="1426"/>
+        <location filename="mainwindow.cpp" line="543"/>
+        <location filename="mainwindow.cpp" line="709"/>
+        <location filename="mainwindow.cpp" line="714"/>
+        <location filename="mainwindow.cpp" line="719"/>
+        <location filename="mainwindow.cpp" line="725"/>
+        <location filename="mainwindow.cpp" line="730"/>
+        <location filename="mainwindow.cpp" line="735"/>
+        <location filename="mainwindow.cpp" line="742"/>
+        <location filename="mainwindow.cpp" line="747"/>
+        <location filename="mainwindow.cpp" line="752"/>
+        <location filename="mainwindow.cpp" line="757"/>
+        <location filename="mainwindow.cpp" line="902"/>
+        <location filename="mainwindow.cpp" line="1240"/>
+        <location filename="mainwindow.cpp" line="1730"/>
+        <location filename="mainwindow.cpp" line="1751"/>
+        <location filename="mainwindow.cpp" line="1802"/>
+        <location filename="mainwindow.cpp" line="1808"/>
+        <location filename="mainwindow.cpp" line="1814"/>
+        <location filename="mainwindow.cpp" line="1828"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="550"/>
-        <location filename="mainwindow.cpp" line="1326"/>
+        <location filename="mainwindow.cpp" line="543"/>
+        <location filename="mainwindow.cpp" line="1240"/>
         <source>Error reading file %1</source>
         <translation>Ошибка чтения файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="718"/>
         <source>Incorrectly specified elastic modulus!</source>
-        <translation>Неправильно задан модуль Юнга!</translation>
+        <translation type="vanished">Неправильно задан модуль Юнга!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="724"/>
+        <location filename="mainwindow.cpp" line="735"/>
         <source>Incorrectly specified nonlinear parameters!</source>
         <translation>Некорректно заданы параметры нелинейного рассчета!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="769"/>
         <source>The task is solved %1 at %2</source>
+        <translation type="vanished">Задача решена %1 в %2</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="375"/>
+        <source>QFEM problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh);; QFEM result files (*.qres *.res)</source>
+        <translation>Файлы задач QFEM (*.qfpf);; Файлы сеток (*.trp *.trpa *.vol *.mesh);; Файлы результатов QFEM (*.qres *.res)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="497"/>
+        <source>QFEM Problem files (*.qfpf)</source>
+        <translation>Файлы задач QFEM (*.qfpf)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="633"/>
+        <source>Setup</source>
+        <translation>Настройка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="709"/>
+        <source>Incorrectly specified Young&apos;s modulus!</source>
+        <translation>Некорректно задан модуль Юнга!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="714"/>
+        <source>Incorrectly specified Poisson&apos;s ratio!</source>
+        <translation>Некорректно задан коэффициент Пуассона!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="719"/>
+        <source>Incorrectly specified boundary conditions!</source>
+        <translation>Некорректно заданы граничные условия!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="725"/>
+        <source>Incorrectly specified loads!</source>
+        <translation>Некорректно задана нагрузка!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="730"/>
+        <source>Incorrectly specified FE thickness!</source>
+        <translation>Некорректно задана толщина КЭ!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="742"/>
+        <source>Incorrectly specified the Wilson-Theta parameter!</source>
+        <translation>Некорретно задана тетта Вильсона!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="747"/>
+        <source>Incorrectly specified density!</source>
+        <translation>Неправильно задана плотность!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="752"/>
+        <source>Incorrectly specified damping parameter!</source>
+        <translation>Неправильно задан параметер демпфирования!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="757"/>
+        <source>Incorrectly specified time!</source>
+        <translation>Некорректно залано время!</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="813"/>
+        <source>The problem has been solving %1 at %2</source>
         <translation>Задача решена %1 в %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="772"/>
+        <location filename="mainwindow.cpp" line="816"/>
         <source>Object: &lt;b&gt;%1&lt;/b&gt; (nodes: &lt;b&gt;%2&lt;/b&gt;, finite elements: &lt;b&gt;%3&lt;/b&gt;)</source>
         <translation>Объект: &lt;b&gt;%1&lt;/b&gt; (узлов: &lt;b&gt;%2&lt;/b&gt;, конечных элементов: &lt;b&gt;%3&lt;/b&gt;)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="775"/>
+        <location filename="mainwindow.cpp" line="819"/>
         <source>FE type: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Тип КЭ: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="782"/>
+        <location filename="mainwindow.cpp" line="826"/>
         <source>Method for approximating the time: the method of Wilson</source>
         <translation>Способ аппроксимации по времени: метод Вильсона</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="784"/>
+        <location filename="mainwindow.cpp" line="828"/>
         <source>Method for approximating the time: the method Zinkevych</source>
         <translation>Способ аппроксимации по времени: метод Зинкевича</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="792"/>
-        <source>Results of calculation</source>
-        <translation>Результаты расчета</translation>
+        <location filename="mainwindow.cpp" line="835"/>
+        <source>Results of calculation:</source>
+        <oldsource>Results of calculation</oldsource>
+        <translation>Результаты расчета:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="793"/>
+        <location filename="mainwindow.cpp" line="839"/>
         <source>Function</source>
         <translation>Функция</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="793"/>
+        <location filename="mainwindow.cpp" line="839"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="839"/>
+        <location filename="mainwindow.cpp" line="864"/>
+        <source>Problem notes:</source>
+        <translation>Примечания к расчету:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="891"/>
         <source>Results</source>
         <translation>Результаты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="850"/>
-        <location filename="mainwindow.cpp" line="1315"/>
+        <location filename="mainwindow.cpp" line="902"/>
+        <location filename="mainwindow.cpp" line="1730"/>
+        <location filename="mainwindow.cpp" line="1751"/>
         <source>Error opening file %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="868"/>
-        <source>Task parameters:</source>
+        <location filename="mainwindow.cpp" line="920"/>
+        <source>Problem parameters:</source>
         <translation>Параметры задачи:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="872"/>
-        <location filename="mainwindow.cpp" line="874"/>
+        <location filename="mainwindow.cpp" line="937"/>
+        <source>Density</source>
+        <translation>Плотность</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="938"/>
+        <source>Damping parameter</source>
+        <translation>Параметер демпфирования</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="966"/>
+        <source>Load step</source>
+        <translation>Шаг по нагрузке</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="974"/>
+        <source>FE thickness</source>
+        <translation>Толщина КЭ</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="978"/>
+        <source>Thermal expansion</source>
+        <translation>Температурное расширение</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="979"/>
+        <source>Temperatire</source>
+        <translation>Температура</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="985"/>
+        <source>Volume load</source>
+        <translation>Обїемная нагрузка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="988"/>
+        <source>Surface load</source>
+        <translation>Поверхностная нагрузка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="991"/>
+        <source>Concentrated load</source>
+        <translation>Сосредоточенная нагрузка</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="994"/>
+        <source>Pressure load</source>
+        <translation>Давление</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1897"/>
+        <source>QFEM result files (*.qres);; QFEM report files (*.txt)</source>
+        <translation>Файлы результатов QFEM (*.qres);; Файлы отчетов QFEM (*.txt)</translation>
+    </message>
+    <message>
+        <source>Task parameters:</source>
+        <translation type="vanished">Параметры задачи:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="924"/>
+        <location filename="mainwindow.cpp" line="926"/>
         <source>Solution method: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Метод расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="872"/>
+        <location filename="mainwindow.cpp" line="924"/>
         <source>static (Lagrange)</source>
         <translation>статика (Lagrange)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="874"/>
+        <location filename="mainwindow.cpp" line="926"/>
         <source>dynamic (Ostrogradsky)</source>
         <translation>динамика (Ostrogradsky)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="878"/>
+        <location filename="mainwindow.cpp" line="929"/>
         <source>Computational accuracy: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Точность вычислений: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="880"/>
+        <location filename="mainwindow.cpp" line="931"/>
         <source>Elastic characteristics</source>
         <translation>Упругие характеристики</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="881"/>
-        <location filename="mainwindow.cpp" line="904"/>
-        <location filename="mainwindow.cpp" line="931"/>
-        <location filename="mainwindow.cpp" line="973"/>
-        <location filename="mainwindow.cpp" line="1016"/>
-        <location filename="mainwindow.cpp" line="1059"/>
+        <location filename="mainwindow.cpp" line="950"/>
+        <source>Stress-strain curve:</source>
+        <translation>Диаграмма деформирования:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="959"/>
+        <location filename="mainwindow.cpp" line="1098"/>
         <source>N</source>
         <translation>№</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="881"/>
+        <location filename="mainwindow.cpp" line="932"/>
         <source>Young&apos;s modulus</source>
         <translation>Модуль Юнга</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="881"/>
+        <location filename="mainwindow.cpp" line="933"/>
         <source>Poisson&apos;s ratio</source>
         <translation>Коэффициент Пуассона</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="888"/>
         <source>density: &lt;b&gt;%1&lt;/b&gt;, damping parameter: &lt;b&gt;%2&lt;/b&gt;</source>
-        <translation>плотность: &lt;b&gt;%1&lt;/b&gt;, параметр демпфирования: &lt;b&gt;%2&lt;/b&gt;</translation>
+        <translation type="vanished">плотность: &lt;b&gt;%1&lt;/b&gt;, параметр демпфирования: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="896"/>
-        <location filename="mainwindow.cpp" line="898"/>
+        <location filename="mainwindow.cpp" line="945"/>
+        <location filename="mainwindow.cpp" line="947"/>
         <source>Method of elastic-plastic analysis: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Способ упруго-пластического расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="896"/>
+        <location filename="mainwindow.cpp" line="945"/>
         <source>method of variable stiffness</source>
         <translation>метод переменной жесткости</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="898"/>
+        <location filename="mainwindow.cpp" line="947"/>
         <source>method of elastic solutions Ilyushin</source>
         <translation>метод упругих решений Ильюшина</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="901"/>
         <source>Mechanical properties of the material:</source>
-        <translation>Механические свойства материала:</translation>
+        <translation type="vanished">Механические свойства материала:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="904"/>
+        <location filename="mainwindow.cpp" line="959"/>
         <source>Stress</source>
         <translation>Напряжения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="904"/>
+        <location filename="mainwindow.cpp" line="959"/>
         <source>Deformation</source>
         <translation>Деформации</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="910"/>
         <source>Force step</source>
-        <translation>Шаг по нагрузке</translation>
+        <translation type="vanished">Шаг по нагрузке</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="929"/>
+        <location filename="mainwindow.cpp" line="982"/>
         <source>Boundary condition</source>
         <translation>Граничные условия</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="931"/>
-        <location filename="mainwindow.cpp" line="973"/>
-        <location filename="mainwindow.cpp" line="1016"/>
-        <location filename="mainwindow.cpp" line="1059"/>
+        <location filename="mainwindow.cpp" line="1098"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="931"/>
-        <location filename="mainwindow.cpp" line="973"/>
-        <location filename="mainwindow.cpp" line="1016"/>
-        <location filename="mainwindow.cpp" line="1059"/>
+        <location filename="mainwindow.cpp" line="956"/>
+        <location filename="mainwindow.cpp" line="1098"/>
         <source>Predicate</source>
         <translation>Предикат</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="971"/>
         <source>Volume strain</source>
-        <translation>Объемная нагрузка</translation>
+        <translation type="vanished">Объемная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1014"/>
         <source>Surface strain</source>
-        <translation>Поверхностная нагрузка</translation>
+        <translation type="vanished">Поверхностная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1057"/>
         <source>Point strain</source>
-        <translation>Сосредоточенная нагрузка</translation>
+        <translation type="vanished">Сосредоточенная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1092"/>
+        <location filename="mainwindow.cpp" line="999"/>
         <source>time parameters - initial time: &lt;b&gt;%1&lt;/b&gt;, the final moment: &lt;b&gt;%2&lt;/b&gt;, step: &lt;b&gt;%3&lt;/b&gt;</source>
         <translation>параметры времени - начальный момент: &lt;b&gt;%1&lt;/b&gt;, конечный момент: &lt;b&gt;%2&lt;/b&gt;, шаг: &lt;b&gt;%3&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1105"/>
+        <location filename="mainwindow.cpp" line="1012"/>
         <source>initial conditions:</source>
         <translation>начальныe условия:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1112"/>
-        <location filename="mainwindow.cpp" line="1117"/>
-        <location filename="mainwindow.cpp" line="1122"/>
-        <location filename="mainwindow.cpp" line="1127"/>
-        <location filename="mainwindow.cpp" line="1132"/>
-        <location filename="mainwindow.cpp" line="1137"/>
-        <location filename="mainwindow.cpp" line="1142"/>
-        <location filename="mainwindow.cpp" line="1147"/>
-        <location filename="mainwindow.cpp" line="1152"/>
+        <location filename="mainwindow.cpp" line="1019"/>
+        <location filename="mainwindow.cpp" line="1024"/>
+        <location filename="mainwindow.cpp" line="1029"/>
+        <location filename="mainwindow.cpp" line="1034"/>
+        <location filename="mainwindow.cpp" line="1039"/>
+        <location filename="mainwindow.cpp" line="1044"/>
+        <location filename="mainwindow.cpp" line="1049"/>
+        <location filename="mainwindow.cpp" line="1054"/>
+        <location filename="mainwindow.cpp" line="1059"/>
         <source>function: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>функция: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1163"/>
-        <source>variables:</source>
-        <translation>параметры:</translation>
+        <location filename="mainwindow.cpp" line="1069"/>
+        <source>Variables:</source>
+        <oldsource>variables:</oldsource>
+        <translation type="unfinished">Переменные:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1167"/>
+        <location filename="mainwindow.cpp" line="1073"/>
         <source>name: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>название: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1346"/>
-        <location filename="mainwindow.cpp" line="1356"/>
-        <location filename="mainwindow.cpp" line="1364"/>
         <source>Error writing file %1</source>
-        <translation>Ошибка записи файла %1</translation>
+        <translation type="vanished">Ошибка записи файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1399"/>
+        <location filename="mainwindow.cpp" line="1802"/>
         <source>This function is is already exists!</source>
         <translation>Такая функция уже существует!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1405"/>
-        <location filename="mainwindow.cpp" line="1411"/>
-        <location filename="mainwindow.cpp" line="1426"/>
+        <location filename="mainwindow.cpp" line="1808"/>
+        <location filename="mainwindow.cpp" line="1814"/>
+        <location filename="mainwindow.cpp" line="1828"/>
         <source>Invalid expression!</source>
         <translation>Неправильно задано выражение!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1517"/>
+        <location filename="mainwindow.cpp" line="1897"/>
         <source>Saving results</source>
         <translation>Сохранение результатов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1517"/>
         <source>Results files (*.txt)</source>
-        <translation>Файлы результатов (*.txt)</translation>
+        <translation type="vanished">Файлы результатов (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>TProblemSetupForm</name>
+    <message>
+        <location filename="problemsetupform.ui" line="14"/>
+        <source>Form</source>
+        <translation>Форма</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="32"/>
+        <source>Base settings</source>
+        <translation>Базовые параметры</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="50"/>
+        <source>Method of calculation</source>
+        <translation>Метод расчета</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="68"/>
+        <source>&amp;Variable stiffness</source>
+        <translation>&amp;Переменной жесткости</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="90"/>
+        <source>&amp;Elastic solutions</source>
+        <translation>&amp;Упругих решений</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="109"/>
+        <source>&amp;Linear</source>
+        <translation>&amp;Линейній расчет</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="132"/>
+        <source>Computation parameters</source>
+        <translation>Параметры расчета</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="147"/>
+        <source>Accuracy of calculations:</source>
+        <translation>Точность вычислений:</translation>
+    </message>
+    <message>
+        <source>1.0E-10</source>
+        <translation type="vanished">1.0e-10</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="185"/>
+        <source>Wilson-θ:</source>
+        <translation>θ Вильсона:</translation>
+    </message>
+    <message>
+        <source>1.37</source>
+        <translation type="vanished">1.37</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="vanished">1</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="242"/>
+        <source>Load step (%):</source>
+        <translation>Шаг по нагрузке (%):</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="265"/>
+        <source>Output settings</source>
+        <translation>Параметры вывода</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="280"/>
+        <source>Width:</source>
+        <translation>Ширина:</translation>
+    </message>
+    <message>
+        <source>15</source>
+        <translation type="vanished">15</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="vanished">5</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="337"/>
+        <source>Precision:</source>
+        <translation>Точность:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="360"/>
+        <source>Problem type</source>
+        <translation>Тип задачи</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="381"/>
+        <source>&amp;Statics</source>
+        <translation>&amp;Статика</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="403"/>
+        <source>&amp;Dynamics</source>
+        <translation>&amp;Динамика</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="424"/>
+        <source>Elastic parameters</source>
+        <translation>Параметры упругости</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="442"/>
+        <source>Poisson&apos;s ratio</source>
+        <translation>Коэффициент Пуассона</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="464"/>
+        <location filename="problemsetupform.ui" line="561"/>
+        <location filename="problemsetupform.ui" line="703"/>
+        <location filename="problemsetupform.ui" line="800"/>
+        <location filename="problemsetupform.ui" line="898"/>
+        <location filename="problemsetupform.ui" line="1572"/>
+        <location filename="problemsetupform.ui" line="1666"/>
+        <location filename="problemsetupform.ui" line="1786"/>
+        <location filename="problemsetupform.ui" line="1835"/>
+        <location filename="problemsetupform.ui" line="1884"/>
+        <location filename="problemsetupform.ui" line="1933"/>
+        <location filename="problemsetupform.ui" line="2055"/>
+        <location filename="problemsetupform.cpp" line="614"/>
+        <location filename="problemsetupform.cpp" line="694"/>
+        <location filename="problemsetupform.cpp" line="710"/>
+        <location filename="problemsetupform.cpp" line="721"/>
+        <location filename="problemsetupform.cpp" line="763"/>
+        <location filename="problemsetupform.cpp" line="810"/>
+        <location filename="problemsetupform.cpp" line="845"/>
+        <location filename="problemsetupform.cpp" line="859"/>
+        <location filename="problemsetupform.cpp" line="898"/>
+        <location filename="problemsetupform.cpp" line="941"/>
+        <source>Expression</source>
+        <translation>Выражение</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="469"/>
+        <location filename="problemsetupform.ui" line="566"/>
+        <location filename="problemsetupform.ui" line="708"/>
+        <location filename="problemsetupform.ui" line="805"/>
+        <location filename="problemsetupform.ui" line="903"/>
+        <location filename="problemsetupform.ui" line="1577"/>
+        <location filename="problemsetupform.ui" line="1671"/>
+        <location filename="problemsetupform.ui" line="1791"/>
+        <location filename="problemsetupform.ui" line="1840"/>
+        <location filename="problemsetupform.ui" line="1889"/>
+        <location filename="problemsetupform.ui" line="1938"/>
+        <location filename="problemsetupform.ui" line="2060"/>
+        <location filename="problemsetupform.ui" line="2198"/>
+        <location filename="problemsetupform.cpp" line="614"/>
+        <location filename="problemsetupform.cpp" line="694"/>
+        <location filename="problemsetupform.cpp" line="710"/>
+        <location filename="problemsetupform.cpp" line="721"/>
+        <location filename="problemsetupform.cpp" line="811"/>
+        <location filename="problemsetupform.cpp" line="846"/>
+        <location filename="problemsetupform.cpp" line="860"/>
+        <location filename="problemsetupform.cpp" line="899"/>
+        <location filename="problemsetupform.cpp" line="941"/>
+        <location filename="problemsetupform.cpp" line="995"/>
+        <source>Predicate</source>
+        <translation>Предикат</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="486"/>
+        <location filename="problemsetupform.ui" line="489"/>
+        <location filename="problemsetupform.ui" line="583"/>
+        <location filename="problemsetupform.ui" line="586"/>
+        <location filename="problemsetupform.ui" line="725"/>
+        <location filename="problemsetupform.ui" line="728"/>
+        <location filename="problemsetupform.ui" line="822"/>
+        <location filename="problemsetupform.ui" line="825"/>
+        <location filename="problemsetupform.ui" line="920"/>
+        <location filename="problemsetupform.ui" line="923"/>
+        <location filename="problemsetupform.ui" line="1594"/>
+        <location filename="problemsetupform.ui" line="1597"/>
+        <location filename="problemsetupform.ui" line="1688"/>
+        <location filename="problemsetupform.ui" line="1691"/>
+        <location filename="problemsetupform.ui" line="1957"/>
+        <location filename="problemsetupform.ui" line="1960"/>
+        <location filename="problemsetupform.ui" line="2092"/>
+        <location filename="problemsetupform.ui" line="2095"/>
+        <location filename="problemsetupform.ui" line="2215"/>
+        <location filename="problemsetupform.ui" line="2218"/>
+        <location filename="problemsetupform.ui" line="2540"/>
+        <location filename="problemsetupform.ui" line="2543"/>
+        <source>Remove the current row</source>
+        <translation>Удалить текущую строку</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="492"/>
+        <location filename="problemsetupform.ui" line="515"/>
+        <location filename="problemsetupform.ui" line="589"/>
+        <location filename="problemsetupform.ui" line="612"/>
+        <location filename="problemsetupform.ui" line="638"/>
+        <location filename="problemsetupform.ui" line="731"/>
+        <location filename="problemsetupform.ui" line="754"/>
+        <location filename="problemsetupform.ui" line="828"/>
+        <location filename="problemsetupform.ui" line="851"/>
+        <location filename="problemsetupform.ui" line="926"/>
+        <location filename="problemsetupform.ui" line="949"/>
+        <location filename="problemsetupform.ui" line="975"/>
+        <location filename="problemsetupform.ui" line="1600"/>
+        <location filename="problemsetupform.ui" line="1623"/>
+        <location filename="problemsetupform.ui" line="1694"/>
+        <location filename="problemsetupform.ui" line="1717"/>
+        <location filename="problemsetupform.ui" line="1963"/>
+        <location filename="problemsetupform.ui" line="1986"/>
+        <location filename="problemsetupform.ui" line="2012"/>
+        <location filename="problemsetupform.ui" line="2098"/>
+        <location filename="problemsetupform.ui" line="2121"/>
+        <location filename="problemsetupform.ui" line="2147"/>
+        <location filename="problemsetupform.ui" line="2221"/>
+        <location filename="problemsetupform.ui" line="2244"/>
+        <location filename="problemsetupform.ui" line="2546"/>
+        <location filename="problemsetupform.ui" line="2569"/>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="509"/>
+        <location filename="problemsetupform.ui" line="512"/>
+        <location filename="problemsetupform.ui" line="606"/>
+        <location filename="problemsetupform.ui" line="609"/>
+        <location filename="problemsetupform.ui" line="748"/>
+        <location filename="problemsetupform.ui" line="751"/>
+        <location filename="problemsetupform.ui" line="845"/>
+        <location filename="problemsetupform.ui" line="848"/>
+        <location filename="problemsetupform.ui" line="943"/>
+        <location filename="problemsetupform.ui" line="946"/>
+        <location filename="problemsetupform.ui" line="1617"/>
+        <location filename="problemsetupform.ui" line="1620"/>
+        <location filename="problemsetupform.ui" line="1711"/>
+        <location filename="problemsetupform.ui" line="1714"/>
+        <location filename="problemsetupform.ui" line="1980"/>
+        <location filename="problemsetupform.ui" line="1983"/>
+        <location filename="problemsetupform.ui" line="2115"/>
+        <location filename="problemsetupform.ui" line="2118"/>
+        <location filename="problemsetupform.ui" line="2238"/>
+        <location filename="problemsetupform.ui" line="2241"/>
+        <location filename="problemsetupform.ui" line="2563"/>
+        <location filename="problemsetupform.ui" line="2566"/>
+        <source>Add new row</source>
+        <translation>Добавить новую строку</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="539"/>
+        <source>Young modulus</source>
+        <translation>Модуль Юнга</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="632"/>
+        <location filename="problemsetupform.ui" line="635"/>
+        <location filename="problemsetupform.ui" line="969"/>
+        <location filename="problemsetupform.ui" line="972"/>
+        <location filename="problemsetupform.ui" line="2006"/>
+        <location filename="problemsetupform.ui" line="2009"/>
+        <location filename="problemsetupform.ui" line="2141"/>
+        <location filename="problemsetupform.ui" line="2144"/>
+        <source>Visualization parameter</source>
+        <translation>Визуализация параметра</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="663"/>
+        <source>Thermal parameters</source>
+        <translation>Параметры термоупругости</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="681"/>
+        <source>Temperature (ΔT)</source>
+        <translation>Температура (ΔT)</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="778"/>
+        <source>Thermal expansion (α)</source>
+        <translation>Коэффициент температурного расширения (α)</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="876"/>
+        <source>Finite element thickness</source>
+        <translation>Толщина КЭ</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="999"/>
+        <source>Dynamical parameters</source>
+        <translation>Параметры динамики</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1020"/>
+        <source>The initial conditions</source>
+        <translation>Начальные условия</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1038"/>
+        <source>V:</source>
+        <translation>V:</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="vanished">0</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1079"/>
+        <source>W:</source>
+        <translation>W:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1120"/>
+        <source>Ut:</source>
+        <translation>Ut:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1161"/>
+        <source>Vt:</source>
+        <translation>Vt:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1202"/>
+        <source>Wt:</source>
+        <translation>Wt:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1243"/>
+        <source>Wtt:</source>
+        <translation>Wtt:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1303"/>
+        <source>Vtt:</source>
+        <translation>Vtt:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1341"/>
+        <source>U:</source>
+        <translation>U:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1363"/>
+        <source>Utt:</source>
+        <translation>Utt:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1408"/>
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <source>T0:</source>
+        <translation type="vanished">T0:</translation>
+    </message>
+    <message>
+        <source>T1:</source>
+        <translation type="vanished">T1:</translation>
+    </message>
+    <message>
+        <source>Th:</source>
+        <translation type="vanished">Th:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1553"/>
+        <source>Density</source>
+        <translation>Плотность</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1647"/>
+        <source>Damping</source>
+        <translation>Демпфирование</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1742"/>
+        <source>Loads</source>
+        <translation>Нагрузка</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1764"/>
+        <source>Volume</source>
+        <translation>Объемная</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1796"/>
+        <location filename="problemsetupform.ui" line="1845"/>
+        <location filename="problemsetupform.ui" line="1894"/>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1801"/>
+        <location filename="problemsetupform.ui" line="1850"/>
+        <location filename="problemsetupform.ui" line="1899"/>
+        <source>y</source>
+        <translation>y</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1806"/>
+        <location filename="problemsetupform.ui" line="1855"/>
+        <location filename="problemsetupform.ui" line="1904"/>
+        <source>z</source>
+        <translation>z</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1813"/>
+        <source>Surface</source>
+        <translation>Поверхностная</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1862"/>
+        <source>Concentrated</source>
+        <translation>Сосредоточенная</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="1911"/>
+        <source>Pressure</source>
+        <translation>Давление</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2036"/>
+        <source>Boundary conditions</source>
+        <translation>Граничные условия</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2065"/>
+        <source>U</source>
+        <translation>U</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2070"/>
+        <source>V</source>
+        <translation>V</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2075"/>
+        <source>W</source>
+        <translation>W</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2171"/>
+        <source>Stress-strain curve</source>
+        <translation>Диаграмма деформирования</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2193"/>
+        <location filename="problemsetupform.cpp" line="995"/>
+        <source>Stress-Strain curve</source>
+        <translation>Диаграмма деформирования</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2268"/>
+        <source>Notations and variables</source>
+        <translation>Обозначения и переменные</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2286"/>
+        <source>Function names</source>
+        <translation>Имена функций</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2299"/>
+        <source>Function</source>
+        <translation>Функция</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2304"/>
+        <location filename="problemsetupform.ui" line="2518"/>
+        <source>Name</source>
+        <translation>Обозначение</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2325"/>
+        <source>Coordinate</source>
+        <translation>Координаты</translation>
+    </message>
+    <message>
+        <source>x:</source>
+        <translation type="vanished">x:</translation>
+    </message>
+    <message>
+        <source>y:</source>
+        <translation type="vanished">y:</translation>
+    </message>
+    <message>
+        <source>z:</source>
+        <translation type="vanished">z:</translation>
+    </message>
+    <message>
+        <source>t:</source>
+        <translation type="vanished">t:</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2496"/>
+        <source>Global variables</source>
+        <translation>Глобальные параметры</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.ui" line="2523"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="149"/>
+        <location filename="problemsetupform.cpp" line="158"/>
+        <source>&amp;Select all</source>
+        <translation>&amp;Выделить все</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="150"/>
+        <location filename="problemsetupform.cpp" line="159"/>
+        <source>Clear &amp;all</source>
+        <translation>&amp;Сбросить все</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="152"/>
+        <source>Select &amp;x</source>
+        <translation>Выделить &amp;x</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="153"/>
+        <source>Select &amp;y</source>
+        <translation>Выделить &amp;y</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="154"/>
+        <source>Select &amp;z</source>
+        <translation>Выделить &amp;z</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="156"/>
+        <location filename="problemsetupform.cpp" line="165"/>
+        <location filename="problemsetupform.cpp" line="167"/>
+        <source>&amp;Remove all</source>
+        <translation>У&amp;далить все</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="161"/>
+        <source>Select &amp;U</source>
+        <translation>Выделить по &amp;U</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="162"/>
+        <source>Select &amp;V</source>
+        <translation>Выделить по &amp;V</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="163"/>
+        <source>Select &amp;W</source>
+        <translation>Выделить по &amp;W</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1059"/>
+        <location filename="problemsetupform.cpp" line="1065"/>
+        <location filename="problemsetupform.cpp" line="1073"/>
+        <location filename="problemsetupform.cpp" line="1080"/>
+        <location filename="problemsetupform.cpp" line="1088"/>
+        <location filename="problemsetupform.cpp" line="1094"/>
+        <location filename="problemsetupform.cpp" line="1138"/>
+        <location filename="problemsetupform.cpp" line="1146"/>
+        <location filename="problemsetupform.cpp" line="1162"/>
+        <location filename="problemsetupform.cpp" line="1180"/>
+        <location filename="problemsetupform.cpp" line="1187"/>
+        <location filename="problemsetupform.cpp" line="1192"/>
+        <location filename="problemsetupform.cpp" line="1211"/>
+        <location filename="problemsetupform.cpp" line="1221"/>
+        <location filename="problemsetupform.cpp" line="1236"/>
+        <location filename="problemsetupform.cpp" line="1243"/>
+        <location filename="problemsetupform.cpp" line="1342"/>
+        <location filename="problemsetupform.cpp" line="1348"/>
+        <location filename="problemsetupform.cpp" line="1355"/>
+        <location filename="problemsetupform.cpp" line="1361"/>
+        <location filename="problemsetupform.cpp" line="1368"/>
+        <location filename="problemsetupform.cpp" line="1374"/>
+        <location filename="problemsetupform.cpp" line="1381"/>
+        <location filename="problemsetupform.cpp" line="1387"/>
+        <location filename="problemsetupform.cpp" line="1395"/>
+        <location filename="problemsetupform.cpp" line="1403"/>
+        <location filename="problemsetupform.cpp" line="1411"/>
+        <location filename="problemsetupform.cpp" line="1419"/>
+        <location filename="problemsetupform.cpp" line="1427"/>
+        <location filename="problemsetupform.cpp" line="1435"/>
+        <location filename="problemsetupform.cpp" line="1443"/>
+        <location filename="problemsetupform.cpp" line="1451"/>
+        <location filename="problemsetupform.cpp" line="1459"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1059"/>
+        <location filename="problemsetupform.cpp" line="1065"/>
+        <source>Incorrectly specified calculation errors!</source>
+        <translation>Неправильно задана погрешность вычислений!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1073"/>
+        <location filename="problemsetupform.cpp" line="1080"/>
+        <location filename="problemsetupform.cpp" line="1088"/>
+        <location filename="problemsetupform.cpp" line="1094"/>
+        <source>Incorrectly set output parameters!</source>
+        <translation>Некорректно заданы параметры вывода!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1125"/>
+        <source>volumetric load X</source>
+        <translation>объемная нагрузка X</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1126"/>
+        <source>volumetric load Y</source>
+        <translation>объемная нагрузка Y</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1127"/>
+        <source>volumetric load Z</source>
+        <translation>объемная нагрузка Z</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1128"/>
+        <source>coordinate x</source>
+        <translation>координаты x</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1129"/>
+        <source>coordinate y</source>
+        <translation>координаты y</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1130"/>
+        <source>coordinate z</source>
+        <translation>координаты z</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1138"/>
+        <location filename="problemsetupform.cpp" line="1146"/>
+        <source>Incorrect function name %1!</source>
+        <translation>Неправильное название функции %1!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1162"/>
+        <source>Incorrectly set variable value in a row: %1!</source>
+        <translation>Некорректно задано значение параметра в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1180"/>
+        <source>Incorrectly set load step!</source>
+        <translation>Некорректно задан шаг по нагрузке!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1187"/>
+        <source>Incorrectly set stress-strain curve in a row: %1!</source>
+        <translation>Некорректно задана диаграмма деформированияtв строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1192"/>
+        <source>Incorrectly set predicate in a row: %1!</source>
+        <translation>Некорректно задан предикат в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1211"/>
+        <source>Young&apos;s modulus not defined!</source>
+        <translation>Модуль Юнга не определен!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1221"/>
+        <source>Poisson&apos;s ratio not defined!</source>
+        <translation>Коэффициент Пуассона не определен!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1236"/>
+        <source>Incorrectly specified expression in a row: %1!</source>
+        <translation>Некорректно задано выражение в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1243"/>
+        <source>Predicate is not set correctly in the string: %1!</source>
+        <translation>Неправильно задан предикат в строке: %1!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1342"/>
+        <location filename="problemsetupform.cpp" line="1348"/>
+        <source>Incorrectly set the Wilson-theta!</source>
+        <translation>Некоректно заданна тетта Вильсона!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1355"/>
+        <location filename="problemsetupform.cpp" line="1361"/>
+        <source>Incorrectly set the start time!</source>
+        <translation>Некорректно задано начальное время!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1368"/>
+        <location filename="problemsetupform.cpp" line="1374"/>
+        <source>Incorrectly set the stop time!</source>
+        <translation>Некорректо задано конечное время!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1381"/>
+        <location filename="problemsetupform.cpp" line="1387"/>
+        <source>Incorrectly set the time step!</source>
+        <translation>Неправильно задан шаг по времени!</translation>
+    </message>
+    <message>
+        <location filename="problemsetupform.cpp" line="1395"/>
+        <location filename="problemsetupform.cpp" line="1403"/>
+        <location filename="problemsetupform.cpp" line="1411"/>
+        <location filename="problemsetupform.cpp" line="1419"/>
+        <location filename="problemsetupform.cpp" line="1427"/>
+        <location filename="problemsetupform.cpp" line="1435"/>
+        <location filename="problemsetupform.cpp" line="1443"/>
+        <location filename="problemsetupform.cpp" line="1451"/>
+        <location filename="problemsetupform.cpp" line="1459"/>
+        <source>Incorrectly set the initial conditions!</source>
+        <translation>Неправильно заданы начальные условия!</translation>
     </message>
 </context>
 <context>
@@ -2636,7 +3488,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="setupimagedialog.ui" line="72"/>
-        <source>The coordinate axes</source>
+        <source>Coordinate axes</source>
+        <oldsource>The coordinate axes</oldsource>
         <translation>Оси координат</translation>
     </message>
     <message>
@@ -2645,19 +3498,17 @@ p, li { white-space: pre-wrap; }
         <translation>Освещение</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="104"/>
         <source>Quality visualisation mesh</source>
-        <translation>Качественная прорисовка сетки</translation>
+        <translation type="vanished">Качественная прорисовка сетки</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="120"/>
         <source>Scale values</source>
-        <translation>Шкала значений</translation>
+        <translation type="vanished">Шкала значений</translation>
     </message>
     <message>
         <location filename="setupimagedialog.ui" line="136"/>
-        <location filename="setupimagedialog.ui" line="928"/>
-        <location filename="setupimagedialog.ui" line="970"/>
+        <location filename="setupimagedialog.ui" line="937"/>
+        <location filename="setupimagedialog.ui" line="979"/>
         <source>1</source>
         <translation>1</translation>
     </message>
@@ -2668,173 +3519,211 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="setupimagedialog.ui" line="165"/>
-        <location filename="setupimagedialog.ui" line="494"/>
-        <location filename="setupimagedialog.ui" line="507"/>
-        <location filename="setupimagedialog.ui" line="625"/>
-        <location filename="setupimagedialog.ui" line="695"/>
-        <location filename="setupimagedialog.ui" line="750"/>
-        <location filename="setupimagedialog.ui" line="836"/>
-        <location filename="setupimagedialog.ui" line="852"/>
-        <location filename="setupimagedialog.ui" line="868"/>
-        <location filename="setupimagedialog.ui" line="1046"/>
-        <location filename="setupimagedialog.ui" line="1059"/>
-        <location filename="setupimagedialog.ui" line="1116"/>
-        <location filename="setupimagedialog.ui" line="1142"/>
-        <location filename="setupimagedialog.ui" line="1171"/>
-        <location filename="setupimagedialog.ui" line="1244"/>
+        <location filename="setupimagedialog.ui" line="503"/>
+        <location filename="setupimagedialog.ui" line="516"/>
+        <location filename="setupimagedialog.ui" line="634"/>
+        <location filename="setupimagedialog.ui" line="704"/>
+        <location filename="setupimagedialog.ui" line="759"/>
+        <location filename="setupimagedialog.ui" line="845"/>
+        <location filename="setupimagedialog.ui" line="861"/>
+        <location filename="setupimagedialog.ui" line="877"/>
+        <location filename="setupimagedialog.ui" line="1055"/>
+        <location filename="setupimagedialog.ui" line="1068"/>
+        <location filename="setupimagedialog.ui" line="1125"/>
+        <location filename="setupimagedialog.ui" line="1151"/>
+        <location filename="setupimagedialog.ui" line="1180"/>
+        <location filename="setupimagedialog.ui" line="1253"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="210"/>
+        <location filename="setupimagedialog.ui" line="226"/>
         <source>Object:</source>
         <translation>Объект:</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="222"/>
         <source>Grid</source>
-        <translation>Сетка</translation>
+        <translation type="vanished">Сетка</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="238"/>
+        <location filename="setupimagedialog.ui" line="254"/>
         <source>Nodes</source>
         <translation>Узлы</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="251"/>
+        <location filename="setupimagedialog.ui" line="267"/>
         <source>Surface</source>
         <translation>Поверхность</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="267"/>
         <source>Boundary conditions</source>
-        <translation>Граничные условия</translation>
+        <translation type="vanished">Граничные условия</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="283"/>
         <source>Forces</source>
-        <translation>Нагрузки</translation>
+        <translation type="vanished">Нагрузки</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="300"/>
         <source>Image:</source>
-        <translation>Образ:</translation>
+        <translation type="vanished">Образ:</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="312"/>
         <source>greyscale</source>
-        <translation>Черно-белый</translation>
+        <translation type="vanished">Черно-белый</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="325"/>
         <source>RGB</source>
-        <translation>Цветной (RGB)</translation>
+        <translation type="vanished">Цветной (RGB)</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="341"/>
         <source>Spectral</source>
-        <translation>Спектральный</translation>
+        <translation type="vanished">Спектральный</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="379"/>
+        <location filename="setupimagedialog.ui" line="104"/>
+        <source>Double sided lighting model</source>
+        <translation>Двухсторонний режим освещения</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="120"/>
+        <source>Legend</source>
+        <translation>Легенда</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="209"/>
+        <source>Surface normal</source>
+        <translation>Нормали к поверхности</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="238"/>
+        <source>Mesh</source>
+        <translation>Сетка</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="284"/>
+        <source>Function:</source>
+        <translation>Функция:</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="296"/>
+        <source>Greyscale</source>
+        <translation>Градации серого</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="309"/>
+        <source>Color</source>
+        <translation>Цветная</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="353"/>
         <source>Colors:</source>
         <translation>Цветов:</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="392"/>
+        <location filename="setupimagedialog.ui" line="366"/>
         <source>16</source>
         <translation>16</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="405"/>
+        <location filename="setupimagedialog.ui" line="382"/>
         <source>128</source>
         <translation>128</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="421"/>
+        <location filename="setupimagedialog.ui" line="398"/>
         <source>256</source>
         <translation>256</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="437"/>
+        <location filename="setupimagedialog.ui" line="414"/>
         <source>Negative</source>
         <translation>Негатив</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="451"/>
+        <location filename="setupimagedialog.ui" line="427"/>
+        <source>32</source>
+        <translation>32</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="443"/>
+        <source>64</source>
+        <translation>64</translation>
+    </message>
+    <message>
+        <location filename="setupimagedialog.ui" line="460"/>
         <source>Transformation ratio</source>
         <translation>Коэффициент трансформации</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="520"/>
-        <location filename="setupimagedialog.ui" line="609"/>
-        <location filename="setupimagedialog.ui" line="734"/>
-        <location filename="setupimagedialog.ui" line="763"/>
-        <location filename="setupimagedialog.ui" line="954"/>
+        <location filename="setupimagedialog.ui" line="529"/>
+        <location filename="setupimagedialog.ui" line="618"/>
+        <location filename="setupimagedialog.ui" line="743"/>
+        <location filename="setupimagedialog.ui" line="772"/>
+        <location filename="setupimagedialog.ui" line="963"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="537"/>
+        <location filename="setupimagedialog.ui" line="546"/>
         <source>Background color</source>
         <translation>Цвет фона</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="566"/>
+        <location filename="setupimagedialog.ui" line="575"/>
         <source>Translate</source>
         <translation>Сместить</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="638"/>
-        <location filename="setupimagedialog.ui" line="721"/>
-        <location filename="setupimagedialog.ui" line="823"/>
-        <location filename="setupimagedialog.ui" line="941"/>
+        <location filename="setupimagedialog.ui" line="647"/>
+        <location filename="setupimagedialog.ui" line="730"/>
+        <location filename="setupimagedialog.ui" line="832"/>
+        <location filename="setupimagedialog.ui" line="950"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="651"/>
-        <location filename="setupimagedialog.ui" line="1072"/>
+        <location filename="setupimagedialog.ui" line="660"/>
+        <location filename="setupimagedialog.ui" line="1081"/>
         <source>X:</source>
         <translation>X:</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="708"/>
-        <location filename="setupimagedialog.ui" line="1129"/>
+        <location filename="setupimagedialog.ui" line="717"/>
+        <location filename="setupimagedialog.ui" line="1138"/>
         <source>Y:</source>
         <translation>Y:</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="810"/>
-        <location filename="setupimagedialog.ui" line="1231"/>
+        <location filename="setupimagedialog.ui" line="819"/>
+        <location filename="setupimagedialog.ui" line="1240"/>
         <source>Z:</source>
         <translation>Z:</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="885"/>
+        <location filename="setupimagedialog.ui" line="894"/>
         <source>Scale</source>
         <translation>Масштабировать</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="987"/>
+        <location filename="setupimagedialog.ui" line="996"/>
         <source>Rotation</source>
         <translation>Вращать</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.ui" line="1030"/>
-        <location filename="setupimagedialog.ui" line="1155"/>
-        <location filename="setupimagedialog.ui" line="1184"/>
+        <location filename="setupimagedialog.ui" line="1039"/>
+        <location filename="setupimagedialog.ui" line="1164"/>
+        <location filename="setupimagedialog.ui" line="1193"/>
         <source>360</source>
         <translation>360</translation>
     </message>
     <message>
-        <location filename="setupimagedialog.cpp" line="178"/>
-        <location filename="setupimagedialog.cpp" line="190"/>
         <location filename="setupimagedialog.cpp" line="195"/>
-        <location filename="setupimagedialog.cpp" line="200"/>
-        <location filename="setupimagedialog.cpp" line="205"/>
-        <location filename="setupimagedialog.cpp" line="210"/>
-        <location filename="setupimagedialog.cpp" line="215"/>
+        <location filename="setupimagedialog.cpp" line="207"/>
+        <location filename="setupimagedialog.cpp" line="212"/>
+        <location filename="setupimagedialog.cpp" line="217"/>
+        <location filename="setupimagedialog.cpp" line="222"/>
+        <location filename="setupimagedialog.cpp" line="227"/>
+        <location filename="setupimagedialog.cpp" line="232"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -2842,671 +3731,436 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TSetupTaskDialog</name>
     <message>
-        <location filename="setuptaskdialog.ui" line="32"/>
         <source>The task settings</source>
-        <translation>Параметры задачи</translation>
+        <translation type="vanished">Параметры задачи</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="64"/>
         <source>Base settings</source>
-        <translation>Базовые параметры</translation>
+        <translation type="vanished">Базовые параметры</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="82"/>
         <source>Physical parameters</source>
-        <translation> Физические параметры</translation>
+        <translation type="vanished"> Физические параметры</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="138"/>
         <source>Youngs modulus:</source>
-        <translation>Модуль Юнга:</translation>
+        <translation type="vanished">Модуль Юнга:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="157"/>
         <source>Poissons ratio:</source>
-        <translation>Коэффициент Пуассона:</translation>
+        <translation type="vanished">Коэффициент Пуассона:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="198"/>
         <source>Damping:</source>
-        <translation>Демпфирование:</translation>
+        <translation type="vanished">Демпфирование:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="233"/>
         <source>Density:</source>
-        <translation>Плотность:</translation>
+        <translation type="vanished">Плотность:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="253"/>
         <source>Task type</source>
-        <translation>Тип задачи</translation>
+        <translation type="vanished">Тип задачи</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="274"/>
         <source>&amp;Statics</source>
-        <translation>&amp;Статика</translation>
+        <translation type="vanished">&amp;Статика</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="296"/>
         <source>&amp;Dynamics</source>
-        <translation>&amp;Динамика</translation>
+        <translation type="vanished">&amp;Динамика</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="316"/>
         <source>Computation parameters</source>
-        <translation>Параметры расчета</translation>
+        <translation type="vanished">Параметры расчета</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="353"/>
         <source>Accuracy of calculations:</source>
-        <translation>Точность вычислений:</translation>
+        <translation type="vanished">Точность вычислений:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="372"/>
         <source>Direct &amp;method solving SLAE</source>
-        <translation>Прямой &amp;метод решения СЛАУ</translation>
+        <translation type="vanished">Прямой &amp;метод решения СЛАУ</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="394"/>
         <source>&amp;Iterative method solving SLAE</source>
-        <translation>&amp;Итерационный метод решения СЛАУ</translation>
+        <translation type="vanished">&amp;Итерационный метод решения СЛАУ</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="417"/>
         <source>Time parameters</source>
-        <translation>Параметры времени</translation>
+        <translation type="vanished">Параметры времени</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="438"/>
         <source>Wilson-θ:</source>
-        <translation>Метод Вильсона:</translation>
+        <translation type="vanished">Метод Вильсона:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="508"/>
         <source>Stop:</source>
-        <translation>Конец:</translation>
+        <translation type="vanished">Конец:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="527"/>
         <source>Start:</source>
-        <translation>Начало:</translation>
+        <translation type="vanished">Начало:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="562"/>
         <source>Step:</source>
-        <translation>Шаг:</translation>
+        <translation type="vanished">Шаг:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="582"/>
         <source>Output settings</source>
-        <translation>Параметры вывода</translation>
+        <translation type="vanished">Параметры вывода</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="600"/>
         <source>Width:</source>
-        <translation>Ширина:</translation>
+        <translation type="vanished">Ширина:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="638"/>
         <source>Precision:</source>
-        <translation>Точность:</translation>
+        <translation type="vanished">Точность:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="677"/>
         <source>Thermal expansion</source>
-        <translation>Температурное расширение</translation>
+        <translation type="vanished">Температурное расширение</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="759"/>
         <source>Forces</source>
-        <translation>Нагрузки</translation>
+        <translation type="vanished">Нагрузки</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="775"/>
         <source>Volume</source>
-        <translation>Объемные</translation>
+        <translation type="vanished">Объемные</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="797"/>
-        <location filename="setuptaskdialog.ui" line="895"/>
-        <location filename="setuptaskdialog.ui" line="993"/>
-        <location filename="setuptaskdialog.ui" line="1472"/>
-        <location filename="setuptaskdialog.cpp" line="284"/>
-        <location filename="setuptaskdialog.cpp" line="802"/>
-        <location filename="setuptaskdialog.cpp" line="854"/>
-        <location filename="setuptaskdialog.cpp" line="905"/>
         <source>Expression</source>
-        <translation>Выражение</translation>
+        <translation type="vanished">Выражение</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="802"/>
-        <location filename="setuptaskdialog.ui" line="900"/>
-        <location filename="setuptaskdialog.ui" line="998"/>
-        <location filename="setuptaskdialog.ui" line="1477"/>
-        <location filename="setuptaskdialog.cpp" line="285"/>
-        <location filename="setuptaskdialog.cpp" line="803"/>
-        <location filename="setuptaskdialog.cpp" line="855"/>
-        <location filename="setuptaskdialog.cpp" line="906"/>
         <source>Predicate</source>
-        <translation>Предикат</translation>
+        <translation type="vanished">Предикат</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="807"/>
-        <location filename="setuptaskdialog.ui" line="905"/>
-        <location filename="setuptaskdialog.ui" line="1003"/>
-        <location filename="setuptaskdialog.ui" line="2167"/>
         <source>x</source>
-        <translation>x</translation>
+        <translation type="vanished">x</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="812"/>
-        <location filename="setuptaskdialog.ui" line="910"/>
-        <location filename="setuptaskdialog.ui" line="1008"/>
-        <location filename="setuptaskdialog.ui" line="2186"/>
         <source>y</source>
-        <translation>y</translation>
+        <translation type="vanished">y</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="817"/>
-        <location filename="setuptaskdialog.ui" line="915"/>
-        <location filename="setuptaskdialog.ui" line="1013"/>
-        <location filename="setuptaskdialog.ui" line="2243"/>
         <source>z</source>
-        <translation>z</translation>
+        <translation type="vanished">z</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="837"/>
-        <location filename="setuptaskdialog.ui" line="935"/>
-        <location filename="setuptaskdialog.ui" line="1056"/>
-        <location filename="setuptaskdialog.ui" line="1512"/>
-        <location filename="setuptaskdialog.ui" line="1671"/>
-        <location filename="setuptaskdialog.ui" line="2369"/>
         <source>Remove the current row</source>
-        <translation>Удалить текущую строку</translation>
+        <translation type="vanished">Удалить текущую строку</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="840"/>
-        <location filename="setuptaskdialog.ui" line="863"/>
-        <location filename="setuptaskdialog.ui" line="938"/>
-        <location filename="setuptaskdialog.ui" line="961"/>
-        <location filename="setuptaskdialog.ui" line="1033"/>
-        <location filename="setuptaskdialog.ui" line="1059"/>
-        <location filename="setuptaskdialog.ui" line="1515"/>
-        <location filename="setuptaskdialog.ui" line="1538"/>
-        <location filename="setuptaskdialog.ui" line="1674"/>
-        <location filename="setuptaskdialog.ui" line="1697"/>
-        <location filename="setuptaskdialog.ui" line="2372"/>
-        <location filename="setuptaskdialog.ui" line="2395"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="vanished">...</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="860"/>
-        <location filename="setuptaskdialog.ui" line="958"/>
-        <location filename="setuptaskdialog.ui" line="1030"/>
-        <location filename="setuptaskdialog.ui" line="1535"/>
-        <location filename="setuptaskdialog.ui" line="1694"/>
-        <location filename="setuptaskdialog.ui" line="2392"/>
         <source>Add new row</source>
-        <translation>Добавить новую строку</translation>
+        <translation type="vanished">Добавить новую строку</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="873"/>
         <source>Surface</source>
-        <translation>Поверхностные</translation>
+        <translation type="vanished">Поверхностные</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="971"/>
         <source>Concentrated</source>
-        <translation>Сосредоточенные</translation>
+        <translation type="vanished">Сосредоточенные</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1071"/>
         <source>Boundary conditions</source>
-        <translation>Граничные условия</translation>
+        <translation type="vanished">Граничные условия</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1092"/>
         <source>The initial conditions</source>
-        <translation>Начальные условия</translation>
+        <translation type="vanished">Начальные условия</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1110"/>
-        <location filename="setuptaskdialog.ui" line="1167"/>
-        <location filename="setuptaskdialog.ui" line="1205"/>
-        <location filename="setuptaskdialog.ui" line="1224"/>
-        <location filename="setuptaskdialog.ui" line="1243"/>
-        <location filename="setuptaskdialog.ui" line="1281"/>
-        <location filename="setuptaskdialog.ui" line="1338"/>
-        <location filename="setuptaskdialog.ui" line="1376"/>
-        <location filename="setuptaskdialog.ui" line="1395"/>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1129"/>
         <source>U:</source>
-        <translation>U:</translation>
+        <translation type="vanished">U:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1148"/>
         <source>V:</source>
-        <translation>V:</translation>
+        <translation type="vanished">V:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1186"/>
         <source>W:</source>
-        <translation>W:</translation>
+        <translation type="vanished">W:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1262"/>
         <source>Vt:</source>
-        <translation>Vt:</translation>
+        <translation type="vanished">Vt:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1300"/>
         <source>Ut:</source>
-        <translation>Ut:</translation>
+        <translation type="vanished">Ut:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1319"/>
         <source>Wt:</source>
-        <translation>Wt:</translation>
+        <translation type="vanished">Wt:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1357"/>
         <source>Utt:</source>
-        <translation>Utt:</translation>
+        <translation type="vanished">Utt:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1414"/>
         <source>Vtt:</source>
-        <translation>Vtt:</translation>
+        <translation type="vanished">Vtt:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1433"/>
         <source>Wtt:</source>
-        <translation>Wtt:</translation>
+        <translation type="vanished">Wtt:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1453"/>
         <source>Limiting conditions</source>
-        <translation>Граничные условия</translation>
+        <translation type="vanished">Граничные условия</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1482"/>
         <source>U</source>
-        <translation>U</translation>
+        <translation type="vanished">U</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1487"/>
         <source>V</source>
-        <translation>V</translation>
+        <translation type="vanished">V</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1492"/>
         <source>W</source>
-        <translation>W</translation>
+        <translation type="vanished">W</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1549"/>
         <source>Nonlinearity</source>
-        <translation>Нелинейность</translation>
+        <translation type="vanished">Нелинейность</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1567"/>
         <source>Method of calculation</source>
-        <translation>Метод расчета</translation>
+        <translation type="vanished">Метод расчета</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1585"/>
         <source>&amp;variable stiffness</source>
-        <translation>переменной &amp;жесткости</translation>
+        <translation type="vanished">переменной &amp;жесткости</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1607"/>
         <source>&amp;elastic solutions</source>
-        <translation>&amp;упругих решений</translation>
+        <translation type="vanished">&amp;упругих решений</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1627"/>
         <source>Mechanical properties of the material</source>
-        <translation>Механические свойства материала</translation>
+        <translation type="vanished">Механические свойства материала</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1646"/>
         <source>Stress</source>
-        <translation>Напряжения</translation>
+        <translation type="vanished">Напряжения</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1651"/>
         <source>Deformation</source>
-        <translation>Деформации</translation>
+        <translation type="vanished">Деформации</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1721"/>
         <source>nonlinear calculation</source>
-        <translation>нелинейный расчет</translation>
+        <translation type="vanished">нелинейный расчет</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1740"/>
         <source>Force step</source>
-        <translation>Шаг по нагрузке</translation>
+        <translation type="vanished">Шаг по нагрузке</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1765"/>
         <source>Notations</source>
-        <translation>Обозначения</translation>
+        <translation type="vanished">Обозначения</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1883"/>
         <source>Function</source>
-        <translation>Функция</translation>
+        <translation type="vanished">Функция</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="1894"/>
-        <location filename="setuptaskdialog.ui" line="2344"/>
         <source>Name</source>
-        <translation>Обозначение</translation>
+        <translation type="vanished">Обозначение</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2130"/>
         <source>Coordinate</source>
-        <translation>Координаты</translation>
+        <translation type="vanished">Координаты</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2148"/>
         <source>x:</source>
-        <translation>x:</translation>
+        <translation type="vanished">x:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2205"/>
         <source>y:</source>
-        <translation>y:</translation>
+        <translation type="vanished">y:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2224"/>
         <source>z:</source>
-        <translation>z:</translation>
+        <translation type="vanished">z:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2263"/>
         <source>Time</source>
-        <translation>Время</translation>
+        <translation type="vanished">Время</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2281"/>
         <source>t:</source>
-        <translation>t:</translation>
+        <translation type="vanished">t:</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2300"/>
         <source>t</source>
-        <translation>t</translation>
+        <translation type="vanished">t</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2307"/>
         <source>Variables</source>
-        <translation>Параметры</translation>
+        <translation type="vanished">Параметры</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2325"/>
         <source>Global variables</source>
-        <translation>Глобальные параметры</translation>
+        <translation type="vanished">Глобальные параметры</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.ui" line="2349"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="77"/>
-        <location filename="setuptaskdialog.cpp" line="86"/>
         <source>&amp;Select all</source>
-        <translation>&amp;Выделить все</translation>
+        <translation type="vanished">&amp;Выделить все</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="78"/>
-        <location filename="setuptaskdialog.cpp" line="87"/>
         <source>Clear &amp;all</source>
-        <translation>&amp;Сбросить все</translation>
+        <translation type="vanished">&amp;Сбросить все</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="80"/>
         <source>Select &amp;X</source>
-        <translation>Выделить по &amp;X</translation>
+        <translation type="vanished">Выделить по &amp;X</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="81"/>
         <source>Select &amp;Y</source>
-        <translation>Выделить по &amp;Y</translation>
+        <translation type="vanished">Выделить по &amp;Y</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="82"/>
         <source>Select &amp;Z</source>
-        <translation>Выделить по &amp;Z</translation>
+        <translation type="vanished">Выделить по &amp;Z</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="84"/>
-        <location filename="setuptaskdialog.cpp" line="93"/>
-        <location filename="setuptaskdialog.cpp" line="95"/>
         <source>&amp;Remove all</source>
-        <translation>У&amp;далить все</translation>
+        <translation type="vanished">У&amp;далить все</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="89"/>
         <source>Select &amp;U</source>
-        <translation>Выделить по &amp;U</translation>
+        <translation type="vanished">Выделить по &amp;U</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="90"/>
         <source>Select &amp;V</source>
-        <translation>Выделить по &amp;V</translation>
+        <translation type="vanished">Выделить по &amp;V</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="91"/>
         <source>Select &amp;W</source>
-        <translation>Выделить по &amp;W</translation>
+        <translation type="vanished">Выделить по &amp;W</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="957"/>
-        <location filename="setuptaskdialog.cpp" line="964"/>
-        <location filename="setuptaskdialog.cpp" line="974"/>
-        <location filename="setuptaskdialog.cpp" line="981"/>
-        <location filename="setuptaskdialog.cpp" line="991"/>
-        <location filename="setuptaskdialog.cpp" line="998"/>
-        <location filename="setuptaskdialog.cpp" line="1008"/>
-        <location filename="setuptaskdialog.cpp" line="1016"/>
-        <location filename="setuptaskdialog.cpp" line="1026"/>
-        <location filename="setuptaskdialog.cpp" line="1033"/>
-        <location filename="setuptaskdialog.cpp" line="1072"/>
-        <location filename="setuptaskdialog.cpp" line="1079"/>
-        <location filename="setuptaskdialog.cpp" line="1095"/>
-        <location filename="setuptaskdialog.cpp" line="1102"/>
-        <location filename="setuptaskdialog.cpp" line="1118"/>
-        <location filename="setuptaskdialog.cpp" line="1125"/>
-        <location filename="setuptaskdialog.cpp" line="1140"/>
-        <location filename="setuptaskdialog.cpp" line="1146"/>
-        <location filename="setuptaskdialog.cpp" line="1262"/>
-        <location filename="setuptaskdialog.cpp" line="1269"/>
-        <location filename="setuptaskdialog.cpp" line="1278"/>
-        <location filename="setuptaskdialog.cpp" line="1285"/>
-        <location filename="setuptaskdialog.cpp" line="1295"/>
-        <location filename="setuptaskdialog.cpp" line="1302"/>
-        <location filename="setuptaskdialog.cpp" line="1311"/>
-        <location filename="setuptaskdialog.cpp" line="1318"/>
-        <location filename="setuptaskdialog.cpp" line="1327"/>
-        <location filename="setuptaskdialog.cpp" line="1334"/>
-        <location filename="setuptaskdialog.cpp" line="1343"/>
-        <location filename="setuptaskdialog.cpp" line="1350"/>
-        <location filename="setuptaskdialog.cpp" line="1360"/>
-        <location filename="setuptaskdialog.cpp" line="1370"/>
-        <location filename="setuptaskdialog.cpp" line="1380"/>
-        <location filename="setuptaskdialog.cpp" line="1390"/>
-        <location filename="setuptaskdialog.cpp" line="1400"/>
-        <location filename="setuptaskdialog.cpp" line="1410"/>
-        <location filename="setuptaskdialog.cpp" line="1420"/>
-        <location filename="setuptaskdialog.cpp" line="1430"/>
-        <location filename="setuptaskdialog.cpp" line="1440"/>
-        <location filename="setuptaskdialog.cpp" line="1464"/>
-        <location filename="setuptaskdialog.cpp" line="1473"/>
-        <location filename="setuptaskdialog.cpp" line="1876"/>
-        <location filename="setuptaskdialog.cpp" line="1885"/>
-        <location filename="setuptaskdialog.cpp" line="1892"/>
-        <location filename="setuptaskdialog.cpp" line="1909"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation type="vanished">Ошибка</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="957"/>
-        <location filename="setuptaskdialog.cpp" line="964"/>
-        <location filename="setuptaskdialog.cpp" line="974"/>
-        <location filename="setuptaskdialog.cpp" line="981"/>
         <source>Incorrectly specified elastic modulus!</source>
-        <translation>Неправильно задан модуль Юнга!</translation>
+        <translation type="vanished">Неправильно задан модуль Юнга!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="991"/>
-        <location filename="setuptaskdialog.cpp" line="998"/>
         <source>Incorrectly specified calculation errors!</source>
-        <translation>Неправильно задана погрешность вычислений!</translation>
+        <translation type="vanished">Неправильно задана погрешность вычислений!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1008"/>
-        <location filename="setuptaskdialog.cpp" line="1016"/>
-        <location filename="setuptaskdialog.cpp" line="1026"/>
-        <location filename="setuptaskdialog.cpp" line="1033"/>
         <source>Incorrectly set output parameters!</source>
-        <translation>Некорректно заданы параметры вывода!</translation>
+        <translation type="vanished">Некорректно заданы параметры вывода!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1072"/>
         <source>Incorrectly specified volume force in a row: %1!</source>
-        <translation>Неправильно задана объемная нагрузкa в строке: %1!</translation>
+        <translation type="vanished">Неправильно задана объемная нагрузкa в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1079"/>
-        <location filename="setuptaskdialog.cpp" line="1102"/>
-        <location filename="setuptaskdialog.cpp" line="1125"/>
-        <location filename="setuptaskdialog.cpp" line="1146"/>
         <source>Predicate is not set correctly in the string: %1!</source>
-        <translation>Неправильно задан предикат в строке: %1!</translation>
+        <translation type="vanished">Неправильно задан предикат в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1095"/>
         <source>Incorrectly specified surface force in a row: %1!</source>
-        <translation>Неправильно задана поверхностная нагрузкa в строке: %1!</translation>
+        <translation type="vanished">Неправильно задана поверхностная нагрузкa в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1118"/>
         <source>Incorrectly specified point force in a row: %1!</source>
-        <translation>Неправильно задана сосредоточенная нагрузкa в строке: %1!</translation>
+        <translation type="vanished">Неправильно задана сосредоточенная нагрузкa в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1140"/>
         <source>Incorrectly specified boundary condition in a row: %1!</source>
-        <translation>Неправильно заданo граничное условие в строке: %1!</translation>
+        <translation type="vanished">Неправильно заданo граничное условие в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1262"/>
-        <location filename="setuptaskdialog.cpp" line="1269"/>
         <source>Incorrectly specified density!</source>
-        <translation>Неправильно задана плотность!</translation>
+        <translation type="vanished">Неправильно задана плотность!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1278"/>
-        <location filename="setuptaskdialog.cpp" line="1285"/>
         <source>Damping parameter is set incorrectly!</source>
-        <translation>Неправильно задан параметр демпфирования!</translation>
+        <translation type="vanished">Неправильно задан параметр демпфирования!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1295"/>
         <source>Incorrectly set the Wilson-theta!</source>
-        <translation>Некоректно заданна тетта Вильсона!</translation>
+        <translation type="vanished">Некоректно заданна тетта Вильсона!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1302"/>
-        <location filename="setuptaskdialog.cpp" line="1311"/>
-        <location filename="setuptaskdialog.cpp" line="1318"/>
-        <location filename="setuptaskdialog.cpp" line="1327"/>
-        <location filename="setuptaskdialog.cpp" line="1334"/>
         <source>Incorrectly set the initial time!</source>
-        <translation>Неправильно задан начальный момент времени!</translation>
+        <translation type="vanished">Неправильно задан начальный момент времени!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1343"/>
-        <location filename="setuptaskdialog.cpp" line="1350"/>
         <source>Incorrectly set the time step!</source>
-        <translation>Неправильно задан шаг по времени!</translation>
+        <translation type="vanished">Неправильно задан шаг по времени!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1360"/>
-        <location filename="setuptaskdialog.cpp" line="1370"/>
-        <location filename="setuptaskdialog.cpp" line="1380"/>
-        <location filename="setuptaskdialog.cpp" line="1390"/>
-        <location filename="setuptaskdialog.cpp" line="1400"/>
-        <location filename="setuptaskdialog.cpp" line="1410"/>
-        <location filename="setuptaskdialog.cpp" line="1420"/>
-        <location filename="setuptaskdialog.cpp" line="1430"/>
-        <location filename="setuptaskdialog.cpp" line="1440"/>
         <source>Incorrectly set the initial conditions!</source>
-        <translation>Неправильно заданы начальные условия!</translation>
+        <translation type="vanished">Неправильно заданы начальные условия!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1450"/>
         <source>volumetric force X</source>
-        <translation>объемной нагрузки X</translation>
+        <translation type="vanished">объемной нагрузки X</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1451"/>
         <source>volumetric force Y</source>
-        <translation>объемной нагрузки Y</translation>
+        <translation type="vanished">объемной нагрузки Y</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1452"/>
         <source>volumetric force Z</source>
-        <translation>объемной нагрузки Z</translation>
+        <translation type="vanished">объемной нагрузки Z</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1453"/>
         <source>coordinate x</source>
-        <translation>координаты x</translation>
+        <translation type="vanished">координаты x</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1454"/>
         <source>coordinate y</source>
-        <translation>координаты y</translation>
+        <translation type="vanished">координаты y</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1455"/>
         <source>coordinate z</source>
-        <translation>координаты z</translation>
+        <translation type="vanished">координаты z</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1464"/>
-        <location filename="setuptaskdialog.cpp" line="1473"/>
         <source>Incorrect function name %1!</source>
-        <translation>Неправильное название функции %1!</translation>
+        <translation type="vanished">Неправильное название функции %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1876"/>
         <source>Incorrectly set force step!</source>
-        <translation>Некорректно задан шаг по нагрузке!</translation>
+        <translation type="vanished">Некорректно задан шаг по нагрузке!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1885"/>
         <source>Incorrectly set stress intensity in a row: %1!</source>
-        <translation>Неправильно задана интенсивность напряжений в строке: %1!</translation>
+        <translation type="vanished">Неправильно задана интенсивность напряжений в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1892"/>
         <source>Incorrectly set deformation intensity in a row: %1!</source>
-        <translation>Неправильно задана интенсивность деформаций в строке: %1!</translation>
+        <translation type="vanished">Неправильно задана интенсивность деформаций в строке: %1!</translation>
     </message>
     <message>
-        <location filename="setuptaskdialog.cpp" line="1909"/>
         <source>Incorrectly set variable value in a row: %1!</source>
-        <translation>Некорректно задано значение параметра в строке: %1!</translation>
+        <translation type="vanished">Некорректно задано значение параметра в строке: %1!</translation>
     </message>
 </context>
 <context>

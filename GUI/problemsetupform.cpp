@@ -1,3 +1,4 @@
+#include <QPushButton>
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QTextEdit>
@@ -125,6 +126,7 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, ui->tbShowLoads, getLoadTab()); }));
 
     connect(ui->buttonBox, &QDialogButtonBox::rejected, ([=](void) { slotCancelButton(); }));
+    connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, ([=](void) { slotApplyButton(); }));
 
     createMenu();
 
@@ -135,6 +137,12 @@ TProblemSetupForm::~TProblemSetupForm()
 {
     delete ui;
 }
+
+void TProblemSetupForm::slotApplyButton(void)
+{
+    getParams();
+}
+
 
 void TProblemSetupForm::createMenu(void)
 {

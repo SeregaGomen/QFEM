@@ -57,6 +57,7 @@ TMainWindow::~TMainWindow()
     delete dock;
     delete tabWidget;
     delete iDlg;
+//    delete pForm;
     delete ui;
 }
 
@@ -120,7 +121,7 @@ void TMainWindow::init(void)
     myCout = new QStdRedirector<>(std::cout, this);
 //    connect(myCout, SIGNAL(messageChanged(QString)), terminal, SLOT(insertPlainText(QString)));
     connect(myCout, SIGNAL(messageChanged(QString)), this, SLOT(slotMsg(QString)));
-    cout << ' ';
+    cout << endl;
 
     myCerr = new QStdRedirector<>(std::cerr, this);
 //    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(setErrColor()));
@@ -501,10 +502,6 @@ void TMainWindow::slotSaveAsDocument(void)
 
 void TMainWindow::saveDocument(QString fileName)
 {
-    // Загрузка текущих параметров из диалога
-    if (!pForm->getParams())
-        return;
-
     if (saveQFPF(fileName))
     {
         setCurrentFile(fileName);
@@ -630,7 +627,7 @@ void TMainWindow::slotSetupTaskParams(void)
         // Включаем режим отображения закладки параметров расчета
         ui->actionObjectParameters->setChecked(true);
         pForm->changeLanguage();
-//        pForm->setup();
+        pForm->setup();
         scroll = new QScrollArea();
         scroll->setWidget(pForm);
         tabWidget->insertTab(1, scroll, tr("Setup"));
@@ -642,27 +639,6 @@ void TMainWindow::slotSetupTaskParams(void)
         ui->actionObjectParameters->setChecked(false);
         tabWidget->removeTab(1);
     }
-
-/*
-
-    // Проверка наличия такой функции в уже открытых закладках
-    for (int i = 0; i < tabWidget->count(); i++)
-        if (tabWidget->tabText(i) == tr("Setup"))
-        {
-            isFind = true;
-            tabWidget->setCurrentIndex(i);
-        }
-    if (!isFind)
-    {
-        pForm->changeLanguage();
-        pForm->setup();
-        scroll = new QScrollArea();
-        scroll->setWidget(pForm);
-        tabWidget->insertTab(1, scroll, tr("Setup"));
-        tabWidget->setTabsClosable(true);
-        tabWidget->setCurrentIndex(1);
-    }
-*/
 }
 
 // Запуск процедуры расчета задачи
@@ -796,11 +772,6 @@ void TMainWindow::startSolvingProblem(void)
     QString htmlFile = QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + ".html",
             qresFile = QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + ".qres";
 
-//    if (!checkParams())
-//        return;
-    if (!pForm->getParams())
-        return;
-
     try
     {
         // Запуск расчета
@@ -842,11 +813,11 @@ void TMainWindow::showProtocol(QString fileName)
     webOut += tr("The problem has been solving %1 at %2").arg(QString("%1.%2.%3").arg(dt.date().day(), 2, 10, QChar('0')).arg(dt.date().month(), 2, 10, QChar('0')).arg(dt.date().year(), 2, 10, QChar('0'))).arg(QString("%1:%2").arg(dt.time().hour(), 2, 10, QChar('0')).arg(dt.time().minute(), 2, 10, QChar('0')));
     webOut += "</h1>";
 
-    webOut += tr("Object: <b>%1</b> (nodes: <b>%2</b>, finite elements: <b>%3</b>)").arg(femObject->getObjectName().c_str()).arg(femObject->getMesh().getNumVertex()).arg(femObject->getMesh().getNumFE());
-    webOut += "<br>";
+    webOut += tr("Object: <b>%1</b> (nodes: <b>%2</b>, finite elements: <b>%3</b>)<br>").arg(femObject->getObjectName().c_str()).arg(femObject->getMesh().getNumVertex()).arg(femObject->getMesh().getNumFE());
+//    webOut += "<br>";
 
-    webOut += tr("FE type: <b>%1</b>").arg(femObject->getMesh().feName().c_str());
-    webOut += "<br>";
+    webOut += tr("FE type: <b>%1</b><br>").arg(femObject->getMesh().feName().c_str());
+//    webOut += "<br>";
 
     // Вывод метода аппроксимации по времени (в динамике)
     if (femObject->getParams().fType == DynamicProblem)
@@ -860,8 +831,11 @@ void TMainWindow::showProtocol(QString fileName)
 
 
     // Вывод рез-тов по каждой функции
-    webOut += "<br>";
-    webOut += tr("Results of calculation");
+    webOut += "<h2>";
+    webOut += tr("Results of calculation:");
+    webOut += "</h2>";
+//    webOut += "<br>";
+//    webOut += tr("Results of calculation");
     webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("Function")).arg(tr("Min")).arg("Max");
     if (femObject->getParams().fType == StaticProblem)
         for (unsigned i = 0; i < femObject->getResult().size(); i++)
@@ -884,12 +858,18 @@ void TMainWindow::showProtocol(QString fileName)
     }
     webOut += "</table><br>";
 
-    // Вывод примечаний к расчету
-    webOut += "<br>";
-    for (auto it: femObject->getNotes())
+    if (femObject->getNotes().size())
     {
-        webOut += it.c_str();
-        webOut += "<br>";
+        webOut += "<h2>";
+        webOut += tr("Problem notes:");
+        webOut += "</h2>";
+        // Вывод примечаний к расчету
+//        webOut += "<br>";
+        for (auto it: femObject->getNotes())
+        {
+            webOut += tr(it.c_str());
+            webOut += "<br>";
+        }
     }
 //    webOut += "<br>";
 
@@ -949,13 +929,13 @@ void TMainWindow::sayParams(QString& webOut)
     webOut += tr("Computational accuracy: <b>%1</b>").arg(femObject->getParams().eps, int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
     webOut += "<br><br>";
     webOut += tr("Elastic characteristics");
-    sayParam(webOut, "Young's modulus", YOUNG_MODULUS_PARAMETER, false);
-    sayParam(webOut, "Poisson's ratio", POISSON_RATIO_PARAMETER, false);
+    sayParam(webOut, tr("Young's modulus"), YOUNG_MODULUS_PARAMETER, false);
+    sayParam(webOut, tr("Poisson's ratio"), POISSON_RATIO_PARAMETER, false);
 
     if (femObject->getParams().fType == DynamicProblem)
     {
-        sayParam(webOut, "Density", DENSITY_PARAMETER, false);
-        sayParam(webOut, "Damping parameter", DAMPING_PARAMETER, false);
+        sayParam(webOut, tr("Density"), DENSITY_PARAMETER, false);
+        sayParam(webOut, tr("Damping parameter"), DAMPING_PARAMETER, false);
     }
     // Упруго-пластические параметры задачи
     if (femObject->getParams().pMethod != Linear)
@@ -991,27 +971,27 @@ void TMainWindow::sayParams(QString& webOut)
 
     // Толщина КЭ
     if (femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D())
-        sayParam(webOut, "FE thickness", THICKNESS_PARAMETER, false);
+        sayParam(webOut, tr("FE thickness"), THICKNESS_PARAMETER, false);
 
 
     // --------------- Термоупругие параметры ---------------
-    sayParam(webOut, "Thermal expansion", ALPHA_PARAMETER, false);
-    sayParam(webOut, "Temperatire", TEMPERATURE_PARAMETER, false);
+    sayParam(webOut, tr("Thermal expansion"), ALPHA_PARAMETER, false);
+    sayParam(webOut, tr("Temperatire"), TEMPERATURE_PARAMETER, false);
 
     // --------------- Краевые условия задачи ---------------
-    sayParam(webOut, "Boundary condition", BOUNDARY_CONDITION_PARAMETER);
+    sayParam(webOut, tr("Boundary condition"), BOUNDARY_CONDITION_PARAMETER);
 
     // --------------- Объемная нагрузки ---------------
-    sayParam(webOut, "Volume load", VOLUME_LOAD_PARAMETER);
+    sayParam(webOut, tr("Volume load"), VOLUME_LOAD_PARAMETER);
 
     // --------------- Поверхностная нагрузки ---------------
-    sayParam(webOut, "Surface load", SURFACE_LOAD_PARAMETER);
+    sayParam(webOut, tr("Surface load"), SURFACE_LOAD_PARAMETER);
 
     // --------------- Сосредоточенная нагрузки ---------------
-    sayParam(webOut, "Concentrated load", CONCENTRATED_LOAD_PARAMETER);
+    sayParam(webOut, tr("Concentrated load"), CONCENTRATED_LOAD_PARAMETER);
 
     // --------------- Давление ---------------
-    sayParam(webOut, "Pressure load", PRESSURE_LOAD_PARAMETER, false);
+    sayParam(webOut, tr("Pressure load"), PRESSURE_LOAD_PARAMETER, false);
 
     // --------------- Начальные и другие условия, зависящие от времени ---------------
     if (femObject->getParams().fType == DynamicProblem)
@@ -1086,11 +1066,12 @@ void TMainWindow::sayParams(QString& webOut)
     if (femObject->getParams().variables.size())
     {
         webOut += "<br>";
-        webOut += tr("variables:");
+        webOut += tr("Variables:");
         webOut += "<br>";
         for (auto it: femObject->getParams().variables)
         {
-            webOut += tr("name: <b>%1</b>, value: <b>%2</b>").arg(it.first.c_str()).arg(it.second);
+            // webOut += tr("name: <b>%1</b>, value: <b>%2</b>").arg(it.first.c_str()).arg(it.second);
+            webOut += tr("<b>%1</b> = <b>%2</b>").arg(it.first.c_str()).arg(it.second);
             webOut += "<br>";
         }
     }
@@ -1631,13 +1612,18 @@ void TMainWindow::loadMesh(const QJsonObject &meshObj)
         for (unsigned j = 0; j < fe_size; j++)
             fe[i][j] = unsigned(arr[j].toInt());
     }
-    be.resize(ja_be.size(), be_size);
-    for (unsigned i = 0; i < unsigned(ja_be.size()); i++)
+    if (fe_type == FE3D3S || fe_type == FE3D4S || fe_type == FE3D6S)
+        be = fe;
+    else
     {
-        QJsonArray arr = ja_be[i].toArray();
+        be.resize(ja_be.size(), be_size);
+        for (unsigned i = 0; i < unsigned(ja_be.size()); i++)
+        {
+            QJsonArray arr = ja_be[i].toArray();
 
-        for (unsigned j = 0; j < be_size; j++)
-            be[i][j] = unsigned(arr[j].toInt());
+            for (unsigned j = 0; j < be_size; j++)
+                be[i][j] = unsigned(arr[j].toInt());
+        }
     }
     mesh.setMesh(FEType(fe_type), x, fe, be);
 }
