@@ -27,11 +27,45 @@ private:
     int token_type;
     ErrorCode error_code = NO_ERR;
     int tok;
+    vector<idToken> functionList{
+                                    { "SQRT", SQRT },
+                                    { "SIN", SIN },
+                                    { "COS", COS },
+                                    { "TAN", TAN },
+                                    { "EXP", EXP },
+                                    { "ASIN", ASIN },
+                                    { "ACOS", ACOS },
+                                    { "ATAN", ATAN },
+                                    { "ATAN2", ATAN2 },
+                                    { "SINH", SINH },
+                                    { "COSH", COSH },
+                                    { "TANH", TANH },
+                                    { "ABS", ABS }
+                                };
+    vector<idToken> booleanList{
+                                    { "NOT", NOT },
+                                    { "AND", AND },
+                                    { "OR", OR }
+                                };
+
+    vector<idToken> opeartionList{
+                                    { "+", PLUS },
+                                    { "-", MINUS },
+                                    { "*", MUL },
+                                    { "/", DIV },
+                                    { "**", POW },
+                                    { "==", EQ },
+                                    { ">", GT },
+                                    { "<", LT },
+                                    { ">=", GE },
+                                    { "<=", LE },
+                                    { "<>", NE }
+                                };
 protected:
     int get_token(void);
     int is_delim(char);
     bool is_name(string);
-    bool is_find(idToken[], string, int&);
+    bool is_find(vector<idToken>&, string, int&);
     [[noreturn ]] void error(ErrorCode);
     void compile(void);
     void get_exp(Tree&);

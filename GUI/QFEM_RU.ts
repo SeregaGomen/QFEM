@@ -2423,12 +2423,12 @@ p, li { white-space: pre-wrap; }
         <location filename="mainwindow.cpp" line="760"/>
         <location filename="mainwindow.cpp" line="881"/>
         <location filename="mainwindow.cpp" line="1163"/>
-        <location filename="mainwindow.cpp" line="1653"/>
-        <location filename="mainwindow.cpp" line="1674"/>
-        <location filename="mainwindow.cpp" line="1725"/>
+        <location filename="mainwindow.cpp" line="1659"/>
+        <location filename="mainwindow.cpp" line="1680"/>
         <location filename="mainwindow.cpp" line="1731"/>
         <location filename="mainwindow.cpp" line="1737"/>
-        <location filename="mainwindow.cpp" line="1751"/>
+        <location filename="mainwindow.cpp" line="1743"/>
+        <location filename="mainwindow.cpp" line="1757"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -2562,8 +2562,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="mainwindow.cpp" line="881"/>
-        <location filename="mainwindow.cpp" line="1653"/>
-        <location filename="mainwindow.cpp" line="1674"/>
+        <location filename="mainwindow.cpp" line="1659"/>
+        <location filename="mainwindow.cpp" line="1680"/>
         <source>Error opening file %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
@@ -2583,7 +2583,12 @@ p, li { white-space: pre-wrap; }
         <translation>Параметер демпфирования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="927"/>
+        <location filename="mainwindow.cpp" line="916"/>
+        <source>Stress-strain curve</source>
+        <translation>Диаграмма деформирования</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="928"/>
         <source>Load step</source>
         <translation>Шаг по нагрузке</translation>
     </message>
@@ -2628,7 +2633,7 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;b&gt;%1&lt;/b&gt; = &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1821"/>
+        <location filename="mainwindow.cpp" line="1827"/>
         <source>QFEM result files (*.qres);; QFEM report files (*.txt)</source>
         <translation>Файлы результатов QFEM (*.qres);; Файлы отчетов QFEM (*.txt)</translation>
     </message>
@@ -2662,12 +2667,11 @@ p, li { white-space: pre-wrap; }
         <translation>Упругие характеристики</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="915"/>
         <source>Stress-strain curve:</source>
-        <translation>Диаграмма деформирования:</translation>
+        <translation type="vanished">Диаграмма деформирования:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="921"/>
+        <location filename="mainwindow.cpp" line="922"/>
         <location filename="mainwindow.cpp" line="1021"/>
         <source>N</source>
         <translation>№</translation>
@@ -2697,17 +2701,17 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">плотность: &lt;b&gt;%1&lt;/b&gt;, параметр демпфирования: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="914"/>
+        <location filename="mainwindow.cpp" line="915"/>
         <source>Method of elastic-plastic analysis: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Способ упруго-пластического расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="914"/>
+        <location filename="mainwindow.cpp" line="915"/>
         <source>method of variable stiffness</source>
         <translation>метод переменной жесткости</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="914"/>
+        <location filename="mainwindow.cpp" line="915"/>
         <source>method of elastic solutions Ilyushin</source>
         <translation>метод упругих решений Ильюшина</translation>
     </message>
@@ -2716,12 +2720,12 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Механические свойства материала:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="921"/>
+        <location filename="mainwindow.cpp" line="922"/>
         <source>Stress</source>
         <translation>Напряжения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="921"/>
+        <location filename="mainwindow.cpp" line="922"/>
         <source>Deformation</source>
         <translation>Деформации</translation>
     </message>
@@ -2740,7 +2744,7 @@ p, li { white-space: pre-wrap; }
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="920"/>
+        <location filename="mainwindow.cpp" line="921"/>
         <location filename="mainwindow.cpp" line="1021"/>
         <source>Predicate</source>
         <translation>Предикат</translation>
@@ -2795,19 +2799,19 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Ошибка записи файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1725"/>
+        <location filename="mainwindow.cpp" line="1731"/>
         <source>This function is is already exists!</source>
         <translation>Такая функция уже существует!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1731"/>
         <location filename="mainwindow.cpp" line="1737"/>
-        <location filename="mainwindow.cpp" line="1751"/>
+        <location filename="mainwindow.cpp" line="1743"/>
+        <location filename="mainwindow.cpp" line="1757"/>
         <source>Invalid expression!</source>
         <translation>Неправильно задано выражение!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1821"/>
+        <location filename="mainwindow.cpp" line="1827"/>
         <source>Saving results</source>
         <translation>Сохранение результатов</translation>
     </message>

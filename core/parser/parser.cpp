@@ -5,45 +5,6 @@
 #include <cmath>
 #include "parser.h"
 
-static idToken functionList[] = {
-    { "SQRT", SQRT },
-    { "SIN", SIN },
-    { "COS", COS },
-    { "TAN", TAN },
-    { "EXP", EXP },
-    { "ASIN", ASIN },
-    { "ACOS", ACOS },
-    { "ATAN", ATAN },
-    { "ATAN2", ATAN2 },
-    { "SINH", SINH },
-    { "COSH", COSH },
-    { "TANH", TANH },
-    { "ABS", ABS },
-    { "", END }
-};
-
-static idToken booleanList[] =  {
-    { "NOT", NOT },
-    { "AND", AND },
-    { "OR", OR },
-    { "", END }
-};
-
-static idToken opeartionList[] =  {
-    { "+", PLUS },
-    { "-", MINUS },
-    { "*", MUL },
-    { "/", DIV },
-    { "**", POW },
-    { "==", EQ },
-    { ">", GT },
-    { "<", LT },
-    { ">=", GE },
-    { "<=", LE },
-    { "<>", NE },
-    { "", END }
-};
-
 /********************************************************************/
 void TParser::set_expression(string prog)
 {
@@ -58,20 +19,15 @@ void TParser::set_expression(string prog)
     compile();
 }
 /********************************************************************/
-bool TParser::is_find(idToken table[], string id, int& token)
+bool TParser::is_find(vector<idToken>& table, string id, int& token)
 {
-    int  i = 0;
-
     transform(id.begin(), id.end(),id.begin(), ::toupper);
-    while (table[i].type != END)
-    {
-        if (id == table[i].name)
+    for (auto it : table)
+        if (it.name == id)
         {
-            token = table[i].type;
+            token = it.type;
             return true;
         }
-        i++;
-    }
     return false;
 }
 /********************************************************************/
@@ -91,7 +47,7 @@ int TParser::get_token(void)
         token = *expression++;
         // Проверка на наличие двойного разделителя
         if (*expression && strchr("=><*",*expression))
-            if (is_find(opeartionList,token + *expression, tok))
+            if (is_find(opeartionList, token + *expression, tok))
                 token += *expression++;
         return (token_type = DELIMITER);
     }
@@ -124,9 +80,9 @@ int TParser::get_token(void)
     }
     if (token_type == STRING)
     {
-        if (is_find(functionList,token,tok))
+        if (is_find(functionList, token,tok))
             return token_type = FUNCTION;
-        if (is_find(booleanList,token,tok))
+        if (is_find(booleanList, token,tok))
             return token_type = DELIMITER;
         return token_type = VARIABLE;
     }

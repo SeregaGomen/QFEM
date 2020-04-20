@@ -911,21 +911,21 @@ void TMainWindow::sayParams(QString& webOut)
     // Упруго-пластические параметры задачи
     if (femObject->getParams().pMethod != Linear)
     {
+        num = 1;
         webOut += "<br>" + ((femObject->getParams().pMethod == MVS) ? tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of variable stiffness")) : tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of elastic solutions Ilyushin"))) + "<br>";
-        webOut += tr("Stress-strain curve:");
+        webOut += tr("Stress-strain curve");
 
         for (auto it: femObject->getParams().plist)
             if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
             {
-                webOut += "<br>" + QString("<b>%1</b>: %2").arg(tr("Predicate")).arg(it.getPredicate().c_str()) + "<br>";
+                webOut += QString("<br>%1. <b>%2</b>: %3").arg(num++).arg(tr("Predicate")).arg(it.getPredicate().c_str());// + "<br>";
                 webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("N")).arg(tr("Stress")).arg(tr("Deformation"));
                 for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
                     webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>").arg(i + 1).arg(it.getStressStrainCurve(i, 0), int(femObject->getParams().width), 'e', int(femObject->getParams().precision)).arg(it.getStressStrainCurve(i, 1), int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
                 webOut += "</table><br>";
 
             }
-        webOut += "<br>" + tr("Load step");
-        webOut += QString("<b>%1</b><br>").arg(femObject->getParams().loadStep, int(femObject->getParams().width),'e', int(femObject->getParams().precision));
+        webOut += "<br>" + tr("Load step") + QString("<b>%1</b><br>").arg(femObject->getParams().loadStep, int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
     }
 
     // Толщина КЭ
@@ -1586,9 +1586,15 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
             direct = static_cast<QJsonValue>(value)["Direct"].toInt();
         QString predicate = static_cast<QJsonValue>(value)["Predicate"].toString(),
                 expression = static_cast<QJsonValue>(value)["Expression"].toString();
-        TParameter p(type, expression.toStdString(), predicate.toStdString(), direct);
+        matrix<double> ssc;
 
-        params.plist.push_back(p);
+        if (type == STRESS_STRAIN_CURVE_PARAMETER)
+        {
+            pForm->decodeStressStarinCurve(expression.toStdString(), ssc);
+            params.plist.addStressStrainCurve(ssc, predicate.toStdString());
+        }
+        else
+            params.plist.addParameter(type, expression.toStdString(), predicate.toStdString(), direct);
     }
 
     // Названия

@@ -163,13 +163,13 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     out << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
     TFEM::notes->push_back(out.str());
     out.str("");
-    out << S_MSG_SI << maxSi;
+    out << S_MSG_SI << maxSi << endl;
     TFEM::notes->push_back(out.str());
     out.str("");
-    out << S_MSG_ITERATION << --count;
+    out << S_MSG_ITERATION << --count << endl;
     TFEM::notes->push_back(out.str());
     out.str("");
-    out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
+    out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ') << endl;
     TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
     // Вывод коэффициента изменения нагрузки P = P0 * k1 * (1 + k2 * n), где:
