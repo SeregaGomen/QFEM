@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>370</width>
+    <width>470</width>
     <height>150</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>370</width>
+    <width>431</width>
     <height>150</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>370</width>
+    <width>470</width>
     <height>150</height>
    </size>
   </property>
@@ -28,10 +28,10 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>250</x>
      <y>110</y>
-     <width>221</width>
-     <height>32</height>
+     <width>171</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="orientation">
@@ -46,7 +46,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>161</width>
+     <width>141</width>
      <height>91</height>
     </rect>
    </property>
@@ -58,7 +58,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>151</width>
+      <width>121</width>
       <height>21</height>
      </rect>
     </property>
@@ -74,7 +74,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>151</width>
+      <width>121</width>
       <height>21</height>
      </rect>
     </property>
@@ -86,9 +86,9 @@
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>160</x>
      <y>10</y>
-     <width>171</width>
+     <width>211</width>
      <height>91</height>
     </rect>
    </property>
@@ -100,7 +100,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>151</width>
+      <width>191</width>
       <height>21</height>
      </rect>
     </property>
@@ -116,7 +116,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>151</width>
+      <width>191</width>
       <height>22</height>
      </rect>
     </property>
@@ -132,7 +132,7 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>151</width>
+      <width>191</width>
       <height>21</height>
      </rect>
     </property>
@@ -141,6 +141,32 @@
     </property>
     <property name="checked">
      <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>10</y>
+     <width>81</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Threads</string>
+   </property>
+   <widget class="QSpinBox" name="sbThread">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>1</number>
     </property>
    </widget>
   </widget>

@@ -94,6 +94,7 @@ private:
     bool isAutoSaveResults;
     bool isAutoSaveProtocol;
     int curTabIndex;
+    int numThread;
     unsigned getTimeDeltaIndex(QString);
     void init(void);
     void startSolvingProblem(void);

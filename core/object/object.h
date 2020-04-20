@@ -15,6 +15,7 @@ class TFEM;
 class TFEMObject
 {
 private:
+    int numThread;                      // Количество потоков, используемых при вычислениях
     string fileName;                    // Имя файла с данными
     string objName;                     // Имя объекта
     bool isProcessStarted;              // Признак того, что процесс запущен
@@ -29,6 +30,7 @@ public:
     {
         fem = nullptr;
         isProcessStarted = isProcessCalculated = false;
+        numThread = thread::hardware_concurrency() - 1;
     }
    ~TFEMObject(void)
     {
@@ -493,6 +495,10 @@ public:
     void setPlasticityMethod(PlasticityMethod p)
     {
         params.pMethod = p;
+    }
+    void setNumThread(int n)
+    {
+        numThread = n;
     }
     void setLanguage(int);
     string stdTxtResName(void)

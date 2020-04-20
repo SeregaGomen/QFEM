@@ -1,7 +1,8 @@
+#include <thread>
 #include "appesetupdialog.h"
 #include "ui_appsetupdialog.h"
 
-TAppSetupDialog::TAppSetupDialog(int lang, bool results, bool scroll, bool protocol, QWidget *parent) :
+TAppSetupDialog::TAppSetupDialog(int lang, int thread, bool results, bool scroll, bool protocol, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TAppSetupDialog)
 {
@@ -17,6 +18,9 @@ TAppSetupDialog::TAppSetupDialog(int lang, bool results, bool scroll, bool proto
     ui->cbAutoScroll->setChecked(scroll);
     ui->cbAutoSaveResults->setChecked(results);
     ui->cbAutoSaveProtocol->setChecked(protocol);
+    ui->sbThread->setMinimum(1);
+    ui->sbThread->setMaximum((std::thread::hardware_concurrency() - 1 <= 0) ? 1 : std::thread::hardware_concurrency() - 1);
+    ui->sbThread->setValue((thread <= 0) ? 1 : thread);
 }
 
 TAppSetupDialog::~TAppSetupDialog()
@@ -37,6 +41,12 @@ int TAppSetupDialog::getLangNo(void)
         return 1;
     return 2;
 }
+
+int TAppSetupDialog::getNumThread(void)
+{
+    return ui->sbThread->value();
+}
+
 
 bool TAppSetupDialog::getIsAutoSaveResults(void)
 {

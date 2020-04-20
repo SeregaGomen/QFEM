@@ -44,6 +44,8 @@ bool TFEMObject::start(void)
             case DynamicProblem:
                 fem = new TFEMDynamic<TEigenSolver>(objName, &mesh, &results, &notes);
         }
+        // Задание количества потоков
+        fem->setNumThread(numThread);
         // Задание параметров расчета
         fem->setParams(params);
         // Запуск расчета

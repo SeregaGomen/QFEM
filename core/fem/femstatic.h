@@ -14,7 +14,6 @@ extern TMessenger* msg;
 template <class T> class TFEMStatic : public TFEM
 {
 protected:
-    int numThread;
     T solver;
     void ansambleLocalMatrix(TFE*, unsigned);
     void setLoad(vector<double>&);
@@ -45,14 +44,9 @@ public:
     TFEMStatic(string n, TMesh *m, TResultList *r, list<string> *l) : TFEM(n, m, r, l)
     {
         TFEM::params.fType = StaticProblem;
-        numThread = thread::hardware_concurrency() - 1;
     }
     virtual ~TFEMStatic(void) {}
     void startProcess(void);
-    void setNumThread(int n)
-    {
-        numThread = n;
-    }
 };
 //----------------------------------------------------------
 //                     Запуск расчета

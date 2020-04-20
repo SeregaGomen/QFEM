@@ -76,6 +76,7 @@ void TMainWindow::init(void)
 //        setWindowIcon(QIcon(":/images/main.png"));
     #endif
 
+    numThread = (std::thread::hardware_concurrency() - 1 <= 0) ? 1 : std::thread::hardware_concurrency() - 1;
     isAutoSaveProtocol = isAutoScroll = isAutoSaveResults = isUntitled = true;
 
     femProcessor = new TFEMProcessor();
@@ -447,6 +448,7 @@ void TMainWindow::readSettings(void)
     ui->actionTerminal->setChecked(isTerminal);
     files = settings.value("recentFileList").toStringList();
     langNo = settings.value("lang").toInt();
+    numThread = settings.value("thread").toInt();
     if (Qt::WindowStates(states) == Qt::WindowMaximized)
         this->setWindowState(Qt::WindowMaximized);
     else
@@ -471,7 +473,7 @@ void TMainWindow::writeSettings(void)
     settings.setValue("results", isAutoSaveResults);
     settings.setValue("scroll", isAutoScroll);
     settings.setValue("protocol", isAutoSaveProtocol);
-}
+    settings.setValue("thread", numThread);}
 
 void TMainWindow::closeEvent(QCloseEvent *event)
 {
@@ -687,6 +689,7 @@ void TMainWindow::femProcess(void)
     pb->reset();
     pb->show();
 
+    femProcessor->getFEMObject()->setNumThread(numThread);
     femProcessor->moveToThread(thread);
     connect(thread, SIGNAL(started()), femProcessor, SLOT(start()));
     connect(femProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
@@ -1869,7 +1872,7 @@ void TMainWindow::setupLanguage(void)
 
 void TMainWindow::slotAppSettings(void)
 {
-    TAppSetupDialog* dlg = new TAppSetupDialog(langNo, isAutoSaveResults, isAutoScroll, isAutoSaveProtocol, this);
+    TAppSetupDialog* dlg = new TAppSetupDialog(langNo, numThread, isAutoSaveResults, isAutoScroll, isAutoSaveProtocol, this);
 
     dlg->changeLanguage();
     if (dlg->exec() != QDialog::Accepted)
@@ -1890,6 +1893,7 @@ void TMainWindow::slotAppSettings(void)
     isAutoScroll = dlg->getIsAutoScroll();
     isAutoSaveProtocol = dlg->getIsAutoSaveProtocol();
     isAutoSaveResults = dlg->getIsAutoSaveResults();
+    numThread = dlg->getNumThread();
 }
 
 void TMainWindow::slotSaveResults(void)

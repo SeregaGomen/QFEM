@@ -95,6 +95,8 @@ public:
 class TFEM
 {
 protected:
+    // Количество потоков, используемых для расчетов
+    int numThread;
     // Назание объекта расчета
     string objName;
     // Параметры расчета
@@ -162,6 +164,7 @@ public:
         results = r;
         notes = l;
         isProcessStarted = isProcessAborted = isProcessCalculated = false;
+        numThread = thread::hardware_concurrency() - 1;
     }
     virtual ~TFEM(void) {}
     virtual void startProcess(void) = 0;
@@ -172,6 +175,10 @@ public:
     void setParams(TFEMParams& p)
     {
         params = p;
+    }
+    void setNumThread(int n)
+    {
+        numThread = n;
     }
     // Вывод рез-тов по каждой функции на экран
     void printResultSummary(double t = 0)
