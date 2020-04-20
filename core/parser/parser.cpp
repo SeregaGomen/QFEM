@@ -82,7 +82,7 @@ int TParser::get_token(void)
     if (*expression == 0)
     {
         tok = FINISHED;
-        return (token_type = DELIMETR);
+        return (token_type = DELIMITER);
     }
     while (*expression == ' ' || *expression == '\t')
         expression++;
@@ -93,7 +93,7 @@ int TParser::get_token(void)
         if (*expression && strchr("=><*",*expression))
             if (is_find(opeartionList,token + *expression, tok))
                 token += *expression++;
-        return (token_type = DELIMETR);
+        return (token_type = DELIMITER);
     }
     if (isdigit(*expression))
     {
@@ -127,7 +127,7 @@ int TParser::get_token(void)
         if (is_find(functionList,token,tok))
             return token_type = FUNCTION;
         if (is_find(booleanList,token,tok))
-            return token_type = DELIMETR;
+            return token_type = DELIMITER;
         return token_type = VARIABLE;
     }
     return token_type;
@@ -163,7 +163,7 @@ void TParser::compile(void)
         if (tok == FINISHED)
             break;
         get_exp(result);
-        if (token_type == DELIMETR && tok != FINISHED)
+        if (token_type == DELIMITER && tok != FINISHED)
         {
             if (token[0] == ')')
                 error(CRAMP_ERR);
@@ -216,7 +216,7 @@ void TParser::token_not(Tree& code)
 {
     int op = tok;
 
-    if (tok == DELIMETR && op == NOT)
+    if (tok == DELIMITER && op == NOT)
         get_token();
 
     token_add(code);
@@ -276,7 +276,7 @@ void TParser::token_un(Tree& code)
 {
     int op = 0;
 
-    if ((token_type == DELIMETR) && (token[0] == '+' || token[0] == '-'))
+    if ((token_type == DELIMITER) && (token[0] == '+' || token[0] == '-'))
     {
         if (token[0] == '+')
             op = PLUS;
@@ -323,7 +323,7 @@ void TParser::token_prim(Tree& code)
 /********************************************************************/
 void TParser::token_cramp(Tree& code)
 {
-    if(tok != FINISHED  && token[0] == '(' && token_type == DELIMETR)
+    if(tok != FINISHED  && token[0] == '(' && token_type == DELIMITER)
     {
         get_token();
         token_or(code);

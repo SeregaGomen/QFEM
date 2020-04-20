@@ -9,7 +9,7 @@
 using namespace std;
 
 /************************************************************************************************/
-enum { END = 0, DELIMETR, NUMERIC, FUNCTION, VARIABLE, STRING, FINISHED };
+enum { END = 0, DELIMITER, NUMERIC, FUNCTION, VARIABLE, STRING, FINISHED };
 /************************************************************************************************/
 struct idToken
 {
