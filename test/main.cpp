@@ -29,7 +29,7 @@ void calcTank(void)
 
     if (!object.setMeshFile("../../QFEM/mesh/tank-0_25.trp"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
 
     object.setEps(1.0E-8);
     object.setWidth(15);
@@ -45,7 +45,7 @@ void calcTank(void)
     // Шаг по нагрузке
     object.setLoadStep(10);
     // Способ расчета пластичности
-    object.setPlasticityMethod(MVS);
+    object.setPlasticityMethod(PlasticityMethod::MVS);
 
     // Граничные условия
     //        object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, "0", "z == -4.7");
@@ -100,7 +100,7 @@ void calcBalka(void)
 
     if (!object.setMeshFile("../../QFEM/mesh/balka.trp"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
 
     object.setEps(1.0E-8);
     object.setWidth(15);
@@ -134,7 +134,7 @@ void calcShell(void)
 
     if (!object.setMeshFile("../../QFEM/mesh/shell-tube-3.trpa"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
 
     object.setEps(1.0E-8);
     object.setWidth(15);
@@ -177,7 +177,7 @@ void pyfem_test(void)
 
     if (!object.setMeshFile("../../../../python/pyfem/mesh/shell-tube6.trpa"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
 
     // Упругие характеристики
     object.addYoungModulus(203200);
@@ -204,7 +204,7 @@ void calcTank3ds(void)
 
     if (!object.setMeshFile("d:/work/python/pyfem/mesh/tank3ds.trpa"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
     // Упругие характеристики
     object.addYoungModulus([](double, double, double, double){ return 6.5E+10; }, [](double, double, double z, double){ return (z < -7) ? 1.0 : 0.0; });
     //        object.addPoissonRatio([](double, double, double, double){ return 0.3; }, [](double, double, double z, double){ return (z < -7) ? 1.0 : 0.0; });
@@ -242,7 +242,7 @@ void calcTank3s6(void)
 
     if (!object.setMeshFile("d:/work/python/pyfem/mesh/tank3s6.trpa"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
     // Упругие характеристики
     object.addYoungModulus(6.5E+10);
     object.addPoissonRatio(0.3);
@@ -270,6 +270,7 @@ void calcTank3s6(void)
 
 }
 
+/*
 double tank3_new_thickness(double, double y, double, double)
 {
     double L = 0.22,
@@ -311,6 +312,35 @@ double tank3_new_thickness(double, double y, double, double)
         return 0.0125;
     return 0.0024;
 }
+*/
+double tank3_new_thickness(double, double y, double, double)
+{
+    double L = 0.22,
+           shpangout_top = 0.0435,
+           shpangout_bot = 0.047,
+           R = 1.037;
+
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.17*0.17)) or y > (L / 2 + shpangout_top + sqrt(R*R - 0.418*0.418)))
+        return 0.0032;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.365*0.365)) or y > (L / 2 + shpangout_top + sqrt(R*R - 0.94*0.94)) or y > (L / 2 + shpangout_top + sqrt(R*R - 1.029*1.029)))
+        return 0.0019;
+    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.9645*0.9645)) or y > (L / 2 + 0.061) or y > L / 2 - 0.020 or y > -L / 2)
+        return 0.003;
+    if (y > (L / 2 + 0.031))
+        return 0.058;
+    if (abs(y) <= L / 2 - 0.020)
+        return 0.0023;
+    if (y > -(L/2 + shpangout_bot) or y > -(L/2 + shpangout_bot + sqrt(R*R - 0.425*0.425)))
+        return 0.007;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.479*0.479)))
+        return 0.0015;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.4365*0.4365)))
+        return 0.0024;
+    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.403*0.403)))
+        return 0.0125;
+    return 0.0024;
+}
+
 void calcNewTank3(void)
 {
     TFEMObject object;
@@ -322,7 +352,7 @@ void calcNewTank3(void)
 
     if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new.trpa"))
         return;
-    object.setTaskParam(StaticProblem);
+    object.setTaskParam(FEMType::StaticProblem);
     // Упругие характеристики
     object.addYoungModulus(6.67E+10);
     object.addPoissonRatio(0.3);
@@ -366,9 +396,9 @@ void calcNewTank3(void)
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc);
     // Шаг по нагрузке
-    object.setLoadStep(5);
+    object.setLoadStep(10);
     // Способ расчета пластичности
-    object.setPlasticityMethod(MVS);
+    object.setPlasticityMethod(PlasticityMethod::MVS);
 
 
     // Запуск расчета

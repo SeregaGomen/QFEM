@@ -22,8 +22,8 @@ win32 {
 }
 
 unix {
-    INCLUDEPATH +=../../../../intel/compilers_and_libraries_2019.5.281/linux/mkl/include/
-    LIBS += -L$$PWD/../../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+    INCLUDEPATH +=../../../intel/mkl/include/
+    LIBS += -L$$PWD/../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 }
 
 SOURCES += main.cpp \

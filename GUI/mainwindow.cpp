@@ -777,6 +777,10 @@ void TMainWindow::startSolvingProblem(void)
 
     try
     {
+        // Загрузка параметров
+        if (!pForm->getParams())
+            return;
+
         // Запуск расчета
         femProcess();
 
