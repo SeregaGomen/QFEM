@@ -6,6 +6,7 @@
 #include <QVector4D>
 
 class TFEMObject;
+enum class ParamType;
 
 using namespace std;
 
@@ -22,7 +23,7 @@ signals:
 
 private:
     // Тип визуализируемого параметра
-    int paramType;
+    ParamType paramType;
     // Объект рассчета (содержит геометрию)
     TFEMObject* object;
     // Вектор значений нагрузок, краевых условий, etc
@@ -61,7 +62,7 @@ public:
     {
         vertex.clear();
     }
-    void setType(int type)
+    void setType(ParamType type)
     {
         paramType = type;
     }

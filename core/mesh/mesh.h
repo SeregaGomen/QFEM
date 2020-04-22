@@ -45,7 +45,7 @@ private:
 public:
     TMesh(void)
     {
-        feType = NOTYPE;
+        feType = FEType::undefined;
         error = false;
     }
     ~TMesh(void)
@@ -88,9 +88,9 @@ public:
     {
         unsigned ret = fe.size2();
 
-        if (feType == FE2D6 || feType == FE2D6P || feType == FE3D6S)
+        if (feType == FEType::fe2d6 || feType == FEType::fe2d6p || feType == FEType::fe3d6s)
             ret = 3;
-        else if (feType == FE3D10)
+        else if (feType == FEType::fe3d10)
             ret = 4;
         return ret;
     }
@@ -118,9 +118,9 @@ public:
     {
         unsigned ret = be.size2();
 
-        if (feType == FE2D6)
+        if (feType == FEType::fe2d6)
             ret = 2;
-        else if (feType == FE3D10 || feType == FE2D6P || feType == FE3D6S)
+        else if (feType == FEType::fe3d10 || feType == FEType::fe2d6p || feType == FEType::fe3d6s)
             ret = 3;
         return ret;
     }
@@ -150,25 +150,25 @@ public:
 
         switch (feType)
         {
-            case FE1D2:
+            case FEType::fe1d2:
                 ret = 1;
                 break;
-            case FE2D3:
-            case FE2D4:
-            case FE2D6:
+            case FEType::fe2d3:
+            case FEType::fe2d4:
+            case FEType::fe2d6:
                 ret = 2;
                 break;
-            case FE2D3P:
-            case FE2D4P:
-            case FE2D6P:
-            case FE3D4:
-            case FE3D8:
-            case FE3D10:
+            case FEType::fe2d3p:
+            case FEType::fe2d4p:
+            case FEType::fe2d6p:
+            case FEType::fe3d4:
+            case FEType::fe3d8:
+            case FEType::fe3d10:
                 ret = 3;
                 break;
-            case FE3D3S:
-            case FE3D4S:
-            case FE3D6S:
+            case FEType::fe3d3s:
+            case FEType::fe3d4s:
+            case FEType::fe3d6s:
                 ret = 6;
                 break;
             default:
@@ -195,7 +195,7 @@ public:
     }
     void clear(void)
     {
-        feType = NOTYPE;
+        feType = FEType::undefined;
         error = false;
         x.clear();
         fe.clear();
@@ -249,23 +249,23 @@ public:
     FEType getDataFE(unsigned, unsigned&, unsigned&, unsigned&);
     bool is1D(void)
     {
-        return (feType == FE1D2) ? true : false;
+        return (feType == FEType::fe1d2) ? true : false;
     }
     bool is2D(void)
     {
-        return (feType == FE2D3 || feType == FE2D4 || feType == FE2D6) ? true : false;
+        return (feType == FEType::fe2d3 || feType == FEType::fe2d4 || feType == FEType::fe2d6) ? true : false;
     }
     bool is3D(void)
     {
-        return (feType == FE3D4 || feType == FE3D8 || feType == FE3D10) ? true : false;
+        return (feType == FEType::fe3d4 || feType == FEType::fe3d8 || feType == FEType::fe3d10) ? true : false;
     }
     bool isPlate(void)
     {
-        return (feType == FE2D3P || feType == FE2D4P || feType == FE2D6P) ? true : false;
+        return (feType == FEType::fe2d3p || feType == FEType::fe2d4p || feType == FEType::fe2d6p) ? true : false;
     }
     bool isShell(void)
     {
-        return (feType == FE3D3S || feType == FE3D4S || feType == FE3D6S) ? true : false;
+        return (feType == FEType::fe3d3s || feType == FEType::fe3d4s || feType == FEType::fe3d6s) ? true : false;
     }
     void normal(unsigned, vector<double>&);
     vector<double> surfaceLoadShare(void);

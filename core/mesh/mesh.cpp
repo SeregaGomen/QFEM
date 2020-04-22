@@ -62,87 +62,87 @@ FEType TMesh::getDataFE(unsigned type, unsigned& feSize, unsigned& beSize, unsig
 
     switch (type)
     {
-        case 3:  /* FE2D3 */
-            ret = FE2D3;
+        case 3:
+            ret = FEType::fe2d3;
             beSize = 2;
             feSize = 3;
             feDim = 2;
             break;
-        case 4:  /* FE3D4 */
-            ret = FE3D4;
+        case 4:
+            ret = FEType::fe3d4;
             beSize = 3;
             feSize = 4;
             feDim = 3;
             break;
-        case 6:  /* FE2D6 */
-            ret = FE2D6;
+        case 6:
+            ret = FEType::fe2d6;
             beSize = 3;
             feSize = 6;
             feDim = 2;
             break;
-        case 8:  /* FE3D8 */
-            ret = FE3D8;
+        case 8:
+            ret = FEType::fe3d8;
             beSize = 4;
             feSize = 8;
             feDim = 3;
             break;
-        case 10:  /* FE3D10 */
-            ret = FE3D10;
+        case 10:
+            ret = FEType::fe3d10;
             beSize = 6;
             feSize = 10;
             feDim = 3;
             break;
-        case 24: /* FE2D4 */
-            ret = FE2D4;
+        case 24:
+            ret = FEType::fe2d4;
             beSize = 2;
             feSize = 4;
             feDim = 2;
             break;
-        case 34: /* FE1D2 */
-            ret = FE1D2;
+        case 34:
+            ret = FEType::fe1d2;
             beSize = 1;
             feSize = 2;
             feDim = 1;
             break;
-        case 123:  /* FE2D3P */
-            ret = FE2D3P;
+        case 123:
+            ret = FEType::fe2d3p;
             beSize = 0;
             feSize = 3;
             feDim = 2;
             break;
-        case 124:  /* FE2D4P */
-            ret = FE2D4P;
+        case 124:
+            ret = FEType::fe2d4p;
             beSize = 0;
             feSize = 4;
             feDim = 2;
             break;
-        case 125:  /* FE2D6P */
-            ret = FE2D6P;
+        case 125:
+            ret = FEType::fe2d6p;
             beSize = 0;
             feSize = 6;
             feDim = 2;
             break;
-        case 223:  /* FE3D3S */
-            ret = FE3D3S;
+        case 223:
+            ret = FEType::fe3d3s;
             beSize = 0;
             feSize = 3;
             feDim = 3;
             break;
-        case 224:  /* FE3D4S */
-            ret = FE3D4S;
+        case 224:
+            ret = FEType::fe3d4s;
             beSize = 0;
             feSize = 4;
             feDim = 3;
             break;
-        case 225:  /* FE3D6S */
-            ret = FE3D6S;
+        case 225:
+            ret = FEType::fe3d6s;
             beSize = 0;
             feSize = 6;
             feDim = 3;
             break;
         default:
             feSize = beSize = feDim = 0;
-            ret = NOTYPE;
+            ret = FEType::undefined;
     }
     return ret;
 }
@@ -153,43 +153,43 @@ unsigned TMesh::convertFEType(FEType p)
 
     switch (p)
     {
-        case FE1D2:
+        case FEType::fe1d2:
             ret = 34;
             break;
-        case FE2D3:
+        case FEType::fe2d3:
             ret = 3;
             break;
-        case FE2D4:
+        case FEType::fe2d4:
             ret = 24;
             break;
-        case FE2D6:
+        case FEType::fe2d6:
             ret = 6;
             break;
-        case FE2D3P:
+        case FEType::fe2d3p:
             ret = 123;
             break;
-        case FE2D4P:
+        case FEType::fe2d4p:
             ret = 124;
             break;
-        case FE2D6P:
+        case FEType::fe2d6p:
             ret = 125;
             break;
-        case FE3D4:
+        case FEType::fe3d4:
             ret = 4;
             break;
-        case FE3D8:
+        case FEType::fe3d8:
             ret = 8;
             break;
-        case FE3D10:
+        case FEType::fe3d10:
             ret = 10;
             break;
-        case FE3D3S:
+        case FEType::fe3d3s:
             ret = 223;
             break;
-        case FE3D4S:
+        case FEType::fe3d4s:
             ret = 224;
             break;
-        case FE3D6S:
+        case FEType::fe3d6s:
             ret = 225;
             break;
         default:
@@ -232,46 +232,46 @@ string TMesh::feName(void)
 
     switch (feType)
     {
-        case NOTYPE:
+        case FEType::undefined:
             ret = S_MSG_NO_TYPE;
             break;
-        case FE1D2:
+        case FEType::fe1d2:
             ret = S_MSG_FE1D2;
             break;
-        case FE2D3:
+        case FEType::fe2d3:
             ret = S_MSG_FE2D3;
             break;
-        case FE2D4:
+        case FEType::fe2d4:
             ret = S_MSG_FE2D4;
             break;
-        case FE2D6:
+        case FEType::fe2d6:
             ret = S_MSG_FE2D6;
             break;
-        case FE2D3P:
+        case FEType::fe2d3p:
             ret = S_MSG_FE2D3_PLATE;
             break;
-        case FE2D4P:
+        case FEType::fe2d4p:
             ret = S_MSG_FE2D4_PLATE;
             break;
-        case FE2D6P:
+        case FEType::fe2d6p:
             ret = S_MSG_FE2D6_PLATE;
             break;
-        case FE3D4:
+        case FEType::fe3d4:
             ret = S_MSG_FE3D4;
             break;
-        case FE3D8:
+        case FEType::fe3d8:
             ret = S_MSG_FE3D8;
             break;
-        case FE3D10:
+        case FEType::fe3d10:
             ret = S_MSG_FE3D10;
             break;
-        case FE3D3S:
+        case FEType::fe3d3s:
             ret = S_MSG_FE3D3_SHELL;
             break;
-        case FE3D4S:
+        case FEType::fe3d4s:
             ret = S_MSG_FE3D4_SHELL;
             break;
-        case FE3D6S:
+        case FEType::fe3d6s:
             ret = S_MSG_FE3D6_SHELL;
             break;
     }
@@ -315,7 +315,7 @@ bool TMesh::readTRP(string fname)
     }
     // Cчитываем тип КЭ
     in.read(reinterpret_cast<char*>(&temp), sizeof(unsigned));
-    if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == NOTYPE)
+    if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == FEType::undefined)
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -384,7 +384,7 @@ bool TMesh::readTRPA(string fname)
         return (error = true);
     }
     in >> temp;
-    if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == NOTYPE)
+    if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == FEType::undefined)
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -430,7 +430,7 @@ bool TMesh::readTRPA(string fname)
             }
         }
     in >> temp;
-    if (in.fail() || (temp == 0 && (feType == FE2D3 || feType == FE2D4 || feType == FE3D4 || feType == FE3D8)))
+    if (in.fail() || (temp == 0 && (feType == FEType::fe2d3 || feType == FEType::fe2d4 || feType == FEType::fe3d4 || feType == FEType::fe3d8)))
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -584,7 +584,7 @@ bool TMesh::read(ifstream& in)
     in >> str;
     // Cчитываем тип КЭ
     in >> val;
-    if ((feType = getDataFE(val, feSize, surfaceSize, feDim)) == NOTYPE)
+    if ((feType = getDataFE(val, feSize, surfaceSize, feDim)) == FEType::undefined)
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -732,7 +732,7 @@ bool TMesh::readVOL(string fname)
         in >> x(i, 0) >> x(i, 1) >> x(i, 2);
 
     in.close();
-    feType = FE3D4;
+    feType = FEType::fe3d4;
     if (in.fail())
     {
         cerr << sayError(READ_FILE_ERR) << endl;
@@ -839,7 +839,7 @@ bool TMesh::readMESH(string fname)
         }
     }
     in.close();
-    feType = FE2D3;
+    feType = FEType::fe2d3;
     if (in.fail())
     {
         cerr << sayError(READ_FILE_ERR) << endl;
@@ -924,24 +924,24 @@ vector<double> TMesh::surfaceLoadShare(void)
 {
     switch (feType)
     {
-        case FE1D2:
+        case FEType::fe1d2:
             return { 1.0 };
-        case FE2D3:
-        case FE2D4:
+        case FEType::fe2d3:
+        case FEType::fe2d4:
             return { 0.5, 0.5 };
-        case FE2D6:
+        case FEType::fe2d6:
             return { 0.16666666666, 0.16666666666, 0.66666666666 };
-        case FE2D3P:
-        case FE3D3S:
-        case FE3D4:
+        case FEType::fe2d3p:
+        case FEType::fe3d3s:
+        case FEType::fe3d4:
             return { 0.333333333333, 0.333333333333, 0.333333333333 };
-        case FE2D4P:
-        case FE3D4S:
-        case FE3D8:
+        case FEType::fe2d4p:
+        case FEType::fe3d4s:
+        case FEType::fe3d8:
             return { 0.25, 0.25, 0.25, 0.25 };
-        case FE2D6P:
-        case FE3D6S:
-        case FE3D10:
+        case FEType::fe2d6p:
+        case FEType::fe3d6s:
+        case FEType::fe3d10:
             return { 0, 0, 0, 0.333333333333, 0.333333333333, 0.333333333333 };
         default:
             break;
@@ -953,25 +953,25 @@ vector<double> TMesh::volumeLoadShare(void)
 {
     switch (feType)
     {
-        case FE1D2:
+        case FEType::fe1d2:
             return { 0.5, 0.5 };
-        case FE2D3:
-        case FE2D3P:
-        case FE3D3S:
+        case FEType::fe2d3:
+        case FEType::fe2d3p:
+        case FEType::fe3d3s:
             return { 0.33333333333, 0.33333333333, 0.33333333333 };
-        case FE2D4:
-        case FE2D4P:
-        case FE3D4S:
+        case FEType::fe2d4:
+        case FEType::fe2d4p:
+        case FEType::fe3d4s:
             return { 0.25, 0.25, 0.25, 0.25 };
-        case FE2D6:
-        case FE2D6P:
-        case FE3D6S:
+        case FEType::fe2d6:
+        case FEType::fe2d6p:
+        case FEType::fe3d6s:
             return { 0, 0, 0, 0.33333333333, 0.33333333333, 0.33333333333 };
-        case FE3D4:
+        case FEType::fe3d4:
             return { 0.25, 0.25, 0.25, 0.25 };
-        case FE3D8:
+        case FEType::fe3d8:
             return { 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125 };
-        case FE3D10:
+        case FEType::fe3d10:
             return { -0.05, -0.05, -0.05, -0.05, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 };
         default:
             break;
@@ -987,25 +987,25 @@ double TMesh::beVolume(unsigned index)
     getCoordBE(index, be_coord);
     switch (feType)
     {
-        case FE1D2:
+        case FEType::fe1d2:
             ret = 1.0;
             break;
-        case FE2D3:
-        case FE2D4:
-        case FE2D6:
+        case FEType::fe2d3:
+        case FEType::fe2d4:
+        case FEType::fe2d6:
             ret = volume1d2(be_coord);
             break;
-        case FE2D3P:
-        case FE3D3S:
-        case FE2D6P:
-        case FE3D6S:
-        case FE3D4:
-        case FE3D10:
+        case FEType::fe2d3p:
+        case FEType::fe3d3s:
+        case FEType::fe2d6p:
+        case FEType::fe3d6s:
+        case FEType::fe3d4:
+        case FEType::fe3d10:
             ret = volume2d3(be_coord);
             break;
-        case FE2D4P:
-        case FE3D4S:
-        case FE3D8:
+        case FEType::fe2d4p:
+        case FEType::fe3d4s:
+        case FEType::fe3d8:
             ret = volume2d4(be_coord);
             break;
         default:
@@ -1023,27 +1023,27 @@ double TMesh::feVolume(unsigned index)
 
     switch (feType)
     {
-        case FE1D2:
+        case FEType::fe1d2:
             ret = volume1d2(fe_coord);
             break;
-        case FE2D3:
-        case FE2D3P:
-        case FE2D6:
-        case FE2D6P:
-        case FE3D3S:
-        case FE3D6S:
+        case FEType::fe2d3:
+        case FEType::fe2d3p:
+        case FEType::fe2d6:
+        case FEType::fe2d6p:
+        case FEType::fe3d3s:
+        case FEType::fe3d6s:
             ret = volume2d3(fe_coord);
             break;
-        case FE2D4:
-        case FE2D4P:
-        case FE3D4S:
+        case FEType::fe2d4:
+        case FEType::fe2d4p:
+        case FEType::fe3d4s:
             ret = volume2d4(fe_coord);
             break;
-        case FE3D4:
-        case FE3D10:
+        case FEType::fe3d4:
+        case FEType::fe3d10:
             ret = volume3d4(fe_coord);
             break;
-        case FE3D8:
+        case FEType::fe3d8:
             ret = volume3d8(fe_coord);
             break;
         default:

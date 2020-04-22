@@ -28,43 +28,43 @@ private:
         // Создание конечного элемента
         switch (type)
         {
-            case FE1D2:
+            case FEType::fe1d2:
                 fe = new TFE1D<TShape1D2>();
                 break;
-            case FE2D3:
+            case FEType::fe2d3:
                 fe = new TFE2D<TShape2D3>();
                 break;
-            case FE2D4:
+            case FEType::fe2d4:
                 fe = new TFE2D<TShape2D4>();
                 break;
-            case FE2D6:
+            case FEType::fe2d6:
                 fe = new TFE2D<TShape2D6>();
                 break;
-            case FE2D3P:
+            case FEType::fe2d3p:
                 fe = new TFE2DP<TShape2D3>();
                 break;
-            case FE2D4P:
+            case FEType::fe2d4p:
                 fe = new TFE2DP<TShape2D4>();
                 break;
-            case FE2D6P:
+            case FEType::fe2d6p:
                 fe = new TFE2DP<TShape2D6>();
                 break;
-            case FE3D4:
+            case FEType::fe3d4:
                 fe = new TFE3D<TShape3D4>();
                 break;
-            case FE3D8:
+            case FEType::fe3d8:
                 fe = new TFE3D<TShape3D8>();
                 break;
-            case FE3D10:
+            case FEType::fe3d10:
                 fe = new TFE3D<TShape3D10>();
                 break;
-            case FE3D3S:
+            case FEType::fe3d3s:
                 fe = new TFE3DS<TShape2D3>();
                 break;
-            case FE3D4S:
+            case FEType::fe3d4s:
                 fe = new TFE3DS<TShape2D4>();
                 break;
-            case FE3D6S:
+            case FEType::fe3d6s:
                 fe = new TFE3DS<TShape2D6>();
                 break;
             default:
@@ -145,7 +145,7 @@ protected:
         // Загрузка альфы
         fe->setAlpha(params.getAlpha(cx));
         // Загрузка плотности
-        if (params.fType == DynamicProblem)
+        if (params.fType == FEMType::DynamicProblem)
         {
             if ((val = params.getDensity(cx)) == 0.0)
                 throw DENSITY_ERR;

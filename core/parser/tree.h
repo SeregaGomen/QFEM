@@ -4,8 +4,7 @@
 #include "node.h"
 
 
-enum Op { SIN = 1, COS, TAN, EXP, ASIN, ACOS, ATAN, ATAN2, SINH, COSH, TANH, SQRT,
-          ABS, PLUS, MINUS, DIV, MUL, POW, EQ, NE, LT, LE, GT, GE, NOT, AND, OR };
+enum class Operation { Undefined, Sin, Cos, Tan, Exp, Asin, Acos, Atan, Atan2, Sinh, Cosh, Tanh, Sqrt, Abs, Plus, Minus, Div, Mul, Pow, Eq, Ne, Lt, Le, Gt, Ge, Not, And, Or };
 
 
 class Tree
@@ -16,8 +15,8 @@ public:
     Tree(void);
     Tree(double*);
     Tree(double);
-    Tree(int,const Tree&);
-    Tree(const Tree&, int, const Tree&);
+    Tree(Operation, const Tree&);
+    Tree(const Tree&, Operation, const Tree&);
     Tree(const Tree&);
    ~Tree(void);
     double value(void);

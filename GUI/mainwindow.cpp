@@ -448,7 +448,7 @@ void TMainWindow::readSettings(void)
     ui->actionTerminal->setChecked(isTerminal);
     files = settings.value("recentFileList").toStringList();
     langNo = settings.value("lang").toInt();
-    numThread = settings.value("thread").toInt();
+    numThread = (settings.value("thread").toInt() > 0) ? settings.value("thread").toInt() : 1;
     if (Qt::WindowStates(states) == Qt::WindowMaximized)
         this->setWindowState(Qt::WindowMaximized);
     else
@@ -707,50 +707,50 @@ bool TMainWindow::checkParams(void)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
 
-    if (femObject->getParams().plist.findParameter(YOUNG_MODULUS_PARAMETER) == 0)
+    if (femObject->getParams().plist.findParameter(ParamType::YoungModulus) == 0)
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Young's modulus!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(POISSON_RATIO_PARAMETER) == 0 && !femObject->getMesh().is1D())
+    if (femObject->getParams().plist.findParameter(ParamType::PoissonRatio) == 0 && !femObject->getMesh().is1D())
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Poisson's ratio!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(BOUNDARY_CONDITION_PARAMETER) == 0)
+    if (femObject->getParams().plist.findParameter(ParamType::BoundaryCondition) == 0)
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified boundary conditions!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(VOLUME_LOAD_PARAMETER) == 0 && femObject->getParams().plist.findParameter(SURFACE_LOAD_PARAMETER) == 0 &&
-        femObject->getParams().plist.findParameter(CONCENTRATED_LOAD_PARAMETER) == 0 && femObject->getParams().plist.findParameter(PRESSURE_LOAD_PARAMETER) == 0)
+    if (femObject->getParams().plist.findParameter(ParamType::VolumeLoad) == 0 && femObject->getParams().plist.findParameter(ParamType::SurfaceLoad) == 0 &&
+        femObject->getParams().plist.findParameter(ParamType::ConcentratedLoad) == 0 && femObject->getParams().plist.findParameter(ParamType::Pressure_load) == 0)
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified loads!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(THICKNESS_PARAMETER) == 0 && (femObject->getMesh().is2D() || femObject->getMesh().isShell() || femObject->getMesh().isPlate()))
+    if (femObject->getParams().plist.findParameter(ParamType::Thickness) == 0 && (femObject->getMesh().is2D() || femObject->getMesh().isShell() || femObject->getMesh().isPlate()))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified FE thickness!"));
         return false;
     }
-    if (femObject->getParams().pMethod != Linear && (femObject->getParams().loadStep <= 0 || femObject->getParams().plist.findParameter(STRESS_STRAIN_CURVE_PARAMETER) == 0))
+    if (femObject->getParams().pMethod != PlasticityMethod::Linear && (femObject->getParams().loadStep <= 0 || femObject->getParams().plist.findParameter(ParamType::StressStrainCurve) == 0))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified nonlinear parameters!"));
         return false;
     }
-    if (femObject->getParams().fType == DynamicProblem)
+    if (femObject->getParams().fType == FEMType::DynamicProblem)
     {
         if (femObject->getParams().theta <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified the Wilson-Theta parameter!"));
             return false;
         }
-        if (femObject->getParams().plist.findParameter(DENSITY_PARAMETER) == 0)
+        if (femObject->getParams().plist.findParameter(ParamType::Density) == 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified density!"));
             return false;
         }
-        if (femObject->getParams().plist.findParameter(DAMPING_PARAMETER) == 0)
+        if (femObject->getParams().plist.findParameter(ParamType::Damping) == 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping parameter!"));
             return false;
@@ -817,13 +817,13 @@ void TMainWindow::showProtocol(QString fileName)
     webOut += tr("FE type: <b>%1</b><br>").arg(femObject->getMesh().feName().c_str());
 
     // Вывод метода аппроксимации по времени (в динамике)
-    if (femObject->getParams().fType == DynamicProblem)
-        webOut += (((femObject->getParams().tMethod == Wilson) ? tr("Method for approximating the time: the method of Wilson") : tr("Method for approximating the time: the method Zinkevych")) + "<br>");
+    if (femObject->getParams().fType == FEMType::DynamicProblem)
+        webOut += (((femObject->getParams().tMethod == TimeMethod::Wilson) ? tr("Method for approximating the time: the method of Wilson") : tr("Method for approximating the time: the method Zinkevych")) + "<br>");
 
     // Вывод рез-тов по каждой функции
     webOut += ("<h2>" + tr("Results of calculation:") + "</h2>");
     webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("Function")).arg(tr("Min")).arg("Max");
-    if (femObject->getParams().fType == StaticProblem)
+    if (femObject->getParams().fType == FEMType::StaticProblem)
         for (unsigned i = 0; i < femObject->getResult().size(); i++)
             webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>").arg(femObject->getResult()[i].getName().c_str()).arg(femObject->getResult()[i].min(),int(femObject->getParams().width),'e',int(femObject->getParams().precision)).arg(femObject->getResult()[i].max(), int(femObject->getParams().width),'e',int(femObject->getParams().precision));
     else
@@ -896,27 +896,27 @@ void TMainWindow::sayParams(QString& webOut)
 
     // --------------- базовые параметры ---------------
     webOut += "<h2>" + tr("Problem parameters:") + "</h2>";
-    webOut += ((femObject->getParams().fType == StaticProblem) ? tr("Solution method: <b>%1</b>").arg(tr("static (Lagrange)")) : tr("Solution method: <b>%1</b>").arg(tr("dynamic (Ostrogradsky)"))) + "<br>";
+    webOut += ((femObject->getParams().fType == FEMType::StaticProblem) ? tr("Solution method: <b>%1</b>").arg(tr("static (Lagrange)")) : tr("Solution method: <b>%1</b>").arg(tr("dynamic (Ostrogradsky)"))) + "<br>";
 
     webOut += tr("Computational accuracy: <b>%1</b>").arg(femObject->getParams().eps, int(femObject->getParams().width), 'e', int(femObject->getParams().precision)) + "<br><br>";
     webOut += tr("Elastic characteristics");
-    sayParam(webOut, tr("Young's modulus"), YOUNG_MODULUS_PARAMETER, false);
-    sayParam(webOut, tr("Poisson's ratio"), POISSON_RATIO_PARAMETER, false);
+    sayParam(webOut, tr("Young's modulus"), ParamType::YoungModulus, false);
+    sayParam(webOut, tr("Poisson's ratio"), ParamType::PoissonRatio, false);
 
-    if (femObject->getParams().fType == DynamicProblem)
+    if (femObject->getParams().fType == FEMType::DynamicProblem)
     {
-        sayParam(webOut, tr("Density"), DENSITY_PARAMETER, false);
-        sayParam(webOut, tr("Damping parameter"), DAMPING_PARAMETER, false);
+        sayParam(webOut, tr("Density"), ParamType::Density, false);
+        sayParam(webOut, tr("Damping parameter"), ParamType::Damping, false);
     }
     // Упруго-пластические параметры задачи
-    if (femObject->getParams().pMethod != Linear)
+    if (femObject->getParams().pMethod != PlasticityMethod::Linear)
     {
         num = 1;
-        webOut += "<br>" + ((femObject->getParams().pMethod == MVS) ? tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of variable stiffness")) : tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of elastic solutions Ilyushin"))) + "<br>";
+        webOut += "<br>" + ((femObject->getParams().pMethod == PlasticityMethod::MVS) ? tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of variable stiffness")) : tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of elastic solutions Ilyushin"))) + "<br>";
         webOut += tr("Stress-strain curve");
 
         for (auto it: femObject->getParams().plist)
-            if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
+            if (it.getType() == ParamType::StressStrainCurve)
             {
                 webOut += QString("<br>%1. <b>%2</b>: %3").arg(num++).arg(tr("Predicate")).arg(it.getPredicate().c_str());// + "<br>";
                 webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("N")).arg(tr("Stress")).arg(tr("Deformation"));
@@ -930,36 +930,36 @@ void TMainWindow::sayParams(QString& webOut)
 
     // Толщина КЭ
     if (femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D())
-        sayParam(webOut, tr("FE thickness"), THICKNESS_PARAMETER, false);
+        sayParam(webOut, tr("FE thickness"), ParamType::Thickness, false);
 
 
     // --------------- Термоупругие параметры ---------------
-    sayParam(webOut, tr("Thermal expansion"), ALPHA_PARAMETER, false);
-    sayParam(webOut, tr("Temperatire"), TEMPERATURE_PARAMETER, false);
+    sayParam(webOut, tr("Thermal expansion"), ParamType::Alpha, false);
+    sayParam(webOut, tr("Temperatire"), ParamType::Temperature, false);
 
     // --------------- Краевые условия задачи ---------------
-    sayParam(webOut, tr("Boundary condition"), BOUNDARY_CONDITION_PARAMETER);
+    sayParam(webOut, tr("Boundary condition"), ParamType::BoundaryCondition);
 
     // --------------- Объемная нагрузки ---------------
-    sayParam(webOut, tr("Volume load"), VOLUME_LOAD_PARAMETER);
+    sayParam(webOut, tr("Volume load"), ParamType::VolumeLoad);
 
     // --------------- Поверхностная нагрузки ---------------
-    sayParam(webOut, tr("Surface load"), SURFACE_LOAD_PARAMETER);
+    sayParam(webOut, tr("Surface load"), ParamType::SurfaceLoad);
 
     // --------------- Сосредоточенная нагрузки ---------------
-    sayParam(webOut, tr("Concentrated load"), CONCENTRATED_LOAD_PARAMETER);
+    sayParam(webOut, tr("Concentrated load"), ParamType::ConcentratedLoad);
 
     // --------------- Давление ---------------
-    sayParam(webOut, tr("Pressure load"), PRESSURE_LOAD_PARAMETER, false);
+    sayParam(webOut, tr("Pressure load"), ParamType::Pressure_load, false);
 
     // --------------- Начальные и другие условия, зависящие от времени ---------------
-    if (femObject->getParams().fType == DynamicProblem)
+    if (femObject->getParams().fType == FEMType::DynamicProblem)
     {
         webOut += tr("time parameters - initial time: <b>%1</b>, the final moment: <b>%2</b>, step: <b>%3</b>").arg(femObject->getParams().t0).arg(femObject->getParams().t1).arg(femObject->getParams().th) + "<br>";
         num = 0;
 
         for (auto it: femObject->getParams().plist)
-            if (it.getType() == INITIAL_CONDITION_PARAMETER)
+            if (it.getType() == ParamType::InitialCondition)
             {
                 num++;
                 break;
@@ -968,7 +968,7 @@ void TMainWindow::sayParams(QString& webOut)
         {
             webOut += "<br>" + tr("initial conditions:") + "<br>";
             for (auto it: femObject->getParams().plist)
-                if (it.getType() == INITIAL_CONDITION_PARAMETER)
+                if (it.getType() == ParamType::InitialCondition)
                 {
                     if ((it.getDirect() & FUN_U) == FUN_U)
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[4].c_str()).arg(it.getExpression().c_str()) + "<br>";
@@ -1002,7 +1002,7 @@ void TMainWindow::sayParams(QString& webOut)
 }
 
 // Вывод информации о конкретном парметре расчета в табличной форме
-void TMainWindow::sayParam(QString& webOut, const QString& title, int param, bool isDirect)
+void TMainWindow::sayParam(QString& webOut, const QString& title, ParamType param, bool isDirect)
 {
     unsigned num = 0;
     QString predicate;
@@ -1129,7 +1129,7 @@ bool TMainWindow::loadQFPF(QString fileName)
     int dir;
     string expr,
            pred;
-    int type;
+    ParamType type;
     matrix<double> ssc;
 
 
@@ -1175,7 +1175,7 @@ bool TMainWindow::loadQFPF(QString fileName)
 
 
     // Базовые параметры
-    params.fType = (obj.value(QString("Parameters"))["ProblemType"].toVariant().toString() == "Static") ? StaticProblem : DynamicProblem;
+    params.fType = (obj.value(QString("Parameters"))["ProblemType"].toVariant().toString() == "Static") ? FEMType::StaticProblem : FEMType::DynamicProblem;
     params.eps = obj.value(QString("Parameters"))["Accuracy"].toVariant().toDouble();
 
     // Динамические параметры
@@ -1200,8 +1200,8 @@ bool TMainWindow::loadQFPF(QString fileName)
             dir = bc.at(i)["Direct"].toVariant().toInt();
             expr = bc.at(i)["Expression"].toVariant().toString().toStdString();
             pred = bc.at(i)["Predicate"].toVariant().toString().toStdString();
-            type = bc.at(i)["Type"].toVariant().toInt();
-            if (type == STRESS_STRAIN_CURVE_PARAMETER)
+            type = static_cast<ParamType>(bc.at(i)["Type"].toVariant().toInt());
+            if (type == ParamType::StressStrainCurve)
             {
                 if (!pForm->decodeStressStarinCurve(expr, ssc))
                     return false;
@@ -1258,7 +1258,7 @@ unsigned TMainWindow::getTimeDeltaIndex(QString funName)
     int ret = 0;
 
     QApplication::setOverrideCursor(Qt::BusyCursor);
-    if (femProcessor->getFEMObject()->getParams().fType == DynamicProblem)
+    if (femProcessor->getFEMObject()->getParams().fType == FEMType::DynamicProblem)
         if ((pos1 = funName.lastIndexOf("(")) != -1)
         {
             pos2 = funName.lastIndexOf(")");
@@ -1273,13 +1273,13 @@ unsigned TMainWindow::getTimeDeltaIndex(QString funName)
 void TMainWindow::slotSetupImageParams(void)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
-    int type = (qobject_cast<TGLFunction*>(tabWidget->currentWidget())) ? ( (qobject_cast<TGLParameter*>(tabWidget->currentWidget())) ? V_PARAM : V_FUNC ) : V_MESH;
+    ImageType type = (qobject_cast<TGLFunction*>(tabWidget->currentWidget())) ? ( (qobject_cast<TGLParameter*>(tabWidget->currentWidget())) ? ImageType::param : ImageType::func ) : ImageType::mesh;
 
     if (qobject_cast<TGLParameter*>(tabWidget->currentWidget()))
-        if (qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == VOLUME_LOAD_PARAMETER || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == SURFACE_LOAD_PARAMETER ||
-            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == CONCENTRATED_LOAD_PARAMETER || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == PRESSURE_LOAD_PARAMETER ||
-            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == BOUNDARY_CONDITION_PARAMETER)
-            type = V_MESH;
+        if (qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::VolumeLoad || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::SurfaceLoad ||
+            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::ConcentratedLoad || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::Pressure_load ||
+            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::BoundaryCondition)
+            type = ImageType::mesh;
     if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
     {
         iDlg->changeLanguage();
@@ -1355,7 +1355,7 @@ void TMainWindow::saveParam(QJsonObject &main)
     TFEMParams &params = femProcessor->getFEMObject()->getParams();
     
     // Тип задачи
-    paramObj.insert("ProblemType", (params.fType == StaticProblem) ? "Static" : "Dynamic");
+    paramObj.insert("ProblemType", (params.fType == FEMType::StaticProblem) ? "Static" : "Dynamic");
 
     // Точность вычислений
     paramObj.insert("Accuracy", params.eps);
@@ -1373,7 +1373,7 @@ void TMainWindow::saveParam(QJsonObject &main)
     paramObj.insert("OutputParameters", out);
 
     // Параметры нелинейного расчета
-    nonlin.insert("CalculationMethod", params.pMethod);
+    nonlin.insert("CalculationMethod", static_cast<int>(params.pMethod));
     nonlin.insert("LoadStep", params.loadStep);
     paramObj.insert("Nonlinearity", nonlin);
 
@@ -1382,10 +1382,10 @@ void TMainWindow::saveParam(QJsonObject &main)
     {
         QJsonObject bc;
 
-        bc.insert("Type", it.getType());
+        bc.insert("Type", static_cast<int>(it.getType()));
         bc.insert("Direct", it.getDirect());
         bc.insert("Predicate", it.getPredicate().c_str());
-        if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
+        if (it.getType() == ParamType::StressStrainCurve)
         {
             val = "{";
             for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
@@ -1423,7 +1423,7 @@ void TMainWindow::saveMesh(QJsonObject &main)
     TMesh &mesh = femProcessor->getFEMObject()->getMesh();
     
     // ---------------- Сетка ------------------
-    meshObj.insert("FEType", QJsonValue::fromVariant(mesh.getTypeFE()));
+    meshObj.insert("FEType", QJsonValue::fromVariant(static_cast<int>(mesh.getTypeFE())));
     for (unsigned i = 0; i < mesh.getNumVertex(); i++)
     {
         QJsonArray arr;
@@ -1534,7 +1534,7 @@ void TMainWindow::loadMesh(const QJsonObject &meshObj)
         for (unsigned j = 0; j < fe_size; j++)
             fe[i][j] = unsigned(arr[j].toInt());
     }
-    if (fe_type == FE3D3S || fe_type == FE3D4S || fe_type == FE3D6S)
+    if (fe_type == static_cast<int>(FEType::fe3d3s) || fe_type == static_cast<int>(FEType::fe3d4s) || fe_type == static_cast<int>(FEType::fe3d6s))
         be = fe;
     else
     {
@@ -1559,7 +1559,7 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
     TFEMParams &params = femProcessor->getFEMObject()->getParams();
 
     // Тип задачи
-    params.fType = (paramObj["ProblemType"].toString() == "Static") ? StaticProblem : DynamicProblem;
+    params.fType = (paramObj["ProblemType"].toString() == "Static") ? FEMType::StaticProblem : FEMType::DynamicProblem;
 
     // Точность вычислений
     params.eps = paramObj["Accuracy"].toDouble();
@@ -1582,13 +1582,13 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
     params.plist.clear();
     for (auto value: lbc)
     {
-        int type = static_cast<QJsonValue>(value)["Type"].toInt(),
-            direct = static_cast<QJsonValue>(value)["Direct"].toInt();
+        ParamType type = static_cast<ParamType>(static_cast<QJsonValue>(value)["Type"].toInt());
+        int direct = static_cast<QJsonValue>(value)["Direct"].toInt();
         QString predicate = static_cast<QJsonValue>(value)["Predicate"].toString(),
                 expression = static_cast<QJsonValue>(value)["Expression"].toString();
         matrix<double> ssc;
 
-        if (type == STRESS_STRAIN_CURVE_PARAMETER)
+        if (type == ParamType::StressStrainCurve)
         {
             pForm->decodeStressStarinCurve(expression.toStdString(), ssc);
             params.plist.addStressStrainCurve(ssc, predicate.toStdString());
@@ -1876,7 +1876,7 @@ void TMainWindow::slotShowParam(int type)
     bool isFind = false;
     QTextCursor textCursor = terminal->textCursor(),
                 saveCursor = textCursor;
-    QString tabName = paramName(type).c_str();
+    QString tabName = paramName(static_cast<ParamType>(type)).c_str();
 
     textCursor.clearSelection();
     terminal->setTextCursor(textCursor);
@@ -1885,7 +1885,7 @@ void TMainWindow::slotShowParam(int type)
     pb->show();
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(true);
-    bcProcessor->setType(type);
+    bcProcessor->setType(static_cast<ParamType>(type));
     bcProcessor->moveToThread(thread);
     connect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
     connect(bcProcessor, SIGNAL(finished()), thread, SLOT(terminate()));
@@ -1910,7 +1910,7 @@ void TMainWindow::slotShowParam(int type)
         }
     if (!isFind)
     {
-        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), type, this), tabName);
+        tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), static_cast<ParamType>(type), this), tabName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
 

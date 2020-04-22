@@ -18,7 +18,7 @@ class QThread;
 class TFEMProcessor;
 class TBCProcessor;
 class TProblemSetupForm;
-
+enum class ParamType;
 
 const int maxRecentFiles = 5;
 
@@ -108,7 +108,7 @@ private:
     void checkMenuState(void);
     void showProtocol(QString);
     void sayParams(QString&);
-    void sayParam(QString&, const QString&, int, bool = true);
+    void sayParam(QString&, const QString&, ParamType, bool = true);
     void saveDocument(QString);
     void addFuncToAnalyse(QString, QString);
     void setupLanguage(void);

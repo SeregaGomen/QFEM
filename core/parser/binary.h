@@ -8,16 +8,11 @@
 class BinaryNode : public Node
 {
 private:
-    int op;
+    Operation op;
     Tree left;
     Tree right;
 public:
-    BinaryNode(const Tree& l, int o, const Tree& r)
-    {
-        left = l;
-        op = o;
-        right = r;
-    }
+    BinaryNode(const Tree& l, Operation o, const Tree& r) : op(o), left(l), right(r) {}
     ~BinaryNode(void) {}
     double value(void);
 };

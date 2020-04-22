@@ -7,10 +7,10 @@
 class UnaryNode : public Node
 {
 private:
-    int op;
+    Operation op;
     Tree val;
 public:
-    UnaryNode(int o, const Tree& v) : op(o), val(v) {}
+    UnaryNode(Operation o, const Tree& v) : op(o), val(v) {}
     ~UnaryNode(void) {}
     double value(void);
 };

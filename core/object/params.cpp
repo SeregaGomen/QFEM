@@ -12,26 +12,26 @@ unsigned TFEMParams::numResult(FEType type)
 
     switch (type)
     {
-        case FE1D2:
-            ret = (fType == StaticProblem) ? 3 : 5;
+        case FEType::fe1d2:
+            ret = (fType == FEMType::StaticProblem) ? 3 : 5;
             break;
-        case FE2D3:
-        case FE2D4:
-        case FE2D6:
-            ret = (fType == StaticProblem) ? 8 : 12;
+        case FEType::fe2d3:
+        case FEType::fe2d4:
+        case FEType::fe2d6:
+            ret = (fType == FEMType::StaticProblem) ? 8 : 12;
             break;
-        case FE2D3P:
-        case FE2D4P:
-        case FE2D6P:
-        case FE3D4:
-        case FE3D8:
-        case FE3D10:
-            ret = (fType == StaticProblem) ? 15 : 21;
+        case FEType::fe2d3p:
+        case FEType::fe2d4p:
+        case FEType::fe2d6p:
+        case FEType::fe3d4:
+        case FEType::fe3d8:
+        case FEType::fe3d10:
+            ret = (fType == FEMType::StaticProblem) ? 15 : 21;
             break;
-        case FE3D3S:
-        case FE3D4S:
-        case FE3D6S:
-            ret = (fType == StaticProblem) ? 18 : 24;
+        case FEType::fe3d3s:
+        case FEType::fe3d4s:
+        case FEType::fe3d6s:
+            ret = (fType == FEMType::StaticProblem) ? 18 : 24;
             break;
         default:
             ret = 0;
@@ -45,27 +45,27 @@ vector<unsigned> TFEMParams::getFunIndex(FEType type)
 {
     switch (type)
     {
-        case FE1D2:
+        case FEType::fe1d2:
             // U, Exx, Sxx, Ut, Utt
             return { 4, 10, 16, 22, 25 };
-        case FE2D3:
-        case FE2D4:
-        case FE2D6:
+        case FEType::fe2d3:
+        case FEType::fe2d4:
+        case FEType::fe2d6:
             // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy, Ut, Vt, Utt, Vtt
             return { 4, 5, 10, 11, 13, 16, 17, 19, 22, 23, 25, 26 };
-        case FE2D3P:
-        case FE2D4P:
-        case FE2D6P:
+        case FEType::fe2d3p:
+        case FEType::fe2d4p:
+        case FEType::fe2d6p:
             // W, Tx, Ty, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
             return { 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
-        case FE3D4:
-        case FE3D8:
-        case FE3D10:
+        case FEType::fe3d4:
+        case FEType::fe3d8:
+        case FEType::fe3d10:
             // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
             return { 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
-        case FE3D3S:
-        case FE3D4S:
-        case FE3D6S:
+        case FEType::fe3d3s:
+        case FEType::fe3d4s:
+        case FEType::fe3d6s:
             // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
             return { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
         default:
@@ -83,7 +83,7 @@ string TFEMParams::getName(unsigned i, FEType type)
 //--------------------------------------------------------------------
 // Извлечение значения параметра, соответствующего заданной координате
 //--------------------------------------------------------------------
-double TFEMParams::getScalarParam(int p, vector<double>& cx)
+double TFEMParams::getScalarParam(ParamType p, vector<double>& cx)
 {
     matrix<double> tmp;
     double res = 0;
@@ -98,17 +98,17 @@ void TFEMParams::getMatrixParam(vector<double>& cx, matrix<double>& res)
 {
     double tmp;
 
-    getParam(STRESS_STRAIN_CURVE_PARAMETER, cx, tmp, res);
+    getParam(ParamType::StressStrainCurve, cx, tmp, res);
 }
 //--------------------------------------------------------------------
-void TFEMParams::getParam(int p, vector<double>& cx, double& d, matrix<double>& m)
+void TFEMParams::getParam(ParamType p, vector<double>& cx, double& d, matrix<double>& m)
 {
     for (auto it : plist)
         if (it.getType() == p)
         {
             if (!getPredicateValue(it, cx))
                 continue;
-            if (p == STRESS_STRAIN_CURVE_PARAMETER)
+            if (p == ParamType::StressStrainCurve)
                 m = it.getStressStrainCurve();
             else
                 d = getExpressionValue(it, cx);
@@ -121,7 +121,7 @@ double TFEMParams::getMinStress(void)
     double res = DBL_MAX;
 
     for (auto it : plist)
-        if (it.getType() == STRESS_STRAIN_CURVE_PARAMETER)
+        if (it.getType() == ParamType::StressStrainCurve)
         {
             if (!it.getStressStrainCurve().size1())
                 throw NONLINEAR_PARAM_ERR;
@@ -206,13 +206,13 @@ bool TFEMParams::write(ofstream& out)
 {
     out << "Parameters" << endl;
     // Тип задачи
-    out << fType << endl;
+    out << static_cast<int>(fType) << endl;
 
     // Способ аппроксимации по времени
-    out << tMethod << endl;
+    out << static_cast<int>(tMethod) << endl;
 
     // Метод решения упруго-пластических задач
-    out << pMethod << endl;
+    out << static_cast<int>(pMethod) << endl;
 
     // Погрешность расчета
     out << eps << endl;
@@ -235,7 +235,7 @@ bool TFEMParams::write(ofstream& out)
     out << plist.size() << endl;
     for (auto it : plist)
     {
-        out << it.getType() << endl;   // Тип условия
+        out << static_cast<int>(it.getType()) << endl;   // Тип условия
         out << it.getDirect() << endl; // Номер функции: 0 - X, ...
         out << it.getExpression() << endl;
         out << it.getPredicate() << endl;
@@ -293,7 +293,7 @@ bool TFEMParams::read(ifstream& in)
         getline(in, str); // endl
         getline(in, str);
         getline(in, key);
-        plist.addParameter(type, str, key, dir);
+        plist.addParameter(static_cast<ParamType>(type), str, key, dir);
     }
 
     // Вспомогательные параметры

@@ -24,8 +24,8 @@ win32 {
 }
 
 unix {
-    INCLUDEPATH +=../../../../intel/mkl/include/
-    LIBS += -L$$PWD/../../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+    INCLUDEPATH +=../../../intel/mkl/include/
+    LIBS += -L$$PWD/../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 }
 
 

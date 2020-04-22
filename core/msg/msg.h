@@ -100,6 +100,7 @@ extern int langCode;
 #define S_DENSITY_PARAMETER             ((langCode) ? "Плотность" : "Density")
 #define S_DAMPING_PARAMETER             ((langCode) ? "Демпфирование" : "Damping")
 #define S_STRESS_STRAIN_CURVE_PARAMETER ((langCode) ? "Диаграмма деформирования" : "Stress–strain curve")
+#define S_UNDEFINED_PARAMETER           ((langCode) ? "Неопределенный параметер" : "Undefined")
 
 using namespace std;
 

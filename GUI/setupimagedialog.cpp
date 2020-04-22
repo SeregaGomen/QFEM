@@ -41,7 +41,7 @@ void TSetupImageDialog::slotChangeBkgColor(void)
     delete cDlg;
 }
 
-void TSetupImageDialog::setup(int type)
+void TSetupImageDialog::setup(ImageType type)
 {
     // Инициализация параметров визуализации
     if (dimension == 1)
@@ -79,7 +79,7 @@ void TSetupImageDialog::setup(int type)
     ui->rbBW->setChecked(params.isBW);
     ui->rbColor->setChecked(params.isColor);
 
-    if (type == V_FUNC)
+    if (type == ImageType::func)
         setTransformValue();
     setScaleValue();
     setAngleX();
@@ -111,10 +111,10 @@ void TSetupImageDialog::setup(int type)
     }
 
 
-    ui->gbFunc->setEnabled(type != V_MESH);
-    ui->gbKoff->setEnabled(type == V_FUNC);
-    ui->chbValueScale->setEnabled(type != V_MESH);
-    ui->chbNormal->setEnabled(type == V_MESH);
+    ui->gbFunc->setEnabled(type != ImageType::mesh);
+    ui->gbKoff->setEnabled(type == ImageType::func);
+    ui->chbValueScale->setEnabled(type != ImageType::mesh);
+    ui->chbNormal->setEnabled(type == ImageType::mesh);
 
     // Цвет фона
     bkgColor = params.bkgColor;

@@ -13,7 +13,7 @@ namespace Ui {
 
 using namespace std;
 
-enum { V_MESH, V_FUNC, V_PARAM };
+enum class ImageType { mesh, func, param };
 
 class TSetupImageDialog : public QDialog
 {
@@ -25,7 +25,7 @@ public slots:
 public:
     explicit TSetupImageDialog(QWidget *parent = nullptr);
     ~TSetupImageDialog();
-    void setup(int);
+    void setup(ImageType);
     void clear(void);
     void initParams(void);
     void write(QDataStream& file)
@@ -40,7 +40,7 @@ public:
     {
         return params;
     }
-    void setImageParams(TImageParams& r, int pf, int type)
+    void setImageParams(TImageParams& r, int pf, ImageType type)
     {
         dimension = pf;
         params = r;

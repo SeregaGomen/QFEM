@@ -4,48 +4,36 @@
 
 double UnaryNode::value(void)
 {
-    double result = 0;
-
     switch (op)
     {
-        case MINUS:
-            result = -val.value();
+        case Operation::Minus:
+            return -val.value();
+        case Operation::Abs:
+            return fabs(val.value());
+        case Operation::Sqrt:
+            return sqrt(val.value());
+        case Operation::Sin:
+            return sin(val.value());
+        case Operation::Cos:
+            return cos(val.value());
+        case Operation::Tan:
+            return tan(val.value());
+        case Operation::Exp:
+            return exp(val.value());
+        case Operation::Asin:
+            return asin(val.value());
+        case Operation::Acos:
+            return acos(val.value());
+        case Operation::Atan:
+            return atan(val.value());
+        case Operation::Sinh:
+            return sinh(val.value());
+        case Operation::Cosh:
+            return cosh(val.value());
+        case Operation::Not:
+            return !int(val.value());
+        default:
             break;
-        case ABS:
-            result = fabs(val.value());
-            break;
-        case SQRT:
-            result = sqrt(val.value());
-            break;
-        case SIN:
-            result = sin(val.value());
-            break;
-        case COS:
-            result = cos(val.value());
-            break;
-        case TAN:
-            result = tan(val.value());
-            break;
-        case EXP:
-            result = exp(val.value());
-            break;
-        case ASIN:
-            result = asin(val.value());
-            break;
-        case ACOS:
-            result = acos(val.value());
-            break;
-        case ATAN:
-            result = atan(val.value());
-            break;
-        case SINH:
-            result = sinh(val.value());
-            break;
-        case COSH:
-            result = cosh(val.value());
-            break;
-        case NOT:
-            result = !int(val.value());
     }
-    return result;
+    return 0;
 }

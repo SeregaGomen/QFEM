@@ -4,7 +4,7 @@
 #include "object/params.h"
 
 /*******************************************************************/
-TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, int t, QWidget *parent) : TGLFunction(m, nullptr, nullptr, nullptr, nullptr, "", parent)
+TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, ParamType t, QWidget *parent) : TGLFunction(m, nullptr, nullptr, nullptr, nullptr, "", parent)
 {
     vertex = v;
     paramType = t;
@@ -12,9 +12,9 @@ TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, int t, QWidget *pare
 /*******************************************************************/
 void TGLParameter::createObject(void)
 {
-    if (paramType == PRESSURE_LOAD_PARAMETER || paramType == SURFACE_LOAD_PARAMETER || paramType == VOLUME_LOAD_PARAMETER || paramType == CONCENTRATED_LOAD_PARAMETER)
+    if (paramType == ParamType::Pressure_load || paramType == ParamType::SurfaceLoad || paramType == ParamType::VolumeLoad || paramType == ParamType::ConcentratedLoad)
         createLoads();
-    else if (paramType == BOUNDARY_CONDITION_PARAMETER)
+    else if (paramType == ParamType::BoundaryCondition)
         createBoundaryConditions();
     else
         TGLFunction::createObject();

@@ -111,14 +111,14 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveDensity, &QToolButton::clicked, ([=](void) { removeRow(ui->twDensity); setEnabledBtn(ui->tbRemoveDensity, ui->twDensity); }));
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
 
-    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(YOUNG_MODULUS_PARAMETER); }));
-    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(THICKNESS_PARAMETER); }));
-    connect(ui->tbShowBoundaryConditions, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(BOUNDARY_CONDITION_PARAMETER); }));
+    connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::YoungModulus)); }));
+    connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::Thickness)); }));
+    connect(ui->tbShowBoundaryConditions, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::BoundaryCondition)); }));
     connect(ui->tbShowLoads, &QToolButton::clicked, ([=](void)
     {
-        int c_param[4] = { VOLUME_LOAD_PARAMETER, SURFACE_LOAD_PARAMETER, CONCENTRATED_LOAD_PARAMETER, PRESSURE_LOAD_PARAMETER };
+        ParamType c_param[4] = { ParamType::VolumeLoad, ParamType::SurfaceLoad, ParamType::ConcentratedLoad, ParamType::Pressure_load };
 
-        if (getParams()) emit clicked(c_param[ui->tabWidgetLoads->currentIndex()]);
+        if (getParams()) emit clicked(static_cast<int>(c_param[ui->tabWidgetLoads->currentIndex()]));
     }));
 
 
@@ -287,35 +287,35 @@ void TProblemSetupForm::enabledFuncNames(void)
     vector<int> index;
     FEType type = femObject->getMesh().getTypeFE();
 
-    if (type == FE1D2)
+    if (type == FEType::fe1d2)
     {
         if (isStatic)
             index = { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         else
             index = { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0 };
     }
-    else if (type == FE2D3 || type == FE2D4 || type == FE2D6)
+    else if (type == FEType::fe2d3 || type == FEType::fe2d4 || type == FEType::fe2d6)
     {
         if (isStatic)
             index = { 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
         else
             index = { 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0 };
     }
-    else if (type == FE2D3P || type == FE2D4P || type == FE2D6P)
+    else if (type == FEType::fe2d3p || type == FEType::fe2d4p || type == FEType::fe2d6p)
     {
         if (isStatic)
             index = { 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
         else
             index = { 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1 };
     }
-    else if (type == FE3D4 || type == FE3D8 || type == FE3D10)
+    else if (type == FEType::fe3d4 || type == FEType::fe3d8 || type == FEType::fe3d10)
     {
         if (isStatic)
             index = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
         else
             index = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     }
-    else if (type == FE3D3S || type == FE3D4S || type == FE3D6S)
+    else if (type == FEType::fe3d3s || type == FEType::fe3d4s || type == FEType::fe3d6s)
     {
         if (isStatic)
             index = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
@@ -579,7 +579,7 @@ void TProblemSetupForm::setup(void)
     setThickness();
 
     // Инициализация метода расчета
-    if (femObject->getParams().fType == DynamicProblem)
+    if (femObject->getParams().fType == FEMType::DynamicProblem)
         ui->rbDynamic->setChecked(true);
     else
         ui->rbStatic->setChecked(true);
@@ -615,15 +615,15 @@ void TProblemSetupForm::setElasticParam(void)
     ui->twYoungModulus->setHorizontalHeaderLabels(Titles);
 //    ui->twYoungModulus->setColumnWidth(0, 100);
 //    ui->twYoungModulus->setColumnWidth(1, 200);
-    setTableValue(YOUNG_MODULUS_PARAMETER, ui->twYoungModulus, false);
+    setTableValue(ParamType::YoungModulus, ui->twYoungModulus, false);
 
     ui->twPoissonsRatio->setHorizontalHeaderLabels(Titles);
 //    ui->twPoissonsRatio->setColumnWidth(0, 100);
 //    ui->twPoissonsRatio->setColumnWidth(1, 200);
-    setTableValue(POISSON_RATIO_PARAMETER, ui->twPoissonsRatio, false);
+    setTableValue(ParamType::PoissonRatio, ui->twPoissonsRatio, false);
 }
 
-void TProblemSetupForm::setTableValue(int type, QTableWidget* tw, bool isDirect)
+void TProblemSetupForm::setTableValue(ParamType type, QTableWidget* tw, bool isDirect)
 {
     int count = 0;
     QString ssc;
@@ -634,7 +634,7 @@ void TProblemSetupForm::setTableValue(int type, QTableWidget* tw, bool isDirect)
         if (it->getType() == type)
         {
             tw->insertRow(count);
-            if (type == STRESS_STRAIN_CURVE_PARAMETER)
+            if (type == ParamType::StressStrainCurve)
             {
                 ssc = "{";
                 for (unsigned i = 0; i < it->getStressStrainCurve().size1(); i++)
@@ -695,12 +695,12 @@ void TProblemSetupForm::setThermalExpansionParam(void)
     ui->twThermalExpansion->setHorizontalHeaderLabels(Titles);
     ui->twThermalExpansion->setColumnWidth(0, 100);
     ui->twThermalExpansion->setColumnWidth(1, 200);
-    setTableValue(ALPHA_PARAMETER, ui->twThermalExpansion, false);
+    setTableValue(ParamType::Alpha, ui->twThermalExpansion, false);
 
     ui->twTemperature->setHorizontalHeaderLabels(Titles);
     ui->twTemperature->setColumnWidth(0, 100);
     ui->twTemperature->setColumnWidth(1, 200);
-    setTableValue(TEMPERATURE_PARAMETER, ui->twTemperature, false);
+    setTableValue(ParamType::Temperature, ui->twTemperature, false);
 }
 
 void TProblemSetupForm::setDensity(void)
@@ -711,7 +711,7 @@ void TProblemSetupForm::setDensity(void)
     ui->twDensity->setHorizontalHeaderLabels(Titles);
     ui->twDensity->setColumnWidth(0, 100);
     ui->twDensity->setColumnWidth(1, 200);
-    setTableValue(DENSITY_PARAMETER, ui->twDensity, false);
+    setTableValue(ParamType::Density, ui->twDensity, false);
 }
 
 void TProblemSetupForm::setDamping(void)
@@ -722,7 +722,7 @@ void TProblemSetupForm::setDamping(void)
     ui->twDamping->setHorizontalHeaderLabels(Titles);
     ui->twDamping->setColumnWidth(0, 100);
     ui->twDamping->setColumnWidth(1, 200);
-    setTableValue(DAMPING_PARAMETER, ui->twDamping, false);
+    setTableValue(ParamType::Damping, ui->twDamping, false);
 }
 
 void TProblemSetupForm::setInitialParam(void)
@@ -731,7 +731,7 @@ void TProblemSetupForm::setInitialParam(void)
 
     for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
     {
-        if (it->getType() != INITIAL_CONDITION_PARAMETER)
+        if (it->getType() != ParamType::InitialCondition)
             continue;
 
         direct = it->getDirect();
@@ -764,7 +764,7 @@ void TProblemSetupForm::setThickness(void)
     ui->twThickness->setHorizontalHeaderLabels(Titles);
     ui->twThickness->setColumnWidth(0, 100);
     ui->twThickness->setColumnWidth(1, 200);
-    setTableValue(THICKNESS_PARAMETER, ui->twThickness, false);
+    setTableValue(ParamType::Thickness, ui->twThickness, false);
 }
 
 void TProblemSetupForm::setFuncNames(void)
@@ -834,7 +834,7 @@ void TProblemSetupForm::setVolumeLoad(void)
         if (femObject->getMesh().getFreedom() < 3)
             ui->twVV->setColumnHidden(4, true);
     }
-    setTableValue(VOLUME_LOAD_PARAMETER, ui->twVV);
+    setTableValue(ParamType::VolumeLoad, ui->twVV);
 }
 
 // Инициализация нагрузки-давления
@@ -848,7 +848,7 @@ void TProblemSetupForm::setPressureLoad(void)
     ui->twPV->setColumnWidth(0, 340);
     ui->twPV->setColumnWidth(1, 340);
 
-    setTableValue(PRESSURE_LOAD_PARAMETER, ui->twPV, false);
+    setTableValue(ParamType::Pressure_load, ui->twPV, false);
 }
 
 // Инициализация поверхностных нагрузок
@@ -886,7 +886,7 @@ void TProblemSetupForm::setSurfaceLoad(void)
             ui->twSV->setColumnHidden(4, true);
     }
 
-    setTableValue(SURFACE_LOAD_PARAMETER, ui->twSV);
+    setTableValue(ParamType::SurfaceLoad, ui->twSV);
 }
 
 
@@ -924,7 +924,7 @@ void TProblemSetupForm::setConcentratedLoad(void)
         if (femObject->getMesh().getFreedom() < 3)
             ui->twCV->setColumnHidden(4, true);
     }
-    setTableValue(CONCENTRATED_LOAD_PARAMETER, ui->twCV);
+    setTableValue(ParamType::ConcentratedLoad, ui->twCV);
 }
 
 // Формирование списка граничных условий
@@ -969,7 +969,7 @@ void TProblemSetupForm::setBoundaryConditionValue(void)
         ui->twBC->setColumnHidden(4, true);
 
     for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
-        if (it->getType() == BOUNDARY_CONDITION_PARAMETER)
+        if (it->getType() == ParamType::BoundaryCondition)
         {
             direct = it->getDirect();
             ui->twBC->insertRow(count);
@@ -987,16 +987,16 @@ void TProblemSetupForm::setPlasticityParam(void)
 {
     QStringList Titles;
 
-    ui->rbLinear->setChecked((femObject->getParams().pMethod == Linear) ? true : false);
-    ui->rbMVS->setChecked((femObject->getParams().pMethod == MVS) ? true : false);
-    ui->rbMES->setChecked((femObject->getParams().pMethod == MES) ? true : false);
+    ui->rbLinear->setChecked((femObject->getParams().pMethod == PlasticityMethod::Linear) ? true : false);
+    ui->rbMVS->setChecked((femObject->getParams().pMethod == PlasticityMethod::MVS) ? true : false);
+    ui->rbMES->setChecked((femObject->getParams().pMethod == PlasticityMethod::MES) ? true : false);
     ui->textLoadStep->setText(QString("%1").arg(femObject->getParams().loadStep));
 
     Titles << tr("Stress-Strain curve") << tr("Predicate");
     ui->twStressStrainCurve->setHorizontalHeaderLabels(Titles);
     ui->twStressStrainCurve->setColumnWidth(0, 370);
     ui->twStressStrainCurve->setColumnWidth(1, 370);
-    setTableValue(STRESS_STRAIN_CURVE_PARAMETER, ui->twStressStrainCurve, false);
+    setTableValue(ParamType::StressStrainCurve, ui->twStressStrainCurve, false);
 }
 
 bool TProblemSetupForm::decodeStressStarinCurve(string str, matrix<double>& ssc)
@@ -1494,8 +1494,8 @@ bool TProblemSetupForm::getParams(void)
         return false;
 
     femObject->getParams().clear();
-    femObject->setTaskParam((ui->rbDynamic->isChecked()) ? DynamicProblem : StaticProblem);
-    femObject->getParams().tMethod = Wilson;
+    femObject->setTaskParam((ui->rbDynamic->isChecked()) ? FEMType::DynamicProblem : FEMType::StaticProblem);
+    femObject->getParams().tMethod = TimeMethod::Wilson;
 
     getElasticParam();
     getEps();
@@ -1541,7 +1541,7 @@ void TProblemSetupForm::getPlasticityParam(void)
 {
     matrix<double> ssc(unsigned(ui->twStressStrainCurve->rowCount()), 2);
 
-    femObject->getParams().pMethod = (ui->rbLinear->isChecked()) ? Linear : (ui->rbMVS->isChecked()) ? MVS : MES;
+    femObject->getParams().pMethod = (ui->rbLinear->isChecked()) ? PlasticityMethod::Linear : (ui->rbMVS->isChecked()) ? PlasticityMethod::MVS : PlasticityMethod::MES;
     femObject->getParams().loadStep = ui->textLoadStep->text().toDouble();
 
     for (unsigned i = 0; i < unsigned(ui->twStressStrainCurve->rowCount()); i++)
@@ -1553,28 +1553,28 @@ void TProblemSetupForm::getPlasticityParam(void)
 
 void TProblemSetupForm::getVolumeLoad(void)
 {
-    getTableValue(VOLUME_LOAD_PARAMETER, ui->twVV);
+    getTableValue(ParamType::VolumeLoad, ui->twVV);
 }
 
 void TProblemSetupForm::getSurfaceLoad(void)
 {
-    getTableValue(SURFACE_LOAD_PARAMETER, ui->twSV);
+    getTableValue(ParamType::SurfaceLoad, ui->twSV);
 }
 
 void TProblemSetupForm::getConcentratedLoad(void)
 {
-    getTableValue(CONCENTRATED_LOAD_PARAMETER, ui->twCV);
+    getTableValue(ParamType::ConcentratedLoad, ui->twCV);
 }
 
 void TProblemSetupForm::getPressureLoad(void)
 {
-    getTableValue(PRESSURE_LOAD_PARAMETER, ui->twPV, false);
+    getTableValue(ParamType::Pressure_load, ui->twPV, false);
 }
 
 // Извлечение граничных условий
 void TProblemSetupForm::getBoundaryConditionValue(void)
 {
-    getTableValue(BOUNDARY_CONDITION_PARAMETER, ui->twBC);
+    getTableValue(ParamType::BoundaryCondition, ui->twBC);
 }
 
 
@@ -1597,20 +1597,20 @@ void TProblemSetupForm::getInitialParam(void)
 // Извлечение плотности
 void TProblemSetupForm::getDensity(void)
 {
-    getTableValue(DENSITY_PARAMETER, ui->twDensity, false);
+    getTableValue(ParamType::Density, ui->twDensity, false);
 }
 
 // Извлечение параметра демпфирования
 void TProblemSetupForm::getDamping(void)
 {
-    getTableValue(DAMPING_PARAMETER, ui->twDamping, false);
+    getTableValue(ParamType::Damping, ui->twDamping, false);
 }
 
 // Извлечение параметров температурного расширения
 void TProblemSetupForm::getThermalExpansionParam(void)
 {
-    getTableValue(ALPHA_PARAMETER, ui->twThermalExpansion, false);
-    getTableValue(TEMPERATURE_PARAMETER, ui->twTemperature, false);
+    getTableValue(ParamType::Alpha, ui->twThermalExpansion, false);
+    getTableValue(ParamType::Temperature, ui->twTemperature, false);
 }
 
 // Извлечение параметров вывода
@@ -1641,7 +1641,7 @@ void TProblemSetupForm::getTime(void)
 // Извлечение параметра толщины элемента
 void TProblemSetupForm::getThickness(void)
 {
-    getTableValue(THICKNESS_PARAMETER, ui->twThickness, false);
+    getTableValue(ParamType::Thickness, ui->twThickness, false);
 }
 
 // Извлечение параметра точности расчета
@@ -1664,7 +1664,7 @@ int TProblemSetupForm::getDirect(QTableWidget* p, int i)
     return direct;
 }
 
-void TProblemSetupForm::getTableValue(int type, QTableWidget* tw, bool isDirect)
+void TProblemSetupForm::getTableValue(ParamType type, QTableWidget* tw, bool isDirect)
 {
     int direct = 0;
 
@@ -1679,8 +1679,8 @@ void TProblemSetupForm::getTableValue(int type, QTableWidget* tw, bool isDirect)
 // Извлечение параметров упругости
 void TProblemSetupForm::getElasticParam(void)
 {
-    getTableValue(YOUNG_MODULUS_PARAMETER, ui->twYoungModulus, false);
-    getTableValue(POISSON_RATIO_PARAMETER, ui->twPoissonsRatio, false);
+    getTableValue(ParamType::YoungModulus, ui->twYoungModulus, false);
+    getTableValue(ParamType::PoissonRatio, ui->twPoissonsRatio, false);
 }
 
 void TProblemSetupForm::slotCancelButton(void)

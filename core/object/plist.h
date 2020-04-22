@@ -27,74 +27,77 @@
 using namespace std;
 
 // Типы параметров расчета:
-enum {
-    EMPTY_PARAMETER = 0,
-    INITIAL_CONDITION_PARAMETER,    // Начальные условия
-    BOUNDARY_CONDITION_PARAMETER,   // Граничное условие, заданноe выражением
-    VOLUME_LOAD_PARAMETER,          // Объемная нагрузка
-    SURFACE_LOAD_PARAMETER,         // Поверхностная ...
-    CONCENTRATED_LOAD_PARAMETER,    // Сосредоточенная ...
-    PRESSURE_LOAD_PARAMETER,        // Нагрузка давлением
-    YOUNG_MODULUS_PARAMETER,        // Модуль Юнга
-    POISSON_RATIO_PARAMETER,        // Коэффициент Пуассона
-    THICKNESS_PARAMETER,            // Толщина элемента
-    TEMPERATURE_PARAMETER,          // Разность температур
-    ALPHA_PARAMETER,                // Коэффициент теплового расширения
-    DENSITY_PARAMETER,              // Плотность
-    DAMPING_PARAMETER,              // Параметр демпфирования
-    STRESS_STRAIN_CURVE_PARAMETER   // Диаграмма деформирования
+enum class ParamType {
+    Undefined,
+    InitialCondition,    // Начальные условия
+    BoundaryCondition,   // Граничное условие, заданноe выражением
+    VolumeLoad,          // Объемная нагрузка
+    SurfaceLoad,         // Поверхностная ...
+    ConcentratedLoad,    // Сосредоточенная ...
+    Pressure_load,       // Нагрузка давлением
+    YoungModulus,        // Модуль Юнга
+    PoissonRatio,        // Коэффициент Пуассона
+    Thickness,           // Толщина элемента
+    Temperature,         // Разность температур
+    Alpha,               // Коэффициент теплового расширения
+    Density,             // Плотность
+    Damping,             // Параметр демпфирования
+    StressStrainCurve    // Диаграмма деформирования
 };
 
 extern TMessenger* msg;
 
 // Названия параметров
-inline string paramName(int type)
+inline string paramName(ParamType type)
 {
     string ret;
 
     switch (type)
     {
-        case INITIAL_CONDITION_PARAMETER:
+        case ParamType::InitialCondition:
             ret = S_INITIAL_CONDITION_PARAMETER;
             break;
-        case BOUNDARY_CONDITION_PARAMETER:
+        case ParamType::BoundaryCondition:
             ret = S_BOUNDARY_CONDITION_PARAMETER;
             break;
-        case VOLUME_LOAD_PARAMETER:
+        case ParamType::VolumeLoad:
             ret = S_VOLUME_LOAD_PARAMETER;
             break;
-        case SURFACE_LOAD_PARAMETER:
+        case ParamType::SurfaceLoad:
             ret = S_SURFACE_LOAD_PARAMETER;
             break;
-        case CONCENTRATED_LOAD_PARAMETER:
+        case ParamType::ConcentratedLoad:
             ret = S_CONCENTRATED_LOAD_PARAMETER;
             break;
-        case PRESSURE_LOAD_PARAMETER:
+        case ParamType::Pressure_load:
             ret = S_PRESSURE_LOAD_PARAMETER;
             break;
-        case YOUNG_MODULUS_PARAMETER:
+        case ParamType::YoungModulus:
             ret = S_YOUNG_MODULUS_PARAMETER;
             break;
-        case POISSON_RATIO_PARAMETER:
+        case ParamType::PoissonRatio:
             ret = S_POISSON_RATIO_PARAMETER;
             break;
-        case THICKNESS_PARAMETER:
+        case ParamType::Thickness:
             ret = S_THICKNESS_PARAMETER;
             break;
-        case TEMPERATURE_PARAMETER:
+        case ParamType::Temperature:
             ret = S_TEMPERATURE_PARAMETER;
             break;
-        case ALPHA_PARAMETER:
+        case ParamType::Alpha:
             ret = S_ALPHA_PARAMETER;
             break;
-        case DENSITY_PARAMETER:
+        case ParamType::Density:
             ret = S_DENSITY_PARAMETER;
             break;
-        case DAMPING_PARAMETER:
+        case ParamType::Damping:
             ret = S_DAMPING_PARAMETER;
             break;
-        case STRESS_STRAIN_CURVE_PARAMETER:
+        case ParamType::StressStrainCurve:
             ret = S_STRESS_STRAIN_CURVE_PARAMETER;
+            break;
+        default:
+            ret = S_UNDEFINED_PARAMETER;
     }
     return ret;
 }
@@ -128,7 +131,7 @@ class TParameter
 {
 private:
     // Тип параметра
-    int type;
+    ParamType type;
     // Направление (для краевого условия )
     int direct = 0;
     // Значение параметра в виде числовой константы
@@ -139,30 +142,30 @@ private:
 public:
     TParameter(void)
     {
-        type = EMPTY_PARAMETER;
+        type = ParamType::Undefined;
     }
-    TParameter(int t, double v, string p, int d)
+    TParameter(ParamType t, double v, string p, int d)
     {
         type = t;
         d_value = v;
         predicate = p;
         direct = d;
     }
-    TParameter(int t, string e, string p, int d)
+    TParameter(ParamType t, string e, string p, int d)
     {
         type = t;
         e_value = e;
         predicate = p;
         direct = d;
     }
-    TParameter(int t, double v, function<double (double, double, double, double)> p, int d)
+    TParameter(ParamType t, double v, function<double (double, double, double, double)> p, int d)
     {
         type = t;
         d_value = v;
         predicate = p;
         direct = d;
     }
-    TParameter(int t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    TParameter(ParamType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
     {
         type = t;
         e_value = e;
@@ -171,13 +174,13 @@ public:
     }
     TParameter(matrix<double>& m, string p)
     {
-        type = STRESS_STRAIN_CURVE_PARAMETER;
+        type = ParamType::StressStrainCurve;
         e_value = m;
         predicate = p;
     }
     TParameter(matrix<double>& m, function<double (double, double, double, double)> p)
     {
-        type = STRESS_STRAIN_CURVE_PARAMETER;
+        type = ParamType::StressStrainCurve;
         e_value = m;
         predicate = p;
     }
@@ -215,7 +218,7 @@ public:
     {
         return e_value.s_value;
     }
-    int getType(void) const
+    ParamType getType(void) const
     {
         return type;
     }
@@ -252,25 +255,25 @@ class TParameterList : public list<TParameter>
 public:
     TParameterList(void) {}
     ~TParameterList(void) {}
-    void addParameter(int t, double v, string p, int d = 0)
+    void addParameter(ParamType t, double v, string p, int d = 0)
     {
         TParameter c(t, v, p, d);
 
         push_back(c);
     }
-    void addParameter(int t, string e, string p, int d = 0)
+    void addParameter(ParamType t, string e, string p, int d = 0)
     {
         TParameter c(t, e, p, d);
 
         push_back(c);
     }
-    void addParameter(int t, double v, function<double (double, double, double, double)> p, int d = 0)
+    void addParameter(ParamType t, double v, function<double (double, double, double, double)> p, int d = 0)
     {
         TParameter c(t, v, p, d);
 
         push_back(c);
     }
-    void addParameter(int t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d = 0)
+    void addParameter(ParamType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d = 0)
     {
         TParameter c(t, e, p, d);
 
@@ -290,209 +293,209 @@ public:
     }
     void addThickness(double v, string p)
     {
-        addParameter(THICKNESS_PARAMETER, v, p);
+        addParameter(ParamType::Thickness, v, p);
     }
     void addThickness(string e, string p)
     {
-        addParameter(THICKNESS_PARAMETER, e, p);
+        addParameter(ParamType::Thickness, e, p);
     }
     void addThickness(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(THICKNESS_PARAMETER, v, p);
+        addParameter(ParamType::Thickness, v, p);
     }
     void addThickness(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(THICKNESS_PARAMETER, e, p);
+        addParameter(ParamType::Thickness, e, p);
     }
     void addTemperature(double v, string p)
     {
-        addParameter(TEMPERATURE_PARAMETER, v, p);
+        addParameter(ParamType::Temperature, v, p);
     }
     void addTemperature(string e, string p)
     {
-        addParameter(TEMPERATURE_PARAMETER, e, p);
+        addParameter(ParamType::Temperature, e, p);
     }
     void addTemperature(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(TEMPERATURE_PARAMETER, e, p);
+        addParameter(ParamType::Temperature, e, p);
     }
     void addTemperature(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(TEMPERATURE_PARAMETER, v, p);
+        addParameter(ParamType::Temperature, v, p);
     }
     void addAlpha(double v, string p)
     {
-        addParameter(ALPHA_PARAMETER, v, p);
+        addParameter(ParamType::Alpha, v, p);
     }
     void addAlpha(string e, string p)
     {
-        addParameter(ALPHA_PARAMETER, e, p);
+        addParameter(ParamType::Alpha, e, p);
     }
     void addAlpha(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(ALPHA_PARAMETER, e, p);
+        addParameter(ParamType::Alpha, e, p);
     }
     void addAlpha(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(ALPHA_PARAMETER, v, p);
+        addParameter(ParamType::Alpha, v, p);
     }
     void addDensity(double v, string p)
     {
-        addParameter(DENSITY_PARAMETER, v, p);
+        addParameter(ParamType::Density, v, p);
     }
     void addDensity(string e, string p)
     {
-        addParameter(DENSITY_PARAMETER, e, p);
+        addParameter(ParamType::Density, e, p);
     }
     void addDensity(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(DENSITY_PARAMETER, v, p);
+        addParameter(ParamType::Density, v, p);
     }
     void addDensity(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(DENSITY_PARAMETER, e, p);
+        addParameter(ParamType::Density, e, p);
     }
     void addDamping(double v, string p)
     {
-        addParameter(DAMPING_PARAMETER, v, p);
+        addParameter(ParamType::Damping, v, p);
     }
     void addDamping(string e, string p)
     {
-        addParameter(DAMPING_PARAMETER, e, p);
+        addParameter(ParamType::Damping, e, p);
     }
     void addDamping(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(DAMPING_PARAMETER, v, p);
+        addParameter(ParamType::Damping, v, p);
     }
     void addDamping(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(DAMPING_PARAMETER, e, p);
+        addParameter(ParamType::Damping, e, p);
     }
     void addYoungModulus(double v, string p)
     {
-        addParameter(YOUNG_MODULUS_PARAMETER, v, p);
+        addParameter(ParamType::YoungModulus, v, p);
     }
     void addYoungModulus(string e, string p)
     {
-        addParameter(YOUNG_MODULUS_PARAMETER, e, p);
+        addParameter(ParamType::YoungModulus, e, p);
     }
     void addYoungModulus(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(YOUNG_MODULUS_PARAMETER, v, p);
+        addParameter(ParamType::YoungModulus, v, p);
     }
     void addYoungModulus(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(YOUNG_MODULUS_PARAMETER, e, p);
+        addParameter(ParamType::YoungModulus, e, p);
     }
     void addPoissonRatio(double v, string p)
     {
-        addParameter(POISSON_RATIO_PARAMETER, v, p);
+        addParameter(ParamType::PoissonRatio, v, p);
     }
     void addPoissonRatio(string e, string p)
     {
-        addParameter(POISSON_RATIO_PARAMETER, e, p);
+        addParameter(ParamType::PoissonRatio, e, p);
     }
     void addPoissonRatio(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(POISSON_RATIO_PARAMETER, v, p);
+        addParameter(ParamType::PoissonRatio, v, p);
     }
     void addPoissonRatio(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(POISSON_RATIO_PARAMETER, e, p);
+        addParameter(ParamType::PoissonRatio, e, p);
     }
     void addBoundaryCondition(double v, string p, int d)
     {
-        addParameter(BOUNDARY_CONDITION_PARAMETER, v, p, d);
+        addParameter(ParamType::BoundaryCondition, v, p, d);
     }
     void addBoundaryCondition(string e, string p, int d)
     {
-        addParameter(BOUNDARY_CONDITION_PARAMETER, e, p, d);
+        addParameter(ParamType::BoundaryCondition, e, p, d);
     }
     void addBoundaryCondition(double v, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(BOUNDARY_CONDITION_PARAMETER, v, p, d);
+        addParameter(ParamType::BoundaryCondition, v, p, d);
     }
     void addBoundaryCondition(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(BOUNDARY_CONDITION_PARAMETER, e, p, d);
+        addParameter(ParamType::BoundaryCondition, e, p, d);
     }
     void addInitialCondition(double v, int d)
     {
-        addParameter(INITIAL_CONDITION_PARAMETER, v, "", d);
+        addParameter(ParamType::InitialCondition, v, "", d);
     }
     void addInitialCondition(string e, int d)
     {
-        addParameter(INITIAL_CONDITION_PARAMETER, e, "", d);
+        addParameter(ParamType::InitialCondition, e, "", d);
     }
     void addInitialCondition(function<double (double, double, double, double)> e, int d)
     {
-        addParameter(INITIAL_CONDITION_PARAMETER, e, nullptr, d);
+        addParameter(ParamType::InitialCondition, e, nullptr, d);
     }
     void addSurfaceLoad(double v, string p, int d)
     {
-        addParameter(SURFACE_LOAD_PARAMETER, v, p, d);
+        addParameter(ParamType::SurfaceLoad, v, p, d);
     }
     void addSurfaceLoad(string e, string p, int d)
     {
-        addParameter(SURFACE_LOAD_PARAMETER, e, p, d);
+        addParameter(ParamType::SurfaceLoad, e, p, d);
     }
     void addSurfaceLoad(double v, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(SURFACE_LOAD_PARAMETER, v, p, d);
+        addParameter(ParamType::SurfaceLoad, v, p, d);
     }
     void addSurfaceLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(SURFACE_LOAD_PARAMETER, e, p, d);
+        addParameter(ParamType::SurfaceLoad, e, p, d);
     }
     void addVolumeLoad(double v, string p, int d)
     {
-        addParameter(VOLUME_LOAD_PARAMETER, v, p, d);
+        addParameter(ParamType::VolumeLoad, v, p, d);
     }
     void addVolumeLoad(string e, string p, int d)
     {
-        addParameter(VOLUME_LOAD_PARAMETER, e, p, d);
+        addParameter(ParamType::VolumeLoad, e, p, d);
     }
     void addVolumeLoad(double v, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(VOLUME_LOAD_PARAMETER, v, p, d);
+        addParameter(ParamType::VolumeLoad, v, p, d);
     }
     void addVolumeLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(VOLUME_LOAD_PARAMETER, e, p, d);
+        addParameter(ParamType::VolumeLoad, e, p, d);
     }
     void addConcentratedLoad(double v, string p, int d)
     {
-        addParameter(CONCENTRATED_LOAD_PARAMETER, v, p, d);
+        addParameter(ParamType::ConcentratedLoad, v, p, d);
     }
     void addConcentratedLoad(string e, string p, int d)
     {
-        addParameter(CONCENTRATED_LOAD_PARAMETER, e, p, d);
+        addParameter(ParamType::ConcentratedLoad, e, p, d);
     }
     void addConcentratedLoad(double v, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(CONCENTRATED_LOAD_PARAMETER, v, p, d);
+        addParameter(ParamType::ConcentratedLoad, v, p, d);
     }
     void addConcentratedLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
     {
-        addParameter(CONCENTRATED_LOAD_PARAMETER, e, p, d);
+        addParameter(ParamType::ConcentratedLoad, e, p, d);
     }
     void addPressureLoad(double v, string p)
     {
-        addParameter(PRESSURE_LOAD_PARAMETER, v, p, 0);
+        addParameter(ParamType::Pressure_load, v, p, 0);
     }
     void addPressureLoad(string e, string p)
     {
-        addParameter(PRESSURE_LOAD_PARAMETER, e, p, 0);
+        addParameter(ParamType::Pressure_load, e, p, 0);
     }
     void addPressureLoad(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(PRESSURE_LOAD_PARAMETER, v, p, 0);
+        addParameter(ParamType::Pressure_load, v, p, 0);
     }
     void addPressureLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(PRESSURE_LOAD_PARAMETER, e, p, 0);
+        addParameter(ParamType::Pressure_load, e, p, 0);
     }
-    unsigned findParameter(int type)
+    unsigned findParameter(ParamType type)
     {
         unsigned counter = 0;
 

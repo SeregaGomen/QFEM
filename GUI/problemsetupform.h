@@ -14,6 +14,8 @@ namespace Ui {
     class TProblemSetupForm;
 }
 
+enum class ParamType;
+
 class TDelegateHTML : public QItemDelegate
 {
     Q_OBJECT
@@ -67,7 +69,7 @@ private:
     void setDirect(QTableWidget*, int);
     void setDirect(QTableWidget*, int, int);
     void removeAllRows(QTableWidget*);
-    void setTableValue(int, QTableWidget*, bool = true);
+    void setTableValue(ParamType, QTableWidget*, bool = true);
     void setElasticParam(void);
     void setThermalExpansionParam(void);
     void setDensity(void);
@@ -83,7 +85,7 @@ private:
     void setPlasticityParam(void);
     void setBoundaryConditionValue(void);
     void getVariables(void);
-    void getTableValue(int, QTableWidget*, bool = true);
+    void getTableValue(ParamType, QTableWidget*, bool = true);
     void getElasticParam(void);
     void getEps(void);
     void getThickness();

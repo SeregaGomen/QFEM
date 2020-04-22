@@ -35,13 +35,13 @@ bool TFEMObject::start(void)
     {
         switch (params.fType)
         {
-            case StaticProblem:
-                if (params.pMethod == Linear) // Упругий расчет
+            case FEMType::StaticProblem:
+                if (params.pMethod == PlasticityMethod::Linear) // Упругий расчет
                     fem = new TFEMStatic<TEigenSolver>(objName, &mesh, &results, &notes);
-                else if (params.pMethod == MVS)
+                else if (params.pMethod == PlasticityMethod::MVS)
                     fem = new TFEMStaticMVS<TEigenSolver>(params.loadStep, objName, &mesh, &results, &notes);
                 break;
-            case DynamicProblem:
+            case FEMType::DynamicProblem:
                 fem = new TFEMDynamic<TEigenSolver>(objName, &mesh, &results, &notes);
         }
         // Задание количества потоков
@@ -186,7 +186,7 @@ void TFEMObject::printResult(string fname)
 {
     size_t lenStr,
            lenNo;
-    double t = (params.fType == StaticProblem) ? 0 : params.t0 + params.th,
+    double t = (params.fType == FEMType::StaticProblem) ? 0 : params.t0 + params.th,
            tmp = -1.0123456789e-15;
     unsigned size = 0,
              index = 0,
@@ -219,12 +219,12 @@ void TFEMObject::printResult(string fname)
         return;
     size++;
 
-    if (params.fType == DynamicProblem)
+    if (params.fType == FEMType::DynamicProblem)
         counter_size = unsigned((params.t1 - params.t0) / params.th);
     msg->setProcess(PRINT_RESULT_PROCESS, 1, int(counter_size * mesh.getNumVertex()));
     do
     {
-        if (params.fType == DynamicProblem)
+        if (params.fType == FEMType::DynamicProblem)
             out << "t = " << t << endl;
         //////////////////
         // Печать заголовка
@@ -297,7 +297,7 @@ void TFEMObject::printResult(string fname)
 
 
         // Печать итогов
-        if (params.fType == DynamicProblem)
+        if (params.fType == FEMType::DynamicProblem)
             out << "t = " << t << endl;
         out << "| " << setw(int(lenNo)) << " " << "  ";
         for (unsigned i = 0; i < mesh.getDimension(); i++)
@@ -343,7 +343,7 @@ void TFEMObject::printResult(string fname)
         }
         out << endl << endl;
         /////////////////
-        if (params.fType == StaticProblem)
+        if (params.fType == FEMType::StaticProblem)
             break;
         t += params.th;
         if (fabs(t - params.t1) < params.eps)

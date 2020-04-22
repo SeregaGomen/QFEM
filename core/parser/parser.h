@@ -9,12 +9,12 @@
 using namespace std;
 
 /************************************************************************************************/
-enum { END = 0, DELIMITER, NUMERIC, FUNCTION, VARIABLE, STRING, FINISHED };
+enum class TokenType { Undefined, Delimiter, Numeric, Function, Variable, String, Finished };
 /************************************************************************************************/
 struct idToken
 {
     string name;
-    int type;
+    Operation op;
 };
 /************************************************************************************************/
 class TParser
@@ -24,48 +24,48 @@ private:
     map<string,double> variables; // Таблица переменных
     string token;
     char* expression = nullptr;
-    int token_type;
+    TokenType token_type = TokenType::Undefined;
     ErrorCode error_code = NO_ERR;
-    int tok;
+    Operation tok = Operation::Undefined;
     vector<idToken> functionList{
-                                    { "SQRT", SQRT },
-                                    { "SIN", SIN },
-                                    { "COS", COS },
-                                    { "TAN", TAN },
-                                    { "EXP", EXP },
-                                    { "ASIN", ASIN },
-                                    { "ACOS", ACOS },
-                                    { "ATAN", ATAN },
-                                    { "ATAN2", ATAN2 },
-                                    { "SINH", SINH },
-                                    { "COSH", COSH },
-                                    { "TANH", TANH },
-                                    { "ABS", ABS }
+                                    { "SQRT", Operation::Sqrt },
+                                    { "SIN", Operation::Sin },
+                                    { "COS", Operation::Cos },
+                                    { "TAN", Operation::Tan },
+                                    { "EXP", Operation::Exp },
+                                    { "ASIN", Operation::Asin },
+                                    { "ACOS", Operation::Acos },
+                                    { "ATAN", Operation::Atan },
+                                    { "ATAN2", Operation::Atan2 },
+                                    { "SINH", Operation::Sinh },
+                                    { "COSH", Operation::Cosh },
+                                    { "TANH", Operation::Tanh },
+                                    { "ABS", Operation::Abs }
                                 };
     vector<idToken> booleanList{
-                                    { "NOT", NOT },
-                                    { "AND", AND },
-                                    { "OR", OR }
+                                    { "NOT", Operation::Not },
+                                    { "AND", Operation::And },
+                                    { "OR", Operation::Or }
                                 };
 
     vector<idToken> opeartionList{
-                                    { "+", PLUS },
-                                    { "-", MINUS },
-                                    { "*", MUL },
-                                    { "/", DIV },
-                                    { "**", POW },
-                                    { "==", EQ },
-                                    { ">", GT },
-                                    { "<", LT },
-                                    { ">=", GE },
-                                    { "<=", LE },
-                                    { "<>", NE }
+                                    { "+", Operation::Plus },
+                                    { "-", Operation::Minus },
+                                    { "*", Operation::Mul },
+                                    { "/", Operation::Div },
+                                    { "**", Operation::Pow },
+                                    { "==", Operation::Eq },
+                                    { ">", Operation::Gt },
+                                    { "<", Operation::Lt },
+                                    { ">=", Operation::Ge },
+                                    { "<=", Operation::Le },
+                                    { "<>", Operation::Ne }
                                 };
 protected:
-    int get_token(void);
+    TokenType get_token(void);
     int is_delim(char);
     bool is_name(string);
-    bool is_find(vector<idToken>&, string, int&);
+    bool is_find(vector<idToken>&, string, Operation&);
     [[noreturn ]] void error(ErrorCode);
     void compile(void);
     void get_exp(Tree&);

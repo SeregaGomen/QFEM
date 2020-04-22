@@ -43,7 +43,7 @@ protected:
 public:
     TFEMStatic(string n, TMesh *m, TResultList *r, list<string> *l) : TFEM(n, m, r, l)
     {
-        TFEM::params.fType = StaticProblem;
+        TFEM::params.fType = FEMType::StaticProblem;
     }
     virtual ~TFEMStatic(void) {}
     void startProcess(void);
@@ -268,7 +268,7 @@ template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<thread> thr(numThread);
 
-    if (params.plist.findParameter(BOUNDARY_CONDITION_PARAMETER))
+    if (params.plist.findParameter(ParamType::BoundaryCondition))
     {
         msg->setProcess(CALC_BOUNDARY_CONDITION_PROCESS, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
@@ -295,7 +295,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
         {
             msg->addProgress();
             for (auto it: params.plist)
-                if (it.getType() == BOUNDARY_CONDITION_PARAMETER && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::BoundaryCondition && (direct = unsigned(it.getDirect())))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -328,7 +328,7 @@ template<class T> void TFEMStatic<T>::calcConcentratedLoad(vector<double> &load,
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<thread> thr(numThread);
 
-    if (params.plist.findParameter(CONCENTRATED_LOAD_PARAMETER))
+    if (params.plist.findParameter(ParamType::ConcentratedLoad))
     {
         msg->setProcess(CALCULATION_CONCENTRATED_LOAD_PROCESS, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
@@ -354,7 +354,7 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
         {
             msg->addProgress();
             for (auto it : params.plist)
-                if (it.getType() == CONCENTRATED_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::ConcentratedLoad && (direct = unsigned(it.getDirect())))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -387,7 +387,7 @@ template<class T> void TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, doub
     unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<thread> thr(numThread);
 
-    if (params.plist.findParameter(SURFACE_LOAD_PARAMETER))
+    if (params.plist.findParameter(ParamType::SurfaceLoad))
     {
         msg->setProcess(CALCULATION_SURFACE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
@@ -414,7 +414,7 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
         {
             msg->addProgress();
             for (auto it:  params.plist)
-                if (it.getType() == SURFACE_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::SurfaceLoad && (direct = unsigned(it.getDirect())))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -451,7 +451,7 @@ template<class T> void TFEMStatic<T>::calcPressureLoad(vector<double> &load, dou
     unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<thread> thr(numThread);
 
-    if (params.plist.findParameter(PRESSURE_LOAD_PARAMETER))
+    if (params.plist.findParameter(ParamType::Pressure_load))
     {
         msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
@@ -478,7 +478,7 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
         {
             msg->addProgress();
             for (auto it: params.plist)
-                if (it.getType() == PRESSURE_LOAD_PARAMETER)
+                if (it.getType() == ParamType::Pressure_load)
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -526,7 +526,7 @@ template<class T> void TFEMStatic<T>::calcVolumeLoad(vector<double> &load, doubl
     unsigned step = TFEM::mesh->getNumFE() / numThread;
     vector<thread> thr(numThread);
 
-    if (params.plist.findParameter(VOLUME_LOAD_PARAMETER))
+    if (params.plist.findParameter(ParamType::VolumeLoad))
     {
         msg->setProcess(CALCULATION_VOLUME_LOAD_PROCESS, 1, mesh->getNumFE());
         for (int i = 0; i < numThread; i++)
@@ -555,7 +555,7 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
             if (isProcessAborted)
                 throw ABORT_ERR;
             for (auto it: params.plist)
-                if (it.getType() == VOLUME_LOAD_PARAMETER && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::VolumeLoad && (direct = unsigned(it.getDirect())))
                 {
                     // Проверка, все ли узлы КЭ удовлетворяют предикату
                     if (!checkFE(i, it))
@@ -605,26 +605,26 @@ template<class T> void TFEMStatic<T>::getStressIntensity(TResultList &res, vecto
     for (unsigned i = begin; i < end; i++)
         switch (TFEM::mesh->getTypeFE())
         {
-            case FE1D2: // U, Exx, Sxx
+            case FEType::fe1d2: // U, Exx, Sxx
                 si[i] = m_sqrt1_2 * fabs(res[2].getResults(i));
                 break;
-            case FE2D3:
-            case FE2D4:
-            case FE2D6: // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy
+            case FEType::fe2d3:
+            case FEType::fe2d4:
+            case FEType::fe2d6: // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy
                 si[i] = m_sqrt1_2 * sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0 * (pow(res[7].getResults(i), 2)));
                 break;
-            case FE2D3P:
-            case FE2D4P:
-            case FE2D6P: // W, Tx, Ty, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
-            case FE3D4:
-            case FE3D8:
-            case FE3D10: // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
+            case FEType::fe2d3p:
+            case FEType::fe2d4p:
+            case FEType::fe2d6p: // W, Tx, Ty, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
+            case FEType::fe3d4:
+            case FEType::fe3d8:
+            case FEType::fe3d10: // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
                 si[i] =  m_sqrt1_2 * sqrt(pow(res[9].getResults(i) - res[10].getResults(i), 2) + pow(res[9].getResults(i) - res[11].getResults(i), 2) +
                              pow(res[11].getResults(i) - res[12].getResults(i), 2) + 6.0 * (pow(res[12].getResults(i), 2) + pow(res[13].getResults(i), 2) + pow(res[14].getResults(i), 2)));
                 break;
-            case FE3D3S:
-            case FE3D4S:
-            case FE3D6S: // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
+            case FEType::fe3d3s:
+            case FEType::fe3d4s:
+            case FEType::fe3d6s: // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
                 si[i] = m_sqrt1_2 * sqrt(pow(res[12].getResults(i) - res[13].getResults(i), 2) + pow(res[12].getResults(i) - res[14].getResults(i), 2) +
                              pow(res[13].getResults(i) - res[14].getResults(i), 2) + 6.0 * (pow(res[15].getResults(i), 2) + pow(res[16].getResults(i), 2) + pow(res[17].getResults(i), 2)));
                 break;

@@ -5,12 +5,13 @@
 #include "glfun.h"
 
 class TMesh;
+enum class ParamType;
 
 class TGLParameter : public TGLFunction
 {
     Q_OBJECT
 private:
-    int paramType;
+    ParamType paramType;
     QVector<QVector4D> vertex;
     void getMinMax(float &min, float &max)
     {
@@ -33,7 +34,7 @@ protected:
     void createObject(void);
 
 public:
-    TGLParameter(TMesh*, QVector<QVector4D>&, int, QWidget* = nullptr);
+    TGLParameter(TMesh*, QVector<QVector4D>&, ParamType, QWidget* = nullptr);
     ~TGLParameter(void) {}
     void redraw(QVector<QVector4D>& v)
     {
@@ -41,7 +42,7 @@ public:
         initColorTable();
         repaint();
     }
-    int getType(void) const
+    ParamType getType(void) const
     {
         return paramType;
     }

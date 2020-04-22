@@ -7,9 +7,9 @@
 #include "fe/fe.h"
 
 
-enum FEMType { StaticProblem, DynamicProblem }; // Тип задачи: статика или динамика
-enum TimeMethod { TEmpty, Zinkevich, Wilson  }; // Способ аппроксимации по времени (стандартный, Вильсона etc.)
-enum PlasticityMethod { Linear, MVS, MES };     // Метод расчета упруго-пластических задач (метод переменной жесткости, метод упругих решений etc.)
+enum class FEMType { StaticProblem, DynamicProblem }; // Тип задачи: статика или динамика
+enum class TimeMethod { Zinkevich, Wilson  }; // Способ аппроксимации по времени (стандартный, Вильсона etc.)
+enum class PlasticityMethod { Linear, MVS, MES };     // Метод расчета упруго-пластических задач (метод переменной жесткости, метод упругих решений etc.)
 
 using namespace std;
 
@@ -17,8 +17,8 @@ using namespace std;
 class TFEMParams
 {
 private:
-    void getParam(int, vector<double>&, double&, matrix<double>&);
-    double getScalarParam(int, vector<double>&);
+    void getParam(ParamType, vector<double>&, double&, matrix<double>&);
+    double getScalarParam(ParamType, vector<double>&);
     void getMatrixParam(vector<double>&, matrix<double>&);
     vector<unsigned> getFunIndex(FEType);
 public:
@@ -38,9 +38,9 @@ public:
     map<string, double> variables;  // Список дополнительных числовых параметров
     void clear(void)
     {
-        fType = StaticProblem;
-        tMethod = TEmpty;
-        pMethod = Linear;
+        fType = FEMType::StaticProblem;
+        tMethod = TimeMethod::Wilson;
+        pMethod = PlasticityMethod::Linear;
         eps = 1.0e-10;
         width = 12;
         precision = 5;
@@ -56,9 +56,9 @@ public:
     }
     TFEMParams(void)
     {
-        fType = StaticProblem;
-        tMethod = TEmpty;
-        pMethod = Linear;
+        fType = FEMType::StaticProblem;
+        tMethod = TimeMethod::Wilson;
+        pMethod = PlasticityMethod::Linear;
         eps = 1.0E-10;
         width = 12;
         precision = 5;
@@ -153,37 +153,37 @@ public:
     // Извлечение модуля Юнга, соответствующего заданной координате
     double getYoungModule(vector<double>& cx)
     {
-        return getScalarParam(YOUNG_MODULUS_PARAMETER, cx);
+        return getScalarParam(ParamType::YoungModulus, cx);
     }
     // Извлечение коэффициента Пуассона, ...
     double getPoissonRatio(vector<double>& cx)
     {
-        return getScalarParam(POISSON_RATIO_PARAMETER, cx);
+        return getScalarParam(ParamType::PoissonRatio, cx);
     }
     // Извлечение толщины элемента
     double getThickness(vector<double>& cx)
     {
-        return getScalarParam(THICKNESS_PARAMETER, cx);
+        return getScalarParam(ParamType::Thickness, cx);
     }
     // Извлечение температуры
     double getTemperature(vector<double>& cx)
     {
-        return getScalarParam(TEMPERATURE_PARAMETER, cx);
+        return getScalarParam(ParamType::Temperature, cx);
     }
     // Извлечение коэффициента темперратурного расширения
     double getAlpha(vector<double>& cx)
     {
-        return getScalarParam(ALPHA_PARAMETER, cx);
+        return getScalarParam(ParamType::Alpha, cx);
     }
     // Извлечение плотности
     double getDensity(vector<double>& cx)
     {
-        return getScalarParam(DENSITY_PARAMETER, cx);
+        return getScalarParam(ParamType::Density, cx);
     }
     // Извлечение параметра демпфирования
     double getDamping(vector<double>& cx)
     {
-        return getScalarParam(DAMPING_PARAMETER, cx);
+        return getScalarParam(ParamType::Damping, cx);
     }
     // Извлечение диаграммы деформирования
     void getStressStrainCurve(vector<double>& cx, matrix<double>& ssc)

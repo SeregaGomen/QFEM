@@ -18,14 +18,14 @@ Tree::Tree(double* value)
     nodePtr = new ArgNode(value);
 }
 /**********************************************************************/
-Tree::Tree(int op, const Tree& right)
+Tree::Tree(Operation op, const Tree& right)
 {
-    nodePtr = new UnaryNode(op,right);
+    nodePtr = new UnaryNode(op, right);
 }
 /**********************************************************************/
-Tree::Tree(const Tree& left, int op, const Tree& right)
+Tree::Tree(const Tree& left, Operation op, const Tree& right)
 {
-    nodePtr = new BinaryNode(left,op,right);
+    nodePtr = new BinaryNode(left, op, right);
 }
 /**********************************************************************/
 Tree::~Tree(void)
@@ -45,7 +45,7 @@ Tree Tree::operator = (const Tree& value)
 /**********************************************************************/
 Tree Tree::operator - (void)
 {
-    return Tree(Tree(-1.0), MUL, *this);
+    return Tree(Tree(-1.0), Operation::Mul, *this);
 }
 /**********************************************************************/
 Tree::Tree(const Tree& value)
@@ -67,81 +67,81 @@ Tree Tree::operator += (const Tree& r)
 /**********************************************************************/
 Tree operator + (double l, const Tree& r)
 {
-    return Tree(Tree(l),PLUS,r);
+    return Tree(Tree(l), Operation::Plus, r);
 }
 /**********************************************************************/
 Tree operator + (const Tree& l, double r)
 {
-    return Tree(l,PLUS,Tree(r));
+    return Tree(l, Operation::Plus, Tree(r));
 }
 /**********************************************************************/
 Tree operator + (const Tree& l, const Tree& r)
 {
-    return Tree(l,PLUS,r);
+    return Tree(l, Operation::Plus, r);
 }
 /**********************************************************************/
 Tree operator - (double l, const Tree& r)
 {
-    return Tree(Tree(l),MINUS,r);
+    return Tree(Tree(l), Operation::Minus, r);
 }
 /**********************************************************************/
 Tree operator - (const Tree& l, double r)
 {
-    return Tree(l,MINUS,Tree(r));
+    return Tree(l, Operation::Minus, Tree(r));
 }
 /**********************************************************************/
 Tree operator - (const Tree& l, const Tree& r)
 {
-    return Tree(l,MINUS,r);
+    return Tree(l, Operation::Minus, r);
 }
 /**********************************************************************/
 Tree operator * (double l, const Tree& r)
 {
-    return Tree(Tree(l),MUL,r);
+    return Tree(Tree(l), Operation::Mul, r);
 }
 /**********************************************************************/
 Tree operator * (const Tree& l, double r)
 {
-    return Tree(l,MUL,Tree(r));
+    return Tree(l, Operation::Mul, Tree(r));
 }
 /**********************************************************************/
 Tree operator * (const Tree& l, const Tree& r)
 {
-    return Tree(l,MUL,r);
+    return Tree(l, Operation::Mul, r);
 }
 /**********************************************************************/
 Tree operator / (double l, const Tree& r)
 {
-    return Tree(Tree(l),DIV,r);
+    return Tree(Tree(l), Operation::Div, r);
 }
 /**********************************************************************/
 Tree operator / (const Tree& l, double r)
 {
-    return Tree(l,DIV,Tree(r));
+    return Tree(l, Operation::Div, Tree(r));
 }
 /**********************************************************************/
 Tree operator / (const Tree& l, const Tree& r)
 {
-    return Tree(l,DIV,r);
+    return Tree(l, Operation::Div, r);
 }
 /**********************************************************************/
 Tree operator ^ (double l, const Tree& r)
 {
-    return Tree(Tree(l),POW,r);
+    return Tree(Tree(l), Operation::Pow, r);
 }
 /**********************************************************************/
 Tree operator ^ (const Tree& l, double r)
 {
-    return Tree(l,POW,Tree(r));
+    return Tree(l, Operation::Pow, Tree(r));
 }
 /**********************************************************************/
 Tree operator ^ (const Tree& l, const Tree& r)
 {
-    return Tree(l,POW,r);
+    return Tree(l, Operation::Pow, r);
 }
 /**********************************************************************/
 Tree exp(const Tree& r)
 {
-    return Tree(EXP,r);
+    return Tree(Operation::Exp, r);
 }
 /**********************************************************************/

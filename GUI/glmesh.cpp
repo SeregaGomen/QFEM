@@ -469,23 +469,23 @@ void TGLMesh::createObject(void)
 
     switch (mesh->getTypeFE())
     {
-        case FE1D2:
+        case FEType::fe1d2:
             drawMesh1D();
             break;
-        case FE2D3:
-        case FE2D4:
-        case FE2D6:
-        case FE2D3P:
-        case FE2D4P:
-        case FE2D6P:
+        case FEType::fe2d3:
+        case FEType::fe2d4:
+        case FEType::fe2d6:
+        case FEType::fe2d3p:
+        case FEType::fe2d4p:
+        case FEType::fe2d6p:
             drawMesh2D();
             break;
-        case FE3D4:
-        case FE3D8:
-        case FE3D10:
-        case FE3D3S:
-        case FE3D4S:
-        case FE3D6S:
+        case FEType::fe3d4:
+        case FEType::fe3d8:
+        case FEType::fe3d10:
+        case FEType::fe3d3s:
+        case FEType::fe3d4s:
+        case FEType::fe3d6s:
             drawMesh3D();
             break;
         default:

@@ -6,23 +6,7 @@
 using namespace std;
 
 // Типы конечных элементов
-enum FEType {
-                NOTYPE  = 0,
-                FE1D2,
-                FE2D3,
-                FE2D4,
-                FE2D6,
-                FE2D3P,
-                FE2D4P,
-                FE2D6P,
-                FE3D4,
-                FE3D8,
-                FE3D10,
-                FE3D3S,
-                FE3D4S,
-                FE3D6S
-            };
-
+enum class FEType { undefined  = 0, fe1d2, fe2d3, fe2d4, fe2d6, fe2d3p, fe2d4p, fe2d6p, fe3d4, fe3d8, fe3d10, fe3d3s, fe3d4s, fe3d6s };
 
 //---------------------------------------------------------
 // Абстрактный изопараметрический класс конечного элемента

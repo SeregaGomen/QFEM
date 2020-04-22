@@ -31,7 +31,7 @@ public:
     TFEMDynamic(string n,TMesh* m,TResultList* r,list<string>* l) : TFEMStatic<T>(n,m,r,l)
     {
         t = 0;
-        TFEM::params.fType = DynamicProblem;
+        TFEM::params.fType = FEMType::DynamicProblem;
     }
     virtual ~TFEMDynamic(void) {}
     void startProcess(void);
@@ -132,7 +132,7 @@ template<class T> void TFEMDynamic<T>::getInitialCondition(void)
 
     u0.resize(9, TFEM::mesh->getNumVertex());
     for (auto it : TFEM::params.plist)
-        if (it.getType() == INITIAL_CONDITION_PARAMETER)
+        if (it.getType() == ParamType::InitialCondition)
         {
             parser.set_expression(it.getExpression());
             value = parser.run();

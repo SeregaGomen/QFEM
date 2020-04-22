@@ -18,14 +18,14 @@ void TBCProcessor::processVertex(void)
     vertex.clear();
     vertex.resize(int(object->getMesh().getNumVertex()));
 
-    if (paramType == PRESSURE_LOAD_PARAMETER || paramType == SURFACE_LOAD_PARAMETER)
+    if (paramType == ParamType::Pressure_load || paramType == ParamType::SurfaceLoad)
         f_ptr = std::mem_fn(&TBCProcessor::calcPressureLoad);
-    else if (paramType == VOLUME_LOAD_PARAMETER)
+    else if (paramType == ParamType::VolumeLoad)
     {
         step = (size = object->getMesh().getNumFE()) / numThread;
         f_ptr = std::mem_fn(&TBCProcessor::calcVolumeLoad);
     }
-    else if (paramType == CONCENTRATED_LOAD_PARAMETER)
+    else if (paramType == ParamType::ConcentratedLoad)
     {
         step = (size = object->getMesh().getNumVertex()) / numThread;
         f_ptr = std::mem_fn(&TBCProcessor::calcConcentratedLoad);
@@ -65,7 +65,7 @@ void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
                     object->getMesh().getCoordVertex(i, coord);
                     if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord))
                         continue;
-                    vertex[int(i)].setW((paramType == BOUNDARY_CONDITION_PARAMETER) ? 1 : float(object->getParams().getExpressionValue(it, coord)));
+                    vertex[int(i)].setW((paramType == ParamType::BoundaryCondition) ? 1 : float(object->getParams().getExpressionValue(it, coord)));
                     break;
                 }
         }
@@ -93,7 +93,7 @@ void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error
                 return;
             }
             for (auto it: object->getParams().plist)
-                if (it.getType() == CONCENTRATED_LOAD_PARAMETER)
+                if (it.getType() == ParamType::ConcentratedLoad)
                 {
                     object->getMesh().getCoordVertex(i, coord);
                     if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord))
@@ -135,7 +135,7 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
             }
 
             for (auto it: object->getParams().plist)
-                if (it.getType() == PRESSURE_LOAD_PARAMETER || it.getType() == SURFACE_LOAD_PARAMETER)
+                if (it.getType() == ParamType::Pressure_load || it.getType() == ParamType::SurfaceLoad)
                 {
                     object->getMesh().getCoordBE(i, coord);
                     isTrue = true;
@@ -149,10 +149,10 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
                         continue;
                     object->getMesh().getCenterBE(i, c_coord);
                     value = object->getParams().getExpressionValue(it, c_coord);
-                    if (it.getType() == PRESSURE_LOAD_PARAMETER)
+                    if (it.getType() == ParamType::Pressure_load)
                         object->getMesh().normal(i, v);
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeBE(); j++)
-                        if (it.getType() == PRESSURE_LOAD_PARAMETER)
+                        if (it.getType() == ParamType::Pressure_load)
                         {
                             // X
                             vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value * v[0]));
@@ -201,7 +201,7 @@ void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
             }
 
             for (auto it: object->getParams().plist)
-                if (it.getType() == VOLUME_LOAD_PARAMETER)
+                if (it.getType() == ParamType::VolumeLoad)
                 {
                     object->getMesh().getCoordFE(i, coord);
                     isTrue = true;
