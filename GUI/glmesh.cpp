@@ -177,7 +177,7 @@ void TGLMesh::mouseMoveEvent(QMouseEvent *event)
     int dx = event->x() - lastPos.x(),
         dy = event->y() - lastPos.y();
 
-    if ((event->buttons() & Qt::LeftButton) && (QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) == false))
+    if ((event->buttons() & Qt::LeftButton) and (QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) == false))
     {
         if (isRotate)
             rotate(dy, dx, 0);
@@ -187,7 +187,7 @@ void TGLMesh::mouseMoveEvent(QMouseEvent *event)
             translate(dx, dy);
 
     }
-    else if ((event->buttons() & Qt::LeftButton) && (QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) == true))
+    else if ((event->buttons() & Qt::LeftButton) and (QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) == true))
     {
         if (isRotate)
             rotate(dy, 0, dx);
@@ -209,7 +209,7 @@ void TGLMesh::rotate(int dx, int dy, int dz)
 /*******************************************************************/
 void TGLMesh::scale(int dx, int dy)
 {
-    if (dx > 0 || dy > 0)
+    if (dx > 0 or dy > 0)
         params.scale *= 1.05f;
     else
         params.scale /= 1.05f;
@@ -393,7 +393,7 @@ void TGLMesh::paintGL(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (!mesh)
+    if (not mesh)
         return;
 
     glLoadIdentity();
@@ -425,7 +425,7 @@ void TGLMesh::paintGL(void)
     glRotatef(params.angleY, 0.0, 1.0, 0.0);
     glRotatef(params.angleZ, 0.0, 0.0, 1.0);
 
-    if (isIdle || mesh->getDimension() == 1)
+    if (isIdle or mesh->getDimension() == 1)
         displayObject();
     else
         displaySkeleton();
@@ -435,7 +435,7 @@ void TGLMesh::paintGL(void)
 /*******************************************************************/
 void TGLMesh::displaySkeleton(void)
 {
-    if (!xList2)
+    if (not xList2)
     {
         xList2 = glGenLists(1);
         glNewList(xList2, GL_COMPILE);
@@ -453,7 +453,7 @@ void TGLMesh::displaySkeleton(void)
 /*******************************************************************/
 void TGLMesh::displayObject(void)
 {
-    if (!xList1)
+    if (not xList1)
     {
         xList1 = glGenLists(1);
         glNewList(xList1, GL_COMPILE);
@@ -521,7 +521,7 @@ void TGLMesh::drawMesh1D(void)
 /*******************************************************************/
 void TGLMesh::drawMesh2D(void)
 {
-    unsigned size = (mesh->getSizeFE() == 3 || mesh->getSizeFE() == 6) ? 3 : 4;
+    unsigned size = (mesh->getSizeFE() == 3 or mesh->getSizeFE() == 6) ? 3 : 4;
 
     glNormal3d(0, 0, 1);
     for (unsigned i = 0; i < mesh->getNumFE(); i++)
@@ -529,7 +529,7 @@ void TGLMesh::drawMesh2D(void)
         if (params.isFace)
         {
             setColor(0.8f, 0.8f, 0.8f, params.alpha);
-            glBegin((mesh->getSizeFE() == 3 || mesh->getSizeFE() == 6) ? GL_TRIANGLES : GL_QUADS);
+            glBegin((mesh->getSizeFE() == 3 or mesh->getSizeFE() == 6) ? GL_TRIANGLES : GL_QUADS);
             for (unsigned j = 0; j < size; j++)
                 glVertex2f(float(mesh->getX(mesh->getFE(i, j), 0)) - x0[0], float(mesh->getX(mesh->getFE(i, j), 1)) - x0[1]);
             glEnd();
@@ -616,7 +616,7 @@ void TGLMesh::showContextMenu(const QPoint &pos)
         {
             fileName = QFileDialog::getSaveFileName(this,tr("Saving the image"),fileName,tr("Image files (*.png)"));
 
-            if (!fileName.isEmpty())
+            if (not fileName.isEmpty())
                 saveImage(fileName);
         }
     }

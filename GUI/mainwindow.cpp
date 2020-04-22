@@ -197,11 +197,11 @@ void TMainWindow::slotChangeTab(int nTab)
 //    ui->actionAnalyse->setEnabled(isEnabled);
     ui->actionAnalyse->setEnabled(femProcessor->isCalculated());
     ui->actionSetupImage->setEnabled(isEnabled);
-    if (/*tabWidget->currentIndex() == 0 &&*/ !isUntitled)
+    if (/*tabWidget->currentIndex() == 0 and*/ not isUntitled)
         ui->actionObjectParameters->setEnabled(true);
     else
         ui->actionObjectParameters->setEnabled(false);
-    if (isEnabled && !isUntitled)
+    if (isEnabled and not isUntitled)
     {
         if (qobject_cast<TGLMesh*>(tabWidget->widget(nTab))->getRotate())
             slotSetRotate();
@@ -219,7 +219,7 @@ void TMainWindow::slotCloseTab(int nTab)
     if (nTab != 0)
     {
         tabWidget->removeTab(nTab);
-        if (nTab == 1 && ui->actionObjectParameters->isChecked())
+        if (nTab == 1 and ui->actionObjectParameters->isChecked())
             ui->actionObjectParameters->setChecked(false);
     }
     else
@@ -284,21 +284,21 @@ void TMainWindow::checkMenuState(void)
 {
     bool isEnabled = (qobject_cast<TGLMesh*>(tabWidget->currentWidget()) == nullptr) ? false : true;
 
-    ui->actionCopy->setEnabled(!isUntitled);
-    ui->actionClose->setEnabled(!isUntitled);
-    ui->actionSaveAs->setEnabled(!isUntitled);
-    ui->actionRotate->setEnabled(!isUntitled && isEnabled);
-    ui->actionScale->setEnabled(!isUntitled && isEnabled);
-    ui->actionTranslate->setEnabled(!isUntitled && isEnabled);
-    ui->actionRestore->setEnabled(!isUntitled);
-    ui->actionObjectParameters->setEnabled(!isUntitled);
-    ui->actionStart->setEnabled(!isUntitled && !thread->isRunning());
-    ui->actionStop->setEnabled(!isUntitled && thread->isRunning());
-    ui->actionAnalyse->setEnabled(!isUntitled && femProcessor->isCalculated());
-    ui->actionAddExpression->setEnabled(!isUntitled && femProcessor->isCalculated());
-    ui->actionSetupImage->setEnabled(!isUntitled && isEnabled);
-    ui->actionInfo->setEnabled(!isUntitled);
-    ui->actionSaveResults->setEnabled(!isUntitled && femProcessor->isCalculated());
+    ui->actionCopy->setEnabled(not isUntitled);
+    ui->actionClose->setEnabled(not isUntitled);
+    ui->actionSaveAs->setEnabled(not isUntitled);
+    ui->actionRotate->setEnabled(not isUntitled and isEnabled);
+    ui->actionScale->setEnabled(not isUntitled and isEnabled);
+    ui->actionTranslate->setEnabled(not isUntitled and isEnabled);
+    ui->actionRestore->setEnabled(not isUntitled);
+    ui->actionObjectParameters->setEnabled(not isUntitled);
+    ui->actionStart->setEnabled(not isUntitled and not thread->isRunning());
+    ui->actionStop->setEnabled(not isUntitled and thread->isRunning());
+    ui->actionAnalyse->setEnabled(not isUntitled and femProcessor->isCalculated());
+    ui->actionAddExpression->setEnabled(not isUntitled and femProcessor->isCalculated());
+    ui->actionSetupImage->setEnabled(not isUntitled and isEnabled);
+    ui->actionInfo->setEnabled(not isUntitled);
+    ui->actionSaveResults->setEnabled(not isUntitled and femProcessor->isCalculated());
 }
 
 void TMainWindow::slotSetRotate(void)
@@ -375,7 +375,7 @@ void TMainWindow::slotOpenDocument(void)
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh);; QFEM result files (*.qres *.res)"));
 
-    if (!fileName.isEmpty())
+    if (not fileName.isEmpty())
         loadFile(fileName);
 }
 
@@ -384,7 +384,7 @@ void TMainWindow::loadFile(QString fileName)
     bool isOk = false;
 
     slotCloseTab(0);
-    if (QFileInfo(fileName).completeSuffix().toUpper() == "TRP" || QFileInfo(fileName).completeSuffix().toUpper() == "TRPA" || QFileInfo(fileName).completeSuffix().toUpper() == "VOL"  || QFileInfo(fileName).completeSuffix().toUpper() == "MESH")
+    if (QFileInfo(fileName).completeSuffix().toUpper() == "TRP" or QFileInfo(fileName).completeSuffix().toUpper() == "TRPA" or QFileInfo(fileName).completeSuffix().toUpper() == "VOL"  or QFileInfo(fileName).completeSuffix().toUpper() == "MESH")
         isOk = loadMesh(fileName);
     else if (QFileInfo(fileName).completeSuffix().toUpper() == "QRES")
         isOk = loadQRES(fileName);
@@ -498,7 +498,7 @@ void TMainWindow::slotSaveAsDocument(void)
     QString fileName = QString(QFileInfo(curFile).absolutePath() + "/" +  QFileInfo(curFile).baseName() + ".qfpf"),
             fullFileName = QFileDialog::getSaveFileName(this,tr("Saving the document"),fileName,tr("QFEM Problem files (*.qfpf)"));
 
-    if (!fullFileName.isEmpty())
+    if (not fullFileName.isEmpty())
         saveDocument(fullFileName);
 }
 
@@ -540,7 +540,7 @@ bool TMainWindow::loadMesh(QString fileName)
     QApplication::setOverrideCursor(Qt::BusyCursor);
     ret = femObject->setMeshFile(file);
     QApplication::restoreOverrideCursor();
-    if (!ret)
+    if (not ret)
     {
         QMessageBox::critical(this, tr("Error"), tr("Error reading file %1").arg(fileName));
         return false;
@@ -712,7 +712,7 @@ bool TMainWindow::checkParams(void)
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Young's modulus!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(ParamType::PoissonRatio) == 0 && !femObject->getMesh().is1D())
+    if (femObject->getParams().plist.findParameter(ParamType::PoissonRatio) == 0 and not femObject->getMesh().is1D())
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Poisson's ratio!"));
         return false;
@@ -722,18 +722,18 @@ bool TMainWindow::checkParams(void)
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified boundary conditions!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(ParamType::VolumeLoad) == 0 && femObject->getParams().plist.findParameter(ParamType::SurfaceLoad) == 0 &&
-        femObject->getParams().plist.findParameter(ParamType::ConcentratedLoad) == 0 && femObject->getParams().plist.findParameter(ParamType::Pressure_load) == 0)
+    if (femObject->getParams().plist.findParameter(ParamType::VolumeLoad) == 0 and femObject->getParams().plist.findParameter(ParamType::SurfaceLoad) == 0 and
+        femObject->getParams().plist.findParameter(ParamType::ConcentratedLoad) == 0 and femObject->getParams().plist.findParameter(ParamType::Pressure_load) == 0)
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified loads!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(ParamType::Thickness) == 0 && (femObject->getMesh().is2D() || femObject->getMesh().isShell() || femObject->getMesh().isPlate()))
+    if (femObject->getParams().plist.findParameter(ParamType::Thickness) == 0 and (femObject->getMesh().is2D() or femObject->getMesh().isShell() or femObject->getMesh().isPlate()))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified FE thickness!"));
         return false;
     }
-    if (femObject->getParams().pMethod != PlasticityMethod::Linear && (femObject->getParams().loadStep <= 0 || femObject->getParams().plist.findParameter(ParamType::StressStrainCurve) == 0))
+    if (femObject->getParams().pMethod != PlasticityMethod::Linear and (femObject->getParams().loadStep <= 0 or femObject->getParams().plist.findParameter(ParamType::StressStrainCurve) == 0))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified nonlinear parameters!"));
         return false;
@@ -755,7 +755,7 @@ bool TMainWindow::checkParams(void)
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping parameter!"));
             return false;
         }
-        if (femObject->getParams().th == 0.0 || femObject->getParams().t0 < 0 || femObject->getParams().t1 <= 0 || (femObject->getParams().t0 >= femObject->getParams().t1))
+        if (femObject->getParams().th == 0.0 or femObject->getParams().t0 < 0 or femObject->getParams().t1 <= 0 or (femObject->getParams().t0 >= femObject->getParams().t1))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified time!"));
             return false;
@@ -778,7 +778,7 @@ void TMainWindow::startSolvingProblem(void)
     try
     {
         // Загрузка параметров
-        if (!pForm->getParams())
+        if (not pForm->getParams())
             return;
 
         // Запуск расчета
@@ -866,7 +866,7 @@ void TMainWindow::showProtocol(QString fileName)
             isFind = true;
             qobject_cast<QTextEdit*>(tabWidget->widget(i))->setText(webOut);
         }
-    if (!isFind)
+    if (not isFind)
     {
         QTextEdit* ed = new QTextEdit(webOut);
 
@@ -880,7 +880,7 @@ void TMainWindow::showProtocol(QString fileName)
         QFile file(fileName);
         QTextStream out(&file);
 
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
             return;
@@ -933,7 +933,7 @@ void TMainWindow::sayParams(QString& webOut)
     }
 
     // Толщина КЭ
-    if (femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D())
+    if (femObject->getMesh().isPlate() or femObject->getMesh().isShell() or femObject->getMesh().is1D() or femObject->getMesh().is2D())
         sayParam(webOut, tr("FE thickness"), ParamType::Thickness, false);
 
 
@@ -1110,7 +1110,7 @@ bool TMainWindow::saveQFPF(QString fileName)
 
     // Запись в файл
     file.setFileName(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
            return false;
     file.write(doc.toJson(), doc.toJson().length());
     file.close();
@@ -1158,7 +1158,7 @@ bool TMainWindow::loadQFPF(QString fileName)
     // Проверяем наличие файла сетки
     fn = meshFile;
     fi.setFile(fn);
-    if (!fi.exists())
+    if (not fi.exists())
     {
         // Такого файла нет
         if ((fn = fi.fileName()) != meshFile)
@@ -1174,7 +1174,7 @@ bool TMainWindow::loadQFPF(QString fileName)
 
 
     // Загрузка сетки
-    if (!loadMesh(meshFile))
+    if (not loadMesh(meshFile))
         return false;
 
 
@@ -1207,7 +1207,7 @@ bool TMainWindow::loadQFPF(QString fileName)
             type = static_cast<ParamType>(bc.at(i)["Type"].toVariant().toInt());
             if (type == ParamType::StressStrainCurve)
             {
-                if (!pForm->decodeStressStarinCurve(expr, ssc))
+                if (not pForm->decodeStressStarinCurve(expr, ssc))
                     return false;
                 params.plist.addStressStrainCurve(ssc, pred);
             }
@@ -1245,7 +1245,7 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
             isFind = true;
             tabWidget->setCurrentIndex(i);
         }
-    if (!isFind)
+    if (not isFind)
     {
         tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(ind_f).getResults(), &femObject->getResult(ind_d + 0).getResults(), &femObject->getResult(ind_d + 1).getResults(), &femObject->getResult(ind_d + 2).getResults(), expression, this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
@@ -1280,8 +1280,8 @@ void TMainWindow::slotSetupImageParams(void)
     ImageType type = (qobject_cast<TGLFunction*>(tabWidget->currentWidget())) ? ( (qobject_cast<TGLParameter*>(tabWidget->currentWidget())) ? ImageType::param : ImageType::func ) : ImageType::mesh;
 
     if (qobject_cast<TGLParameter*>(tabWidget->currentWidget()))
-        if (qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::VolumeLoad || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::SurfaceLoad ||
-            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::ConcentratedLoad || qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::Pressure_load ||
+        if (qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::VolumeLoad or qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::SurfaceLoad or
+            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::ConcentratedLoad or qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::Pressure_load or
             qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::BoundaryCondition)
             type = ImageType::mesh;
     if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
@@ -1499,7 +1499,7 @@ bool TMainWindow::saveQRES(QString fileName)
 
     // Запись в файл
     file.setFileName(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
     file.write(doc.toJson(), doc.toJson().length());
     file.close();
@@ -1538,7 +1538,7 @@ void TMainWindow::loadMesh(const QJsonObject &meshObj)
         for (unsigned j = 0; j < fe_size; j++)
             fe[i][j] = unsigned(arr[j].toInt());
     }
-    if (fe_type == static_cast<int>(FEType::fe3d3s) || fe_type == static_cast<int>(FEType::fe3d4s) || fe_type == static_cast<int>(FEType::fe3d6s))
+    if (fe_type == static_cast<int>(FEType::fe3d3s) or fe_type == static_cast<int>(FEType::fe3d4s) or fe_type == static_cast<int>(FEType::fe3d6s))
         be = fe;
     else
     {
@@ -1658,7 +1658,7 @@ bool TMainWindow::loadRES(QString fileName)
     QApplication::setOverrideCursor(Qt::BusyCursor);
     ret = femProcessor->getFEMObject()->loadResult(fileName.toStdString());
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    if (!ret)
+    if (not ret)
     {
         QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
         return false;
@@ -1679,7 +1679,7 @@ bool TMainWindow::loadQRES(QString fileName)
 //    cout << endl;
     // Чтение из файла
     file.setFileName(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (not file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
         return false;
@@ -1736,13 +1736,13 @@ bool TMainWindow::calcExpression(QString expression, QString& name)
         return false;
     }
     // Выделяем выражение
-    if (!expression.contains('='))
+    if (not expression.contains('='))
     {
         QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
         return false;
     }
     exp = expression.mid(int(expression.toStdString().find("=") + 1)).trimmed();
-    if (!exp.trimmed().length())
+    if (not exp.trimmed().length())
     {
         QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
         return false;
@@ -1831,7 +1831,7 @@ void TMainWindow::slotSaveResults(void)
     QString fileName = QFileDialog::getSaveFileName(this, tr("Saving results"), QString(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("qres").toLower()), tr("QFEM result files (*.qres);; QFEM report files (*.txt)"));
     QFileInfo info(fileName);
 
-    if (!fileName.isEmpty())
+    if (not fileName.isEmpty())
     {
         if (info.suffix().toUpper() == "TXT")
             femProcessor->getFEMObject()->printResult(fileName.toStdString());
@@ -1912,7 +1912,7 @@ void TMainWindow::slotShowParam(int type)
             qobject_cast<TGLParameter*>(tabWidget->widget(i))->redraw(bcProcessor->getVertex());
             tabWidget->setCurrentIndex(i);
         }
-    if (!isFind)
+    if (not isFind)
     {
         tabWidget->addTab(new TGLParameter(&femProcessor->getFEMObject()->getMesh(), bcProcessor->getVertex(), static_cast<ParamType>(type), this), tabName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);

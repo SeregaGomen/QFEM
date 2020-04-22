@@ -192,8 +192,8 @@ void TProblemSetupForm::enabledParams(void)
     ui->gbDamping->setEnabled(ui->rbDynamic->isChecked());
     ui->textTime->setEnabled(ui->rbDynamic->isChecked());
     ui->textThetaWilson->setEnabled(ui->rbDynamic->isChecked());
-    ui->twStressStrainCurve->setEnabled(!ui->rbDynamic->isChecked());
-    ui->textLoadStep->setEnabled(!ui->rbDynamic->isChecked());
+    ui->twStressStrainCurve->setEnabled(not ui->rbDynamic->isChecked());
+    ui->textLoadStep->setEnabled(not ui->rbDynamic->isChecked());
 
     // Задание режима доступа к полям ввода в зависимости от размерности задачи
     ui->textCoordX->setEnabled(true);
@@ -217,14 +217,14 @@ void TProblemSetupForm::enabledParams(void)
     ui->textWtt->setVisible(femObject->getMesh().getFreedom() > 2);
 
     // Толщина элемента недоступна для 3D-задачи
-    ui->gbThickness->setEnabled((femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D()) ? true : false);
+    ui->gbThickness->setEnabled((femObject->getMesh().isPlate() or femObject->getMesh().isShell() or femObject->getMesh().is1D() or femObject->getMesh().is2D()) ? true : false);
 
 
     ui->gbPoissonRatio->setEnabled(femObject->getMesh().getFreedom() > 1);
 
     // Задание доступности упруго-ластических параметров
-    ui->textLoadStep->setEnabled(ui->rbStatic->isChecked() && (ui->rbMES->isChecked() || ui->rbMVS->isChecked()));
-    ui->gbStressStrainCurve->setEnabled(ui->rbStatic->isChecked() && (ui->rbMES->isChecked() || ui->rbMVS->isChecked()));
+    ui->textLoadStep->setEnabled(ui->rbStatic->isChecked() and (ui->rbMES->isChecked() or ui->rbMVS->isChecked()));
+    ui->gbStressStrainCurve->setEnabled(ui->rbStatic->isChecked() and (ui->rbMES->isChecked() or ui->rbMVS->isChecked()));
 
     // Задание доступности функций
     enabledFuncNames();
@@ -239,7 +239,7 @@ void TProblemSetupForm::addRow(QTableWidget* ptw)
     ptw->setItem(count, 0, new QTableWidgetItem(""));
     ptw->setItem(count, 1, new QTableWidgetItem(""));
 
-    if (ptw == ui->twVV || ptw == ui->twSV || ptw == ui->twCV || ptw == ui->twBC)
+    if (ptw == ui->twVV or ptw == ui->twSV or ptw == ui->twCV or ptw == ui->twBC)
     {
         newItem = new QTableWidgetItem();
         newItem->setCheckState(Qt::Unchecked);
@@ -294,28 +294,28 @@ void TProblemSetupForm::enabledFuncNames(void)
         else
             index = { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0 };
     }
-    else if (type == FEType::fe2d3 || type == FEType::fe2d4 || type == FEType::fe2d6)
+    else if (type == FEType::fe2d3 or type == FEType::fe2d4 or type == FEType::fe2d6)
     {
         if (isStatic)
             index = { 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
         else
             index = { 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0 };
     }
-    else if (type == FEType::fe2d3p || type == FEType::fe2d4p || type == FEType::fe2d6p)
+    else if (type == FEType::fe2d3p or type == FEType::fe2d4p or type == FEType::fe2d6p)
     {
         if (isStatic)
             index = { 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
         else
             index = { 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1 };
     }
-    else if (type == FEType::fe3d4 || type == FEType::fe3d8 || type == FEType::fe3d10)
+    else if (type == FEType::fe3d4 or type == FEType::fe3d8 or type == FEType::fe3d10)
     {
         if (isStatic)
             index = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
         else
             index = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     }
-    else if (type == FEType::fe3d3s || type == FEType::fe3d4s || type == FEType::fe3d6s)
+    else if (type == FEType::fe3d3s or type == FEType::fe3d4s or type == FEType::fe3d6s)
     {
         if (isStatic)
             index = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
@@ -395,11 +395,11 @@ void TDelegateHTML::paint(QPainter* painter, const QStyleOptionViewItem& option,
                         "<font size=5>w<sub>tt</sub></font>"
                      };
 
-     if (index.column() == 1 && index.flags() != Qt::ItemIsEditable)
+     if (index.column() == 1 and index.flags() != Qt::ItemIsEditable)
      {
          painter->fillRect(option.rect, QColor(213,213,213));
      }
-     if (value.isValid() && !value.isNull())
+     if (value.isValid() and not value.isNull())
      {
          if (index.column() == 0)
              text = val[index.row()];
@@ -416,7 +416,7 @@ void TProblemSetupForm::slotShowContextMenu1(const QPoint &pos)
     QPoint globalPos;
     QAction* selectedItem;
     QTableWidget* twPtr = static_cast<QTableWidget*>(focusWidget());
-    QMenu* menu = (twPtr == ui->twVV || twPtr == ui->twSV || twPtr == ui->twCV) ? &menu1 : &menu2;
+    QMenu* menu = (twPtr == ui->twVV or twPtr == ui->twSV or twPtr == ui->twCV) ? &menu1 : &menu2;
 
     if (sender()->inherits("QAbstractScrollArea"))
         globalPos = (reinterpret_cast<QAbstractScrollArea*>(sender()))->viewport()->mapToGlobal(pos);
@@ -1015,9 +1015,9 @@ bool TProblemSetupForm::decodeStressStarinCurve(string str, matrix<double>& ssc)
         ss >> ch[0] >> val[0] >> ch[1] >> val[1] >> ch[2] >> ch[3];
         if (ss.bad())
             return false;
-        if (ch[0] != '{' || ch[1] != ',' || ch[2] != '}')
+        if (ch[0] != '{' or ch[1] != ',' or ch[2] != '}')
             return false;
-        if (ch[3] != ',' && ch[3] != '}')
+        if (ch[3] != ',' and ch[3] != '}')
             return false;
         v.push_back(val[0]);
         v.push_back(val[1]);
@@ -1041,20 +1041,20 @@ bool TProblemSetupForm::check(void)
     double val;
     unsigned w;
 
-    if (!checkYoungModulus())
+    if (not checkYoungModulus())
         return false;
-    if (!checkPoissonRatio())
+    if (not checkPoissonRatio())
         return false;
-    if (!checkThermalExpansion())
+    if (not checkThermalExpansion())
         return false;
-    if (!checkTemperature())
+    if (not checkTemperature())
         return false;
-    if (!checkThickness())
+    if (not checkThickness())
         return false;
 
     if (ui->textEps->text().length())
     {
-        if (getExpression(ui->textEps->text(), val) || val <= 0)
+        if (getExpression(ui->textEps->text(), val) or val <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified calculation errors!"));
             return false;
@@ -1068,7 +1068,7 @@ bool TProblemSetupForm::check(void)
 
     if (ui->textWidth->text().length())
     {
-        if (getExpression(ui->textWidth->text(), val) || val <= 0)
+        if (getExpression(ui->textWidth->text(), val) or val <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set output parameters!"));
             return false;
@@ -1083,7 +1083,7 @@ bool TProblemSetupForm::check(void)
 
     if (ui->textPrecision->text().length())
     {
-        if (getExpression(ui->textPrecision->text(), val) || val <= 0 || unsigned(val) >= w)
+        if (getExpression(ui->textPrecision->text(), val) or val <= 0 or unsigned(val) >= w)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set output parameters!"));
             return false;
@@ -1096,24 +1096,24 @@ bool TProblemSetupForm::check(void)
     }
 
     if (ui->rbDynamic->isChecked())
-        if (!checkDynamicParams())
+        if (not checkDynamicParams())
             return false;
 
-    if (!checkVolumeLoad())
+    if (not checkVolumeLoad())
         return false;
-    if (!checkSurfaceLoad())
+    if (not checkSurfaceLoad())
         return false;
-    if (!checkConcentratedLoad())
+    if (not checkConcentratedLoad())
         return false;
-    if (!checkPressureLoad())
+    if (not checkPressureLoad())
         return false;
-    if (!checkLimitValue())
+    if (not checkLimitValue())
         return false;
-    if (!checkFuncNames())
+    if (not checkFuncNames())
         return false;
-    if (!checkPlasticity())
+    if (not checkPlasticity())
         return false;
-    if (!checkVariables())
+    if (not checkVariables())
         return false;
 
     return true;
@@ -1133,7 +1133,7 @@ bool TProblemSetupForm::checkFuncNames(void)
 
     for (int i = 0; i < 24; i++)
     {
-        if (!ui->twFuncName->item(i, 1)->text().length())
+        if (not ui->twFuncName->item(i, 1)->text().length())
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrect function name %1!").arg(ui->twFuncName->item(i, 0)->text()));
             return false;
@@ -1141,7 +1141,7 @@ bool TProblemSetupForm::checkFuncNames(void)
     }
     for (unsigned i = 24; i < femObject->getParams().names.size(); i++)
     {
-        if (!edit[i - 24]->text().length())
+        if (not edit[i - 24]->text().length())
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrect function name %1!").arg(msg[i - 21]));
             return false;
@@ -1157,7 +1157,7 @@ bool TProblemSetupForm::checkVariables(void)
     for (int i = 0; i < ui->twVariables->rowCount(); i++)
     {
         ui->twVariables->item(i,1)->text().toDouble(&isOk);
-        if (!isOk)
+        if (not isOk)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set variable value in a row: %1!").arg(i + 1));
             return false;
@@ -1175,19 +1175,19 @@ bool TProblemSetupForm::checkPlasticity(void)
     if (ui->rbLinear->isChecked())
         return true;
     val = ui->textLoadStep->text().toDouble(&isOk);
-    if (!isOk || val <=0)
+    if (not isOk or val <=0)
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly set load step!"));
         return false;
     }
     for (int i = 0; i < ui->twStressStrainCurve->rowCount(); i++)
     {
-        if (!decodeStressStarinCurve(ui->twStressStrainCurve->item(i, 0)->text().toStdString(), ssc))
+        if (not decodeStressStarinCurve(ui->twStressStrainCurve->item(i, 0)->text().toStdString(), ssc))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set stress-strain curve in a row: %1!").arg(i + 1));
             return false;
         }
-        if (ui->twStressStrainCurve->item(i, 1)->text().length() && checkExpression(ui->twStressStrainCurve->item(i, 1)->text()) != 0)
+        if (ui->twStressStrainCurve->item(i, 1)->text().length() and checkExpression(ui->twStressStrainCurve->item(i, 1)->text()) != 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set predicate in a row: %1!").arg(i + 1));
             return false;
@@ -1206,7 +1206,7 @@ bool TProblemSetupForm::checkLimitValue(void)
 // Проверка упругих параметров
 bool TProblemSetupForm::checkYoungModulus(void)
 {
-    if (!ui->twYoungModulus->rowCount())
+    if (not ui->twYoungModulus->rowCount())
     {
         QMessageBox::critical(this, tr("Error"), tr("Young's modulus not defined!"));
         return false;
@@ -1216,7 +1216,7 @@ bool TProblemSetupForm::checkYoungModulus(void)
 
 bool TProblemSetupForm::checkPoissonRatio(void)
 {
-    if (!ui->twPoissonsRatio->rowCount() && !femObject->getMesh().is1D())
+    if (not ui->twPoissonsRatio->rowCount() and not femObject->getMesh().is1D())
     {
         QMessageBox::critical(this, tr("Error"), tr("Poisson's ratio not defined!"));
         return false;
@@ -1229,14 +1229,14 @@ bool TProblemSetupForm::checkTable(QTableWidget* tw, int tab_no)
 {
     for (int i = 0; i < tw->rowCount(); i++)
     {
-        if (!tw->item(i, 0)->text().length() || checkExpression(tw->item(i, 0)->text()) != 0)
+        if (not tw->item(i, 0)->text().length() or checkExpression(tw->item(i, 0)->text()) != 0)
         {
             if (tab_no != -1)
                 ui->tabWidgetLoads->setCurrentIndex(tab_no);
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified expression in a row: %1!").arg(i + 1));
             return false;
         }
-        if (tw->item(i, 1)->text().length() && checkExpression(tw->item(i, 1)->text()) != 0)
+        if (tw->item(i, 1)->text().length() and checkExpression(tw->item(i, 1)->text()) != 0)
         {
             if (tab_no != -1)
                 ui->tabWidgetLoads->setCurrentIndex(tab_no);
@@ -1330,14 +1330,14 @@ bool TProblemSetupForm::checkDynamicParams(void)
            t1,
            th;
 
-    if (!checkTable(ui->twDensity, 4))
+    if (not checkTable(ui->twDensity, 4))
         return false;
-    if (!checkTable(ui->twDamping, 4))
+    if (not checkTable(ui->twDamping, 4))
         return false;
 
     if (ui->textThetaWilson->text().length())
     {
-        if (getExpression(ui->textThetaWilson->text(), theta) || theta <= 0)
+        if (getExpression(ui->textThetaWilson->text(), theta) or theta <= 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Wilson-theta!"));
             return false;
@@ -1350,7 +1350,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textT0->text().length())
     {
-        if (getExpression(ui->textT0->text(), t0) || t0 < 0)
+        if (getExpression(ui->textT0->text(), t0) or t0 < 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the start time!"));
             return false;
@@ -1363,7 +1363,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textT1->text().length())
     {
-        if (getExpression(ui->textT1->text(), t1) || t1 <= t0)
+        if (getExpression(ui->textT1->text(), t1) or t1 <= t0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the stop time!"));
             return false;
@@ -1376,7 +1376,7 @@ bool TProblemSetupForm::checkDynamicParams(void)
     }
     if (ui->textTH->text().length())
     {
-        if (getExpression(ui->textTH->text(), th) || th > t1 - t0)
+        if (getExpression(ui->textTH->text(), th) or th > t1 - t0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the time step!"));
             return false;
@@ -1490,7 +1490,7 @@ bool TProblemSetupForm::checkPressureLoad(void)
 // Загрузка параметров расчета в Object
 bool TProblemSetupForm::getParams(void)
 {
-    if (!check())
+    if (not check())
         return false;
 
     femObject->getParams().clear();
@@ -1736,7 +1736,7 @@ void TProblemSetupForm::slotCancelButton(void)
 //        {
 //            expression = tw->item(j, 0)->text();
 //            predicate = tw->item(j, 1)->text();
-//            if (predicate.length() && (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) != 0)
+//            if (predicate.length() and (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) != 0)
 //                continue;
 //            if (value == 0)
 //                continue;

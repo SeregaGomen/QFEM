@@ -201,7 +201,7 @@ void TGLFunction::initColorTable(void)
                 if (red < 0)
                     red = 0;
             }
-            else if (step <= i && i < 2*step)
+            else if (step <= i and i < 2*step)
             {
                 // синий-голубой
                 colorTable.append(QColor(0, int(green), 255, int(params.alpha*255.0f)));
@@ -209,7 +209,7 @@ void TGLFunction::initColorTable(void)
                 if (green > 255)
                     green = 255;
             }
-            else if (2*step <= i && i < 3*step)
+            else if (2*step <= i and i < 3*step)
             {
                 // голубой-зеленый
                 colorTable.append(QColor(0, 255, int(blue), int(params.alpha*255.0f)));
@@ -217,7 +217,7 @@ void TGLFunction::initColorTable(void)
                 if (blue < 0)
                     blue = 0;
             }
-            else if (3*step <= i && i < 4*step)
+            else if (3*step <= i and i < 4*step)
             {
                 // зеленый-желтый
                 colorTable.append(QColor(int(red), 255, 0, int(params.alpha*255.0f)));
@@ -230,7 +230,7 @@ void TGLFunction::initColorTable(void)
                 // желтый-оранжевый-красный
                 colorTable.append(QColor(255, int(green), 0, int(params.alpha*255.0f)));
                 green -= 0.5f*h;
-                if (green < 0 || i == params.numColor - 2)
+                if (green < 0 or i == params.numColor - 2)
                     green = 0;
             }
     if (params.isNegative)
@@ -260,7 +260,7 @@ void TGLFunction::showLegend(void)
           v = start,
           cy = rc.top() + 20;
 
-    if (!(mesh && mesh->getTypeFE() != FEType::undefined) || rc.height() < 9 * fontH)
+    if (not (mesh and mesh->getTypeFE() != FEType::undefined) or rc.height() < 9 * fontH)
         return;
 
     for (int k = colorTable.size() - 1; k >= 0; k -= h)
@@ -333,7 +333,7 @@ void TGLFunction::drawTriangle3D(QVector<QVector4D>& tri)
         glNormal3f(float(inv)*a, float(inv)*b, float(inv)*c);
     }
 
-    if (color_ind[0] == color_ind[1] && color_ind[1] == color_ind[2])
+    if (color_ind[0] == color_ind[1] and color_ind[1] == color_ind[2])
     {
         // Треугольник одного цвета
         glBegin(GL_TRIANGLES);
@@ -410,7 +410,7 @@ float TGLFunction::cY(unsigned i)
 /*******************************************************************/
 float TGLFunction::cZ(unsigned i)
 {
-    return (mesh->is3D() || mesh->isShell()) ? (float(mesh->getX(i, 2)) + params.koff * ((dz) ? float((*dz)[i]) : 0)) : ((mesh->isPlate()) ? params.koff * ((dx) ? float((*dx)[i]) : 0) : 0);
+    return (mesh->is3D() or mesh->isShell()) ? (float(mesh->getX(i, 2)) + params.koff * ((dz) ? float((*dz)[i]) : 0)) : ((mesh->isPlate()) ? params.koff * ((dx) ? float((*dx)[i]) : 0) : 0);
 }
 /*******************************************************************/
 void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
@@ -429,7 +429,7 @@ void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
 
     for (int i = 0; i < colorTable.size(); i++)
     {
-        if (fabs(float(colorTable[i].redF()) - colors[0]) < eps && fabs(float(colorTable[i].greenF()) - colors[1]) < eps && fabs(float(colorTable[i].blueF()) - colors[2]) < eps)
+        if (fabs(float(colorTable[i].redF()) - colors[0]) < eps and fabs(float(colorTable[i].greenF()) - colors[1]) < eps and fabs(float(colorTable[i].blueF()) - colors[2]) < eps)
         {
             QToolTip::showText(QPoint(e->x(), size().height()-e->y()), QString::number(double(u),'E'));
             return;

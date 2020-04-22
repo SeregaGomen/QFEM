@@ -111,7 +111,7 @@ bool TEigenSolver::saveMatrix(string fname, SparseMatrix<double>& globalMatrix)
         len = 0;
     double val;
 
-    if (out.fail())
+    if (not out.is_open())
         return false;
     // Запись сигнатуры
     out.write(reinterpret_cast<char*>(&signature), sizeof(int));
@@ -129,7 +129,7 @@ bool TEigenSolver::saveMatrix(string fname, SparseMatrix<double>& globalMatrix)
             out.write(reinterpret_cast<char*>(&(val = int(it.value()))), sizeof(double));
         }
     out.close();
-    return !out.fail();
+    return not out.fail();
 }
 
 bool TEigenSolver::loadMatrix(string fname, SparseMatrix<double>& globalMatrix)
@@ -141,14 +141,12 @@ bool TEigenSolver::loadMatrix(string fname, SparseMatrix<double>& globalMatrix)
     double val;
     fstream in(fname, ios::in | ios::binary);
 
-    globalMatrix.setZero();
+    if (not in.is_open())
+        return false;
 
     // Резервируем объем необходимой памяти
+    globalMatrix.setZero();
     globalMatrix.reserve(memMap);
-
-
-    if (in.fail())
-        return false;
     in.read(reinterpret_cast<char*>(&signature), sizeof(int));
     if (signature != 12031971)
     {
@@ -169,7 +167,7 @@ bool TEigenSolver::loadMatrix(string fname, SparseMatrix<double>& globalMatrix)
             break;
     }
     in.close();
-    return !in.fail();
+    return not in.fail();
 }
 
 void TEigenSolver::product(SparseMatrix<double>& matr, vector<double>& vec, vector<double>& res)

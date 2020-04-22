@@ -2850,7 +2850,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="problemsetupform.ui" line="109"/>
         <source>&amp;Linear</source>
-        <translation>&amp;Линейній расчет</translation>
+        <translation>&amp;Линейный расчет</translation>
     </message>
     <message>
         <location filename="problemsetupform.ui" line="132"/>

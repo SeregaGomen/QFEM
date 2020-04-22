@@ -27,7 +27,7 @@ QString TVCDialog::getExpression(void)
 
 void TVCDialog::accept(void)
 {
-    if (!ui->lineEdit->text().length())
+    if (not ui->lineEdit->text().length())
     {
         QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
         return;

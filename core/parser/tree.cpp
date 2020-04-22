@@ -30,14 +30,14 @@ Tree::Tree(const Tree& left, Operation op, const Tree& right)
 /**********************************************************************/
 Tree::~Tree(void)
 {
-    if (!--nodePtr->use)
+    if (not --nodePtr->use)
         delete nodePtr;
 }
 /**********************************************************************/
 Tree Tree::operator = (const Tree& value)
 {
     ++value.nodePtr->use;
-    if (!--nodePtr->use)
+    if (not --nodePtr->use)
         delete nodePtr;
     nodePtr = value.nodePtr;
     return *this;

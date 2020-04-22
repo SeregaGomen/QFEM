@@ -20,7 +20,7 @@ bool TFEMObject::setMeshFile(string n)
     cout << endl << S_MSG_MESH_NAME << n << endl;
     fileName = n;
     objName = n.substr(n.find_last_of("/\\") + 1,n.find_last_of(".") - n.find_last_of("/\\") - 1);
-    return !mesh.read(fileName);
+    return not mesh.read(fileName);
 }
 //---------------------------------------------------------
 bool TFEMObject::start(void)
@@ -75,7 +75,7 @@ bool TFEMObject::saveResult(string fname)
     ofstream out(fname.c_str(), ios::out);
     bool ret;
 
-    if (!out.is_open())
+    if (not out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return false;
@@ -95,7 +95,7 @@ bool TFEMObject::saveResult(string fname)
         return false;
     }
     // Запись результатов
-    if (!results.write(out))
+    if (not results.write(out))
     {
         out.close();
         msg->stop();
@@ -103,7 +103,7 @@ bool TFEMObject::saveResult(string fname)
         return false;
     }
     // Запись параметров
-    if (!params.write(out))
+    if (not params.write(out))
         cerr << sayError(WRITE_FILE_ERR) << endl;
 
     // Запись примечаний к расчету
@@ -114,7 +114,7 @@ bool TFEMObject::saveResult(string fname)
     ret = out.fail();
     out.close();
     msg->stop();
-    return !ret;
+    return not ret;
 }
 //-------------------------------------------------------------
 bool TFEMObject::loadResult(string fname)
@@ -123,7 +123,7 @@ bool TFEMObject::loadResult(string fname)
     ifstream in(fname.c_str(), ios::in);
     string str;
 
-    if (!in.is_open())
+    if (not in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return false;
@@ -148,7 +148,7 @@ bool TFEMObject::loadResult(string fname)
         return false;
     }
     // Загрузка результатов
-    if (!results.read(in))
+    if (not results.read(in))
     {
         msg->stop();
         in.close();
@@ -156,7 +156,7 @@ bool TFEMObject::loadResult(string fname)
         return false;
     }
     // Считывание параметров
-    if (!params.read(in))
+    if (not params.read(in))
     {
         msg->stop();
         in.close();
@@ -195,7 +195,7 @@ void TFEMObject::printResult(string fname)
     stringstream ss;
     ofstream out(fname.c_str(), ios::out);
 
-    if (!out.is_open())
+    if (not out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return;
@@ -215,7 +215,7 @@ void TFEMObject::printResult(string fname)
             size++;
         else
             break;
-    if (!size)
+    if (not size)
         return;
     size++;
 

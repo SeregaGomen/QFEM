@@ -12,7 +12,7 @@ TGLParameter::TGLParameter(TMesh *m, QVector<QVector4D>& v, ParamType t, QWidget
 /*******************************************************************/
 void TGLParameter::createObject(void)
 {
-    if (paramType == ParamType::Pressure_load || paramType == ParamType::SurfaceLoad || paramType == ParamType::VolumeLoad || paramType == ParamType::ConcentratedLoad)
+    if (paramType == ParamType::Pressure_load or paramType == ParamType::SurfaceLoad or paramType == ParamType::VolumeLoad or paramType == ParamType::ConcentratedLoad)
         createLoads();
     else if (paramType == ParamType::BoundaryCondition)
         createBoundaryConditions();
@@ -38,7 +38,7 @@ void TGLParameter::createLoads(void)
     glPointSize(2);
     for (int i = 0; i < vertex.size(); i++)
     {
-        if (!vertex[i].length())
+        if (not vertex[i].length())
             continue;
         x1 = QVector4D(0, 0, 0, 0);
         x2 = QVector4D(0, 0, 0, 0);

@@ -41,7 +41,7 @@ bool TMesh::read(string fname)
         cerr << sayError(UNKNOWN_FILE_ERR) << endl;
         return (error = true);
     }
-    if (!error)
+    if (not error)
     {
         createMeshMap();
         getMinMax();
@@ -298,7 +298,7 @@ bool TMesh::readTRP(string fname)
 
 
     clear();
-    if (!in.is_open())
+    if (not in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -378,7 +378,7 @@ bool TMesh::readTRPA(string fname)
              feDim;
 
     clear();
-    if (!in.is_open())
+    if (not in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -391,7 +391,7 @@ bool TMesh::readTRPA(string fname)
         return (error = true);
     }
     in >> temp;
-    if (in.fail() || temp == 0 || feDim < 1 || feDim > 3)
+    if (in.fail() or temp == 0 or feDim < 1 or feDim > 3)
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -411,7 +411,7 @@ bool TMesh::readTRPA(string fname)
         }
     }
     in >> temp;
-    if (in.fail() || temp == 0)
+    if (in.fail() or temp == 0)
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -430,13 +430,13 @@ bool TMesh::readTRPA(string fname)
             }
         }
     in >> temp;
-    if (in.fail() || (temp == 0 && (feType == FEType::fe2d3 || feType == FEType::fe2d4 || feType == FEType::fe3d4 || feType == FEType::fe3d8)))
+    if (in.fail() or (temp == 0 and (feType == FEType::fe2d3 or feType == FEType::fe2d4 or feType == FEType::fe3d4 or feType == FEType::fe3d8)))
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
         return (error = true);
     }
-    if (isPlate() || isShell())
+    if (isPlate() or isShell())
         be = fe;
     else // if (feDim != 1)
     {
@@ -464,7 +464,7 @@ bool TMesh::writeTRP(string fname)
     const char* signature = "NTRout";
     unsigned temp = 0;
 
-    if (!out.is_open())
+    if (not out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -498,7 +498,7 @@ bool TMesh::writeTRPA(string fname)
 {
     ofstream out(fname.c_str(), ios::out);
 
-    if (!out.is_open())
+    if (not out.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -552,7 +552,7 @@ bool TMesh::write(ofstream& out)
             out << fe(i, j) << ' ';
         out << endl;
     }
-    if (isPlate() || isShell())
+    if (isPlate() or isShell())
         out << 0 << endl;
     else
     {
@@ -613,7 +613,7 @@ bool TMesh::read(ifstream& in)
         cerr << sayError(READ_FILE_ERR) << endl;
         return (error = true);
     }
-    if (isPlate() || isShell())
+    if (isPlate() or isShell())
     {
         in >> val;
         be = fe;
@@ -632,7 +632,7 @@ bool TMesh::read(ifstream& in)
             return (error = true);
         }
     }
-    if (!error)
+    if (not error)
     {
         in.putback('\n');
         cout << *this << endl;
@@ -655,7 +655,7 @@ bool TMesh::readVOL(string fname)
              i4;
 
     clear();
-    if (!in.is_open())
+    if (not in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -755,7 +755,7 @@ bool TMesh::readMESH(string fname)
     matrix<unsigned> tmp;
 
     clear();
-    if (!in.is_open())
+    if (not in.is_open())
     {
         cerr << sayError(OPEN_FILE_ERR) << endl;
         return (error = true);
@@ -801,9 +801,9 @@ bool TMesh::readMESH(string fname)
         }
         else
         {
-            if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
+            if (fe(v3, 0) == v1 or fe(v3, 1) == v1)
                 v1 = UINT_MAX;
-            if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
+            if (fe(v3, 0) == v2 or fe(v3, 1) == v2)
                 v2 = UINT_MAX;
             if (v1 != UINT_MAX)
                 fe(v3, 2) = v1;
@@ -828,9 +828,9 @@ bool TMesh::readMESH(string fname)
         }
         else
         {
-            if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
+            if (fe(v3, 0) == v1 or fe(v3, 1) == v1)
                 v1 = UINT_MAX;
-            if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
+            if (fe(v3, 0) == v2 or fe(v3, 1) == v2)
                 v2 = UINT_MAX;
             if (v1 != UINT_MAX)
                 fe(v3, 2) = v1;
@@ -887,7 +887,7 @@ void TMesh::normal(unsigned index, vector<double>& v)
 {
     double len;
 
-    if (!v.size())
+    if (not v.size())
         v.resize(3);
     if (x.size2() == 1)
     {
@@ -895,13 +895,13 @@ void TMesh::normal(unsigned index, vector<double>& v)
         v[1] = v[2] = 0;
         return;
     }
-    if (x.size2() == 2 && isPlate())
+    if (x.size2() == 2 and isPlate())
     {
         v[0] = v[1] = 0;
         v[2] = 1;
         return;
     }
-    if (x.size2() == 2 && !isPlate())
+    if (x.size2() == 2 and not isPlate())
     {
         v[0] = x(be(index, 0), 1) - x(be(index, 1), 1);
         v[1] = x(be(index, 1), 0) - x(be(index, 0), 0);

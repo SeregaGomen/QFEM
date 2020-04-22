@@ -31,7 +31,7 @@ double UnaryNode::value(void)
         case Operation::Cosh:
             return cosh(val.value());
         case Operation::Not:
-            return !int(val.value());
+            return not int(val.value());
         default:
             break;
     }

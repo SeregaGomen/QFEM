@@ -18,7 +18,7 @@ void TBCProcessor::processVertex(void)
     vertex.clear();
     vertex.resize(int(object->getMesh().getNumVertex()));
 
-    if (paramType == ParamType::Pressure_load || paramType == ParamType::SurfaceLoad)
+    if (paramType == ParamType::Pressure_load or paramType == ParamType::SurfaceLoad)
         f_ptr = std::mem_fn(&TBCProcessor::calcPressureLoad);
     else if (paramType == ParamType::VolumeLoad)
     {
@@ -63,7 +63,7 @@ void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
                 if (paramType == it.getType())
                 {
                     object->getMesh().getCoordVertex(i, coord);
-                    if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord))
+                    if (it.getPredicate().length() and not object->getParams().getPredicateValue(it, coord))
                         continue;
                     vertex[int(i)].setW((paramType == ParamType::BoundaryCondition) ? 1 : float(object->getParams().getExpressionValue(it, coord)));
                     break;
@@ -96,10 +96,10 @@ void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error
                 if (it.getType() == ParamType::ConcentratedLoad)
                 {
                     object->getMesh().getCoordVertex(i, coord);
-                    if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord))
+                    if (it.getPredicate().length() and not object->getParams().getPredicateValue(it, coord))
                         continue;
                     value = float(object->getParams().getExpressionValue(it, coord));
-                    if ((it.getDirect() & DIR_X) == DIR_X || (object->getMesh().isPlate() && (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                    if ((it.getDirect() & DIR_X) == DIR_X or (object->getMesh().isPlate() and (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
                         vertex[int(i)].setX(vertex[int(i)].x() + value);
                     if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
                         vertex[int(i)].setY(vertex[int(i)].y() + value);
@@ -135,17 +135,17 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
             }
 
             for (auto it: object->getParams().plist)
-                if (it.getType() == ParamType::Pressure_load || it.getType() == ParamType::SurfaceLoad)
+                if (it.getType() == ParamType::Pressure_load or it.getType() == ParamType::SurfaceLoad)
                 {
                     object->getMesh().getCoordBE(i, coord);
                     isTrue = true;
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeBE(); j++)
-                        if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord[j][0], coord[j][1], coord[j][2]))
+                        if (it.getPredicate().length() and not object->getParams().getPredicateValue(it, coord[j][0], coord[j][1], coord[j][2]))
                         {
                             isTrue = false;
                             break;
                         }
-                    if (!isTrue)
+                    if (not isTrue)
                         continue;
                     object->getMesh().getCenterBE(i, c_coord);
                     value = object->getParams().getExpressionValue(it, c_coord);
@@ -165,7 +165,7 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
                         }
                         else
                         {
-                            if ((it.getDirect() & DIR_X) == DIR_X || (object->getMesh().isPlate() && (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                            if ((it.getDirect() & DIR_X) == DIR_X or (object->getMesh().isPlate() and (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
                                 vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value));
                             if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
                                 vertex[int(object->getMesh().getBE(i, j))].setY(vertex[int(object->getMesh().getBE(i, j))].y() + float(value));
@@ -206,19 +206,19 @@ void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
                     object->getMesh().getCoordFE(i, coord);
                     isTrue = true;
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeFE(); j++)
-                        if (it.getPredicate().length() && !object->getParams().getPredicateValue(it, coord[j][0], coord[j][1], coord[j][2]))
+                        if (it.getPredicate().length() and not object->getParams().getPredicateValue(it, coord[j][0], coord[j][1], coord[j][2]))
                         {
                             isTrue = false;
                             break;
                         }
-                    if (!isTrue)
+                    if (not isTrue)
                         continue;
                     object->getMesh().getCenterFE(i, c_coord);
                     value = object->getParams().getExpressionValue(it, c_coord);
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeFE(); j++)
                     {
                         // X
-                        if ((it.getDirect() & DIR_X) == DIR_X || (object->getMesh().isPlate() && (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                        if ((it.getDirect() & DIR_X) == DIR_X or (object->getMesh().isPlate() and (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
                             vertex[int(object->getMesh().getFE(i, j))].setX(float(value));
                         // Y
                         if ((it.getDirect() & DIR_Y) == DIR_Y) // Y

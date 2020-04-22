@@ -26,9 +26,9 @@ double BinaryNode::value(void)
         case Operation::Ge:
             return (left.value() >= right.value()) ? 1.0 : 0.0;
         case Operation::And:
-            return int(left.value()) && int(right.value());
+            return int(left.value()) and int(right.value());
         case Operation::Or:
-            return int(left.value()) || int(right.value());
+            return int(left.value()) or int(right.value());
         case Operation::Atan2:
             return atan2(left.value(),right.value());
         default:

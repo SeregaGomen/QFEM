@@ -106,7 +106,7 @@ void TFEMParams::getParam(ParamType p, vector<double>& cx, double& d, matrix<dou
     for (auto it : plist)
         if (it.getType() == p)
         {
-            if (!getPredicateValue(it, cx))
+            if (not getPredicateValue(it, cx))
                 continue;
             if (p == ParamType::StressStrainCurve)
                 m = it.getStressStrainCurve();
@@ -123,7 +123,7 @@ double TFEMParams::getMinStress(void)
     for (auto it : plist)
         if (it.getType() == ParamType::StressStrainCurve)
         {
-            if (!it.getStressStrainCurve().size1())
+            if (not it.getStressStrainCurve().size1())
                 throw NONLINEAR_PARAM_ERR;
             if (it.getStressStrainCurve().size1() && it.getStressStrainCurve(1, 0) < res)
                 res = it.getStressStrainCurve(1, 0);
@@ -139,7 +139,7 @@ bool TFEMParams::getPredicateValue(TParameter& p, vector<double>& cx)
 
     if (p.isFuncPredicate())
         return bool(p.getFuncPredicate(cx[0], cx[1], cx[2]));
-    if (!p.getPredicate().length())
+    if (not p.getPredicate().length())
         return true;
 
     parser.set_variables(variables);
@@ -155,7 +155,7 @@ bool TFEMParams::getPredicateValue(TParameter& p, double cx, double cy, double c
 
     if (p.isFuncPredicate())
         return bool(p.getFuncPredicate(cx, cy, cz));
-    if (!p.getPredicate().length())
+    if (not p.getPredicate().length())
         return true;
 
     parser.set_variables(variables);
@@ -174,7 +174,7 @@ double TFEMParams::getExpressionValue(TParameter& p, vector<double>& cx)
 
     if (p.isFuncExpression())
         return p.getFuncExpression(cx[0], cx[1], cx[2], (cx.size() == 4) ? cx[3] : 0.0);
-    if (!p.getExpression().length())
+    if (not p.getExpression().length())
         return p.getValue();
 
     parser.set_variables(variables);
@@ -191,7 +191,7 @@ double TFEMParams::getExpressionValue(TParameter& p, double cx, double cy, doubl
 
     if (p.isFuncExpression())
         return p.getFuncExpression(cx, cy, cz, t);
-    if (!p.getExpression().length())
+    if (not p.getExpression().length())
         return p.getValue();
 
     parser.set_variables(variables);
@@ -245,7 +245,7 @@ bool TFEMParams::write(ofstream& out)
     out << variables.size() << endl;
     for (map<string, double>::iterator it = variables.begin(); it != variables.end(); ++it)
         out << it->first.c_str() << ' ' << it->second << endl;
-    return !out.fail();
+    return not out.fail();
 }
 //--------------------------------------------------------------------
 bool TFEMParams::read(ifstream& in)
@@ -304,7 +304,7 @@ bool TFEMParams::read(ifstream& in)
         in >> key >> value;
         variables[key] = value;
     }
-    return !in.fail();
+    return not in.fail();
 }
 //--------------------------------------------------------------------
 
