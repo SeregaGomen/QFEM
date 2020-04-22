@@ -31,7 +31,7 @@ protected:
 
         TFE::K.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
         TFE::load.resize(TFE::freedom * TFE::shape->size, 1);
-        if (!isStatic)
+        if (not isStatic)
         {
             TFE::M.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
             TFE::D.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
@@ -64,7 +64,7 @@ protected:
                 bm(0, TFE::freedom * j + 2) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 0) = dx[j];
                 bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 0) = dy[j];
                 bp(0, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 1) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
-                if (!isStatic)
+                if (not isStatic)
                     c(0, TFE::freedom * j + 0) = c(1, TFE::freedom * j + 1) = c(2, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
             }
 
@@ -72,12 +72,12 @@ protected:
             TFE::K += ((transpose(bm) * TFE2D<T>::elastic_matrix() * bm) * (pow(TFE::thickness, 3) / 12.0) +
                        (transpose(bp) * extra_elastic_matrix() * bp) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (TFE::dT != 0.0 && TFE::alpha != 0.0)
+            if (TFE::dT != 0.0 and TFE::alpha != 0.0)
                 for (unsigned j = 0; j < TFE::getSize(); j++)
                     TFE::load[j * TFE::freedom][0] += TFE::e * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
                 // TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 0.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
                 // TFE::load += (transpose(bp) * extra_elastic_matrix() * vector<double>{ 1.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
-            if (!isStatic)
+            if (not isStatic)
             {
                 TFE::M += (transpose(c) * c) * TFE::density * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);
                 TFE::D += (transpose(c) * c) * TFE::damping * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);

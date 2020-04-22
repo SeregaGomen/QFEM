@@ -332,7 +332,7 @@ inline string sayError(ErrorCode code)
 class TMessenger
 {
 private:
-    time_t timer;
+    chrono::system_clock::time_point timer;
     bool isStopped = false;
     thread progress_thread;
     void backgroundRun(bool& isStopped)
@@ -340,7 +340,7 @@ private:
         char chr[] = { '|', '/', '-', '\\' };
         int i = 0;
 
-        while (!isStopped)
+        while (not isStopped)
         {
             cout << '\r' << sayProcess(processCode) << "... " << chr[i++ % 4] << flush;
             //std::this_thread::yield();
@@ -371,7 +371,7 @@ public:
 
         progress_thread = thread(&TMessenger::backgroundRun, this, ref(this->isStopped));
         progress_thread.detach();
-        timer = clock();
+        timer = chrono::system_clock::now();
     }
     virtual void setProcess(ProcessCode code, int start, int stop, int step = 1)
     {
@@ -381,7 +381,7 @@ public:
         processStep = step;
         processCurrent = oldPersent = 0;
         cout << '\r' << sayProcess(processCode) << "... 0%" << flush;
-        timer = clock();
+        timer = chrono::system_clock::now();
     }
     virtual void addProgress(void)
     {
@@ -407,16 +407,14 @@ public:
     {
         stringstream ss;
 
-//        if (processCurrent == processStop)
-//            return;
-        ss << '\r' << sayProcess(processCode) << "... 100%" << endl << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl;
+        ss << '\r' << sayProcess(processCode) << "... 100%" << endl << S_MSG_TIMER << int(double(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count())) << S_MSG_SEC << endl;
         cout << ss.str() << flush;
     }
     virtual void stop(void)
     {
         isStopped = true;
         this_thread::sleep_for(std::chrono::milliseconds(200));
-        cout << S_MSG_TIMER << int(double((clock() - timer) / CLOCKS_PER_SEC)) << S_MSG_SEC << endl;
+        cout << S_MSG_TIMER << int(double((static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()))) << S_MSG_SEC << endl;
     }
 };
 

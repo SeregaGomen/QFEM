@@ -35,7 +35,7 @@ protected:
 
         K.resize(freedom * shape->size, freedom * shape->size);
         load.resize(freedom * shape->size, 1);
-        if (!isStatic)
+        if (not isStatic)
         {
             M.resize(freedom * shape->size, freedom * shape->size);
             D.resize(freedom * shape->size, freedom * shape->size);
@@ -70,14 +70,14 @@ protected:
                 b(0, j * freedom + 0) = b(3, j * freedom + 1) = b(5, j * freedom + 2) = dx[j];
                 b(1, j * freedom + 1) = b(3, j * freedom + 0) = b(4, j * freedom + 2) = dy[j];
                 b(2, j * freedom + 2) = b(4, j * freedom + 1) = b(5, j * freedom + 0) = dz[j];
-                if (!isStatic)
+                if (not isStatic)
                     c(0, j * freedom + 0) = c(1, j * freedom + 1) = c(2, j * freedom + 2) = dynamic_cast<T*>(shape)->shape(i, j);
             }
             K += (transpose(b) * d * b) * shape->w[i] * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (dT != 0.0 && alpha != 0.0)
+            if (dT != 0.0 and alpha != 0.0)
                 load += transpose(b) * d * vector<double>{dT * alpha, dT * alpha, dT * alpha, 0, 0, 0} * shape->w[i] * abs(jacobian);
-            if (!isStatic)
+            if (not isStatic)
             {
                 M += (transpose(c) * c) * density * shape->w[i] * density * abs(jacobian);
                 D += (transpose(c) * c) * damping * shape->w[i] * density * abs(jacobian);

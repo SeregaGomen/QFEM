@@ -52,7 +52,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
              count = 1;
     vector<double> result,
                    load(TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom());
-    time_t full_timer;
+    chrono::system_clock::time_point timer = chrono::system_clock::now();
     bool isLoaded = false;
     ostringstream out;
 
@@ -61,7 +61,6 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
 
-    full_timer = clock();
     // Предварительное вычисление компонент нагрузки
     TFEMStatic<T>::calcLoad(load);
 
@@ -121,7 +120,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
                 }
                 else
                 {
-                    if (!isLoaded)
+                    if (not isLoaded)
                     {
                         // Вычисляем поправочный коэффициент для "пропуска" упругой зоны
                         coef *= (loadFactor = 0.95 * (maxSsc / maxSi));
@@ -133,7 +132,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
                         for_each(load.begin(), load.end(), [step](double& i) -> double{ return i *= step; });
                 }
             }
-            if (++iterNo > 0 && isStopLocalIteration)
+            if (++iterNo > 0 and isStopLocalIteration)
             {
                 addCount += 1;
                 isStopLocalIteration = false;
@@ -149,15 +148,14 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
         }
         TFEMStatic<T>::solver.clear();
     }
-    while (!isStopGlobalIteration);
+    while (not isStopGlobalIteration);
 
     TFEM::isProcessStarted = false;
     TFEM::isProcessCalculated = true;
 
-    full_timer = clock() - full_timer;
-    hour = unsigned(full_timer / CLOCKS_PER_SEC) / 3600;
-    min = unsigned((full_timer / CLOCKS_PER_SEC) % 3600) / 60;
-    sec = unsigned(full_timer / CLOCKS_PER_SEC) - hour * 3600 - min * 60;
+    hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
+    min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
+    sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
 
     // Выводим и сохраняем информацию об итерационном процессе
     out << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
@@ -211,7 +209,7 @@ template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
         index = 0;
     else
         for (index = 1; index < ssCurve.size1(); index++)
-            if (feSi > ssCurve[index - 1][0] && feSi <= ssCurve[index][0])
+            if (feSi > ssCurve[index - 1][0] and feSi <= ssCurve[index][0])
                 break;
 
     if (index == ssCurve.size1())

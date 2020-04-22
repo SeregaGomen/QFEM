@@ -88,7 +88,7 @@ public:
     {
         unsigned ret = fe.size2();
 
-        if (feType == FEType::fe2d6 || feType == FEType::fe2d6p || feType == FEType::fe3d6s)
+        if (feType == FEType::fe2d6 or feType == FEType::fe2d6p or feType == FEType::fe3d6s)
             ret = 3;
         else if (feType == FEType::fe3d10)
             ret = 4;
@@ -120,7 +120,7 @@ public:
 
         if (feType == FEType::fe2d6)
             ret = 2;
-        else if (feType == FEType::fe3d10 || feType == FEType::fe2d6p || feType == FEType::fe3d6s)
+        else if (feType == FEType::fe3d10 or feType == FEType::fe2d6p or feType == FEType::fe3d6s)
             ret = 3;
         return ret;
     }
@@ -253,19 +253,19 @@ public:
     }
     bool is2D(void)
     {
-        return (feType == FEType::fe2d3 || feType == FEType::fe2d4 || feType == FEType::fe2d6) ? true : false;
+        return (feType == FEType::fe2d3 or feType == FEType::fe2d4 or feType == FEType::fe2d6) ? true : false;
     }
     bool is3D(void)
     {
-        return (feType == FEType::fe3d4 || feType == FEType::fe3d8 || feType == FEType::fe3d10) ? true : false;
+        return (feType == FEType::fe3d4 or feType == FEType::fe3d8 or feType == FEType::fe3d10) ? true : false;
     }
     bool isPlate(void)
     {
-        return (feType == FEType::fe2d3p || feType == FEType::fe2d4p || feType == FEType::fe2d6p) ? true : false;
+        return (feType == FEType::fe2d3p or feType == FEType::fe2d4p or feType == FEType::fe2d6p) ? true : false;
     }
     bool isShell(void)
     {
-        return (feType == FEType::fe3d3s || feType == FEType::fe3d4s || feType == FEType::fe3d6s) ? true : false;
+        return (feType == FEType::fe3d3s or feType == FEType::fe3d4s or feType == FEType::fe3d6s) ? true : false;
     }
     void normal(unsigned, vector<double>&);
     vector<double> surfaceLoadShare(void);

@@ -58,7 +58,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
              sec;
     vector<double> res,
                    load(mesh->getNumVertex() * mesh->getFreedom());
-    time_t full_timer;
+    chrono::system_clock::time_point timer = chrono::system_clock::now();
     ostringstream out;
 
     isProcessStarted = true;
@@ -68,7 +68,6 @@ template<class T> void TFEMStatic<T>::startProcess(void)
     cout << S_NUM_THREAD << numThread << endl;
 
     // Предварительное вычисление компонент нагрузки
-    full_timer = clock();
     calcConcentratedLoad(load);
     calcSurfaceLoad(load);
     calcPressureLoad(load);
@@ -96,10 +95,9 @@ template<class T> void TFEMStatic<T>::startProcess(void)
     isProcessStarted = false;
     isProcessCalculated = true;
 
-    full_timer = clock() - full_timer;
-    hour = (unsigned(full_timer) / CLOCKS_PER_SEC) / 3600;
-    min = ((unsigned(full_timer) / CLOCKS_PER_SEC) % 3600) / 60;
-    sec = (unsigned(full_timer) / CLOCKS_PER_SEC) - hour * 3600 - min * 60;
+    hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
+    min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
+    sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
 
     // Сохраняем информацию о времени расчета
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
@@ -144,7 +142,7 @@ template<class T> void TFEMStatic<T>::calcLoad(vector<double> &load, double t)
 //-------------------------------------------------------------
 template<class T> void TFEMStatic<T>::saveResult(matrix<double> &res, bool isAdd)
 {
-    if (!isAdd)
+    if (not isAdd)
         results->clear();
     // Cохраняем результаты
     for (unsigned i = 0; i < params.numResult(mesh->getTypeFE()); i++)
@@ -181,7 +179,7 @@ template<class T> bool TFEMStatic<T>::checkBE(unsigned index, TParameter &p)
     for (unsigned i = 0; i < mesh->getBaseSizeBE(); i++)
     {
         mesh->getCoordVertex(mesh->getBE(index, i), coord);
-        if (!params.getPredicateValue(p, coord))
+        if (not params.getPredicateValue(p, coord))
             return false;
     }
     return true;
@@ -196,7 +194,7 @@ template<class T> bool TFEMStatic<T>::checkFE(unsigned index, TParameter &p)
     for (unsigned i = 0; i < mesh->getBaseSizeFE(); i++)
     {
         mesh->getCoordVertex(mesh->getFE(index, i), coord);
-        if (!params.getPredicateValue(p, coord))
+        if (not params.getPredicateValue(p, coord))
             return false;
     }
     return true;
@@ -295,7 +293,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
         {
             msg->addProgress();
             for (auto it: params.plist)
-                if (it.getType() == ParamType::BoundaryCondition && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::BoundaryCondition and (direct = unsigned(it.getDirect())))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -354,17 +352,17 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
         {
             msg->addProgress();
             for (auto it : params.plist)
-                if (it.getType() == ParamType::ConcentratedLoad && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::ConcentratedLoad and (direct = unsigned(it.getDirect())))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
                     mesh->getCoordVertex(i, coord);
                     coord.push_back(t);
 
-                    if (!params.getPredicateValue(it, coord))
+                    if (not params.getPredicateValue(it, coord))
                         continue;
                     val = params.getExpressionValue(it, coord);
-                    if ((direct & DIR_X) == DIR_X || (mesh->isPlate() && (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
+                    if ((direct & DIR_X) == DIR_X or (mesh->isPlate() and (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
                         load[i * mesh->getFreedom() + 0] += val;
                     if ((direct & DIR_Y) == DIR_Y) // Y
                         load[i * mesh->getFreedom() + 1] += val;
@@ -414,12 +412,12 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
         {
             msg->addProgress();
             for (auto it:  params.plist)
-                if (it.getType() == ParamType::SurfaceLoad && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::SurfaceLoad and (direct = unsigned(it.getDirect())))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
                     // Проверка, все ли узлы ГЭ удвлетворяют предикату
-                    if (!checkBE(i, it))
+                    if (not checkBE(i, it))
                         continue;
                     share = mesh->surfaceLoadShare() * mesh->beVolume(i);
                     mesh->getCenterBE(i, coord);
@@ -427,7 +425,7 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
                     val = params.getExpressionValue(it, coord);
                     for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                     {
-                        if ((direct & DIR_X) == DIR_X || (mesh->isPlate() && (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
+                        if ((direct & DIR_X) == DIR_X or (mesh->isPlate() and (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
                         if ((direct & DIR_Y) == DIR_Y) // Y
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k];
@@ -483,7 +481,7 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
                     if (isProcessAborted)
                         throw ABORT_ERR;
                     // Проверка, все ли узлы ГЭ удвлетворяют предикату
-                    if (!checkBE(i, it))
+                    if (not checkBE(i, it))
                         continue;
                     // Вычисление нагрузки
                     share = mesh->surfaceLoadShare() * mesh->beVolume(i);
@@ -495,7 +493,7 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
 
                     for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                     {
-                        if (!mesh->isPlate())
+                        if (not mesh->isPlate())
                         {
                             // X
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k] * v[0];
@@ -555,10 +553,10 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
             if (isProcessAborted)
                 throw ABORT_ERR;
             for (auto it: params.plist)
-                if (it.getType() == ParamType::VolumeLoad && (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::VolumeLoad and (direct = unsigned(it.getDirect())))
                 {
                     // Проверка, все ли узлы КЭ удовлетворяют предикату
-                    if (!checkFE(i, it))
+                    if (not checkFE(i, it))
                         continue;
                     share = mesh->volumeLoadShare() * mesh->feVolume(i);
                     mesh->getCenterFE(i, coord);
@@ -566,7 +564,7 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
                     val = params.getExpressionValue(it, coord);
                     for (unsigned k = 0; k < mesh->getSizeFE(); k++)
                     {
-                        if ((direct & DIR_X) == DIR_X || (mesh->isPlate() && (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
+                        if ((direct & DIR_X) == DIR_X or (mesh->isPlate() and (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 0] += val * share[k];
                         if ((direct & DIR_Y) == DIR_Y) // Y
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 1] += val * share[k];

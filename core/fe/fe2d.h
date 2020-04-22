@@ -31,7 +31,7 @@ protected:
 
         K.resize(freedom * shape->size, freedom * shape->size);
         load.resize(freedom * shape->size, 1);
-        if (!isStatic)
+        if (not isStatic)
         {
             M.resize(freedom * shape->size, freedom * shape->size);
             D.resize(freedom * shape->size, freedom * shape->size);
@@ -63,16 +63,16 @@ protected:
             {
                 b(0, j * freedom + 0) = b(2, j * freedom + 1) = dx[j];
                 b(1, j * freedom + 1) = b(2, j * freedom + 0) = dy[j];
-                if (!isStatic)
+                if (not isStatic)
                     c(0, j * freedom + 0) = c(0, j * freedom + 1) = dynamic_cast<T*>(shape)->shape(i, j);
             }
 
             // Вычисление локальной матрицы жесткости
             K += (transpose(b) * d * b) * shape->w[i] * thickness * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (dT != 0.0 && alpha != 0.0)
+            if (dT != 0.0 and alpha != 0.0)
                 load += transpose(b) * d * vector<double>{dT * alpha, dT * alpha, 0} * shape->w[i] * abs(jacobian);
-            if (!isStatic)
+            if (not isStatic)
             {
                 M += (transpose(c) * c) * density * shape->w[i] * thickness * abs(jacobian);
                 D += (transpose(c) * c) * damping * shape->w[i] * thickness * abs(jacobian);

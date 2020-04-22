@@ -45,15 +45,13 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
              min,
              sec;
     vector<double> result;
-    time_t full_timer;
+    chrono::system_clock::time_point timer = chrono::system_clock::now();
     ostringstream out;
 
     t = TFEMStatic<T>::params.t0 + TFEMStatic<T>::params.th;
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
     TFEMStatic<T>::solver.setMatrix(TFEM::mesh, true);
-
-    full_timer = clock();
 
     // Формирование глобальных матриц жесткости, масс и демпфирования
     TFEMStatic<T>::calcGlobalMatrix(false);
@@ -88,10 +86,9 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
     TFEM::isProcessStarted = false;
     TFEM::isProcessCalculated = true;
 
-    full_timer = clock() - full_timer;
-    hour = (unsigned(full_timer / CLOCKS_PER_SEC)) / 3600;
-    min = (unsigned(full_timer / CLOCKS_PER_SEC)%3600) / 60;
-    sec = (unsigned(full_timer / CLOCKS_PER_SEC)) - hour * 3600 - min * 60;
+    hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
+    min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
+    sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
     // Сохраняем информацию о времени расчета
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
     TFEM::notes->push_back(out.str());

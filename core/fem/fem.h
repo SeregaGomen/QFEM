@@ -130,11 +130,11 @@ protected:
             throw YOUNG_MODULUS_ERR;
         // Загрузка в КЭ коэффициента Пуассона
         fe->setYoungModulus(val);
-        if ((val = params.getPoissonRatio(cx)) == 0.0 && !mesh->is1D())
+        if ((val = params.getPoissonRatio(cx)) == 0.0 and not mesh->is1D())
             throw POISSON_RATIO_ERR;
         fe->setPoissonRatio(val);
         // Загрузка толщины элемента
-        if (!mesh->is3D())
+        if (not mesh->is3D())
         {
             if ((val = params.getThickness(cx)) == 0.0)
                 throw THICKNESS_ERR;

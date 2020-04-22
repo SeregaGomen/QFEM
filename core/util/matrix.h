@@ -147,7 +147,7 @@ public:
     void operator += (const matrix& r)
     {
 #ifdef DEBUG
-        if (rows != r.rows && cols != r.cols)
+        if (rows != r.rows and cols != r.cols)
             cerr << "void operator += (const matrix& r) " << rows << ' ' << r.rows << ' ' << cols << ' ' << r.cols << endl;
 #endif
         buffer += r.buffer;
@@ -245,7 +245,7 @@ template <typename T> matrix<T> operator + (const matrix<T>& left, const matrix<
     matrix<T> res = left;
 
 #ifdef DEBUG
-        if (left.size1() != right.size1() && left.size2() != right.size2())
+        if (left.size1() != right.size1() and left.size2() != right.size2())
             cerr << "template <typename T> matrix<T> operator + (const matrix<T>& left, const matrix<T>& right " << left.size1() << ' ' << left.size2() << right.size1() << ' ' << right.size2() << endl;
 #endif
     for (unsigned row = 0; row < left.size1(); row++)
@@ -280,7 +280,7 @@ template <typename T> matrix<T> operator * (const matrix<T>& left, const vector<
             for (unsigned inner = 0; inner < left.size2(); inner++)
                 res[row][0] += left[row][inner] * right[inner];
     }
-    else if (left.size2() == 1 && left.size1() == right.size())
+    else if (left.size2() == 1 and left.size1() == right.size())
     {
         res.resize(left.size1(), left.size1());
         for (unsigned row = 0; row < left.size1(); row++)
