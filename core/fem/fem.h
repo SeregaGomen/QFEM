@@ -94,6 +94,8 @@ public:
 //-------------------------------------------------------------
 class TFEM
 {
+private:
+    chrono::system_clock::time_point timer;
 protected:
     // Количество потоков, используемых для расчетов
     int numThread;
@@ -113,6 +115,18 @@ protected:
     bool isProcessAborted;
     // Признак того, что процесс расчета успешно завершен
     bool isProcessCalculated;
+    // Фиксация времени начала расчета
+    void begin(void)
+    {
+        timer = chrono::system_clock::now();
+    }
+    // Получение времени окончания расчета
+    void end(unsigned& hour, unsigned& min, unsigned& sec)
+    {
+        hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
+        min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
+        sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
+    }
     // Настройка КЭ
     virtual void setupFE(TFE *fe, unsigned i)
     {

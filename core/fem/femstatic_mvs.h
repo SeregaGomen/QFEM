@@ -52,7 +52,6 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
              count = 1;
     vector<double> result,
                    load(TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom());
-    chrono::system_clock::time_point timer = chrono::system_clock::now();
     bool isLoaded = false;
     ostringstream out;
 
@@ -61,6 +60,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
 
+    TFEM::begin();
     // Предварительное вычисление компонент нагрузки
     TFEMStatic<T>::calcLoad(load);
 
@@ -153,10 +153,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     TFEM::isProcessStarted = false;
     TFEM::isProcessCalculated = true;
 
-    hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
-    min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
-    sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
-
+    TFEM::end(hour, min, sec);
     // Выводим и сохраняем информацию об итерационном процессе
     out << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
     TFEM::notes->push_back(out.str());

@@ -58,7 +58,6 @@ template<class T> void TFEMStatic<T>::startProcess(void)
              sec;
     vector<double> res,
                    load(mesh->getNumVertex() * mesh->getFreedom());
-    chrono::system_clock::time_point timer = chrono::system_clock::now();
     ostringstream out;
 
     isProcessStarted = true;
@@ -67,6 +66,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
 
     cout << S_NUM_THREAD << numThread << endl;
 
+    TFEM::begin();
     // Предварительное вычисление компонент нагрузки
     calcConcentratedLoad(load);
     calcSurfaceLoad(load);
@@ -95,10 +95,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
     isProcessStarted = false;
     isProcessCalculated = true;
 
-    hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
-    min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
-    sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
-
+    TFEM::end(hour, min, sec);
     // Сохраняем информацию о времени расчета
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
     TFEM::notes->push_back(out.str());
