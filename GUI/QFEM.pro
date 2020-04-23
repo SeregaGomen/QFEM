@@ -13,6 +13,7 @@ TEMPLATE = app
 INCLUDEPATH += ../core \
                ../../../eigen
 
+msvc:QMAKE_CXXFLAGS += /permissive-
 
 #msvc:QMAKE_CXXFLAGS+= /openmp
 #gcc:QMAKE_CXXFLAGS+= -fopenmp

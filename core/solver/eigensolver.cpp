@@ -22,14 +22,14 @@ bool TEigenSolver::solve(vector<double>& r, double, bool&)
     msg->setProcess(SYSTEM_PREPARE_PROCESS);
     solver.compute(stiffnessMatrix);
     msg->stop();
-    if (solver.info() != Success)
+    if (solver.info() not_eq Success)
         throw EQUATION_NOT_SOLVED_ERR;
 
     msg->setProcess(SYSTEM_SOLUTION_PROCESS);
     x = solver.solve(load);
     msg->stop();
 
-    if(solver.info() != Success)
+    if(solver.info() not_eq Success)
         throw EQUATION_NOT_SOLVED_ERR;
 
     r.resize(unsigned(stiffnessMatrix.rows()));
@@ -69,7 +69,7 @@ void TEigenSolver::setBoundaryCondition(unsigned index, double value)
 {
     for (Eigen::SparseMatrix<double>::InnerIterator i(stiffnessMatrix, index); i; ++i)
     {
-        if (i.row() != i.col())
+        if (i.row() not_eq i.col())
         {
             stiffnessMatrix.coeffRef(i.row(), i.col()) = value;
             stiffnessMatrix.coeffRef(i.col(), i.row()) = value;
@@ -148,7 +148,7 @@ bool TEigenSolver::loadMatrix(string fname, SparseMatrix<double>& globalMatrix)
     globalMatrix.setZero();
     globalMatrix.reserve(memMap);
     in.read(reinterpret_cast<char*>(&signature), sizeof(int));
-    if (signature != 12031971)
+    if (signature not_eq 12031971)
     {
         in.close();
         return false;

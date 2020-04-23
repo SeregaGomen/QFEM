@@ -395,7 +395,7 @@ void TDelegateHTML::paint(QPainter* painter, const QStyleOptionViewItem& option,
                         "<font size=5>w<sub>tt</sub></font>"
                      };
 
-     if (index.column() == 1 and index.flags() != Qt::ItemIsEditable)
+     if (index.column() == 1 and index.flags() not_eq Qt::ItemIsEditable)
      {
          painter->fillRect(option.rect, QColor(213,213,213));
      }
@@ -572,7 +572,7 @@ void TProblemSetupForm::setup(void)
     setInitialParam();
 
     // Инициализация погрешности
-    if (femObject->getParams().eps != 0.0)
+    if (femObject->getParams().eps not_eq 0.0)
         ui->textEps->setText(QString("%1").arg(femObject->getParams().eps));
 
     // Инициализация толщины элемента
@@ -630,7 +630,7 @@ void TProblemSetupForm::setTableValue(ParamType type, QTableWidget* tw, bool isD
     QTableWidgetItem* newItem;
 
     removeAllRows(tw);
-    for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
+    for (auto it = femObject->getParams().plist.begin(); it not_eq femObject->getParams().plist.end(); it++)
         if (it->getType() == type)
         {
             tw->insertRow(count);
@@ -729,9 +729,9 @@ void TProblemSetupForm::setInitialParam(void)
 {
     int direct;
 
-    for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
+    for (auto it = femObject->getParams().plist.begin(); it not_eq femObject->getParams().plist.end(); it++)
     {
-        if (it->getType() != ParamType::InitialCondition)
+        if (it->getType() not_eq ParamType::InitialCondition)
             continue;
 
         direct = it->getDirect();
@@ -794,7 +794,7 @@ void TProblemSetupForm::setVariables(void)
 {
     int i = 0;
 
-    for (auto it = femObject->getParams().variables.begin(); it != femObject->getParams().variables.end(); ++it)
+    for (auto it = femObject->getParams().variables.begin(); it not_eq femObject->getParams().variables.end(); ++it)
     {
         ui->twVariables->insertRow(i);
         ui->twVariables->setItem(i, 0, new QTableWidgetItem(QString("%1").arg(it->first.c_str())));
@@ -968,7 +968,7 @@ void TProblemSetupForm::setBoundaryConditionValue(void)
     if (femObject->getMesh().getFreedom() < 3)
         ui->twBC->setColumnHidden(4, true);
 
-    for (auto it = femObject->getParams().plist.begin(); it != femObject->getParams().plist.end(); it++)
+    for (auto it = femObject->getParams().plist.begin(); it not_eq femObject->getParams().plist.end(); it++)
         if (it->getType() == ParamType::BoundaryCondition)
         {
             direct = it->getDirect();
@@ -1008,16 +1008,16 @@ bool TProblemSetupForm::decodeStressStarinCurve(string str, matrix<double>& ssc)
 
     str.erase(remove(str.begin(), str.end(), ' '), str.end());
     ss >> ch[0];
-    if (ch[0] != '{')
+    if (ch[0] not_eq '{')
         return false;
     while (ss.good())
     {
         ss >> ch[0] >> val[0] >> ch[1] >> val[1] >> ch[2] >> ch[3];
         if (ss.bad())
             return false;
-        if (ch[0] != '{' or ch[1] != ',' or ch[2] != '}')
+        if (ch[0] not_eq '{' or ch[1] not_eq ',' or ch[2] not_eq '}')
             return false;
-        if (ch[3] != ',' and ch[3] != '}')
+        if (ch[3] not_eq ',' and ch[3] not_eq '}')
             return false;
         v.push_back(val[0]);
         v.push_back(val[1]);
@@ -1187,7 +1187,7 @@ bool TProblemSetupForm::checkPlasticity(void)
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set stress-strain curve in a row: %1!").arg(i + 1));
             return false;
         }
-        if (ui->twStressStrainCurve->item(i, 1)->text().length() and checkExpression(ui->twStressStrainCurve->item(i, 1)->text()) != 0)
+        if (ui->twStressStrainCurve->item(i, 1)->text().length() and checkExpression(ui->twStressStrainCurve->item(i, 1)->text()) not_eq 0)
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly set predicate in a row: %1!").arg(i + 1));
             return false;
@@ -1229,16 +1229,16 @@ bool TProblemSetupForm::checkTable(QTableWidget* tw, int tab_no)
 {
     for (int i = 0; i < tw->rowCount(); i++)
     {
-        if (not tw->item(i, 0)->text().length() or checkExpression(tw->item(i, 0)->text()) != 0)
+        if (not tw->item(i, 0)->text().length() or checkExpression(tw->item(i, 0)->text()) not_eq 0)
         {
-            if (tab_no != -1)
+            if (tab_no not_eq -1)
                 ui->tabWidgetLoads->setCurrentIndex(tab_no);
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified expression in a row: %1!").arg(i + 1));
             return false;
         }
-        if (tw->item(i, 1)->text().length() and checkExpression(tw->item(i, 1)->text()) != 0)
+        if (tw->item(i, 1)->text().length() and checkExpression(tw->item(i, 1)->text()) not_eq 0)
         {
-            if (tab_no != -1)
+            if (tab_no not_eq -1)
                 ui->tabWidgetLoads->setCurrentIndex(tab_no);
             QMessageBox::critical(this, tr("Error"), tr("Predicate is not set correctly in the string: %1!").arg(i + 1));
             return false;
@@ -1736,11 +1736,11 @@ void TProblemSetupForm::slotCancelButton(void)
 //        {
 //            expression = tw->item(j, 0)->text();
 //            predicate = tw->item(j, 1)->text();
-//            if (predicate.length() and (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) != 0)
+//            if (predicate.length() and (error = getExpression(predicate, value, coord[0], coord[1], coord[2])) not_eq 0)
 //                continue;
 //            if (value == 0)
 //                continue;
-//            if ((error = getExpression(expression, value, coord[0], coord[1], coord[2])) != 0)
+//            if ((error = getExpression(expression, value, coord[0], coord[1], coord[2])) not_eq 0)
 //                continue;
 //            if (value == 0)
 //                continue;

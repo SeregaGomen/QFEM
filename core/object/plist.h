@@ -499,7 +499,7 @@ public:
     {
         unsigned counter = 0;
 
-        for (auto it = begin(); it != end(); it++)
+        for (auto it = begin(); it not_eq end(); it++)
             if (it->getType() == type)
                 counter++;
         return counter;

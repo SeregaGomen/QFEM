@@ -70,7 +70,7 @@ protected:
             // Вычисление локальной матрицы жесткости
             K += (transpose(b) * d * b) * shape->w[i] * thickness * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (dT != 0.0 and alpha != 0.0)
+            if (dT not_eq 0.0 and alpha not_eq 0.0)
                 load += transpose(b) * d * vector<double>{dT * alpha, dT * alpha, 0} * shape->w[i] * abs(jacobian);
             if (not isStatic)
             {

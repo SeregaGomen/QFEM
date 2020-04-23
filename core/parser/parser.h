@@ -9,7 +9,7 @@
 using namespace std;
 
 /************************************************************************************************/
-enum class TokenType { Undefined, Delimiter, Numeric, Function, Variable, String, Finished };
+enum class Token { Undefined, Delimiter, Numeric, Function, Variable, String, Finished };
 /************************************************************************************************/
 struct idToken
 {
@@ -24,7 +24,7 @@ private:
     map<string,double> variables; // Таблица переменных
     string token;
     char* expression = nullptr;
-    TokenType token_type = TokenType::Undefined;
+    Token token_type = Token::Undefined;
     ErrorCode error_code = NO_ERR;
     Operation tok = Operation::Undefined;
     vector<idToken> functionList{
@@ -62,8 +62,8 @@ private:
                                     { "<>", Operation::Ne }
                                 };
 protected:
-    TokenType get_token(void);
-    int is_delim(char);
+    Token get_token(void);
+    bool is_delim(char);
     bool is_name(string);
     bool is_find(vector<idToken>&, string, Operation&);
     [[noreturn ]] void error(ErrorCode);

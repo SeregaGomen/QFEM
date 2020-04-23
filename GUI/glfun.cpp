@@ -260,7 +260,7 @@ void TGLFunction::showLegend(void)
           v = start,
           cy = rc.top() + 20;
 
-    if (not (mesh and mesh->getTypeFE() != FEType::undefined) or rc.height() < 9 * fontH)
+    if (not (mesh and mesh->getTypeFE() not_eq FEType::undefined) or rc.height() < 9 * fontH)
         return;
 
     for (int k = colorTable.size() - 1; k >= 0; k -= h)

@@ -307,7 +307,7 @@ bool TMesh::readTRP(string fname)
     // Cчитываем сигнатуру
     in.read(signature, 6*sizeof(char));
     signature[6] = 0;
-    if (string(signature) != "NTRout")
+    if (string(signature) not_eq "NTRout")
     {
         in.close();
         cerr << sayError(FORMAT_FILE_ERR) << endl;
@@ -438,7 +438,7 @@ bool TMesh::readTRPA(string fname)
     }
     if (isPlate() or isShell())
         be = fe;
-    else // if (feDim != 1)
+    else // if (feDim not_eq 1)
     {
         be.resize(temp, surfaceSize);
         for (unsigned i = 0; i < temp; i++)
@@ -805,9 +805,9 @@ bool TMesh::readMESH(string fname)
                 v1 = UINT_MAX;
             if (fe(v3, 0) == v2 or fe(v3, 1) == v2)
                 v2 = UINT_MAX;
-            if (v1 != UINT_MAX)
+            if (v1 not_eq UINT_MAX)
                 fe(v3, 2) = v1;
-            if (v2 != UINT_MAX)
+            if (v2 not_eq UINT_MAX)
                 fe(v3, 2) = v2;
         }
     }
@@ -832,9 +832,9 @@ bool TMesh::readMESH(string fname)
                 v1 = UINT_MAX;
             if (fe(v3, 0) == v2 or fe(v3, 1) == v2)
                 v2 = UINT_MAX;
-            if (v1 != UINT_MAX)
+            if (v1 not_eq UINT_MAX)
                 fe(v3, 2) = v1;
-            if (v2 != UINT_MAX)
+            if (v2 not_eq UINT_MAX)
                 fe(v3, 2) = v2;
         }
     }
@@ -1118,7 +1118,7 @@ void TMesh::createMeshMap(void)
     for (unsigned i = 0; i < fe.size1(); msg->addProgress(), i++)
         for (unsigned j = 0; j < fe.size2(); j++)
             for (unsigned k = 0; k < fe.size2(); k++)
-                if (k != j)
+                if (k not_eq j)
                     if (find(meshMap[fe(i, j)].begin(), meshMap[fe(i, j)].end(), fe(i, k)) == meshMap[fe(i, j)].end())
                         meshMap[fe(i, j)].push_back(fe(i, k));
 

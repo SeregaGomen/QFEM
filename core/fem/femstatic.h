@@ -121,7 +121,7 @@ template<class T> void TFEMStatic<T>::ansambleLocalMatrix(TFE *fe, unsigned i)
         for (unsigned k = l; k < size; k++)
         {
             solver.addStiffness(fe->getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            if (l != k)
+            if (l not_eq k)
                 solver.addStiffness(fe->getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
         }
         solver.addLoad(fe->getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);

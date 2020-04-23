@@ -110,7 +110,7 @@ template<class T> void TFEMDynamic<T>::ansambleLocalMatrix(TFE* fe, unsigned i)
             TFEMStatic<T>::solver.addMatrixStiffnessElement(fe->getStiffnessMatrix(l, k), TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
             TFEMStatic<T>::solver.addMatrixMassElement(fe->getMassMatrix(l, k), TFEM::mesh->getFE(i, l / freedom)*freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
             TFEMStatic<T>::solver.addMatrixDampingElement(fe->getDampingMatrix(l, k), TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            if (l != k)
+            if (l not_eq k)
             {
                 TFEMStatic<T>::solver.addMatrixStiffnessElement(fe->getStiffnessMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
                 TFEMStatic<T>::solver.addMatrixMassElement(fe->getMassMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
@@ -265,7 +265,7 @@ template<class T> void TFEMDynamic<T>::createDynamicMatrix(double th, double the
         for (unsigned j = 0; j < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); j++)
         {
             val = k1 * TFEMStatic<T>::solver.getDamping(i, j) + k2 * TFEMStatic<T>::solver.getMass(i, j);
-            if (val != 0.0)
+            if (val not_eq 0.0)
                 TFEMStatic<T>::solver.addStiffness(val, i, j);
         }
 }

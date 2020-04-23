@@ -131,7 +131,7 @@ bool TFEMObject::loadResult(string fname)
     msg->setProcess(READ_RESULT_PROCESS);
     // Считывание заголовка
     getline(in, str);
-    if (str != "Core QFEM results file")
+    if (str not_eq "Core QFEM results file")
     {
         msg->stop();
         in.close();
@@ -239,7 +239,7 @@ void TFEMObject::printResult(string fname)
         for (unsigned i = index; i < index + size; i++)
         {
             name = results[i].getName();
-            if (name.find("(") != string::npos)
+            if (name.find("(") not_eq string::npos)
                 name = name.substr(0, name.find("("));
             out << setw(int(lenStr)) << name.substr(name.find(">") + 1) << " | ";
         }
@@ -310,7 +310,7 @@ void TFEMObject::printResult(string fname)
         for (unsigned i = index; i < index + size; i++)
         {
             name = results[i].getName();
-            if (name.find("(") != string::npos)
+            if (name.find("(") not_eq string::npos)
                 name = name.substr(0, name.find("("));
             out << setw(int(lenStr)) << name.substr(name.find(">") + 1) << " | ";
         }

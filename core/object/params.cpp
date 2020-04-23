@@ -243,7 +243,7 @@ bool TFEMParams::write(ofstream& out)
 
     // Вспомогательные параметры
     out << variables.size() << endl;
-    for (map<string, double>::iterator it = variables.begin(); it != variables.end(); ++it)
+    for (map<string, double>::iterator it = variables.begin(); it not_eq variables.end(); ++it)
         out << it->first.c_str() << ' ' << it->second << endl;
     return not out.fail();
 }

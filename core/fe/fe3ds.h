@@ -97,7 +97,7 @@ protected:
                        (transpose(bp) * TFE2D<T>::elastic_matrix() * bp) * (pow(TFE::thickness, 3) / 12.0) +
                        (transpose(bc) * TFE2DP<T>::extra_elastic_matrix() * bc) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (TFE::dT != 0.0 and TFE::alpha != 0.0)
+            if (TFE::dT not_eq 0.0 and TFE::alpha not_eq 0.0)
                 TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 1.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
             if (not isStatic)
             {

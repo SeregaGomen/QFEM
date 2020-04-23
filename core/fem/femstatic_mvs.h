@@ -219,7 +219,7 @@ template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
         isStopGlobalIteration = true;
     }
 
-    if (index != index0[i])
+    if (index not_eq index0[i])
         newE = fabsl((ssCurve[index][0] - ssCurve[index0[i]][0]) / (ssCurve[index][1] - ssCurve[index0[i]][1]));
     else
         newE = (e0[i] == 0.0) ? fe->getYoungModulus() : e0[i];
@@ -228,7 +228,7 @@ template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
     fe->setPoissonRatio(TFEM::params.getPoissonRatio(cx));
 
     // Проверка на изменение модуля упругости по сравнению с предыдущей итерацией
-    if (index != index0[i])
+    if (index not_eq index0[i])
         isStopLocalIteration = false;
 
     // Запоминаем рассчитанное значение модуля упругости и индекс

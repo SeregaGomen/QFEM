@@ -72,7 +72,7 @@ protected:
             TFE::K += ((transpose(bm) * TFE2D<T>::elastic_matrix() * bm) * (pow(TFE::thickness, 3) / 12.0) +
                        (transpose(bp) * extra_elastic_matrix() * bp) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (TFE::dT != 0.0 and TFE::alpha != 0.0)
+            if (TFE::dT not_eq 0.0 and TFE::alpha not_eq 0.0)
                 for (unsigned j = 0; j < TFE::getSize(); j++)
                     TFE::load[j * TFE::freedom][0] += TFE::e * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
                 // TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 0.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);

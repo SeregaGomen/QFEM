@@ -111,9 +111,9 @@ void TSetupImageDialog::setup(ImageType type)
     }
 
 
-    ui->gbFunc->setEnabled(type != ImageType::mesh);
+    ui->gbFunc->setEnabled(type not_eq ImageType::mesh);
     ui->gbKoff->setEnabled(type == ImageType::func);
-    ui->chbValueScale->setEnabled(type != ImageType::mesh);
+    ui->chbValueScale->setEnabled(type not_eq ImageType::mesh);
     ui->chbNormal->setEnabled(type == ImageType::mesh);
 
     // Цвет фона
