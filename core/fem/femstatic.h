@@ -46,7 +46,7 @@ public:
         TFEM::params.fType = FEMType::StaticProblem;
     }
     virtual ~TFEMStatic(void) {}
-    void startProcess(void);
+    virtual void startProcess(void) override;
 };
 //----------------------------------------------------------
 //                     Запуск расчета

@@ -15,26 +15,26 @@ template <class T> class TFEMDynamic : public TFEMStatic<T>
 {
 private:
     double t; // Текущий момент времени
-    matrix<double> u0;  // Начальные условия и результаты U,V,W,Ut,... по итерациям
+    matrix<double> u0;  // Начальные условия и результаты U, V, W, Ut,... по итерациям
     void createDynamicMatrix(double, double);
     void createDynamicVector(matrix<double>&, double, double);
 protected:
     void ansambleLocalMatrix(TFE*, unsigned);
     void getInitialCondition(void);
-    void setBoundaryConstant(unsigned,unsigned,double);
-    void setLoadConstant(unsigned,unsigned,double);
+    void setBoundaryConstant(unsigned, unsigned, double);
+    void setLoadConstant(unsigned, unsigned, double);
     void calcDynamicResult(matrix<double>&);
     void createDynamicVector(void);
-    void genResults(vector<double>&,bool isAdd = false);
-    virtual void saveResult(matrix<double>&,bool);
+    void genResults(vector<double>&, bool = false);
+    void saveResult(matrix<double>&, bool);
 public:
-    TFEMDynamic(string n,TMesh* m,TResultList* r,list<string>* l) : TFEMStatic<T>(n,m,r,l)
+    TFEMDynamic(string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
     {
         t = 0;
         TFEM::params.fType = FEMType::DynamicProblem;
     }
     virtual ~TFEMDynamic(void) {}
-    void startProcess(void);
+    virtual void startProcess(void) override;
 };
 //----------------------------------------------------------
 //                     Запуск расчета
@@ -71,7 +71,7 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
         createDynamicVector();
         // Учет граничных условий
         TFEMStatic<T>::calcBoundaryCondition();
-        if (TFEMStatic<T>::solver.solve(result,TFEM::params.eps,TFEM::isProcessAborted))
+        if (TFEMStatic<T>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
             genResults(result); // Вычисление результатов
         if (TFEM::isProcessAborted)
             throw ABORT_ERR;
@@ -159,24 +159,24 @@ template<class T> void TFEMDynamic<T>::getInitialCondition(void)
 //-------------------------------------------------------------
 //                  Формирование результатов
 //-------------------------------------------------------------
-template<class T> void TFEMDynamic<T>::genResults(vector<double>& result,bool isAdd)
+template<class T> void TFEMDynamic<T>::genResults(vector<double>& result, bool isAdd)
 {
     matrix<double> newResult;
 
     // Вычисляем стандартные результаты по всем КЭ
-    TFEMStatic<T>::calcResult(newResult,result);
+    TFEMStatic<T>::calcResult(newResult, result);
 
     // Вычисляем скорости и ускорения
     calcDynamicResult(newResult);
 
     // Сохраняем их
-    saveResult(newResult,isAdd);
+    saveResult(newResult, isAdd);
 
     // Запоминаем дату и время расчета
     TFEM::results->setCurrentSolutionTime();
 }
 //---------------------------------------------------------
-template<class T> void TFEMDynamic<T>::saveResult(matrix<double>& newResult,bool)
+template<class T> void TFEMDynamic<T>::saveResult(matrix<double>& newResult, bool)
 {
     stringstream s;
 
@@ -184,7 +184,7 @@ template<class T> void TFEMDynamic<T>::saveResult(matrix<double>& newResult,bool
     for (unsigned i = 0; i < TFEM::params.numResult(TFEM::mesh->getTypeFE()); i++)
     {
         s << t;
-        TFEM::results->setResult(newResult[i],newResult.size2(),TFEM::params.getName(i, TFEM::mesh->getTypeFE()) + '(' + s.str() + ')',t);
+        TFEM::results->setResult(newResult[i], newResult.size2(), TFEM::params.getName(i, TFEM::mesh->getTypeFE()) + '(' + s.str() + ')', t);
         s.str("");
         s.clear();
     }
@@ -198,18 +198,18 @@ template<class T> void TFEMDynamic<T>::calcDynamicResult(matrix<double>& results
            utt;
 
     // Вычисляем скорости и ускорения (методом конечных разностей)
-    for (unsigned i = 0; i < TFEM::mesh->getFreedom(); i++)
+    for (unsigned i = 0; i < TFEM::mesh->getDimension(); i++)
         for (unsigned j = 0; j < TFEM::mesh->getNumVertex(); j++)
         {
             ut = (results[i][j] - u0[i][j]) / TFEM::params.th;
-            utt = (ut - u0[TFEM::mesh->getFreedom() + i][j])/TFEM::params.th;
+            utt = (ut - u0[TFEM::mesh->getDimension() + i][j])/TFEM::params.th;
 
-            results[results.size1() - 2 * TFEM::mesh->getFreedom() + i][j] = ut;
-            results[results.size1() - TFEM::mesh->getFreedom() + i][j] = utt;
+            results[results.size1() - 2 * TFEM::mesh->getDimension() + i][j] = ut;
+            results[results.size1() - TFEM::mesh->getDimension() + i][j] = utt;
             // Запоминаем результаты текущей итерации
             u0[i][j] = results[i][j];
-            u0[TFEM::mesh->getFreedom() + i][j] = results[results.size1() - 2 * TFEM::mesh->getFreedom() + i][j];
-            u0[2*TFEM::mesh->getFreedom() + i][j] = results[results.size1() - TFEM::mesh->getFreedom() + i][j];
+            u0[TFEM::mesh->getDimension() + i][j] = results[results.size1() - 2 * TFEM::mesh->getDimension() + i][j];
+            u0[2 * TFEM::mesh->getDimension() + i][j] = results[results.size1() - TFEM::mesh->getDimension() + i][j];
         }
 }
 //-----------------------------------------------------------------------------
@@ -219,6 +219,7 @@ template<class T> void TFEMDynamic<T>::createDynamicVector(void)
 {
     unsigned nvtx = TFEM::mesh->getNumVertex(),
              freedom = TFEM::mesh->getFreedom(),
+             dim = TFEM::mesh->getDimension(),
              size = nvtx * freedom;
     double k1 = 3.0 / (TFEM::params.theta * TFEM::params.th),
            k2 = 6.0 / (TFEM::params.theta * TFEM::params.theta * TFEM::params.th * TFEM::params.th),
@@ -236,8 +237,8 @@ template<class T> void TFEMDynamic<T>::createDynamicVector(void)
     for (unsigned i = 0; i < nvtx; i++)
         for (unsigned j = 0; j < freedom; j++)
         {
-            u1[i * freedom + j] = (k1 * u0[j][i] + 2.0 * k2 * u0[u0.size1() - 2 * freedom + j][i] + 2.0 * u0[u0.size1() - freedom + j][i]) / k2;
-            u2[i * freedom + j] = (k2 * u0[j][i] + 2.0 * u0[u0.size1() - 2 * freedom + j][i] + k3 * u0[u0.size1() - freedom + j][i]) / k1;
+            u1[i * freedom + j] = (k1 * u0[j][i] + 2.0 * k2 * u0[u0.size1() - 2 * dim + j][i] + 2.0 * u0[u0.size1() - dim + j][i]) / k2;
+            u2[i * freedom + j] = (k2 * u0[j][i] + 2.0 * u0[u0.size1() - 2 * dim + j][i] + k3 * u0[u0.size1() - dim + j][i]) / k1;
         }
     TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getMassMatrix(), u1, r1);
     TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getDampingMatrix(), u2, r2);

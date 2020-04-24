@@ -15,14 +15,14 @@ extern TMessenger* msg;
 template <class T> class TFEMStaticMVS : public TFEMStatic<T>
 {
 private:
-    int iterNo;                             // Номер итерации (0 - признак того, что расчет линейный)
-    double loadStep;                        // Шаг по нагрузке
-    bool isStopGlobalIteration;             // Признак того, что расчет окончен (достигнут предел текучести)
-    bool isStopLocalIteration;              // Признак того, что итерационный процесс для заданной нагрузки окончен
-    vector<double> si;                      // Интенсивность напряжений (по узлам)
-    vector<double> e0;                      // Модули упругости (для каждого КЭ), полученные на предыдущей итерации
-    vector<unsigned> index0;                // Индекс упругих свойств, полученный на предыдущей итерации
-    virtual void setupFE(TFE*, unsigned);   // Настройка парметров КЭ (для нелинейного случая)
+    int iterNo;                                     // Номер итерации (0 - признак того, что расчет линейный)
+    double loadStep;                                // Шаг по нагрузке
+    bool isStopGlobalIteration;                     // Признак того, что расчет окончен (достигнут предел текучести)
+    bool isStopLocalIteration;                      // Признак того, что итерационный процесс для заданной нагрузки окончен
+    vector<double> si;                              // Интенсивность напряжений (по узлам)
+    vector<double> e0;                              // Модули упругости (для каждого КЭ), полученные на предыдущей итерации
+    vector<unsigned> index0;                        // Индекс упругих свойств, полученный на предыдущей итерации
+    virtual void setupFE(TFE*, unsigned) override;  // Настройка парметров КЭ (для нелинейного случая)
     void calcIteration(void);
 public:
     TFEMStaticMVS(double& step, string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
@@ -32,7 +32,7 @@ public:
         isStopGlobalIteration = isStopLocalIteration = false;
     }
     virtual ~TFEMStaticMVS(void) {}
-    void startProcess(void);
+    virtual void startProcess(void) override;
 };
 //----------------------------------------------------------------------------
 //                                Запуск расчета

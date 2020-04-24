@@ -40,15 +40,7 @@ public:
         name = fname;
         time = t;
     }
-   ~TResult(void)
-    {
-        clear();
-    }
-    void clear(void)
-    {
-        results.clear();
-        name.clear();
-    }
+    ~TResult(void) {}
     bool write(ofstream& out)
     {
         unsigned len = unsigned(results.size());

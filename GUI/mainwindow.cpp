@@ -865,15 +865,18 @@ void TMainWindow::showProtocol(QString fileName)
         {
             isFind = true;
             qobject_cast<QTextEdit*>(tabWidget->widget(i))->setText(webOut);
+            tabWidget->setCurrentIndex(i);
+            break;
         }
     if (not isFind)
     {
         QTextEdit* ed = new QTextEdit(webOut);
 
         ed->setReadOnly(true);
-        tabWidget->addTab(ed,tr("Results"));
-//        qobject_cast<QTextEdit*>(tabWidget->widget(tabWidget->count() - 1))->setText(webOut);
+        tabWidget->addTab(ed, tr("Results"));
+        tabWidget->setCurrentIndex(tabWidget->count() - 1);
     }
+
     // Сохраняем протокол расчета задачи
     if (isAutoSaveProtocol)
     {
