@@ -330,119 +330,119 @@ public:
         params.plist.addPoissonRatio(e, nullptr);
     }
     // Граничные условия
-    void addBoundaryCondition(int dir, double v, string p)
+    void addBoundaryCondition(Direction dir, double v, string p)
     {
         params.plist.addBoundaryCondition(v, p, dir);
     }
-    void addBoundaryCondition(int dir, string e, string p)
+    void addBoundaryCondition(Direction dir, string e, string p)
     {
         params.plist.addBoundaryCondition(e, p, dir);
     }
-    void addBoundaryCondition(int dir, double v, function<double (double, double, double, double)> p)
+    void addBoundaryCondition(Direction dir, double v, function<double (double, double, double, double)> p)
     {
         params.plist.addBoundaryCondition(v, p, dir);
     }
-    void addBoundaryCondition(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    void addBoundaryCondition(Direction dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
         params.plist.addBoundaryCondition(e, p, dir);
     }
     // Начальные условия
-    void addInitialCondition(int dir, double v)
+    void addInitialCondition(InitialCondition ic, double v)
     {
-        params.plist.addInitialCondition(v, dir);
+        params.plist.addInitialCondition(v, ic);
     }
-    void addInitialCondition(int dir, string e)
+    void addInitialCondition(InitialCondition ic, string e)
     {
-        params.plist.addInitialCondition(e, dir);
+        params.plist.addInitialCondition(e, ic);
     }
-    void addInitialCondition(int dir, function<double (double, double, double, double)> e)
+    void addInitialCondition(InitialCondition ic, function<double (double, double, double, double)> e)
     {
-        params.plist.addInitialCondition(e, dir);
+        params.plist.addInitialCondition(e, ic);
     }
     // Сосредоточенная нагрузка
-    void addConcentratedLoad(int dir, double v, string p)
+    void addConcentratedLoad(Direction dir, double v, string p)
     {
         params.plist.addConcentratedLoad(v, p, dir);
     }
-    void addConcentratedLoad(int dir, double v)
+    void addConcentratedLoad(Direction dir, double v)
     {
         params.plist.addConcentratedLoad(v, "", dir);
     }
-    void addConcentratedLoad(int dir, string e, string p)
+    void addConcentratedLoad(Direction dir, string e, string p)
     {
         params.plist.addConcentratedLoad(e, p, dir);
     }
-    void addConcentratedLoad(int dir, string e)
+    void addConcentratedLoad(Direction dir, string e)
     {
         params.plist.addConcentratedLoad(e, "", dir);
     }
-    void addConcentratedLoad(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    void addConcentratedLoad(Direction dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
         params.plist.addConcentratedLoad(e, p, dir);
     }
-    void addConcentratedLoad(int dir, double v, function<double (double, double, double, double)> p)
+    void addConcentratedLoad(Direction dir, double v, function<double (double, double, double, double)> p)
     {
         params.plist.addConcentratedLoad(v, p, dir);
     }
-    void addConcentratedLoad(int dir, function<double (double, double, double, double)> e)
+    void addConcentratedLoad(Direction dir, function<double (double, double, double, double)> e)
     {
         params.plist.addConcentratedLoad(e, nullptr, dir);
     }
     // Объемная нагрузка
-    void addVolumeLoad(int dir, double v, string p)
+    void addVolumeLoad(Direction dir, double v, string p)
     {
         params.plist.addVolumeLoad(v, p, dir);
     }
-    void addVolumeLoad(int dir, double v)
+    void addVolumeLoad(Direction dir, double v)
     {
         params.plist.addVolumeLoad(v, "", dir);
     }
-    void addVolumeLoad(int dir, string e, string p)
+    void addVolumeLoad(Direction dir, string e, string p)
     {
         params.plist.addVolumeLoad(e, p, dir);
     }
-    void addVolumeLoad(int dir, string e)
+    void addVolumeLoad(Direction dir, string e)
     {
         params.plist.addVolumeLoad(e, "", dir);
     }
-    void addVolumeLoad(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    void addVolumeLoad(Direction dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
         params.plist.addVolumeLoad(e, p, dir);
     }
-    void addVolumeLoad(int dir, double v, function<double (double, double, double, double)> p)
+    void addVolumeLoad(Direction dir, double v, function<double (double, double, double, double)> p)
     {
         params.plist.addVolumeLoad(v, p, dir);
     }
-    void addVolumeLoad(int dir, function<double (double, double, double, double)> e)
+    void addVolumeLoad(Direction dir, function<double (double, double, double, double)> e)
     {
         params.plist.addVolumeLoad(e, nullptr, dir);
     }
     // Поверхностная нагрузка
-    void addSurfaceLoad(int dir, double v, string p)
+    void addSurfaceLoad(Direction dir, double v, string p)
     {
         params.plist.addSurfaceLoad(v, p, dir);
     }
-    void addSurfaceLoad(int dir, double v)
+    void addSurfaceLoad(Direction dir, double v)
     {
         params.plist.addSurfaceLoad(v, "", dir);
     }
-    void addSurfaceLoad(int dir, string e, string p)
+    void addSurfaceLoad(Direction dir, string e, string p)
     {
         params.plist.addSurfaceLoad(e, p, dir);
     }
-    void addSurfaceLoad(int dir, string e)
+    void addSurfaceLoad(Direction dir, string e)
     {
         params.plist.addSurfaceLoad(e, "", dir);
     }
-    void addSurfaceLoad(int dir, double v, function<double (double, double, double, double)> p)
+    void addSurfaceLoad(Direction dir, double v, function<double (double, double, double, double)> p)
     {
         params.plist.addSurfaceLoad(v, p, dir);
     }
-    void addSurfaceLoad(int dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
+    void addSurfaceLoad(Direction dir, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
         params.plist.addSurfaceLoad(e, p, dir);
     }
-    void addSurfaceLoad(int dir, function<double (double, double, double, double)> e)
+    void addSurfaceLoad(Direction dir, function<double (double, double, double, double)> e)
     {
         params.plist.addSurfaceLoad(e, nullptr, dir);
     }

@@ -66,7 +66,7 @@ protected:
     bool is_delim(char);
     bool is_name(string);
     bool is_find(vector<idToken>&, string, Operation&);
-    [[noreturn ]] void error(ErrorCode);
+    /*[[noreturn ]]*/ void error(ErrorCode);
     void compile(void);
     void get_exp(Tree&);
     void token_or(Tree&);

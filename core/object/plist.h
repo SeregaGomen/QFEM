@@ -8,21 +8,16 @@
 #include "msg/msg.h"
 #include "util/matrix.h"
 
+template <typename T> bool contains(const T lhs, const T rhs)
+{
+    return ((static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs)) == static_cast<unsigned>(rhs)) ? true : false;
+}
+
 // Коды направлений вдоль осей координат
-#define DIR_X     1 // 0000000000000001
-#define DIR_Y     2 // 0000000000000010
-#define DIR_Z     4 // 0000000000000100
+enum class Direction { Undefined = 0, X = 1, Y = 2, Z = 4 };
 
 // Коды начальных условий
-#define FUN_U     1 // 0000000000000001
-#define FUN_V     2 // 0000000000000010
-#define FUN_W     4 // 0000000000000100
-#define FUN_UT    8 // 0000000000001000
-#define FUN_VT   16 // 0000000000010000
-#define FUN_WT   32 // 0000000000100000
-#define FUN_UTT  64 // 0000000001000000
-#define FUN_VTT 128 // 0000000010000000
-#define FUN_WTT 256 // 0000000100000000
+enum class InitialCondition { Undefined = 0, U = 1, V = 2, W = 4, Ut = 8, Vt = 16, Wt = 32, Utt = 64, Vtt = 128, Wtt = 256 };
 
 using namespace std;
 
@@ -132,8 +127,8 @@ class TParameter
 private:
     // Тип параметра
     ParamType type;
-    // Направление (для краевого условия )
-    int direct = 0;
+    // Направление (для граничного условия) или начальное условие
+    int attr = 0;
     // Значение параметра в виде числовой константы
     double d_value = 0;
     // Значение параметра в виде функционального выражения или матрицы
@@ -144,33 +139,33 @@ public:
     {
         type = ParamType::Undefined;
     }
-    TParameter(ParamType t, double v, string p, int d)
+    TParameter(ParamType t, double v, string p, int a)
     {
         type = t;
         d_value = v;
         predicate = p;
-        direct = d;
+        attr = a;
     }
-    TParameter(ParamType t, string e, string p, int d)
+    TParameter(ParamType t, string e, string p, int a)
     {
         type = t;
         e_value = e;
         predicate = p;
-        direct = d;
+        attr = a;
     }
-    TParameter(ParamType t, double v, function<double (double, double, double, double)> p, int d)
+    TParameter(ParamType t, double v, function<double (double, double, double, double)> p, int a)
     {
         type = t;
         d_value = v;
         predicate = p;
-        direct = d;
+        attr = a;
     }
-    TParameter(ParamType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    TParameter(ParamType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int a)
     {
         type = t;
         e_value = e;
         predicate = p;
-        direct = d;
+        attr = a;
     }
     TParameter(matrix<double>& m, string p)
     {
@@ -186,7 +181,7 @@ public:
     }
     TParameter(const TParameter& r)
     {
-        direct = r.direct;
+        attr = r.attr;
         type = r.type;
         d_value = r.d_value;
         e_value = r.e_value;
@@ -195,16 +190,20 @@ public:
     ~TParameter(void) {}
     TParameter operator = (const TParameter& r)
     {
-        direct = r.direct;
+        attr = r.attr;
         type = r.type;
         d_value = r.d_value;
         e_value = r.e_value;
         predicate = r.predicate;
         return *this;
     }
-    int getDirect(void) const
+    InitialCondition getInitialCondition(void) const
     {
-        return direct;
+        return static_cast<InitialCondition>(attr);
+    }
+    Direction getDirect(void) const
+    {
+        return static_cast<Direction>(attr);
     }
     double getValue(void) const
     {
@@ -255,27 +254,27 @@ class TParameterList : public list<TParameter>
 public:
     TParameterList(void) {}
     ~TParameterList(void) {}
-    void addParameter(ParamType t, double v, string p, int d = 0)
+    void addParameter(ParamType t, double v, string p, int a = 0)
     {
-        TParameter c(t, v, p, d);
+        TParameter c(t, v, p, a);
 
         push_back(c);
     }
-    void addParameter(ParamType t, string e, string p, int d = 0)
+    void addParameter(ParamType t, string e, string p, int a = 0)
     {
-        TParameter c(t, e, p, d);
+        TParameter c(t, e, p, a);
 
         push_back(c);
     }
-    void addParameter(ParamType t, double v, function<double (double, double, double, double)> p, int d = 0)
+    void addParameter(ParamType t, double v, function<double (double, double, double, double)> p, int a = 0)
     {
-        TParameter c(t, v, p, d);
+        TParameter c(t, v, p, a);
 
         push_back(c);
     }
-    void addParameter(ParamType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d = 0)
+    void addParameter(ParamType t, function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int a = 0)
     {
-        TParameter c(t, e, p, d);
+        TParameter c(t, e, p, a);
 
         push_back(c);
     }
@@ -403,97 +402,97 @@ public:
     {
         addParameter(ParamType::PoissonRatio, e, p);
     }
-    void addBoundaryCondition(double v, string p, int d)
+    void addBoundaryCondition(double v, string p, Direction d)
     {
-        addParameter(ParamType::BoundaryCondition, v, p, d);
+        addParameter(ParamType::BoundaryCondition, v, p, static_cast<int>(d));
     }
-    void addBoundaryCondition(string e, string p, int d)
+    void addBoundaryCondition(string e, string p, Direction d)
     {
-        addParameter(ParamType::BoundaryCondition, e, p, d);
+        addParameter(ParamType::BoundaryCondition, e, p, static_cast<int>(d));
     }
-    void addBoundaryCondition(double v, function<double (double, double, double, double)> p, int d)
+    void addBoundaryCondition(double v, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::BoundaryCondition, v, p, d);
+        addParameter(ParamType::BoundaryCondition, v, p, static_cast<int>(d));
     }
-    void addBoundaryCondition(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    void addBoundaryCondition(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::BoundaryCondition, e, p, d);
+        addParameter(ParamType::BoundaryCondition, e, p, static_cast<int>(d));
     }
-    void addInitialCondition(double v, int d)
+    void addInitialCondition(double v, InitialCondition i)
     {
-        addParameter(ParamType::InitialCondition, v, "", d);
+        addParameter(ParamType::InitialCondition, v, "", static_cast<int>(i));
     }
-    void addInitialCondition(string e, int d)
+    void addInitialCondition(string e, InitialCondition i)
     {
-        addParameter(ParamType::InitialCondition, e, "", d);
+        addParameter(ParamType::InitialCondition, e, "", static_cast<int>(i));
     }
-    void addInitialCondition(function<double (double, double, double, double)> e, int d)
+    void addInitialCondition(function<double (double, double, double, double)> e, InitialCondition i)
     {
-        addParameter(ParamType::InitialCondition, e, nullptr, d);
+        addParameter(ParamType::InitialCondition, e, nullptr, static_cast<int>(i));
     }
-    void addSurfaceLoad(double v, string p, int d)
+    void addSurfaceLoad(double v, string p, Direction d)
     {
-        addParameter(ParamType::SurfaceLoad, v, p, d);
+        addParameter(ParamType::SurfaceLoad, v, p, static_cast<int>(d));
     }
-    void addSurfaceLoad(string e, string p, int d)
+    void addSurfaceLoad(string e, string p, Direction d)
     {
-        addParameter(ParamType::SurfaceLoad, e, p, d);
+        addParameter(ParamType::SurfaceLoad, e, p, static_cast<int>(d));
     }
-    void addSurfaceLoad(double v, function<double (double, double, double, double)> p, int d)
+    void addSurfaceLoad(double v, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::SurfaceLoad, v, p, d);
+        addParameter(ParamType::SurfaceLoad, v, p, static_cast<int>(d));
     }
-    void addSurfaceLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    void addSurfaceLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::SurfaceLoad, e, p, d);
+        addParameter(ParamType::SurfaceLoad, e, p, static_cast<int>(d));
     }
-    void addVolumeLoad(double v, string p, int d)
+    void addVolumeLoad(double v, string p, Direction d)
     {
-        addParameter(ParamType::VolumeLoad, v, p, d);
+        addParameter(ParamType::VolumeLoad, v, p, static_cast<int>(d));
     }
-    void addVolumeLoad(string e, string p, int d)
+    void addVolumeLoad(string e, string p, Direction d)
     {
-        addParameter(ParamType::VolumeLoad, e, p, d);
+        addParameter(ParamType::VolumeLoad, e, p, static_cast<int>(d));
     }
-    void addVolumeLoad(double v, function<double (double, double, double, double)> p, int d)
+    void addVolumeLoad(double v, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::VolumeLoad, v, p, d);
+        addParameter(ParamType::VolumeLoad, v, p, static_cast<int>(d));
     }
-    void addVolumeLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    void addVolumeLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::VolumeLoad, e, p, d);
+        addParameter(ParamType::VolumeLoad, e, p, static_cast<int>(d));
     }
-    void addConcentratedLoad(double v, string p, int d)
+    void addConcentratedLoad(double v, string p, Direction d)
     {
-        addParameter(ParamType::ConcentratedLoad, v, p, d);
+        addParameter(ParamType::ConcentratedLoad, v, p, static_cast<int>(d));
     }
-    void addConcentratedLoad(string e, string p, int d)
+    void addConcentratedLoad(string e, string p, Direction d)
     {
-        addParameter(ParamType::ConcentratedLoad, e, p, d);
+        addParameter(ParamType::ConcentratedLoad, e, p, static_cast<int>(d));
     }
-    void addConcentratedLoad(double v, function<double (double, double, double, double)> p, int d)
+    void addConcentratedLoad(double v, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::ConcentratedLoad, v, p, d);
+        addParameter(ParamType::ConcentratedLoad, v, p, static_cast<int>(d));
     }
-    void addConcentratedLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, int d)
+    void addConcentratedLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p, Direction d)
     {
-        addParameter(ParamType::ConcentratedLoad, e, p, d);
+        addParameter(ParamType::ConcentratedLoad, e, p, static_cast<int>(d));
     }
     void addPressureLoad(double v, string p)
     {
-        addParameter(ParamType::Pressure_load, v, p, 0);
+        addParameter(ParamType::Pressure_load, v, p);
     }
     void addPressureLoad(string e, string p)
     {
-        addParameter(ParamType::Pressure_load, e, p, 0);
+        addParameter(ParamType::Pressure_load, e, p);
     }
     void addPressureLoad(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(ParamType::Pressure_load, v, p, 0);
+        addParameter(ParamType::Pressure_load, v, p);
     }
     void addPressureLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(ParamType::Pressure_load, e, p, 0);
+        addParameter(ParamType::Pressure_load, e, p);
     }
     unsigned findParameter(ParamType type)
     {

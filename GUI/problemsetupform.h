@@ -9,6 +9,7 @@
 class QToolButton;
 class QTableWidget;
 class TFEMObject;
+enum class Direction;
 
 namespace Ui {
     class TProblemSetupForm;
@@ -66,8 +67,8 @@ private:
     void addRow(QTableWidget*);
     void removeRow(QTableWidget*);
     void enabledFuncNames(void);
-    void setDirect(QTableWidget*, int);
-    void setDirect(QTableWidget*, int, int);
+    void setDirect(QTableWidget*, Direction);
+    void setDirect(QTableWidget*, int, Direction);
     void removeAllRows(QTableWidget*);
     void setTableValue(ParamType, QTableWidget*, bool = true);
     void setElasticParam(void);
@@ -124,7 +125,7 @@ private:
 
     int getExpression(QString, double&, double = 0, double = 0, double = 0);
     int checkExpression(QString);
-    int getDirect(QTableWidget*, int);
+    Direction getDirect(QTableWidget*, int);
     QTableWidget* getLoadTab(void);
 };
 

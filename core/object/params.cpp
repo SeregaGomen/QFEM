@@ -236,7 +236,7 @@ bool TFEMParams::write(ofstream& out)
     for (auto it : plist)
     {
         out << static_cast<int>(it.getType()) << endl;   // Тип условия
-        out << it.getDirect() << endl; // Номер функции: 0 - X, ...
+        out << static_cast<unsigned>(it.getDirect()) << endl; // Номер функции: 0 - X, ...
         out << it.getExpression() << endl;
         out << it.getPredicate() << endl;
     }

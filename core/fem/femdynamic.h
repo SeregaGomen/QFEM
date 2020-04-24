@@ -122,7 +122,7 @@ template<class T> void TFEMDynamic<T>::ansambleLocalMatrix(TFE* fe, unsigned i)
 template<class T> void TFEMDynamic<T>::getInitialCondition(void)
 {
     TParser parser;
-    unsigned direct;
+    InitialCondition init;
     double value;
 
     u0.resize(9, TFEM::mesh->getNumVertex());
@@ -131,27 +131,27 @@ template<class T> void TFEMDynamic<T>::getInitialCondition(void)
         {
             parser.set_expression(it.getExpression());
             value = parser.run();
-            direct = unsigned(it.getDirect());
+            init = it.getInitialCondition();
 
             for (unsigned j = 0; j < TFEM::mesh->getNumVertex(); j++)
             {
-                if ((direct & FUN_U) == FUN_U)
+                if (contains(init, InitialCondition::U))
                     u0[0][j] = value;
-                if ((direct & FUN_V) == FUN_V)
+                if (contains(init, InitialCondition::V))
                     u0[1][j] = value;
-                if ((direct & FUN_W) == FUN_W)
+                if (contains(init, InitialCondition::W))
                     u0[2][j] = value;
-                if ((direct & FUN_UT) == FUN_UT)
+                if (contains(init, InitialCondition::Ut))
                     u0[3][j] = value;
-                if ((direct & FUN_VT) == FUN_VT)
+                if (contains(init, InitialCondition::Vt))
                     u0[4][j] = value;
-                if ((direct & FUN_WT) == FUN_WT)
+                if (contains(init, InitialCondition::Wt))
                     u0[5][j] = value;
-                if ((direct & FUN_UTT) == FUN_UTT)
+                if (contains(init, InitialCondition::Utt))
                     u0[6][j] = value;
-                if ((direct & FUN_VTT) == FUN_VTT)
+                if (contains(init, InitialCondition::Vtt))
                     u0[7][j] = value;
-                if ((direct & FUN_WTT) == FUN_WTT)
+                if (contains(init, InitialCondition::Wtt))
                     u0[8][j] = value;
             }
         }

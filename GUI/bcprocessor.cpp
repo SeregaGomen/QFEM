@@ -99,11 +99,11 @@ void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error
                     if (it.getPredicate().length() and not object->getParams().getPredicateValue(it, coord))
                         continue;
                     value = float(object->getParams().getExpressionValue(it, coord));
-                    if ((it.getDirect() & DIR_X) == DIR_X or (object->getMesh().isPlate() and (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                    if (contains(it.getDirect(), Direction::X) or (object->getMesh().isPlate() and contains(it.getDirect(), Direction::Z))) // X или W - для пластины
                         vertex[int(i)].setX(vertex[int(i)].x() + value);
-                    if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
+                    if (contains(it.getDirect(), Direction::Y)) // Y
                         vertex[int(i)].setY(vertex[int(i)].y() + value);
-                    if ((it.getDirect() & DIR_Z) == DIR_Z) // Z
+                    if (contains(it.getDirect(), Direction::Z)) // Z
                         vertex[int(i)].setZ(vertex[int(i)].z() + value);
                 }
         }
@@ -165,11 +165,11 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
                         }
                         else
                         {
-                            if ((it.getDirect() & DIR_X) == DIR_X or (object->getMesh().isPlate() and (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                            if (contains(it.getDirect(), Direction::X) or (object->getMesh().isPlate() and contains(it.getDirect(), Direction::Z))) // X или W - для пластины
                                 vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value));
-                            if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
+                            if (contains(it.getDirect(), Direction::Y)) // Y
                                 vertex[int(object->getMesh().getBE(i, j))].setY(vertex[int(object->getMesh().getBE(i, j))].y() + float(value));
-                            if ((it.getDirect() & DIR_Z) == DIR_Z) // Y
+                            if (contains(it.getDirect(), Direction::Z)) // Y
                                 vertex[int(object->getMesh().getBE(i, j))].setZ(vertex[int(object->getMesh().getBE(i, j))].z() + float(value));
                         }
                 }
@@ -218,13 +218,13 @@ void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeFE(); j++)
                     {
                         // X
-                        if ((it.getDirect() & DIR_X) == DIR_X or (object->getMesh().isPlate() and (it.getDirect() & DIR_Z) == DIR_Z)) // X или W - для пластины
+                        if (contains(it.getDirect(), Direction::X) or (object->getMesh().isPlate() and contains(it.getDirect(), Direction::Z))) // X или W - для пластины
                             vertex[int(object->getMesh().getFE(i, j))].setX(float(value));
                         // Y
-                        if ((it.getDirect() & DIR_Y) == DIR_Y) // Y
+                        if (contains(it.getDirect(), Direction::Y)) // Y
                             vertex[int(object->getMesh().getFE(i, j))].setY(float(value));
                         // Z
-                        if ((it.getDirect() & DIR_Z) == DIR_Z) // Z
+                        if (contains(it.getDirect(), Direction::Z)) // Z
                             vertex[int(object->getMesh().getFE(i, j))].setZ(float(value));
                     }
                 }

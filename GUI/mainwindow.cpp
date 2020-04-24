@@ -977,23 +977,23 @@ void TMainWindow::sayParams(QString& webOut)
             for (auto it: femObject->getParams().plist)
                 if (it.getType() == ParamType::InitialCondition)
                 {
-                    if ((it.getDirect() & FUN_U) == FUN_U)
+                    if (contains(it.getInitialCondition(), InitialCondition::U))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[4].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_V) == FUN_V)
+                    if (contains(it.getInitialCondition(), InitialCondition::V))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[5].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_W) == FUN_W)
+                    if (contains(it.getInitialCondition(), InitialCondition::W))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[6].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_UT) == FUN_UT)
+                    if (contains(it.getInitialCondition(), InitialCondition::Ut))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[19].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_VT) == FUN_VT)
+                    if (contains(it.getInitialCondition(), InitialCondition::Vt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[20].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_WT) == FUN_WT)
+                    if (contains(it.getInitialCondition(), InitialCondition::Wt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[21].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_UTT) == FUN_UTT)
+                    if (contains(it.getInitialCondition(), InitialCondition::Utt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[22].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_VTT) == FUN_VTT)
+                    if (contains(it.getInitialCondition(), InitialCondition::Vtt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[23].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if ((it.getDirect() & FUN_WTT) == FUN_WTT)
+                    if (contains(it.getInitialCondition(), InitialCondition::Wtt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[24].c_str()).arg(it.getExpression().c_str()) + "<br>";
                 }
         }
@@ -1043,15 +1043,15 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, ParamType para
             webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td>").arg(num++).arg(it.getExpression().c_str()).arg(predicate);
             if (isDirect)
             {
-                if ((it.getDirect() & DIR_X) == DIR_X)
+                if (contains(it.getDirect(), Direction::X))
                     webOut += QString("<td>%1</td>").arg("+");
                 else
                     webOut += QString("<td>%1</td>").arg("");
-                if ((it.getDirect() & DIR_Y) == DIR_Y)
+                if (contains(it.getDirect(), Direction::Y))
                     webOut += QString("<td>%1</td>").arg("+");
                 else if (femObject->getMesh().getFreedom() > 1)
                     webOut += QString("<td>%1</td>").arg("");
-                if ((it.getDirect() & DIR_Z) == DIR_Z)
+                if (contains(it.getDirect(), Direction::Z))
                     webOut += QString("<td>%1</td>").arg("+");
                 else if (femObject->getMesh().getFreedom() > 2)
                     webOut += QString("<td>%1</td>").arg("");
@@ -1390,7 +1390,7 @@ void TMainWindow::saveParam(QJsonObject &main)
         QJsonObject bc;
 
         bc.insert("Type", static_cast<int>(it.getType()));
-        bc.insert("Direct", it.getDirect());
+        bc.insert("Direct", static_cast<int>(it.getDirect()));
         bc.insert("Predicate", it.getPredicate().c_str());
         if (it.getType() == ParamType::StressStrainCurve)
         {

@@ -280,9 +280,9 @@ template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
 template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsigned end, ErrorCode &error)
 {
     double val;
-    unsigned direct,
-             freedom = TFEM::mesh->getFreedom();
+    unsigned freedom = TFEM::mesh->getFreedom();
     vector<double> coord;
+    Direction direct;
 
     try
     {
@@ -290,7 +290,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
         {
             msg->addProgress();
             for (auto it: params.plist)
-                if (it.getType() == ParamType::BoundaryCondition and (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::BoundaryCondition and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -299,11 +299,11 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
                     if (params.getPredicateValue(it, coord))
                     {
                         val = params.getExpressionValue(it, coord);
-                        if ((direct & DIR_X) == DIR_X)
+                        if (contains(direct, Direction::X))
                             solver.setBoundaryCondition(i * freedom + 0, val);
-                        if ((direct & DIR_Y) == DIR_Y)
+                        if (contains(direct, Direction::Y))
                             solver.setBoundaryCondition(i * freedom + 1, val);
-                        if ((direct & DIR_Z) == DIR_Z)
+                        if (contains(direct, Direction::Z))
                             solver.setBoundaryCondition(i * freedom + 2, val);
                     }
                 }
@@ -339,7 +339,7 @@ template<class T> void TFEMStatic<T>::calcConcentratedLoad(vector<double> &load,
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
-    unsigned direct;
+    Direction direct;
     double val;
     vector<double> coord;
 
@@ -349,7 +349,7 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
         {
             msg->addProgress();
             for (auto it : params.plist)
-                if (it.getType() == ParamType::ConcentratedLoad and (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::ConcentratedLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -359,11 +359,11 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
                     if (not params.getPredicateValue(it, coord))
                         continue;
                     val = params.getExpressionValue(it, coord);
-                    if ((direct & DIR_X) == DIR_X or (mesh->isPlate() and (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
+                    if (contains(direct, Direction::X) or (mesh->isPlate() and contains(direct, Direction::Z))) // X или W - для пластины
                         load[i * mesh->getFreedom() + 0] += val;
-                    if ((direct & DIR_Y) == DIR_Y) // Y
+                    if (contains(direct, Direction::Y)) // Y
                         load[i * mesh->getFreedom() + 1] += val;
-                    if ((direct & DIR_Z) == DIR_Z) // Z
+                    if (contains(direct, Direction::Z)) // Z
                         load[i * mesh->getFreedom() + 2] += val;
                 }
         }
@@ -398,7 +398,7 @@ template<class T> void TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, doub
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
-    unsigned direct;
+    Direction direct;
     double val;
     vector<double> share,
                    coord;
@@ -409,7 +409,7 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
         {
             msg->addProgress();
             for (auto it:  params.plist)
-                if (it.getType() == ParamType::SurfaceLoad and (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::SurfaceLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     if (isProcessAborted)
                         throw ABORT_ERR;
@@ -422,11 +422,11 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
                     val = params.getExpressionValue(it, coord);
                     for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                     {
-                        if ((direct & DIR_X) == DIR_X or (mesh->isPlate() and (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
+                        if (contains(direct, Direction::X) or (mesh->isPlate() and contains(direct, Direction::Z))) // X или W - для пластины
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
-                        if ((direct & DIR_Y) == DIR_Y) // Y
+                        if (contains(direct, Direction::Y)) // Y
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k];
-                        if ((direct & DIR_Z) == DIR_Z) // Z
+                        if (contains(direct, Direction::Z)) // Z
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 2] += val * share[k];
                     }
                 }
@@ -537,7 +537,7 @@ template<class T> void TFEMStatic<T>::calcVolumeLoad(vector<double> &load, doubl
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
-    unsigned direct;
+    Direction direct;
     double val;
     vector<double> share,
                    coord;
@@ -550,7 +550,7 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
             if (isProcessAborted)
                 throw ABORT_ERR;
             for (auto it: params.plist)
-                if (it.getType() == ParamType::VolumeLoad and (direct = unsigned(it.getDirect())))
+                if (it.getType() == ParamType::VolumeLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     // Проверка, все ли узлы КЭ удовлетворяют предикату
                     if (not checkFE(i, it))
@@ -561,11 +561,11 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
                     val = params.getExpressionValue(it, coord);
                     for (unsigned k = 0; k < mesh->getSizeFE(); k++)
                     {
-                        if ((direct & DIR_X) == DIR_X or (mesh->isPlate() and (direct & DIR_Z) == DIR_Z)) // X или W - для пластины
+                        if (contains(direct, Direction::X)or (mesh->isPlate() and contains(direct, Direction::Z))) // X или W - для пластины
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 0] += val * share[k];
-                        if ((direct & DIR_Y) == DIR_Y) // Y
+                        if (contains(direct, Direction::Y)) // Y
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 1] += val * share[k];
-                        if ((direct & DIR_Z) == DIR_Z) // Z
+                        if (contains(direct, Direction::Z)) // Z
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 2] += val * share[k];
                     }
                 }

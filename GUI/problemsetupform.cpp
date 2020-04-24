@@ -10,6 +10,16 @@
 #include "ui_problemsetupform.h"
 #include "object/object.h"
 
+Direction operator | (Direction lhs, Direction rhs)
+{
+    return static_cast<Direction> (static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
+}
+
+Direction operator |= (Direction& lhs, Direction rhs)
+{
+    return (lhs = static_cast<Direction>(lhs) | static_cast<Direction>(rhs));
+}
+
 TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TProblemSetupForm)
@@ -426,15 +436,15 @@ void TProblemSetupForm::slotShowContextMenu1(const QPoint &pos)
     if ((selectedItem = menu->exec(globalPos)))
     {
         if (selectedItem == menu->actions().at(0))
-            setDirect(twPtr, DIR_X | DIR_Y | DIR_Z);
+            setDirect(twPtr, Direction::X | Direction::Y | Direction::Z);
         else if (selectedItem == menu->actions().at(1))
-            setDirect(twPtr, 0);
+            setDirect(twPtr, Direction::Undefined);
         else if (selectedItem == menu->actions().at(3))
-            setDirect(twPtr, DIR_X);
+            setDirect(twPtr, Direction::X);
         else if (selectedItem == menu->actions().at(4))
-            setDirect(twPtr, DIR_Y);
+            setDirect(twPtr, Direction::Y);
         else if (selectedItem == menu->actions().at(5))
-            setDirect(twPtr, DIR_Z);
+            setDirect(twPtr, Direction::Z);
         else if (selectedItem == menu->actions().at(7))
             removeAllRows(twPtr);
     }
@@ -456,22 +466,22 @@ void TProblemSetupForm::slotShowContextMenu2(const QPoint &pos)
 }
 
 
-void TProblemSetupForm::setDirect(QTableWidget* twPtr,int dir)
+void TProblemSetupForm::setDirect(QTableWidget* twPtr, Direction dir)
 {
     for (int i = 0; i < twPtr->rowCount(); i++)
     {
-        if ((dir & DIR_X) == DIR_X)
-            twPtr->item(i,2)->setCheckState(Qt::Checked);
+        if (contains(dir, Direction::X))
+            twPtr->item(i, 2)->setCheckState(Qt::Checked);
         else
-            twPtr->item(i,2)->setCheckState(Qt::Unchecked);
-        if ((dir & DIR_Y) == DIR_Y)
-            twPtr->item(i,3)->setCheckState(Qt::Checked);
+            twPtr->item(i, 2)->setCheckState(Qt::Unchecked);
+        if (contains(dir, Direction::Y))
+            twPtr->item(i, 3)->setCheckState(Qt::Checked);
         else
-            twPtr->item(i,3)->setCheckState(Qt::Unchecked);
-        if ((dir & DIR_Z) == DIR_Z)
-            twPtr->item(i,4)->setCheckState(Qt::Checked);
+            twPtr->item(i, 3)->setCheckState(Qt::Unchecked);
+        if (contains(dir, Direction::Z))
+            twPtr->item(i, 4)->setCheckState(Qt::Checked);
         else
-            twPtr->item(i,4)->setCheckState(Qt::Unchecked);
+            twPtr->item(i, 4)->setCheckState(Qt::Unchecked);
     }
 }
 
@@ -658,13 +668,13 @@ void TProblemSetupForm::setTableValue(ParamType type, QTableWidget* tw, bool isD
 }
 
 // Задание номера комбинации выбранных функций в списке граничных условий
-void TProblemSetupForm::setDirect(QTableWidget* p, int i, int direct)
+void TProblemSetupForm::setDirect(QTableWidget* p, int i, Direction direct)
 {
     p->setItem(i, 2, new QTableWidgetItem(0));
     p->setItem(i, 3, new QTableWidgetItem(0));
     p->setItem(i, 4, new QTableWidgetItem(0));
 
-    if (direct == -1)
+    if (direct == Direction::Undefined)
     {
         p->item(i, 2)->setCheckState(Qt::Unchecked);
         p->item(i, 3)->setCheckState(Qt::Unchecked);
@@ -672,15 +682,15 @@ void TProblemSetupForm::setDirect(QTableWidget* p, int i, int direct)
         return;
     }
 
-    if ((direct & DIR_X) == DIR_X)
+    if (contains(direct, Direction::X))
         p->item(i, 2)->setCheckState(Qt::Checked);
     else
         p->item(i, 2)->setCheckState(Qt::Unchecked);
-    if ((direct & DIR_Y) == DIR_Y)
+    if (contains(direct, Direction::Y))
         p->item(i, 3)->setCheckState(Qt::Checked);
     else
         p->item(i, 3)->setCheckState(Qt::Unchecked);
-    if ((direct & DIR_Z) == DIR_Z)
+    if (contains(direct, Direction::Z))
         p->item(i, 4)->setCheckState(Qt::Checked);
     else
         p->item(i, 4)->setCheckState(Qt::Unchecked);
@@ -727,31 +737,31 @@ void TProblemSetupForm::setDamping(void)
 
 void TProblemSetupForm::setInitialParam(void)
 {
-    int direct;
+    InitialCondition init;
 
     for (auto it = femObject->getParams().plist.begin(); it not_eq femObject->getParams().plist.end(); it++)
     {
         if (it->getType() not_eq ParamType::InitialCondition)
             continue;
 
-        direct = it->getDirect();
-        if ((direct & FUN_U) == FUN_U)
+        init = it->getInitialCondition();
+        if (contains(init, InitialCondition::U))
             ui->textU->setText(it->getExpression().c_str());
-        if ((direct & FUN_UT) == FUN_UT)
+        if (contains(init, InitialCondition::Ut))
             ui->textUt->setText(it->getExpression().c_str());
-        if ((direct & FUN_UTT) == FUN_UTT)
+        if (contains(init, InitialCondition::Utt))
             ui->textUtt->setText(it->getExpression().c_str());
-        if ((direct & FUN_V) == FUN_V)
+        if (contains(init, InitialCondition::V))
             ui->textV->setText(it->getExpression().c_str());
-        if ((direct & FUN_VT) == FUN_VT)
+        if (contains(init, InitialCondition::Vt))
             ui->textVt->setText(it->getExpression().c_str());
-        if ((direct & FUN_VTT) == FUN_VTT)
+        if (contains(init, InitialCondition::Vtt))
             ui->textVtt->setText(it->getExpression().c_str());
-        if ((direct & FUN_W) == FUN_W)
+        if (contains(init, InitialCondition::W))
             ui->textW->setText(it->getExpression().c_str());
-        if ((direct & FUN_WT) == FUN_WT)
+        if (contains(init, InitialCondition::Wt))
             ui->textWt->setText(it->getExpression().c_str());
-        if ((direct & FUN_WTT) == FUN_WTT)
+        if (contains(init, InitialCondition::Wtt))
             ui->textWtt->setText(it->getExpression().c_str());
     }
 }
@@ -932,8 +942,8 @@ void TProblemSetupForm::setBoundaryConditionValue(void)
 {
     QTableWidgetItem* newItem;
     QStringList Titles;
-    int count = 0,
-        direct;
+    int count = 0;
+    Direction direct;
 
 
     removeAllRows(ui->twBC);
@@ -1581,17 +1591,17 @@ void TProblemSetupForm::getBoundaryConditionValue(void)
 // Извлечение начальных условий
 void TProblemSetupForm::getInitialParam(void)
 {
-    femObject->getParams().plist.addInitialCondition(ui->textU->text().toStdString(), FUN_U);     // U(t=0) = 0
-    femObject->getParams().plist.addInitialCondition(ui->textUt->text().toStdString(), FUN_UT);   // Ut(t=0) = 0
-    femObject->getParams().plist.addInitialCondition(ui->textUtt->text().toStdString(), FUN_UTT); // Utt(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textU->text().toStdString(), InitialCondition::U);     // U(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textUt->text().toStdString(), InitialCondition::Ut);   // Ut(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textUtt->text().toStdString(), InitialCondition::Utt); // Utt(t=0) = 0
 
-    femObject->getParams().plist.addInitialCondition(ui->textV->text().toStdString(), FUN_V);     // V(t=0) = 0
-    femObject->getParams().plist.addInitialCondition(ui->textVt->text().toStdString(), FUN_VT);   // Vt(t=0) = 0
-    femObject->getParams().plist.addInitialCondition(ui->textVtt->text().toStdString(), FUN_VTT); // Vtt(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textV->text().toStdString(), InitialCondition::V);     // V(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textVt->text().toStdString(), InitialCondition::Vt);   // Vt(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textVtt->text().toStdString(), InitialCondition::Vtt); // Vtt(t=0) = 0
 
-    femObject->getParams().plist.addInitialCondition(ui->textW->text().toStdString(), FUN_W);     // W(t=0) = 0
-    femObject->getParams().plist.addInitialCondition(ui->textWt->text().toStdString(), FUN_WT);   // Wt(t=0) = 0
-    femObject->getParams().plist.addInitialCondition(ui->textWtt->text().toStdString(), FUN_WTT); // Wtt(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textW->text().toStdString(), InitialCondition::W);     // W(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textWt->text().toStdString(), InitialCondition::Wt);   // Wt(t=0) = 0
+    femObject->getParams().plist.addInitialCondition(ui->textWtt->text().toStdString(), InitialCondition::Wtt); // Wtt(t=0) = 0
 }
 
 // Извлечение плотности
@@ -1651,28 +1661,28 @@ void TProblemSetupForm::getEps(void)
 }
 
 // Определение номера комбинации выбранных функций в списке граничных условий
-int TProblemSetupForm::getDirect(QTableWidget* p, int i)
+Direction TProblemSetupForm::getDirect(QTableWidget* p, int i)
 {
-    int direct = 0;
+    Direction direct = Direction::Undefined;
 
-    if (p->item(i,2)->checkState() == Qt::Checked)
-        direct |= DIR_X;
-    if (p->item(i,3)->checkState() == Qt::Checked)
-        direct |= DIR_Y;
-    if (p->item(i,4)->checkState() == Qt::Checked)
-        direct |= DIR_Z;
+    if (p->item(i, 2)->checkState() == Qt::Checked)
+        direct |= Direction::X;
+    if (p->item(i, 3)->checkState() == Qt::Checked)
+        direct |= Direction::Y;
+    if (p->item(i, 4)->checkState() == Qt::Checked)
+        direct |= Direction::Z;
     return direct;
 }
 
 void TProblemSetupForm::getTableValue(ParamType type, QTableWidget* tw, bool isDirect)
 {
-    int direct = 0;
+    Direction direct = Direction::Undefined;
 
     for (int i = 0; i < tw->rowCount(); i++)
     {
         if (isDirect)
             direct = getDirect(tw, i);
-        femObject->getParams().plist.addParameter(type, tw->item(i, 0)->text().toStdString(), tw->item(i, 1)->text().toStdString(), direct);
+        femObject->getParams().plist.addParameter(type, tw->item(i, 0)->text().toStdString(), tw->item(i, 1)->text().toStdString(), static_cast<int>(direct));
     }
 }
 
