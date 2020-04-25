@@ -23,6 +23,7 @@ signals:
     void finished(void);
 
 private:
+    int numThread = 1;
     // Тип визуализируемого параметра
     ParamType paramType;
     // Объект рассчета (содержит геометрию)
@@ -66,6 +67,10 @@ public:
     void setType(ParamType type)
     {
         paramType = type;
+    }
+    void setNumTheread(int n)
+    {
+        numThread = n;
     }
 };
 

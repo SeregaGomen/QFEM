@@ -7,8 +7,7 @@ extern TMessenger* msg;
 
 void TBCProcessor::processVertex(void)
 {
-    unsigned numThread = 1, //std::thread::hardware_concurrency() - 1,
-             size = object->getMesh().getNumBE(),
+    unsigned size = object->getMesh().getNumBE(),
              step = size / numThread;
     ErrorCode error = ErrorCode::Undefined;
     vector<std::thread> thr(numThread);
@@ -36,8 +35,8 @@ void TBCProcessor::processVertex(void)
     isStoped = false;
     msg->setProcess(ProcessCode::GeneratingBoundaryCondition, 1, int(size), 5);
     // Обработка граничных условий
-    for (unsigned i = 0; i < numThread; i++)
-        thr[i] = std::thread(f_ptr, this, i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
+    for (unsigned i = 0; i < unsigned(numThread); i++)
+        thr[i] = std::thread(f_ptr, this, i * step, (i == unsigned(numThread) - 1) ? size : (i + 1) * step, ref(error));
     for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
 //    calcConcentratedLoad(0, size, ref(error));
     msg->stopProcess();

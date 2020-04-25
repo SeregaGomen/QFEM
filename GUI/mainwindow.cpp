@@ -1896,6 +1896,7 @@ void TMainWindow::slotShowParam(int type)
     pb->show();
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(true);
+    bcProcessor->setNumTheread(numThread);
     bcProcessor->setType(static_cast<ParamType>(type));
     bcProcessor->moveToThread(thread);
     connect(thread, SIGNAL(started()), bcProcessor, SLOT(start()));
