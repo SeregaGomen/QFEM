@@ -316,27 +316,27 @@ double tank3_new_thickness(double, double y, double, double)
 double tank3_new_thickness(double, double y, double, double)
 {
     double L = 0.22,
-           shpangout_top = 0.0435,
-           shpangout_bot = 0.047,
+           Lt = 0.0435,
+           Lb = 0.047,
            R = 1.037;
 
-    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.17*0.17)) or y > (L / 2 + shpangout_top + sqrt(R*R - 0.418*0.418)))
+    if (y > (L / 2 + Lt + sqrt(R*R - 0.17*0.17)) or y > (L / 2 + Lt + sqrt(R*R - 0.418*0.418)))
         return 0.0032;
-    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.365*0.365)) or y > (L / 2 + shpangout_top + sqrt(R*R - 0.94*0.94)) or y > (L / 2 + shpangout_top + sqrt(R*R - 1.029*1.029)))
+    if (y > (L / 2 + Lt + sqrt(R*R - 0.365*0.365)) or y > (L / 2 + Lt + sqrt(R*R - 0.94*0.94)) or y > (L / 2 + Lt + sqrt(R*R - 1.029*1.029)))
         return 0.0019;
-    if (y > (L / 2 + shpangout_top + sqrt(R*R - 0.9645*0.9645)) or y > (L / 2 + 0.061) or y > L / 2 - 0.020 or y > -L / 2)
+    if (y > (L / 2 + Lt + sqrt(R*R - 0.9645*0.9645)) or y > (L / 2 + 0.061) or y > L / 2 - 0.020 or y > -L / 2)
         return 0.003;
     if (y > (L / 2 + 0.031))
         return 0.058;
-    if (abs(y) <= L / 2 - 0.020)
+    if (y > -(L / 2 - 0.020))
         return 0.0023;
-    if (y > -(L/2 + shpangout_bot) or y > -(L/2 + shpangout_bot + sqrt(R*R - 0.425*0.425)))
+    if (y > -(L/2 + Lb) or y > -(L/2 + Lb + sqrt(R*R - 0.425*0.425)))
         return 0.007;
-    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.479*0.479)))
+    if (y > -(L/2 + Lb + sqrt(R*R - 0.479*0.479)))
         return 0.0015;
-    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.4365*0.4365)))
+    if (y > -(L/2 + Lb + sqrt(R*R - 0.4365*0.4365)))
         return 0.0024;
-    if (y > -(L/2 + shpangout_bot + sqrt(R*R - 0.403*0.403)))
+    if (y > -(L/2 + Lb + sqrt(R*R - 0.403*0.403)))
         return 0.0125;
     return 0.0024;
 }
@@ -347,44 +347,18 @@ void calcNewTank3(void)
     double eps = 0.001,
            L = 0.22,
            Lt = 0.0435,
-           P = 1.0E+7;
+           P = 1;
     matrix<double> ssc = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
 
     if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new.trpa"))
         return;
+    object.setNumThread(8);
     object.setTaskParam(FEMType::StaticProblem);
     // Упругие характеристики
     object.addYoungModulus(6.67E+10);
     object.addPoissonRatio(0.3);
     // Толщина КЭ
     object.addThickness(tank3_new_thickness);
-
-//    object.addVariable("L", 0.22);
-//    object.addVariable("Lt", 0.0435);
-//    object.addVariable("Lb", 0.047);
-//    object.addVariable("R", 1.037);
-
-//    object.addThickness("0.0032", "y > (L / 2 + Lt + sqrt(R*R - 0.17*0.17))");
-//    object.addThickness("0.0019", "y > (L / 2 + Lt + sqrt(R*R - 0.365*0.365))");
-//    object.addThickness("0.0032", "y > (L / 2 + Lt + sqrt(R*R - 0.418*0.418))");
-//    object.addThickness("0.0019", "y > (L / 2 + Lt + sqrt(R*R - 0.94*0.94))");
-//    object.addThickness("0.003", "y > (L / 2 + Lt + sqrt(R*R - 0.9645*0.9645))");
-//    object.addThickness("0.0019", "y > (L / 2 +Lt + sqrt(R*R - 1.029*1.029))");
-//    object.addThickness("0.003", "y > (L / 2 + 0.061)");
-//    object.addThickness("0.058", "y > (L / 2 + 0.031)");
-//    object.addThickness("0.003", "y > L / 2 - 0.020");
-//    object.addThickness("0.0023", "abs(y) <= L / 2 - 0.020");
-//    object.addThickness("0.003", "y > -L / 2");
-//    object.addThickness("0.007", "y > -(L/2 + Lb)");
-//    object.addThickness("0.0015", "y > -(L/2 + Lb + sqrt(R*R - 0.479*0.479))");
-//    object.addThickness("0.0024", "y > -(L/2 + Lb + sqrt(R*R - 0.4365*0.4365))");
-//    object.addThickness("0.007", "y > -(L/2 +Lb + sqrt(R*R - 0.425*0.425))");
-//    object.addThickness("0.0125", "y > -(L/2 + Lb + sqrt(R*R - 0.403*0.403))");
-//    object.addThickness("0.0024");
-
-//////////////
-
-
 
     // Граничные условия
     object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [&](double, double y, double, double){ return (abs(y - L / 2 - Lt) <= eps) ? 1.0 : 0.0; });
@@ -396,7 +370,7 @@ void calcNewTank3(void)
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc);
     // Шаг по нагрузке
-    object.setLoadStep(10);
+    object.setLoadStep(5);
     // Способ расчета пластичности
     object.setPlasticityMethod(PlasticityMethod::MVS);
 
