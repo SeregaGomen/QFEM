@@ -825,7 +825,7 @@ void TMainWindow::showProtocol(QString fileName)
         webOut += (((femObject->getParams().tMethod == TimeMethod::Wilson) ? tr("Method for approximating the time: the method of Wilson") : tr("Method for approximating the time: the method Zinkevych")) + "<br>");
 
     // Вывод рез-тов по каждой функции
-    webOut += ("<h2>" + tr("Results of calculation:") + "</h2>");
+    webOut += ("<h2>" + tr("Results of calculation:") + "</h2>") + tr("Parameters of the stress-strain state");
     webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("Function")).arg(tr("Min")).arg("Max");
     if (femObject->getParams().fType == FEMType::StaticProblem)
         for (unsigned i = 0; i < femObject->getResult().size(); i++)
@@ -905,8 +905,8 @@ void TMainWindow::sayParams(QString& webOut)
     webOut += "<h2>" + tr("Problem parameters:") + "</h2>";
     webOut += ((femObject->getParams().fType == FEMType::StaticProblem) ? tr("Solution method: <b>%1</b>").arg(tr("static (Lagrange)")) : tr("Solution method: <b>%1</b>").arg(tr("dynamic (Ostrogradsky)"))) + "<br>";
 
-    webOut += tr("Computational accuracy: <b>%1</b>").arg(femObject->getParams().eps, int(femObject->getParams().width), 'e', int(femObject->getParams().precision)) + "<br><br>";
-    webOut += tr("Elastic characteristics");
+    webOut += tr("Computational accuracy: <b>%1</b>").arg(femObject->getParams().eps, int(femObject->getParams().width), 'e', int(femObject->getParams().precision)) + "<br>";
+    // webOut += tr("Elastic characteristics");
     sayParam(webOut, tr("Young's modulus"), ParamType::YoungModulus, false);
     sayParam(webOut, tr("Poisson's ratio"), ParamType::PoissonRatio, false);
 
@@ -1001,7 +1001,7 @@ void TMainWindow::sayParams(QString& webOut)
     // --------------- Вспомогательные параметры ---------------
     if (femObject->getParams().variables.size())
     {
-        webOut += "<br>" + tr("Variables:") + "<br>";
+        webOut += "<br>" + tr("Variables") + "<br>";
         for (auto it: femObject->getParams().variables)
             webOut += tr("<b>%1</b> = <b>%2</b>").arg(it.first.c_str()).arg(it.second) + "<br>";
     }

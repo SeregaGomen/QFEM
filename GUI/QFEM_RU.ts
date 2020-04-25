@@ -832,7 +832,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QObject</name>
     <message>
-        <location filename="mainwindow.cpp" line="1151"/>
+        <location filename="mainwindow.cpp" line="1154"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -845,7 +845,7 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Ошибка записи файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1151"/>
+        <location filename="mainwindow.cpp" line="1154"/>
         <source>Wrong format file %1</source>
         <translation>Некорректный формат файла %1</translation>
     </message>
@@ -2421,20 +2421,20 @@ p, li { white-space: pre-wrap; }
         <location filename="mainwindow.cpp" line="750"/>
         <location filename="mainwindow.cpp" line="755"/>
         <location filename="mainwindow.cpp" line="760"/>
-        <location filename="mainwindow.cpp" line="885"/>
-        <location filename="mainwindow.cpp" line="1167"/>
-        <location filename="mainwindow.cpp" line="1663"/>
-        <location filename="mainwindow.cpp" line="1684"/>
-        <location filename="mainwindow.cpp" line="1735"/>
-        <location filename="mainwindow.cpp" line="1741"/>
-        <location filename="mainwindow.cpp" line="1747"/>
-        <location filename="mainwindow.cpp" line="1761"/>
+        <location filename="mainwindow.cpp" line="888"/>
+        <location filename="mainwindow.cpp" line="1170"/>
+        <location filename="mainwindow.cpp" line="1666"/>
+        <location filename="mainwindow.cpp" line="1687"/>
+        <location filename="mainwindow.cpp" line="1738"/>
+        <location filename="mainwindow.cpp" line="1744"/>
+        <location filename="mainwindow.cpp" line="1750"/>
+        <location filename="mainwindow.cpp" line="1764"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="545"/>
-        <location filename="mainwindow.cpp" line="1167"/>
+        <location filename="mainwindow.cpp" line="1170"/>
         <source>Error reading file %1</source>
         <translation>Ошибка чтения файла %1</translation>
     </message>
@@ -2541,6 +2541,11 @@ p, li { white-space: pre-wrap; }
         <translation>Результаты расчета:</translation>
     </message>
     <message>
+        <location filename="mainwindow.cpp" line="828"/>
+        <source>Parameters of the stress-strain state</source>
+        <translation>Параметры напряженно-деформированного состояния</translation>
+    </message>
+    <message>
         <location filename="mainwindow.cpp" line="829"/>
         <source>Function</source>
         <translation>Функция</translation>
@@ -2556,84 +2561,89 @@ p, li { white-space: pre-wrap; }
         <translation>Примечания к расчету:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="874"/>
+        <location filename="mainwindow.cpp" line="876"/>
         <source>Results</source>
         <translation>Результаты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="885"/>
-        <location filename="mainwindow.cpp" line="1663"/>
-        <location filename="mainwindow.cpp" line="1684"/>
+        <location filename="mainwindow.cpp" line="888"/>
+        <location filename="mainwindow.cpp" line="1666"/>
+        <location filename="mainwindow.cpp" line="1687"/>
         <source>Error opening file %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="902"/>
+        <location filename="mainwindow.cpp" line="905"/>
         <source>Problem parameters:</source>
         <translation>Параметры задачи:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="912"/>
+        <location filename="mainwindow.cpp" line="915"/>
         <source>Density</source>
         <translation>Плотность</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="913"/>
+        <location filename="mainwindow.cpp" line="916"/>
         <source>Damping parameter</source>
         <translation>Параметер демпфирования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="920"/>
+        <location filename="mainwindow.cpp" line="923"/>
         <source>Stress-strain curve</source>
         <translation>Диаграмма деформирования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="932"/>
+        <location filename="mainwindow.cpp" line="935"/>
         <source>Load step</source>
         <translation>Шаг по нагрузке</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="937"/>
+        <location filename="mainwindow.cpp" line="940"/>
         <source>FE thickness</source>
         <translation>Толщина КЭ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="941"/>
+        <location filename="mainwindow.cpp" line="944"/>
         <source>Thermal expansion</source>
         <translation>Температурное расширение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="942"/>
+        <location filename="mainwindow.cpp" line="945"/>
         <source>Temperatire</source>
         <translation>Температура</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="948"/>
+        <location filename="mainwindow.cpp" line="951"/>
         <source>Volume load</source>
         <translation>Объемная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="951"/>
+        <location filename="mainwindow.cpp" line="954"/>
         <source>Surface load</source>
         <translation>Поверхностная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="954"/>
+        <location filename="mainwindow.cpp" line="957"/>
         <source>Concentrated load</source>
         <translation>Сосредоточенная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="957"/>
+        <location filename="mainwindow.cpp" line="960"/>
         <source>Pressure load</source>
         <translation>Давление</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1003"/>
+        <location filename="mainwindow.cpp" line="1004"/>
+        <source>Variables</source>
+        <translation>Переменные</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1006"/>
         <source>&lt;b&gt;%1&lt;/b&gt; = &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;b&gt;%1&lt;/b&gt; = &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1831"/>
+        <location filename="mainwindow.cpp" line="1834"/>
         <source>QFEM result files (*.qres);; QFEM report files (*.txt)</source>
         <translation>Файлы результатов QFEM (*.qres);; Файлы отчетов QFEM (*.txt)</translation>
     </message>
@@ -2642,42 +2652,41 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Параметры задачи:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="903"/>
+        <location filename="mainwindow.cpp" line="906"/>
         <source>Solution method: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Метод расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="903"/>
+        <location filename="mainwindow.cpp" line="906"/>
         <source>static (Lagrange)</source>
         <translation>статика (Lagrange)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="903"/>
+        <location filename="mainwindow.cpp" line="906"/>
         <source>dynamic (Ostrogradsky)</source>
         <translation>динамика (Ostrogradsky)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="905"/>
+        <location filename="mainwindow.cpp" line="908"/>
         <source>Computational accuracy: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Точность вычислений: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="906"/>
         <source>Elastic characteristics</source>
-        <translation>Упругие характеристики</translation>
+        <translation type="vanished">Упругие характеристики</translation>
     </message>
     <message>
         <source>Stress-strain curve:</source>
         <translation type="vanished">Диаграмма деформирования:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="926"/>
-        <location filename="mainwindow.cpp" line="1025"/>
+        <location filename="mainwindow.cpp" line="929"/>
+        <location filename="mainwindow.cpp" line="1028"/>
         <source>N</source>
         <translation>№</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="907"/>
+        <location filename="mainwindow.cpp" line="910"/>
         <source>Young&apos;s modulus</source>
         <translation>Модуль Юнга</translation>
     </message>
@@ -2692,7 +2701,7 @@ p, li { white-space: pre-wrap; }
         <translation>Тип КЭ: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="908"/>
+        <location filename="mainwindow.cpp" line="911"/>
         <source>Poisson&apos;s ratio</source>
         <translation>Коэффициент Пуассона</translation>
     </message>
@@ -2701,17 +2710,17 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">плотность: &lt;b&gt;%1&lt;/b&gt;, параметр демпфирования: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="919"/>
+        <location filename="mainwindow.cpp" line="922"/>
         <source>Method of elastic-plastic analysis: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Способ упруго-пластического расчета: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="919"/>
+        <location filename="mainwindow.cpp" line="922"/>
         <source>method of variable stiffness</source>
         <translation>метод переменной жесткости</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="919"/>
+        <location filename="mainwindow.cpp" line="922"/>
         <source>method of elastic solutions Ilyushin</source>
         <translation>метод упругих решений Ильюшина</translation>
     </message>
@@ -2720,12 +2729,12 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Механические свойства материала:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="926"/>
+        <location filename="mainwindow.cpp" line="929"/>
         <source>Stress</source>
         <translation>Напряжения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="926"/>
+        <location filename="mainwindow.cpp" line="929"/>
         <source>Deformation</source>
         <translation>Деформации</translation>
     </message>
@@ -2734,18 +2743,18 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Шаг по нагрузке</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="945"/>
+        <location filename="mainwindow.cpp" line="948"/>
         <source>Boundary condition</source>
         <translation>Граничные условия</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1025"/>
+        <location filename="mainwindow.cpp" line="1028"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="925"/>
-        <location filename="mainwindow.cpp" line="1025"/>
+        <location filename="mainwindow.cpp" line="928"/>
+        <location filename="mainwindow.cpp" line="1028"/>
         <source>Predicate</source>
         <translation>Предикат</translation>
     </message>
@@ -2762,33 +2771,32 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Сосредоточенная нагрузка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="962"/>
+        <location filename="mainwindow.cpp" line="965"/>
         <source>time parameters - initial time: &lt;b&gt;%1&lt;/b&gt;, the final moment: &lt;b&gt;%2&lt;/b&gt;, step: &lt;b&gt;%3&lt;/b&gt;</source>
         <translation>параметры времени - начальный момент: &lt;b&gt;%1&lt;/b&gt;, конечный момент: &lt;b&gt;%2&lt;/b&gt;, шаг: &lt;b&gt;%3&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="973"/>
+        <location filename="mainwindow.cpp" line="976"/>
         <source>initial conditions:</source>
         <translation>начальныe условия:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="978"/>
-        <location filename="mainwindow.cpp" line="980"/>
-        <location filename="mainwindow.cpp" line="982"/>
-        <location filename="mainwindow.cpp" line="984"/>
-        <location filename="mainwindow.cpp" line="986"/>
-        <location filename="mainwindow.cpp" line="988"/>
-        <location filename="mainwindow.cpp" line="990"/>
-        <location filename="mainwindow.cpp" line="992"/>
-        <location filename="mainwindow.cpp" line="994"/>
+        <location filename="mainwindow.cpp" line="981"/>
+        <location filename="mainwindow.cpp" line="983"/>
+        <location filename="mainwindow.cpp" line="985"/>
+        <location filename="mainwindow.cpp" line="987"/>
+        <location filename="mainwindow.cpp" line="989"/>
+        <location filename="mainwindow.cpp" line="991"/>
+        <location filename="mainwindow.cpp" line="993"/>
+        <location filename="mainwindow.cpp" line="995"/>
+        <location filename="mainwindow.cpp" line="997"/>
         <source>function: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>функция: &lt;b&gt;%1&lt;/b&gt;, значение: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1001"/>
         <source>Variables:</source>
         <oldsource>variables:</oldsource>
-        <translation>Переменные:</translation>
+        <translation type="vanished">Переменные:</translation>
     </message>
     <message>
         <source>name: &lt;b&gt;%1&lt;/b&gt;, value: &lt;b&gt;%2&lt;/b&gt;</source>
@@ -2799,19 +2807,19 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Ошибка записи файла %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1735"/>
+        <location filename="mainwindow.cpp" line="1738"/>
         <source>This function is is already exists!</source>
         <translation>Такая функция уже существует!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1741"/>
-        <location filename="mainwindow.cpp" line="1747"/>
-        <location filename="mainwindow.cpp" line="1761"/>
+        <location filename="mainwindow.cpp" line="1744"/>
+        <location filename="mainwindow.cpp" line="1750"/>
+        <location filename="mainwindow.cpp" line="1764"/>
         <source>Invalid expression!</source>
         <translation>Неправильно задано выражение!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1831"/>
+        <location filename="mainwindow.cpp" line="1834"/>
         <source>Saving results</source>
         <translation>Сохранение результатов</translation>
     </message>
@@ -2843,17 +2851,17 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Переменной жесткости</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="90"/>
+        <location filename="problemsetupform.ui" line="93"/>
         <source>&amp;Elastic solutions</source>
         <translation>&amp;Упругих решений</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="109"/>
+        <location filename="problemsetupform.ui" line="112"/>
         <source>&amp;Linear</source>
         <translation>&amp;Линейный расчет</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="132"/>
+        <location filename="problemsetupform.ui" line="135"/>
         <source>Computation parameters</source>
         <translation>Параметры расчета</translation>
     </message>
@@ -2866,7 +2874,7 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">1.0e-10</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="185"/>
+        <location filename="problemsetupform.ui" line="188"/>
         <source>Wilson-θ:</source>
         <translation>θ Вильсона:</translation>
     </message>
@@ -2879,17 +2887,17 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">1</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="242"/>
+        <location filename="problemsetupform.ui" line="245"/>
         <source>Load step (%):</source>
         <translation>Шаг по нагрузке (%):</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="265"/>
+        <location filename="problemsetupform.ui" line="268"/>
         <source>Output settings</source>
         <translation>Параметры вывода</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="280"/>
+        <location filename="problemsetupform.ui" line="283"/>
         <source>Width:</source>
         <translation>Ширина:</translation>
     </message>
@@ -2902,219 +2910,219 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">5</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="337"/>
+        <location filename="problemsetupform.ui" line="340"/>
         <source>Precision:</source>
         <translation>Точность:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="360"/>
+        <location filename="problemsetupform.ui" line="363"/>
         <source>Problem type</source>
         <translation>Тип задачи</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="381"/>
+        <location filename="problemsetupform.ui" line="384"/>
         <source>&amp;Statics</source>
         <translation>&amp;Статика</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="403"/>
+        <location filename="problemsetupform.ui" line="406"/>
         <source>&amp;Dynamics</source>
         <translation>&amp;Динамика</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="424"/>
+        <location filename="problemsetupform.ui" line="427"/>
         <source>Elastic parameters</source>
         <translation>Параметры упругости</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="442"/>
+        <location filename="problemsetupform.ui" line="445"/>
         <source>Poisson&apos;s ratio</source>
         <translation>Коэффициент Пуассона</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="464"/>
-        <location filename="problemsetupform.ui" line="561"/>
-        <location filename="problemsetupform.ui" line="703"/>
-        <location filename="problemsetupform.ui" line="800"/>
-        <location filename="problemsetupform.ui" line="898"/>
-        <location filename="problemsetupform.ui" line="1572"/>
-        <location filename="problemsetupform.ui" line="1666"/>
-        <location filename="problemsetupform.ui" line="1786"/>
-        <location filename="problemsetupform.ui" line="1835"/>
-        <location filename="problemsetupform.ui" line="1884"/>
-        <location filename="problemsetupform.ui" line="1933"/>
-        <location filename="problemsetupform.ui" line="2055"/>
-        <location filename="problemsetupform.cpp" line="614"/>
-        <location filename="problemsetupform.cpp" line="694"/>
-        <location filename="problemsetupform.cpp" line="710"/>
-        <location filename="problemsetupform.cpp" line="721"/>
-        <location filename="problemsetupform.cpp" line="763"/>
-        <location filename="problemsetupform.cpp" line="810"/>
-        <location filename="problemsetupform.cpp" line="845"/>
-        <location filename="problemsetupform.cpp" line="859"/>
-        <location filename="problemsetupform.cpp" line="898"/>
-        <location filename="problemsetupform.cpp" line="941"/>
+        <location filename="problemsetupform.ui" line="467"/>
+        <location filename="problemsetupform.ui" line="564"/>
+        <location filename="problemsetupform.ui" line="706"/>
+        <location filename="problemsetupform.ui" line="803"/>
+        <location filename="problemsetupform.ui" line="901"/>
+        <location filename="problemsetupform.ui" line="1575"/>
+        <location filename="problemsetupform.ui" line="1669"/>
+        <location filename="problemsetupform.ui" line="1789"/>
+        <location filename="problemsetupform.ui" line="1838"/>
+        <location filename="problemsetupform.ui" line="1887"/>
+        <location filename="problemsetupform.ui" line="1936"/>
+        <location filename="problemsetupform.ui" line="2058"/>
+        <location filename="problemsetupform.cpp" line="624"/>
+        <location filename="problemsetupform.cpp" line="704"/>
+        <location filename="problemsetupform.cpp" line="720"/>
+        <location filename="problemsetupform.cpp" line="731"/>
+        <location filename="problemsetupform.cpp" line="773"/>
+        <location filename="problemsetupform.cpp" line="820"/>
+        <location filename="problemsetupform.cpp" line="855"/>
+        <location filename="problemsetupform.cpp" line="869"/>
+        <location filename="problemsetupform.cpp" line="908"/>
+        <location filename="problemsetupform.cpp" line="951"/>
         <source>Expression</source>
         <translation>Выражение</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="469"/>
-        <location filename="problemsetupform.ui" line="566"/>
-        <location filename="problemsetupform.ui" line="708"/>
-        <location filename="problemsetupform.ui" line="805"/>
-        <location filename="problemsetupform.ui" line="903"/>
-        <location filename="problemsetupform.ui" line="1577"/>
-        <location filename="problemsetupform.ui" line="1671"/>
-        <location filename="problemsetupform.ui" line="1791"/>
-        <location filename="problemsetupform.ui" line="1840"/>
-        <location filename="problemsetupform.ui" line="1889"/>
-        <location filename="problemsetupform.ui" line="1938"/>
-        <location filename="problemsetupform.ui" line="2060"/>
-        <location filename="problemsetupform.ui" line="2198"/>
-        <location filename="problemsetupform.cpp" line="614"/>
-        <location filename="problemsetupform.cpp" line="694"/>
-        <location filename="problemsetupform.cpp" line="710"/>
-        <location filename="problemsetupform.cpp" line="721"/>
-        <location filename="problemsetupform.cpp" line="811"/>
-        <location filename="problemsetupform.cpp" line="846"/>
-        <location filename="problemsetupform.cpp" line="860"/>
-        <location filename="problemsetupform.cpp" line="899"/>
-        <location filename="problemsetupform.cpp" line="941"/>
-        <location filename="problemsetupform.cpp" line="995"/>
+        <location filename="problemsetupform.ui" line="472"/>
+        <location filename="problemsetupform.ui" line="569"/>
+        <location filename="problemsetupform.ui" line="711"/>
+        <location filename="problemsetupform.ui" line="808"/>
+        <location filename="problemsetupform.ui" line="906"/>
+        <location filename="problemsetupform.ui" line="1580"/>
+        <location filename="problemsetupform.ui" line="1674"/>
+        <location filename="problemsetupform.ui" line="1794"/>
+        <location filename="problemsetupform.ui" line="1843"/>
+        <location filename="problemsetupform.ui" line="1892"/>
+        <location filename="problemsetupform.ui" line="1941"/>
+        <location filename="problemsetupform.ui" line="2063"/>
+        <location filename="problemsetupform.ui" line="2201"/>
+        <location filename="problemsetupform.cpp" line="624"/>
+        <location filename="problemsetupform.cpp" line="704"/>
+        <location filename="problemsetupform.cpp" line="720"/>
+        <location filename="problemsetupform.cpp" line="731"/>
+        <location filename="problemsetupform.cpp" line="821"/>
+        <location filename="problemsetupform.cpp" line="856"/>
+        <location filename="problemsetupform.cpp" line="870"/>
+        <location filename="problemsetupform.cpp" line="909"/>
+        <location filename="problemsetupform.cpp" line="951"/>
+        <location filename="problemsetupform.cpp" line="1005"/>
         <source>Predicate</source>
         <translation>Предикат</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="486"/>
         <location filename="problemsetupform.ui" line="489"/>
-        <location filename="problemsetupform.ui" line="583"/>
+        <location filename="problemsetupform.ui" line="492"/>
         <location filename="problemsetupform.ui" line="586"/>
-        <location filename="problemsetupform.ui" line="725"/>
+        <location filename="problemsetupform.ui" line="589"/>
         <location filename="problemsetupform.ui" line="728"/>
-        <location filename="problemsetupform.ui" line="822"/>
+        <location filename="problemsetupform.ui" line="731"/>
         <location filename="problemsetupform.ui" line="825"/>
-        <location filename="problemsetupform.ui" line="920"/>
+        <location filename="problemsetupform.ui" line="828"/>
         <location filename="problemsetupform.ui" line="923"/>
-        <location filename="problemsetupform.ui" line="1594"/>
+        <location filename="problemsetupform.ui" line="926"/>
         <location filename="problemsetupform.ui" line="1597"/>
-        <location filename="problemsetupform.ui" line="1688"/>
+        <location filename="problemsetupform.ui" line="1600"/>
         <location filename="problemsetupform.ui" line="1691"/>
-        <location filename="problemsetupform.ui" line="1957"/>
+        <location filename="problemsetupform.ui" line="1694"/>
         <location filename="problemsetupform.ui" line="1960"/>
-        <location filename="problemsetupform.ui" line="2092"/>
+        <location filename="problemsetupform.ui" line="1963"/>
         <location filename="problemsetupform.ui" line="2095"/>
-        <location filename="problemsetupform.ui" line="2215"/>
+        <location filename="problemsetupform.ui" line="2098"/>
         <location filename="problemsetupform.ui" line="2218"/>
-        <location filename="problemsetupform.ui" line="2540"/>
+        <location filename="problemsetupform.ui" line="2221"/>
         <location filename="problemsetupform.ui" line="2543"/>
+        <location filename="problemsetupform.ui" line="2546"/>
         <source>Remove the current row</source>
         <translation>Удалить текущую строку</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="492"/>
-        <location filename="problemsetupform.ui" line="515"/>
-        <location filename="problemsetupform.ui" line="589"/>
-        <location filename="problemsetupform.ui" line="612"/>
-        <location filename="problemsetupform.ui" line="638"/>
-        <location filename="problemsetupform.ui" line="731"/>
-        <location filename="problemsetupform.ui" line="754"/>
-        <location filename="problemsetupform.ui" line="828"/>
-        <location filename="problemsetupform.ui" line="851"/>
-        <location filename="problemsetupform.ui" line="926"/>
-        <location filename="problemsetupform.ui" line="949"/>
-        <location filename="problemsetupform.ui" line="975"/>
-        <location filename="problemsetupform.ui" line="1600"/>
-        <location filename="problemsetupform.ui" line="1623"/>
-        <location filename="problemsetupform.ui" line="1694"/>
-        <location filename="problemsetupform.ui" line="1717"/>
-        <location filename="problemsetupform.ui" line="1963"/>
-        <location filename="problemsetupform.ui" line="1986"/>
-        <location filename="problemsetupform.ui" line="2012"/>
-        <location filename="problemsetupform.ui" line="2098"/>
-        <location filename="problemsetupform.ui" line="2121"/>
-        <location filename="problemsetupform.ui" line="2147"/>
-        <location filename="problemsetupform.ui" line="2221"/>
-        <location filename="problemsetupform.ui" line="2244"/>
-        <location filename="problemsetupform.ui" line="2546"/>
-        <location filename="problemsetupform.ui" line="2569"/>
+        <location filename="problemsetupform.ui" line="495"/>
+        <location filename="problemsetupform.ui" line="518"/>
+        <location filename="problemsetupform.ui" line="592"/>
+        <location filename="problemsetupform.ui" line="615"/>
+        <location filename="problemsetupform.ui" line="641"/>
+        <location filename="problemsetupform.ui" line="734"/>
+        <location filename="problemsetupform.ui" line="757"/>
+        <location filename="problemsetupform.ui" line="831"/>
+        <location filename="problemsetupform.ui" line="854"/>
+        <location filename="problemsetupform.ui" line="929"/>
+        <location filename="problemsetupform.ui" line="952"/>
+        <location filename="problemsetupform.ui" line="978"/>
+        <location filename="problemsetupform.ui" line="1603"/>
+        <location filename="problemsetupform.ui" line="1626"/>
+        <location filename="problemsetupform.ui" line="1697"/>
+        <location filename="problemsetupform.ui" line="1720"/>
+        <location filename="problemsetupform.ui" line="1966"/>
+        <location filename="problemsetupform.ui" line="1989"/>
+        <location filename="problemsetupform.ui" line="2015"/>
+        <location filename="problemsetupform.ui" line="2101"/>
+        <location filename="problemsetupform.ui" line="2124"/>
+        <location filename="problemsetupform.ui" line="2150"/>
+        <location filename="problemsetupform.ui" line="2224"/>
+        <location filename="problemsetupform.ui" line="2247"/>
+        <location filename="problemsetupform.ui" line="2549"/>
+        <location filename="problemsetupform.ui" line="2572"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="509"/>
         <location filename="problemsetupform.ui" line="512"/>
-        <location filename="problemsetupform.ui" line="606"/>
+        <location filename="problemsetupform.ui" line="515"/>
         <location filename="problemsetupform.ui" line="609"/>
-        <location filename="problemsetupform.ui" line="748"/>
+        <location filename="problemsetupform.ui" line="612"/>
         <location filename="problemsetupform.ui" line="751"/>
-        <location filename="problemsetupform.ui" line="845"/>
+        <location filename="problemsetupform.ui" line="754"/>
         <location filename="problemsetupform.ui" line="848"/>
-        <location filename="problemsetupform.ui" line="943"/>
+        <location filename="problemsetupform.ui" line="851"/>
         <location filename="problemsetupform.ui" line="946"/>
-        <location filename="problemsetupform.ui" line="1617"/>
+        <location filename="problemsetupform.ui" line="949"/>
         <location filename="problemsetupform.ui" line="1620"/>
-        <location filename="problemsetupform.ui" line="1711"/>
+        <location filename="problemsetupform.ui" line="1623"/>
         <location filename="problemsetupform.ui" line="1714"/>
-        <location filename="problemsetupform.ui" line="1980"/>
+        <location filename="problemsetupform.ui" line="1717"/>
         <location filename="problemsetupform.ui" line="1983"/>
-        <location filename="problemsetupform.ui" line="2115"/>
+        <location filename="problemsetupform.ui" line="1986"/>
         <location filename="problemsetupform.ui" line="2118"/>
-        <location filename="problemsetupform.ui" line="2238"/>
+        <location filename="problemsetupform.ui" line="2121"/>
         <location filename="problemsetupform.ui" line="2241"/>
-        <location filename="problemsetupform.ui" line="2563"/>
+        <location filename="problemsetupform.ui" line="2244"/>
         <location filename="problemsetupform.ui" line="2566"/>
+        <location filename="problemsetupform.ui" line="2569"/>
         <source>Add new row</source>
         <translation>Добавить новую строку</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="539"/>
+        <location filename="problemsetupform.ui" line="542"/>
         <source>Young modulus</source>
         <translation>Модуль Юнга</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="632"/>
         <location filename="problemsetupform.ui" line="635"/>
-        <location filename="problemsetupform.ui" line="969"/>
+        <location filename="problemsetupform.ui" line="638"/>
         <location filename="problemsetupform.ui" line="972"/>
-        <location filename="problemsetupform.ui" line="2006"/>
+        <location filename="problemsetupform.ui" line="975"/>
         <location filename="problemsetupform.ui" line="2009"/>
-        <location filename="problemsetupform.ui" line="2141"/>
+        <location filename="problemsetupform.ui" line="2012"/>
         <location filename="problemsetupform.ui" line="2144"/>
+        <location filename="problemsetupform.ui" line="2147"/>
         <source>Visualization parameter</source>
         <translation>Визуализация параметра</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="663"/>
+        <location filename="problemsetupform.ui" line="666"/>
         <source>Thermal parameters</source>
         <translation>Параметры термоупругости</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="681"/>
+        <location filename="problemsetupform.ui" line="684"/>
         <source>Temperature (ΔT)</source>
         <translation>Температура (ΔT)</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="778"/>
+        <location filename="problemsetupform.ui" line="781"/>
         <source>Thermal expansion (α)</source>
         <translation>Коэффициент температурного расширения (α)</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="876"/>
+        <location filename="problemsetupform.ui" line="879"/>
         <source>Finite element thickness</source>
         <translation>Толщина КЭ</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="999"/>
+        <location filename="problemsetupform.ui" line="1002"/>
         <source>Dynamical parameters</source>
         <translation>Параметры динамики</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1020"/>
+        <location filename="problemsetupform.ui" line="1023"/>
         <source>The initial conditions</source>
         <translation>Начальные условия</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1038"/>
+        <location filename="problemsetupform.ui" line="1041"/>
         <source>V:</source>
         <translation>V:</translation>
     </message>
@@ -3123,47 +3131,47 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">0</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1079"/>
+        <location filename="problemsetupform.ui" line="1082"/>
         <source>W:</source>
         <translation>W:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1120"/>
+        <location filename="problemsetupform.ui" line="1123"/>
         <source>Ut:</source>
         <translation>Ut:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1161"/>
+        <location filename="problemsetupform.ui" line="1164"/>
         <source>Vt:</source>
         <translation>Vt:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1202"/>
+        <location filename="problemsetupform.ui" line="1205"/>
         <source>Wt:</source>
         <translation>Wt:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1243"/>
+        <location filename="problemsetupform.ui" line="1246"/>
         <source>Wtt:</source>
         <translation>Wtt:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1303"/>
+        <location filename="problemsetupform.ui" line="1306"/>
         <source>Vtt:</source>
         <translation>Vtt:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1341"/>
+        <location filename="problemsetupform.ui" line="1344"/>
         <source>U:</source>
         <translation>U:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1363"/>
+        <location filename="problemsetupform.ui" line="1366"/>
         <source>Utt:</source>
         <translation>Utt:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1408"/>
+        <location filename="problemsetupform.ui" line="1411"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
@@ -3180,120 +3188,120 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Th:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="147"/>
+        <location filename="problemsetupform.ui" line="150"/>
         <source>Error:</source>
         <translation>Погрешность:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1553"/>
+        <location filename="problemsetupform.ui" line="1556"/>
         <source>Density</source>
         <translation>Плотность</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1647"/>
+        <location filename="problemsetupform.ui" line="1650"/>
         <source>Damping</source>
         <translation>Демпфирование</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1742"/>
+        <location filename="problemsetupform.ui" line="1745"/>
         <source>Loads</source>
         <translation>Нагрузка</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1764"/>
+        <location filename="problemsetupform.ui" line="1767"/>
         <source>Volume</source>
         <translation>Объемная</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1796"/>
-        <location filename="problemsetupform.ui" line="1845"/>
-        <location filename="problemsetupform.ui" line="1894"/>
+        <location filename="problemsetupform.ui" line="1799"/>
+        <location filename="problemsetupform.ui" line="1848"/>
+        <location filename="problemsetupform.ui" line="1897"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1801"/>
-        <location filename="problemsetupform.ui" line="1850"/>
-        <location filename="problemsetupform.ui" line="1899"/>
+        <location filename="problemsetupform.ui" line="1804"/>
+        <location filename="problemsetupform.ui" line="1853"/>
+        <location filename="problemsetupform.ui" line="1902"/>
         <source>y</source>
         <translation>y</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1806"/>
-        <location filename="problemsetupform.ui" line="1855"/>
-        <location filename="problemsetupform.ui" line="1904"/>
+        <location filename="problemsetupform.ui" line="1809"/>
+        <location filename="problemsetupform.ui" line="1858"/>
+        <location filename="problemsetupform.ui" line="1907"/>
         <source>z</source>
         <translation>z</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1813"/>
+        <location filename="problemsetupform.ui" line="1816"/>
         <source>Surface</source>
         <translation>Поверхностная</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1862"/>
+        <location filename="problemsetupform.ui" line="1865"/>
         <source>Concentrated</source>
         <translation>Сосредоточенная</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="1911"/>
+        <location filename="problemsetupform.ui" line="1914"/>
         <source>Pressure</source>
         <translation>Давление</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2036"/>
+        <location filename="problemsetupform.ui" line="2039"/>
         <source>Boundary conditions</source>
         <translation>Граничные условия</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2065"/>
+        <location filename="problemsetupform.ui" line="2068"/>
         <source>U</source>
         <translation>U</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2070"/>
+        <location filename="problemsetupform.ui" line="2073"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2075"/>
+        <location filename="problemsetupform.ui" line="2078"/>
         <source>W</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2171"/>
+        <location filename="problemsetupform.ui" line="2174"/>
         <source>Stress-strain curve</source>
         <translation>Диаграмма деформирования</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2193"/>
-        <location filename="problemsetupform.cpp" line="995"/>
+        <location filename="problemsetupform.ui" line="2196"/>
+        <location filename="problemsetupform.cpp" line="1005"/>
         <source>Stress-Strain curve</source>
         <translation>Диаграмма деформирования</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2268"/>
+        <location filename="problemsetupform.ui" line="2271"/>
         <source>Notations and variables</source>
         <translation>Обозначения и переменные</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2286"/>
+        <location filename="problemsetupform.ui" line="2289"/>
         <source>Function names</source>
         <translation>Имена функций</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2299"/>
+        <location filename="problemsetupform.ui" line="2302"/>
         <source>Function</source>
         <translation>Функция</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2304"/>
-        <location filename="problemsetupform.ui" line="2518"/>
+        <location filename="problemsetupform.ui" line="2307"/>
+        <location filename="problemsetupform.ui" line="2521"/>
         <source>Name</source>
         <translation>Обозначение</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2325"/>
+        <location filename="problemsetupform.ui" line="2328"/>
         <source>Coordinate</source>
         <translation>Координаты</translation>
     </message>
@@ -3314,225 +3322,225 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">t:</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2496"/>
+        <location filename="problemsetupform.ui" line="2499"/>
         <source>Global variables</source>
         <translation>Глобальные параметры</translation>
     </message>
     <message>
-        <location filename="problemsetupform.ui" line="2523"/>
+        <location filename="problemsetupform.ui" line="2526"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="149"/>
-        <location filename="problemsetupform.cpp" line="158"/>
+        <location filename="problemsetupform.cpp" line="159"/>
+        <location filename="problemsetupform.cpp" line="168"/>
         <source>&amp;Select all</source>
         <translation>&amp;Выделить все</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="150"/>
-        <location filename="problemsetupform.cpp" line="159"/>
+        <location filename="problemsetupform.cpp" line="160"/>
+        <location filename="problemsetupform.cpp" line="169"/>
         <source>Clear &amp;all</source>
         <translation>&amp;Сбросить все</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="152"/>
+        <location filename="problemsetupform.cpp" line="162"/>
         <source>Select &amp;x</source>
         <translation>Выделить &amp;x</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="153"/>
+        <location filename="problemsetupform.cpp" line="163"/>
         <source>Select &amp;y</source>
         <translation>Выделить &amp;y</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="154"/>
+        <location filename="problemsetupform.cpp" line="164"/>
         <source>Select &amp;z</source>
         <translation>Выделить &amp;z</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="156"/>
-        <location filename="problemsetupform.cpp" line="165"/>
-        <location filename="problemsetupform.cpp" line="167"/>
+        <location filename="problemsetupform.cpp" line="166"/>
+        <location filename="problemsetupform.cpp" line="175"/>
+        <location filename="problemsetupform.cpp" line="177"/>
         <source>&amp;Remove all</source>
         <translation>У&amp;далить все</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="161"/>
+        <location filename="problemsetupform.cpp" line="171"/>
         <source>Select &amp;U</source>
         <translation>Выделить по &amp;U</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="162"/>
+        <location filename="problemsetupform.cpp" line="172"/>
         <source>Select &amp;V</source>
         <translation>Выделить по &amp;V</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="163"/>
+        <location filename="problemsetupform.cpp" line="173"/>
         <source>Select &amp;W</source>
         <translation>Выделить по &amp;W</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1059"/>
-        <location filename="problemsetupform.cpp" line="1065"/>
-        <location filename="problemsetupform.cpp" line="1073"/>
-        <location filename="problemsetupform.cpp" line="1080"/>
-        <location filename="problemsetupform.cpp" line="1088"/>
-        <location filename="problemsetupform.cpp" line="1094"/>
-        <location filename="problemsetupform.cpp" line="1138"/>
-        <location filename="problemsetupform.cpp" line="1146"/>
-        <location filename="problemsetupform.cpp" line="1162"/>
-        <location filename="problemsetupform.cpp" line="1180"/>
-        <location filename="problemsetupform.cpp" line="1187"/>
-        <location filename="problemsetupform.cpp" line="1192"/>
-        <location filename="problemsetupform.cpp" line="1211"/>
+        <location filename="problemsetupform.cpp" line="1069"/>
+        <location filename="problemsetupform.cpp" line="1075"/>
+        <location filename="problemsetupform.cpp" line="1083"/>
+        <location filename="problemsetupform.cpp" line="1090"/>
+        <location filename="problemsetupform.cpp" line="1098"/>
+        <location filename="problemsetupform.cpp" line="1104"/>
+        <location filename="problemsetupform.cpp" line="1148"/>
+        <location filename="problemsetupform.cpp" line="1156"/>
+        <location filename="problemsetupform.cpp" line="1172"/>
+        <location filename="problemsetupform.cpp" line="1190"/>
+        <location filename="problemsetupform.cpp" line="1197"/>
+        <location filename="problemsetupform.cpp" line="1202"/>
         <location filename="problemsetupform.cpp" line="1221"/>
-        <location filename="problemsetupform.cpp" line="1236"/>
-        <location filename="problemsetupform.cpp" line="1243"/>
-        <location filename="problemsetupform.cpp" line="1342"/>
-        <location filename="problemsetupform.cpp" line="1348"/>
-        <location filename="problemsetupform.cpp" line="1355"/>
-        <location filename="problemsetupform.cpp" line="1361"/>
-        <location filename="problemsetupform.cpp" line="1368"/>
-        <location filename="problemsetupform.cpp" line="1374"/>
-        <location filename="problemsetupform.cpp" line="1381"/>
-        <location filename="problemsetupform.cpp" line="1387"/>
-        <location filename="problemsetupform.cpp" line="1395"/>
-        <location filename="problemsetupform.cpp" line="1403"/>
-        <location filename="problemsetupform.cpp" line="1411"/>
-        <location filename="problemsetupform.cpp" line="1419"/>
-        <location filename="problemsetupform.cpp" line="1427"/>
-        <location filename="problemsetupform.cpp" line="1435"/>
-        <location filename="problemsetupform.cpp" line="1443"/>
-        <location filename="problemsetupform.cpp" line="1451"/>
-        <location filename="problemsetupform.cpp" line="1459"/>
+        <location filename="problemsetupform.cpp" line="1231"/>
+        <location filename="problemsetupform.cpp" line="1246"/>
+        <location filename="problemsetupform.cpp" line="1253"/>
+        <location filename="problemsetupform.cpp" line="1352"/>
+        <location filename="problemsetupform.cpp" line="1358"/>
+        <location filename="problemsetupform.cpp" line="1365"/>
+        <location filename="problemsetupform.cpp" line="1371"/>
+        <location filename="problemsetupform.cpp" line="1378"/>
+        <location filename="problemsetupform.cpp" line="1384"/>
+        <location filename="problemsetupform.cpp" line="1391"/>
+        <location filename="problemsetupform.cpp" line="1397"/>
+        <location filename="problemsetupform.cpp" line="1405"/>
+        <location filename="problemsetupform.cpp" line="1413"/>
+        <location filename="problemsetupform.cpp" line="1421"/>
+        <location filename="problemsetupform.cpp" line="1429"/>
+        <location filename="problemsetupform.cpp" line="1437"/>
+        <location filename="problemsetupform.cpp" line="1445"/>
+        <location filename="problemsetupform.cpp" line="1453"/>
+        <location filename="problemsetupform.cpp" line="1461"/>
+        <location filename="problemsetupform.cpp" line="1469"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1059"/>
-        <location filename="problemsetupform.cpp" line="1065"/>
+        <location filename="problemsetupform.cpp" line="1069"/>
+        <location filename="problemsetupform.cpp" line="1075"/>
         <source>Incorrectly specified calculation errors!</source>
         <translation>Неправильно задана погрешность вычислений!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1073"/>
-        <location filename="problemsetupform.cpp" line="1080"/>
-        <location filename="problemsetupform.cpp" line="1088"/>
-        <location filename="problemsetupform.cpp" line="1094"/>
+        <location filename="problemsetupform.cpp" line="1083"/>
+        <location filename="problemsetupform.cpp" line="1090"/>
+        <location filename="problemsetupform.cpp" line="1098"/>
+        <location filename="problemsetupform.cpp" line="1104"/>
         <source>Incorrectly set output parameters!</source>
         <translation>Некорректно заданы параметры вывода!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1125"/>
+        <location filename="problemsetupform.cpp" line="1135"/>
         <source>volumetric load X</source>
         <translation>объемная нагрузка X</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1126"/>
+        <location filename="problemsetupform.cpp" line="1136"/>
         <source>volumetric load Y</source>
         <translation>объемная нагрузка Y</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1127"/>
+        <location filename="problemsetupform.cpp" line="1137"/>
         <source>volumetric load Z</source>
         <translation>объемная нагрузка Z</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1128"/>
+        <location filename="problemsetupform.cpp" line="1138"/>
         <source>coordinate x</source>
         <translation>координаты x</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1129"/>
+        <location filename="problemsetupform.cpp" line="1139"/>
         <source>coordinate y</source>
         <translation>координаты y</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1130"/>
+        <location filename="problemsetupform.cpp" line="1140"/>
         <source>coordinate z</source>
         <translation>координаты z</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1138"/>
-        <location filename="problemsetupform.cpp" line="1146"/>
+        <location filename="problemsetupform.cpp" line="1148"/>
+        <location filename="problemsetupform.cpp" line="1156"/>
         <source>Incorrect function name %1!</source>
         <translation>Неправильное название функции %1!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1162"/>
+        <location filename="problemsetupform.cpp" line="1172"/>
         <source>Incorrectly set variable value in a row: %1!</source>
         <translation>Некорректно задано значение параметра в строке: %1!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1180"/>
+        <location filename="problemsetupform.cpp" line="1190"/>
         <source>Incorrectly set load step!</source>
         <translation>Некорректно задан шаг по нагрузке!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1187"/>
+        <location filename="problemsetupform.cpp" line="1197"/>
         <source>Incorrectly set stress-strain curve in a row: %1!</source>
         <translation>Некорректно задана диаграмма деформированияtв строке: %1!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1192"/>
+        <location filename="problemsetupform.cpp" line="1202"/>
         <source>Incorrectly set predicate in a row: %1!</source>
         <translation>Некорректно задан предикат в строке: %1!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1211"/>
+        <location filename="problemsetupform.cpp" line="1221"/>
         <source>Young&apos;s modulus not defined!</source>
         <translation>Модуль Юнга не определен!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1221"/>
+        <location filename="problemsetupform.cpp" line="1231"/>
         <source>Poisson&apos;s ratio not defined!</source>
         <translation>Коэффициент Пуассона не определен!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1236"/>
+        <location filename="problemsetupform.cpp" line="1246"/>
         <source>Incorrectly specified expression in a row: %1!</source>
         <translation>Некорректно задано выражение в строке: %1!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1243"/>
+        <location filename="problemsetupform.cpp" line="1253"/>
         <source>Predicate is not set correctly in the string: %1!</source>
         <translation>Неправильно задан предикат в строке: %1!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1342"/>
-        <location filename="problemsetupform.cpp" line="1348"/>
+        <location filename="problemsetupform.cpp" line="1352"/>
+        <location filename="problemsetupform.cpp" line="1358"/>
         <source>Incorrectly set the Wilson-theta!</source>
         <translation>Некоректно заданна тетта Вильсона!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1355"/>
-        <location filename="problemsetupform.cpp" line="1361"/>
+        <location filename="problemsetupform.cpp" line="1365"/>
+        <location filename="problemsetupform.cpp" line="1371"/>
         <source>Incorrectly set the start time!</source>
         <translation>Некорректно задано начальное время!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1368"/>
-        <location filename="problemsetupform.cpp" line="1374"/>
+        <location filename="problemsetupform.cpp" line="1378"/>
+        <location filename="problemsetupform.cpp" line="1384"/>
         <source>Incorrectly set the stop time!</source>
         <translation>Некорректо задано конечное время!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1381"/>
-        <location filename="problemsetupform.cpp" line="1387"/>
+        <location filename="problemsetupform.cpp" line="1391"/>
+        <location filename="problemsetupform.cpp" line="1397"/>
         <source>Incorrectly set the time step!</source>
         <translation>Неправильно задан шаг по времени!</translation>
     </message>
     <message>
-        <location filename="problemsetupform.cpp" line="1395"/>
-        <location filename="problemsetupform.cpp" line="1403"/>
-        <location filename="problemsetupform.cpp" line="1411"/>
-        <location filename="problemsetupform.cpp" line="1419"/>
-        <location filename="problemsetupform.cpp" line="1427"/>
-        <location filename="problemsetupform.cpp" line="1435"/>
-        <location filename="problemsetupform.cpp" line="1443"/>
-        <location filename="problemsetupform.cpp" line="1451"/>
-        <location filename="problemsetupform.cpp" line="1459"/>
+        <location filename="problemsetupform.cpp" line="1405"/>
+        <location filename="problemsetupform.cpp" line="1413"/>
+        <location filename="problemsetupform.cpp" line="1421"/>
+        <location filename="problemsetupform.cpp" line="1429"/>
+        <location filename="problemsetupform.cpp" line="1437"/>
+        <location filename="problemsetupform.cpp" line="1445"/>
+        <location filename="problemsetupform.cpp" line="1453"/>
+        <location filename="problemsetupform.cpp" line="1461"/>
+        <location filename="problemsetupform.cpp" line="1469"/>
         <source>Incorrectly set the initial conditions!</source>
         <translation>Неправильно заданы начальные условия!</translation>
     </message>
