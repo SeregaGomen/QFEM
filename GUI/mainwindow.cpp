@@ -1759,7 +1759,7 @@ bool TMainWindow::calcExpression(QString expression, QString& name)
         for (unsigned j = 0; j < femObject->getMesh().getDimension(); j++)
             parser.set_variable(femObject->getParams().names[j],femObject->getMesh().getX(i, j));
         parser.set_expression(exp.toStdString().c_str());
-        if (parser.get_error() not_eq NO_ERR)
+        if (parser.get_error() not_eq ErrorCode::Undefined)
         {
             QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
             return false;

@@ -10,7 +10,7 @@ void TBCProcessor::processVertex(void)
     unsigned numThread = 4, //std::thread::hardware_concurrency() - 1,
              size = object->getMesh().getNumBE(),
              step = size / numThread;
-    int error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     vector<std::thread> thr(numThread);
     auto f_ptr = std::mem_fn(&TBCProcessor::calcParam);
 
@@ -34,18 +34,18 @@ void TBCProcessor::processVertex(void)
         step = (size = object->getMesh().getNumVertex()) / numThread;
 
     isStoped = false;
-    msg->setProcess(BC_CREATE_PROCESS, 1, int(size), 5);
+    msg->setProcess(ProcessCode::GeneratingBoundaryCondition, 1, int(size), 5);
     // Обработка граничных условий
     for (unsigned i = 0; i < numThread; i++)
         thr[i] = std::thread(f_ptr, this, i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
     for_each(thr.begin(), thr.end(), [](auto& t) { t.join(); });
 //    calcConcentratedLoad(0, size, ref(error));
     msg->stopProcess();
-    if (error)
+    if (error not_eq ErrorCode::Undefined)
         cerr << endl << sayError(ErrorCode(error)) << endl;
 }
 
-void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
+void TBCProcessor::calcParam(unsigned begin, unsigned end, ErrorCode& error)
 {
     vector<double> coord;
 
@@ -56,7 +56,7 @@ void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
             msg->addProgress();
             if (isStoped)
             {
-                error = ABORT_ERR;
+                error = ErrorCode::EAbort;
                 return;
             }
             for (auto it: object->getParams().plist)
@@ -77,7 +77,7 @@ void TBCProcessor::calcParam(unsigned begin, unsigned end, int& error)
     }
 }
 
-void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error)
+void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, ErrorCode &error)
 {
     vector<double> coord;
     double value;
@@ -89,7 +89,7 @@ void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error
             msg->addProgress();
             if (isStoped)
             {
-                error = ABORT_ERR;
+                error = ErrorCode::EAbort;
                 return;
             }
             for (auto it: object->getParams().plist)
@@ -115,7 +115,7 @@ void TBCProcessor::calcConcentratedLoad(unsigned begin, unsigned end, int &error
     }
 }
 
-void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
+void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, ErrorCode &error)
 {
     bool isTrue;
     matrix<double> coord;
@@ -130,7 +130,7 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
             msg->addProgress();
             if (isStoped)
             {
-                error = ABORT_ERR;
+                error = ErrorCode::EAbort;
                 return;
             }
 
@@ -182,7 +182,7 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, int &error)
     }
 }
 
-void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
+void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, ErrorCode &error)
 {
     bool isTrue;
     matrix<double> coord;
@@ -196,7 +196,7 @@ void TBCProcessor::calcVolumeLoad(unsigned begin, unsigned end, int &error)
             msg->addProgress();
             if (isStoped)
             {
-                error = ABORT_ERR;
+                error = ErrorCode::EAbort;
                 return;
             }
 

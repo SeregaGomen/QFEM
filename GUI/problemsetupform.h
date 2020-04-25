@@ -16,6 +16,7 @@ namespace Ui {
 }
 
 enum class ParamType;
+enum class ErrorCode;
 
 class TDelegateHTML : public QItemDelegate
 {
@@ -123,8 +124,8 @@ private:
     bool checkPlasticity(void);
     bool checkVariables(void);
 
-    int getExpression(QString, double&, double = 0, double = 0, double = 0);
-    int checkExpression(QString);
+    ErrorCode getExpression(QString, double&, double = 0, double = 0, double = 0);
+    ErrorCode checkExpression(QString);
     Direction getDirect(QTableWidget*, int);
     QTableWidget* getLoadTab(void);
 };

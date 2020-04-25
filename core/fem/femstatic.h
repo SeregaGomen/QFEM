@@ -68,10 +68,11 @@ template<class T> void TFEMStatic<T>::startProcess(void)
 
     TFEM::begin();
     // Предварительное вычисление компонент нагрузки
-    calcConcentratedLoad(load);
-    calcSurfaceLoad(load);
-    calcPressureLoad(load);
-    calcVolumeLoad(load);
+    calcLoad(load);
+//    calcConcentratedLoad(load);
+//    calcSurfaceLoad(load);
+//    calcPressureLoad(load);
+//    calcVolumeLoad(load);
 
     // Формирование ГМЖ
     calcGlobalMatrix();
@@ -91,7 +92,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
         genResults(res); // Вычисление дополнительных результатов
     solver.clear();
     if (isProcessAborted)
-        throw ABORT_ERR;
+        throw ErrorCode::EAbort;
     isProcessStarted = false;
     isProcessCalculated = true;
 
@@ -216,14 +217,14 @@ template<class T> void TFEMStatic<T>::avgResults(matrix<double> &result, vector<
 template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
 {
     unsigned step = TFEM::mesh->getNumFE() / numThread;
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     vector<thread> thr(numThread);
 
-    msg->setProcess((isStatic) ? GENERATE_FE_STATIC_PROCESS : GENERATE_FE_DYNAMIC_PROCESS, 1, TFEM::mesh->getNumFE());
+    msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingDynamicMatrix, 1, TFEM::mesh->getNumFE());
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<T>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
     for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
-    if (error)
+    if (error not_eq ErrorCode::Undefined)
         throw error;
     msg->stopProcess();
 }
@@ -240,7 +241,7 @@ template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bo
         {
             msg->addProgress();
             if (isProcessAborted)
-                throw ABORT_ERR;
+                throw ErrorCode::EAbort;
             // Настройка КЭ
             setupFE(fe.getFE(), i);
             // Формирование локальной МЖ (ЛМЖ)
@@ -259,17 +260,17 @@ template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bo
 //-------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::BoundaryCondition))
     {
-        msg->setProcess(CALC_BOUNDARY_CONDITION_PROCESS, 1, TFEM::mesh->getNumVertex());
+        msg->setProcess(ProcessCode::UsingBoundaryCondition, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<T>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error)
+        if (error not_eq ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -293,7 +294,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
                 if (it.getType() == ParamType::BoundaryCondition and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     if (isProcessAborted)
-                        throw ABORT_ERR;
+                        throw ErrorCode::EAbort;
                     mesh->getCoordVertex(i, coord);
                     coord.push_back(0.0); // t = 0
                     if (params.getPredicateValue(it, coord))
@@ -319,17 +320,17 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcConcentratedLoad(vector<double> &load, double t)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::ConcentratedLoad))
     {
-        msg->setProcess(CALCULATION_CONCENTRATED_LOAD_PROCESS, 1, TFEM::mesh->getNumVertex());
+        msg->setProcess(ProcessCode::GeneratingConcentratedLoad, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<T>::getConcentratedLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error)
+        if (error not_eq ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -352,7 +353,7 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
                 if (it.getType() == ParamType::ConcentratedLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     if (isProcessAborted)
-                        throw ABORT_ERR;
+                        throw ErrorCode::EAbort;
                     mesh->getCoordVertex(i, coord);
                     coord.push_back(t);
 
@@ -378,17 +379,17 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, double t)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::SurfaceLoad))
     {
-        msg->setProcess(CALCULATION_SURFACE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
+        msg->setProcess(ProcessCode::GeneratingSurfaceLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<T>::getSurfaceLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error)
+        if (error not_eq ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -412,7 +413,7 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
                 if (it.getType() == ParamType::SurfaceLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     if (isProcessAborted)
-                        throw ABORT_ERR;
+                        throw ErrorCode::EAbort;
                     // Проверка, все ли узлы ГЭ удвлетворяют предикату
                     if (not checkBE(i, it))
                         continue;
@@ -442,17 +443,17 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcPressureLoad(vector<double> &load, double t)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::Pressure_load))
     {
-        msg->setProcess(CALCULATION_PRESSURE_LOAD_PROCESS, 1, TFEM::mesh->getNumBE());
+        msg->setProcess(ProcessCode::GeneratingPressureLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<T>::getPressureLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error)
+        if (error not_eq ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -476,7 +477,7 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
                 if (it.getType() == ParamType::Pressure_load)
                 {
                     if (isProcessAborted)
-                        throw ABORT_ERR;
+                        throw ErrorCode::EAbort;
                     // Проверка, все ли узлы ГЭ удвлетворяют предикату
                     if (not checkBE(i, it))
                         continue;
@@ -517,17 +518,17 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcVolumeLoad(vector<double> &load, double t)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumFE() / numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::VolumeLoad))
     {
-        msg->setProcess(CALCULATION_VOLUME_LOAD_PROCESS, 1, mesh->getNumFE());
+        msg->setProcess(ProcessCode::GeneratingVolumeLoad, 1, mesh->getNumFE());
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<T>::getVolumeLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error)
+        if (error not_eq ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -548,7 +549,7 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
         {
             msg->addProgress();
             if (isProcessAborted)
-                throw ABORT_ERR;
+                throw ErrorCode::EAbort;
             for (auto it: params.plist)
                 if (it.getType() == ParamType::VolumeLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
@@ -632,7 +633,7 @@ template<class T> void TFEMStatic<T>::getStressIntensity(TResultList &res, vecto
 //-------------------------------------------------------------
 template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<double> &u)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumFE() / numThread;
     vector<int> counter(TFEM::mesh->getNumVertex()); // Счетчик кол-ва вхождения узлов для осреднения результатов
     vector<thread> thr(numThread);
@@ -644,11 +645,11 @@ template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<dou
             res[j][i] = u[i * TFEM::mesh->getFreedom() + j];
 
     // Вычисляем стандартные результаты по всем КЭ
-    msg->setProcess(CALCULATION_STANDART_RESULT_PROCESS, 1, TFEM::mesh->getNumFE());
+    msg->setProcess(ProcessCode::GeneratingResult, 1, TFEM::mesh->getNumFE());
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<T>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    if (error)
+    if (error not_eq ErrorCode::Undefined)
         throw error;
     // Осредняем результаты
     avgResults(res, counter);
@@ -669,7 +670,7 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<do
         {
             msg->addProgress();
             if (isProcessAborted)
-                throw ABORT_ERR;
+                throw ErrorCode::EAbort;
             setupFE(fe.getFE(), i);
             // Формируем вектор перемещений для текущего КЭ
             fe_u.resize(mesh->getSizeFE() * mesh->getFreedom());
@@ -697,16 +698,16 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<do
 //-------------------------------------------------------------
 template<class T> void TFEMStatic<T>::setLoad(vector<double> &load)
 {
-    ErrorCode error = NO_ERR;
+    ErrorCode error = ErrorCode::Undefined;
     int size = mesh->getNumVertex() * mesh->getFreedom();
     unsigned step = size / numThread;
     vector<thread> thr(numThread);
 
-    msg->setProcess(CREATE_LOAD_PROCESS, 1, size);
+    msg->setProcess(ProcessCode::UsingLoad, 1, size);
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<T>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    if (error)
+    if (error not_eq ErrorCode::Undefined)
         throw error;
     msg->stopProcess();
 }
@@ -718,7 +719,7 @@ template<class T> void TFEMStatic<T>::getLoad(vector<double> &load, unsigned beg
         msg->addProgress();
         if (isProcessAborted)
         {
-            error = ABORT_ERR;
+            error = ErrorCode::EAbort;
             break;
         }
         solver.addLoad(load[i], i);

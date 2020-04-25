@@ -124,7 +124,7 @@ double TFEMParams::getMinStress(void)
         if (it.getType() == ParamType::StressStrainCurve)
         {
             if (not it.getStressStrainCurve().size1())
-                throw NONLINEAR_PARAM_ERR;
+                throw ErrorCode::EStressStrainCurve;
             if (it.getStressStrainCurve().size1() && it.getStressStrainCurve(1, 0) < res)
                 res = it.getStressStrainCurve(1, 0);
         }

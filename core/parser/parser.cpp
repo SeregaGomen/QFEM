@@ -11,10 +11,10 @@ void TParser::set_expression(string prog)
     // Удаляем пробелы в начале и конце строки
     prog.erase(0, prog.find_first_not_of(" \t\n\r\f\v")).erase(prog.find_last_not_of(" \t\n\r\f\v") + 1);
     if (not prog.length())
-        throw (error_code = EMPTY_EXPRESSION_ERR);
+        throw (error_code = ErrorCode::EEmptyExpression);
 
     expression = const_cast<char*>(prog.c_str());
-    error_code = NO_ERR;
+    error_code = ErrorCode::Undefined;
     tok = Operation::Undefined;
     compile();
 }
@@ -63,7 +63,7 @@ Token TParser::get_token(void)
         {
             token += *expression++;
             if (*expression not_eq '+' and *expression not_eq '-' )
-                error(SYNTAX_ERR);
+                error(ErrorCode::ESyntax);
             token += *expression++;
             while (isdigit(*expression))
                 token += *expression++;
@@ -119,9 +119,9 @@ void TParser::compile(void)
         if (token_type == Token::Delimiter)
         {
             if (token[0] == ')')
-                error(CRAMP_ERR);
+                error(ErrorCode::ECramp);
             else
-                error(SYNTAX_ERR);
+                error(ErrorCode::ESyntax);
         }
     }
 }
@@ -135,7 +135,7 @@ void TParser::get_exp(Tree& code)
 {
     get_token();
     if (not token.length())
-        error(SYNTAX_ERR);
+        error(ErrorCode::ESyntax);
     token_or(code);
 }
 /********************************************************************/
@@ -254,14 +254,14 @@ void TParser::token_prim(Tree& code)
             var_name = token;
             get_token();
             if (variables.find(var_name) == variables.end())
-                error(UNDEF_VARIABLE_ERR);
+                error(ErrorCode::EUndefVariable);
             code = Tree(&(variables[var_name]));
             break;
         case Token::Numeric:
             s << token;
             s >> val;
             if (s.fail())
-                error(SYNTAX_ERR);
+                error(ErrorCode::ESyntax);
             //            val = std::stod(token);
             code = Tree(val);
             get_token();
@@ -270,7 +270,7 @@ void TParser::token_prim(Tree& code)
             token_func(code);
             break;
         default:
-            error(SYNTAX_ERR);
+            error(ErrorCode::ESyntax);
     }
 }
 /********************************************************************/
@@ -281,7 +281,7 @@ void TParser::token_cramp(Tree& code)
         get_token();
         token_or(code);
         if(token[0] not_eq ')')
-            error(CRAMP_ERR);
+            error(ErrorCode::ECramp);
         get_token();
     }
     else
@@ -297,14 +297,14 @@ void TParser::token_func(Tree& code)
     {
         get_token();
         if (not token.length() or token[0] not_eq '(')
-            error(SYNTAX_ERR);
+            error(ErrorCode::ESyntax);
         get_token();
 
         token_add(code);
         if (fun_tok == Operation::Atan2)
         {
             if (token[0] not_eq ',')
-                error(SYNTAX_ERR);
+                error(ErrorCode::ESyntax);
             get_token();
             token_add(code2);
             code = Tree(code, Operation::Atan2, code2);
@@ -312,7 +312,7 @@ void TParser::token_func(Tree& code)
         else
             code = Tree(fun_tok, code);
         if (token[0] not_eq ')')
-            error(SYNTAX_ERR);
+            error(ErrorCode::ESyntax);
         get_token();
     }
 }

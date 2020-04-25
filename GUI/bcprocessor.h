@@ -7,6 +7,7 @@
 
 class TFEMObject;
 enum class ParamType;
+enum class ErrorCode;
 
 using namespace std;
 
@@ -32,10 +33,10 @@ private:
     bool isStoped;
     // Формирование списка краевых условий
     void processVertex(void);
-    void calcParam(unsigned, unsigned, int&);
-    void calcPressureLoad(unsigned, unsigned, int&);
-    void calcVolumeLoad(unsigned, unsigned, int&);
-    void calcConcentratedLoad(unsigned, unsigned, int&);
+    void calcParam(unsigned, unsigned, ErrorCode&);
+    void calcPressureLoad(unsigned, unsigned, ErrorCode&);
+    void calcVolumeLoad(unsigned, unsigned, ErrorCode&);
+    void calcConcentratedLoad(unsigned, unsigned, ErrorCode&);
 public slots:
     // запуск расчета
     void start(void)

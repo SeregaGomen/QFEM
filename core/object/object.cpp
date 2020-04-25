@@ -77,12 +77,12 @@ bool TFEMObject::saveResult(string fname)
 
     if (not out.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return false;
     }
     out.precision(16);
 
-    msg->setProcess(WRITE_RESULT_PROCESS);
+    msg->setProcess(ProcessCode::WritingResult);
     // Запись подписи
     out << "Core QFEM results file" << endl;
     // Запись сетки
@@ -91,7 +91,7 @@ bool TFEMObject::saveResult(string fname)
     {
         out.close();
         msg->stop();
-        cerr << sayError(WRITE_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EWriteFile) << endl;
         return false;
     }
     // Запись результатов
@@ -99,12 +99,12 @@ bool TFEMObject::saveResult(string fname)
     {
         out.close();
         msg->stop();
-        cerr << sayError(WRITE_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EWriteFile) << endl;
         return false;
     }
     // Запись параметров
     if (not params.write(out))
-        cerr << sayError(WRITE_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EWriteFile) << endl;
 
     // Запись примечаний к расчету
     out << notes.size() << endl;
@@ -125,17 +125,17 @@ bool TFEMObject::loadResult(string fname)
 
     if (not in.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return false;
     }
-    msg->setProcess(READ_RESULT_PROCESS);
+    msg->setProcess(ProcessCode::ReadingResult);
     // Считывание заголовка
     getline(in, str);
     if (str not_eq "Core QFEM results file")
     {
         msg->stop();
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return false;
     }
     // Загрузка сетки
@@ -144,7 +144,7 @@ bool TFEMObject::loadResult(string fname)
     {
         msg->stop();
         in.close();
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return false;
     }
     // Загрузка результатов
@@ -152,7 +152,7 @@ bool TFEMObject::loadResult(string fname)
     {
         msg->stop();
         in.close();
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return false;
     }
     // Считывание параметров
@@ -160,7 +160,7 @@ bool TFEMObject::loadResult(string fname)
     {
         msg->stop();
         in.close();
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return false;
     }
     // Считывание примечаний к расчету
@@ -197,7 +197,7 @@ void TFEMObject::printResult(string fname)
 
     if (not out.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return;
     }
 
@@ -221,7 +221,7 @@ void TFEMObject::printResult(string fname)
 
     if (params.fType == FEMType::DynamicProblem)
         counter_size = unsigned((params.t1 - params.t0) / params.th);
-    msg->setProcess(PRINT_RESULT_PROCESS, 1, int(counter_size * mesh.getNumVertex()));
+    msg->setProcess(ProcessCode::PrintingResult, 1, int(counter_size * mesh.getNumVertex()));
     do
     {
         if (params.fType == FEMType::DynamicProblem)
@@ -288,7 +288,7 @@ void TFEMObject::printResult(string fname)
             if (out.fail())
             {
                 out.close();
-                cerr << sayError(WRITE_FILE_ERR) << endl;
+                cerr << sayError(ErrorCode::EWriteFile) << endl;
                 return;
             }
         }
@@ -354,7 +354,7 @@ void TFEMObject::printResult(string fname)
     out.close();
     msg->stopProcess();
     if (out.fail())
-        cerr << sayError(WRITE_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EWriteFile) << endl;
 }
 //-------------------------------------------------------------
 void TFEMObject::setLanguage(int lang)

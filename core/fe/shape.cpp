@@ -21,7 +21,7 @@ void TShape::create(matrix<double>& px)
             b(j) = (i == j) ? 1.0 : 0.0;
         }
         if (A.determinant() == 0.0)
-            throw INCORRECT_FE_ERR;
+            throw ErrorCode::EIncorrectFE;
         b = A.colPivHouseholderQr().solve(b);
         for (unsigned j = 0; j < size; j++)
             c(j, i) = b(j);

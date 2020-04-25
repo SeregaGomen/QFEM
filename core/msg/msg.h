@@ -8,7 +8,6 @@
 extern int langCode;
 
 #define S_ERR                           ((langCode) ? "Ошибка" : "Error")
-#define S_NO_ERR                        ((langCode) ? "OK" : "OK")
 #define S_ERR_OPEN_FILE                 ((langCode) ? "Ошибка открытия файла" : "Error opening file")
 #define S_ERR_WRITE_FILE                ((langCode) ? "Ошибка записи файла" : "Error writing file")
 #define S_ERR_FORMAT_FILE               ((langCode) ? "Некорректный формат файла" : "Incorrect file format")
@@ -35,8 +34,6 @@ extern int langCode;
 
 #define S_MSG_START                     ((langCode) ? "******************************* Старт *******************************" : "******************************* Start *******************************")
 #define S_MSG_STOP                      ((langCode) ? "******************************* Стоп  *******************************" : "******************************* Stop  *******************************")
-#define S_MSG_IDLE                      ((langCode) ? "Простой" : "Idle")
-#define S_MSG_CALC_LOAD                 ((langCode) ? "Расчет нагрузок" : "Computation of load")
 #define S_MSG_CALC_CONCENTRATED_LOAD    ((langCode) ? "Расчет сосредоточенных нагрузок" : "Calculation of concentrated loads")
 #define S_MSG_CALC_SURFACE_LOAD         ((langCode) ? "Расчет поверхностных нагрузок" : "Calculation of surface loads")
 #define S_MSG_CALC_VOLUME_LOAD          ((langCode) ? "Расчет объемных нагрузок" : "Calculation of volume loads")
@@ -68,14 +65,12 @@ extern int langCode;
 #define S_MSG_SEC                       ((langCode) ? " сек." : " sec.")
 #define S_MSG_SYSTEM_PREPARE            ((langCode) ? "Подготовка системы уравнений" : "Preparing the system of equations")
 #define S_MSG_SYSTEM_SOLUTION           ((langCode) ? "Решение системы уравнений" : "Solution of the system of equations")
-#define S_MSG_ITERATION                 ((langCode) ? "Выполнено итераций: " : "Iterate: ")
 #define S_MSG_ITERATION_ERROR           ((langCode) ? "Невязка" : "Error")
 #define S_MSG_SYSTEM_FACTORIZATION      ((langCode) ? "Факторизация системы уравнений" : "Factorization equations")
 #define S_MSG_PRINT_RESULT              ((langCode) ? "Печать результатов расчета" : "Printing results")
 #define S_MSG_LOAD                      ((langCode) ? "Нагрузка: " : "Load: ")
 #define S_MSG_SI                        ((langCode) ? "Максимальная интенсивность напряжений: " : "Max stress intensity: ")
 #define S_MSG_TIME_ITERATION            ((langCode) ? "Расчет по времени" : "Time calculation")
-#define S_MSG_SE_MATRIX_GENERATION      ((langCode) ? "Формирование матрицы СЛАУ" : "Building of matrix SE")
 #define S_MSG_MESH_ANALYSE              ((langCode) ? "Анализ структуры сетки" : "Analysing of the mesh structure")
 #define S_MSG_CHECK_MESH                ((langCode) ? "Проверка структуры сетки" : "Checking mesh")
 #define S_MSG_RESTRUCTURE_MESH          ((langCode) ? "Перестроение сетки" : "Restructuring mesh")
@@ -101,228 +96,141 @@ extern int langCode;
 #define S_DAMPING_PARAMETER             ((langCode) ? "Демпфирование" : "Damping")
 #define S_STRESS_STRAIN_CURVE_PARAMETER ((langCode) ? "Диаграмма деформирования" : "Stress–strain curve")
 #define S_UNDEFINED_PARAMETER           ((langCode) ? "Неопределенный параметер" : "Undefined")
+#define S_MSG_ITERATION                 ((langCode) ? "Выполнено итераций: " : "Iterate: ")
 
 using namespace std;
 
 
 // ----------------------- Коды ошибок -------------------------------
-enum ErrorCode
+enum class ErrorCode { Undefined = 0, EOpenFile, EReadFile, EWriteFile, EFormatFile, EUndefTypeFile, EUndefTypeFE, ESyntax, ECramp, EName, EUndefVariable,
+                       ERedefVariable, EIncorrectFE, EEquationNorSolved, EAbort, EAllocMemory, EStressStrainCurve, EEmptyExpression, EYoungModulus,
+                       EPoissonRatio, EThickness, ETemperature, EAlpha, EDensity, EDamping };
+enum class ProcessCode
             {
-                NO_ERR = 0,
-                OPEN_FILE_ERR,
-                READ_FILE_ERR,
-                WRITE_FILE_ERR,
-                FORMAT_FILE_ERR,
-                UNKNOWN_FILE_ERR,
-                UNKNOWN_FE_ERR,
-                SYNTAX_ERR,
-                CRAMP_ERR,
-                NAME_ERR,
-                UNDEF_VARIABLE_ERR,
-                DEF_VARIABLE_ERR,
-                INCORRECT_FE_ERR,
-                EQUATION_NOT_SOLVED_ERR,
-                ABORT_ERR,
-                ALLOC_MEMORY_ERR,
-                ERROR_ERR,
-                NONLINEAR_PARAM_ERR,
-                EMPTY_EXPRESSION_ERR,
-                YOUNG_MODULUS_ERR,
-                POISSON_RATIO_ERR,
-                THICKNESS_ERR,
-                TEMPERATURE_ERR,
-                ALPHA_ERR,
-                DENSITY_ERR,
-                DAMPING_ERR
-            };
-enum ProcessCode
-            {
-                IDLE_PROCESS,
-                GENERATE_FE_STATIC_PROCESS,
-                CALC_BOUNDARY_CONDITION_PROCESS,
-                CREATE_LOAD_PROCESS,
-                SYSTEM_PREPARE_PROCESS,
-                SYSTEM_FACTORIZATION_PROCESS,
-                PRINT_RESULT_PROCESS,
-                CALCULATION_LOAD_PROCESS,
-                SYSTEM_ITERATION_PROCESS,
-                SYSTEM_SOLUTION_PROCESS,
-                GENERATE_FE_DYNAMIC_PROCESS,
-                TIME_ITERATION_PROCESS,
-                GENERATE_SE_MATRIX_PROCESS,
-                MESH_ANALYSE_PROCESS,
-                MESH_CHECK_PROCESS,
-                MESH_RESTUCTURE_PROCESS,
-                BC_CREATE_PROCESS,
-                CALCULATION_CONCENTRATED_LOAD_PROCESS,
-                CALCULATION_SURFACE_LOAD_PROCESS,
-                CALCULATION_VOLUME_LOAD_PROCESS,
-                CALCULATION_PRESSURE_LOAD_PROCESS,
-                WRITE_RESULT_PROCESS,
-                READ_RESULT_PROCESS,
-                CALCULATION_STANDART_RESULT_PROCESS
+                Undefined,
+                GeneratingStaticMatrix,
+                UsingBoundaryCondition,
+                UsingLoad,
+                PreparingSystemEquation,
+                FactorizationSystemEquation,
+                PrintingResult,
+                SolutionSystemEquation,
+                GeneratingDynamicMatrix,
+                AnalysingMesh,
+                CheckingMesh,
+                RestructuringMesh,
+                GeneratingBoundaryCondition,
+                GeneratingConcentratedLoad,
+                GeneratingSurfaceLoad,
+                GeneratingVolumeLoad,
+                GeneratingPressureLoad,
+                WritingResult,
+                ReadingResult,
+                GeneratingResult
             };
 
 inline string sayProcess(ProcessCode code)
 {
-    string ret;
-
     switch (code)
     {
-        case GENERATE_FE_STATIC_PROCESS:
-            ret = S_MSG_FE_STATIC_PROCESS;
-            break;
-        case CALC_BOUNDARY_CONDITION_PROCESS:
-            ret = S_MSG_BOUNDARY_PROCESS;
-            break;
-        case CREATE_LOAD_PROCESS:
-            ret = S_MSG_CREATE_LOAD;
-            break;
-        case SYSTEM_PREPARE_PROCESS:
-            ret = S_MSG_SYSTEM_PREPARE;
-            break;
-        case SYSTEM_FACTORIZATION_PROCESS:
-            ret = S_MSG_SYSTEM_FACTORIZATION;
-            break;
-        case PRINT_RESULT_PROCESS:
-            ret = S_MSG_PRINT_RESULT;
-            break;
-        case CALCULATION_LOAD_PROCESS:
-            ret = S_MSG_CALC_LOAD;
-            break;
-        case CALCULATION_CONCENTRATED_LOAD_PROCESS:
-            ret = S_MSG_CALC_CONCENTRATED_LOAD;
-            break;
-        case CALCULATION_SURFACE_LOAD_PROCESS:
-            ret = S_MSG_CALC_SURFACE_LOAD;
-            break;
-        case CALCULATION_VOLUME_LOAD_PROCESS:
-            ret = S_MSG_CALC_VOLUME_LOAD;
-            break;
-        case CALCULATION_PRESSURE_LOAD_PROCESS:
-            ret = S_MSG_CALC_PRESSURE_LOAD;
-            break;
-        case CALCULATION_STANDART_RESULT_PROCESS:
-            ret = S_MSG_CALC_STANDART_RESULTS;
-            break;
-        case SYSTEM_ITERATION_PROCESS:
-            ret = S_MSG_ITERATION;
-            break;
-        case SYSTEM_SOLUTION_PROCESS:
-            ret = S_MSG_SYSTEM_SOLUTION;
-            break;
-        case GENERATE_FE_DYNAMIC_PROCESS:
-            ret = S_MSG_FE_DYNAMIC_PROCESS;
-            break;
-        case TIME_ITERATION_PROCESS:
-            ret = S_MSG_TIME_ITERATION;
-            break;
-        case GENERATE_SE_MATRIX_PROCESS:
-            ret = S_MSG_SE_MATRIX_GENERATION;
-            break;
-        case MESH_ANALYSE_PROCESS:
-            ret = S_MSG_MESH_ANALYSE;
-            break;
-        case MESH_CHECK_PROCESS:
-            ret = S_MSG_CHECK_MESH;
-            break;
-        case MESH_RESTUCTURE_PROCESS:
-            ret = S_MSG_RESTRUCTURE_MESH;
-            break;
-        case BC_CREATE_PROCESS:
-            ret = S_MSG_CREATE_BC;
-            break;
-        case WRITE_RESULT_PROCESS:
-            ret = S_MSG_WRITE_RESULT;
-            break;
-        case READ_RESULT_PROCESS:
-            ret = S_MSG_READ_RESULT;
-            break;
+        case ProcessCode::GeneratingStaticMatrix:
+            return S_MSG_FE_STATIC_PROCESS;
+        case ProcessCode::UsingBoundaryCondition:
+            return S_MSG_BOUNDARY_PROCESS;
+        case ProcessCode::UsingLoad:
+            return S_MSG_CREATE_LOAD;
+        case ProcessCode::PreparingSystemEquation:
+            return S_MSG_SYSTEM_PREPARE;
+        case ProcessCode::FactorizationSystemEquation:
+            return S_MSG_SYSTEM_FACTORIZATION;
+        case ProcessCode::PrintingResult:
+            return S_MSG_PRINT_RESULT;
+        case ProcessCode::GeneratingConcentratedLoad:
+            return S_MSG_CALC_CONCENTRATED_LOAD;
+        case ProcessCode::GeneratingSurfaceLoad:
+            return S_MSG_CALC_SURFACE_LOAD;
+        case ProcessCode::GeneratingVolumeLoad:
+            return S_MSG_CALC_VOLUME_LOAD;
+        case ProcessCode::GeneratingPressureLoad:
+            return S_MSG_CALC_PRESSURE_LOAD;
+        case ProcessCode::GeneratingResult:
+            return S_MSG_CALC_STANDART_RESULTS;
+        case ProcessCode::SolutionSystemEquation:
+            return S_MSG_SYSTEM_SOLUTION;
+        case ProcessCode::GeneratingDynamicMatrix:
+            return S_MSG_FE_DYNAMIC_PROCESS;
+        case ProcessCode::AnalysingMesh:
+            return S_MSG_MESH_ANALYSE;
+        case ProcessCode::CheckingMesh:
+            return S_MSG_CHECK_MESH;
+        case ProcessCode::RestructuringMesh:
+            return S_MSG_RESTRUCTURE_MESH;
+        case ProcessCode::GeneratingBoundaryCondition:
+            return S_MSG_CREATE_BC;
+        case ProcessCode::WritingResult:
+            return S_MSG_WRITE_RESULT;
+        case ProcessCode::ReadingResult:
+            return S_MSG_READ_RESULT;
         default:
-            ret = S_MSG_IDLE;
+            break;
     }
-    return ret;
+    return "";
 }
 
 inline string sayError(ErrorCode code)
 {
-    string ret;
-
     switch (code)
     {
-        case OPEN_FILE_ERR:
-            ret = S_ERR_OPEN_FILE;
-            break;
-        case READ_FILE_ERR:
-            ret = S_ERR_READ_FILE;
-            break;
-        case WRITE_FILE_ERR:
-            ret = S_ERR_WRITE_FILE;
-            break;
-        case FORMAT_FILE_ERR:
-            ret = S_ERR_FORMAT_FILE;
-            break;
-        case UNKNOWN_FILE_ERR:
-            ret = S_ERR_FORMAT_FILE;
-            break;
-        case UNKNOWN_FE_ERR:
-            ret = S_ERR_UNKNOWN_FE;
-            break;
-        case SYNTAX_ERR:
-            ret = S_ERR_SYNTAX;
-            break;
-        case CRAMP_ERR:
-            ret = S_ERR_CRAMP;
-            break;
-        case NAME_ERR:
-            ret = S_ERR_NAME;
-            break;
-        case UNDEF_VARIABLE_ERR:
-            ret = S_ERR_UNDEF_VARIABLE;
-            break;
-        case DEF_VARIABLE_ERR:
-            ret = S_ERR_DEF_VARIABLE;
-            break;
-        case INCORRECT_FE_ERR:
-            ret = S_ERR_INCORRECT_FE;
-            break;
-        case EQUATION_NOT_SOLVED_ERR:
-            ret = S_ERR_EQUATION_NOT_SOLVED;
-            break;
-        case ABORT_ERR:
-            ret = S_ERR_ABORT;
-            break;
-        case ALLOC_MEMORY_ERR:
-            ret = S_ERR_MEMORY;
-            break;
-        case NONLINEAR_PARAM_ERR:
-            ret = S_ERR_NONLINEAR;
-            break;
-        case YOUNG_MODULUS_ERR:
-            ret = S_ERR_YOUNG_MODULUS;
-            break;
-        case POISSON_RATIO_ERR:
-            ret = S_ERR_POISSON_RATIO;
-            break;
-        case THICKNESS_ERR:
-            ret = S_ERR_THICKNESS;
-            break;
-        case TEMPERATURE_ERR:
-            ret = S_ERR_TEMPERATURE;
-            break;
-        case ALPHA_ERR:
-            ret = S_ERR_ALPHA;
-            break;
-        case DENSITY_ERR:
-            ret = S_ERR_DENSITY;
-            break;
-        case DAMPING_ERR:
-            ret = S_ERR_DAMPING;
-            break;
+        case ErrorCode::EOpenFile:
+            return S_ERR_OPEN_FILE;
+        case ErrorCode::EReadFile:
+            return S_ERR_READ_FILE;
+        case ErrorCode::EWriteFile:
+            return S_ERR_WRITE_FILE;
+        case ErrorCode::EFormatFile:
+            return S_ERR_FORMAT_FILE;
+        case ErrorCode::EUndefTypeFile:
+            return S_ERR_FORMAT_FILE;
+        case ErrorCode::EUndefTypeFE:
+            return S_ERR_UNKNOWN_FE;
+        case ErrorCode::ESyntax:
+            return S_ERR_SYNTAX;
+        case ErrorCode::ECramp:
+            return S_ERR_CRAMP;
+        case ErrorCode::EName:
+            return S_ERR_NAME;
+        case ErrorCode::EUndefVariable:
+            return S_ERR_UNDEF_VARIABLE;
+        case ErrorCode::ERedefVariable:
+            return S_ERR_DEF_VARIABLE;
+        case ErrorCode::EIncorrectFE:
+            return S_ERR_INCORRECT_FE;
+        case ErrorCode::EEquationNorSolved:
+            return S_ERR_EQUATION_NOT_SOLVED;
+        case ErrorCode::EAbort:
+            return S_ERR_ABORT;
+        case ErrorCode::EAllocMemory:
+            return S_ERR_MEMORY;
+        case ErrorCode::EStressStrainCurve:
+            return S_ERR_NONLINEAR;
+        case ErrorCode::EYoungModulus:
+            return S_ERR_YOUNG_MODULUS;
+        case ErrorCode::EPoissonRatio:
+            return S_ERR_POISSON_RATIO;
+        case ErrorCode::EThickness:
+            return S_ERR_THICKNESS;
+        case ErrorCode::ETemperature:
+            return S_ERR_TEMPERATURE;
+        case ErrorCode::EAlpha:
+            return S_ERR_ALPHA;
+        case ErrorCode::EDensity:
+            return S_ERR_DENSITY;
+        case ErrorCode::EDamping:
+            return S_ERR_DAMPING;
         default:
-            ret = S_NO_ERR;
+            break;
     }
-    return ret;
+    return "";
 }
 
 
@@ -358,7 +266,7 @@ protected:
 public:
     TMessenger(void)
     {
-        processCode = IDLE_PROCESS;
+        processCode = ProcessCode::Undefined;
         processStart = processStop = processCurrent = oldPersent = 0;
         processStep = 1;
     }

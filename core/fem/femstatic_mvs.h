@@ -143,7 +143,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
             TFEM::isProcessCalculated = false;
             TFEMStatic<T>::solver.clear();
             if (TFEM::isProcessAborted)
-                throw ABORT_ERR;
+                throw ErrorCode::EAbort;
             return;
         }
         TFEMStatic<T>::solver.clear();
@@ -193,7 +193,7 @@ template<class T> void TFEMStaticMVS<T>::setupFE(TFE *fe, unsigned i)
     TFEM::mesh->getCenterFE(i, cx);
     TFEM::params.getStressStrainCurve(cx, ssCurve);
     if (ssCurve.size1() == 0)
-        throw NONLINEAR_PARAM_ERR;
+        throw ErrorCode::EStressStrainCurve;
 
     // Определяем среднюю по КЭ интенсивность наряжений
     for (unsigned j = 1; j < TFEM::mesh->getSizeFE(); j++)

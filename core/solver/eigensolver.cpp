@@ -19,18 +19,18 @@ bool TEigenSolver::solve(vector<double>& r, double, bool&)
     // print("matr1.txt");
     ///
 
-    msg->setProcess(SYSTEM_PREPARE_PROCESS);
+    msg->setProcess(ProcessCode::PreparingSystemEquation);
     solver.compute(stiffnessMatrix);
     msg->stop();
     if (solver.info() not_eq Success)
-        throw EQUATION_NOT_SOLVED_ERR;
+        throw ErrorCode::EEquationNorSolved;
 
-    msg->setProcess(SYSTEM_SOLUTION_PROCESS);
+    msg->setProcess(ProcessCode::SolutionSystemEquation);
     x = solver.solve(load);
     msg->stop();
 
     if(solver.info() not_eq Success)
-        throw EQUATION_NOT_SOLVED_ERR;
+        throw ErrorCode::EEquationNorSolved;
 
     r.resize(unsigned(stiffnessMatrix.rows()));
     for (unsigned i = 0; i < r.size(); i++)

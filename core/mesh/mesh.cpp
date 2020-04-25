@@ -21,7 +21,7 @@ bool TMesh::read(string fname)
     pos = fname.find_last_of('.');
     if ((pos = fname.find_last_of('.')) == string::npos)
     {
-        cerr << sayError(UNKNOWN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
         return (error = true);
     }
     ext = fname.substr(pos + 1);
@@ -38,7 +38,7 @@ bool TMesh::read(string fname)
         error = readMESH(fname);
     else
     {
-        cerr << sayError(UNKNOWN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
         return (error = true);
     }
     if (not error)
@@ -207,7 +207,7 @@ bool TMesh::write(string fname)
     pos = fname.find_last_of('.');
     if ((pos = fname.find_last_of('.')) == string::npos)
     {
-        cerr << sayError(UNKNOWN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
         return (error = true);
     }
     ext = fname.substr(pos + 1);
@@ -220,7 +220,7 @@ bool TMesh::write(string fname)
         error = writeTRPA(fname);
     else
     {
-        cerr << sayError(UNKNOWN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
         error = true;
     }
     return error;
@@ -300,7 +300,7 @@ bool TMesh::readTRP(string fname)
     clear();
     if (not in.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
 
@@ -310,7 +310,7 @@ bool TMesh::readTRP(string fname)
     if (string(signature) not_eq "NTRout")
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     // Cчитываем тип КЭ
@@ -318,7 +318,7 @@ bool TMesh::readTRP(string fname)
     if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == FEType::undefined)
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     // Cчитываем кол-во граней
@@ -336,7 +336,7 @@ bool TMesh::readTRP(string fname)
             in.read(reinterpret_cast<char*>(&x(i, j)), sizeof(double));
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     // Cчитываем КЭ
@@ -347,7 +347,7 @@ bool TMesh::readTRP(string fname)
             in.read(reinterpret_cast<char*>(&fe(i, j)), sizeof(unsigned));
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     // Cчитываем грани
@@ -356,13 +356,13 @@ bool TMesh::readTRP(string fname)
             in.read(reinterpret_cast<char*>(&be(i, j)), sizeof(unsigned));
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     in.close();
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     cout << *this << endl;
@@ -380,21 +380,21 @@ bool TMesh::readTRPA(string fname)
     clear();
     if (not in.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
     in >> temp;
     if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == FEType::undefined)
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     in >> temp;
     if (in.fail() or temp == 0 or feDim < 1 or feDim > 3)
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     x.resize(temp, feDim);
@@ -406,7 +406,7 @@ bool TMesh::readTRPA(string fname)
         if (in.fail())
         {
             in.close();
-            cerr << sayError(READ_FILE_ERR) << endl;
+            cerr << sayError(ErrorCode::EReadFile) << endl;
             return (error = true);
         }
     }
@@ -414,7 +414,7 @@ bool TMesh::readTRPA(string fname)
     if (in.fail() or temp == 0)
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     fe.resize(temp, feSize);
@@ -425,7 +425,7 @@ bool TMesh::readTRPA(string fname)
             if (in.fail())
             {
                 in.close();
-                cerr << sayError(READ_FILE_ERR) << endl;
+                cerr << sayError(ErrorCode::EReadFile) << endl;
                 return (error = true);
             }
         }
@@ -433,7 +433,7 @@ bool TMesh::readTRPA(string fname)
     if (in.fail() or (temp == 0 and (feType == FEType::fe2d3 or feType == FEType::fe2d4 or feType == FEType::fe3d4 or feType == FEType::fe3d8)))
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     if (isPlate() or isShell())
@@ -448,7 +448,7 @@ bool TMesh::readTRPA(string fname)
                 if (in.fail())
                 {
                     in.close();
-                    cerr << sayError(READ_FILE_ERR) << endl;
+                    cerr << sayError(ErrorCode::EReadFile) << endl;
                     return (error = true);
                 }
             }
@@ -466,7 +466,7 @@ bool TMesh::writeTRP(string fname)
 
     if (not out.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
 
@@ -487,7 +487,7 @@ bool TMesh::writeTRP(string fname)
             out.write(reinterpret_cast<char*>(&(temp = be(i, j))), sizeof(unsigned));
     if (out.fail())
     {
-        cerr << sayError(WRITE_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EWriteFile) << endl;
         return (error = true);
     }
     out.close();
@@ -500,7 +500,7 @@ bool TMesh::writeTRPA(string fname)
 
     if (not out.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
     out << convertFEType(feType) << endl;
@@ -527,7 +527,7 @@ bool TMesh::writeTRPA(string fname)
     }
     if (out.fail())
     {
-        cerr << sayError(WRITE_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EWriteFile) << endl;
         return (error = true);
     }
     out.close();
@@ -565,7 +565,7 @@ bool TMesh::write(ofstream& out)
         }
         if (out.fail())
         {
-            cerr << sayError(WRITE_FILE_ERR) << endl;
+            cerr << sayError(ErrorCode::EWriteFile) << endl;
             return (error = true);
         }
     }
@@ -587,7 +587,7 @@ bool TMesh::read(ifstream& in)
     if ((feType = getDataFE(val, feSize, surfaceSize, feDim)) == FEType::undefined)
     {
         in.close();
-        cerr << sayError(FORMAT_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
     // Считываем кол-во узлов
@@ -599,7 +599,7 @@ bool TMesh::read(ifstream& in)
             in >> x(i, j);
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     // Cчитываем КЭ
@@ -610,7 +610,7 @@ bool TMesh::read(ifstream& in)
             in >> fe(i, j);
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     if (isPlate() or isShell())
@@ -628,7 +628,7 @@ bool TMesh::read(ifstream& in)
                 in >> be(i, j);
         if (in.fail())
         {
-            cerr << sayError(READ_FILE_ERR) << endl;
+            cerr << sayError(ErrorCode::EReadFile) << endl;
             return (error = true);
         }
     }
@@ -657,7 +657,7 @@ bool TMesh::readVOL(string fname)
     clear();
     if (not in.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
 
@@ -735,7 +735,7 @@ bool TMesh::readVOL(string fname)
     feType = FEType::fe3d4;
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     cout << *this << endl;
@@ -757,7 +757,7 @@ bool TMesh::readMESH(string fname)
     clear();
     if (not in.is_open())
     {
-        cerr << sayError(OPEN_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
 
@@ -842,7 +842,7 @@ bool TMesh::readMESH(string fname)
     feType = FEType::fe2d3;
     if (in.fail())
     {
-        cerr << sayError(READ_FILE_ERR) << endl;
+        cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
     cout << *this << endl;
@@ -1114,7 +1114,7 @@ double TMesh::volume3d8(const matrix<double>& px)
 void TMesh::createMeshMap(void)
 {
     meshMap.resize(x.size1());
-    msg->setProcess(MESH_ANALYSE_PROCESS, 1, int(fe.size1()));
+    msg->setProcess(ProcessCode::AnalysingMesh, 1, int(fe.size1()));
     for (unsigned i = 0; i < fe.size1(); msg->addProgress(), i++)
         for (unsigned j = 0; j < fe.size2(); j++)
             for (unsigned k = 0; k < fe.size2(); k++)

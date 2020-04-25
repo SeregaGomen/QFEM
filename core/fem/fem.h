@@ -141,17 +141,17 @@ protected:
         mesh->getCenterFE(i, cx);
         // Загрузка в КЭ модуля упругости
         if ((val = params.getYoungModule(cx)) == 0.0)
-            throw YOUNG_MODULUS_ERR;
+            throw ErrorCode::EYoungModulus;
         // Загрузка в КЭ коэффициента Пуассона
         fe->setYoungModulus(val);
         if ((val = params.getPoissonRatio(cx)) == 0.0 and not mesh->is1D())
-            throw POISSON_RATIO_ERR;
+            throw ErrorCode::EPoissonRatio;
         fe->setPoissonRatio(val);
         // Загрузка толщины элемента
         if (not mesh->is3D())
         {
             if ((val = params.getThickness(cx)) == 0.0)
-                throw THICKNESS_ERR;
+                throw ErrorCode::EThickness;
             fe->setThickness(val);
         }
         // Загрузка температуры
@@ -162,11 +162,11 @@ protected:
         if (params.fType == FEMType::DynamicProblem)
         {
             if ((val = params.getDensity(cx)) == 0.0)
-                throw DENSITY_ERR;
+                throw ErrorCode::EDensity;
             fe->setDensity(val);
             // Загрузка параметра демпфирования
             if ((val = params.getDamping(cx)) == 0.0)
-                throw DAMPING_ERR;
+                throw ErrorCode::EDamping;
             fe->setDamping(val);
         }
     }

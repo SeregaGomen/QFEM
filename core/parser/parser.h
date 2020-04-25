@@ -25,7 +25,7 @@ private:
     string token;
     char* expression = nullptr;
     Token token_type = Token::Undefined;
-    ErrorCode error_code = NO_ERR;
+    ErrorCode error_code = ErrorCode::Undefined;
     Operation tok = Operation::Undefined;
     vector<idToken> functionList{
                                     { "SQRT", Operation::Sqrt },
@@ -85,7 +85,7 @@ public:
     void set_expression(string);
     void set_variable(string, double value = 0);
     void set_variables(map<string, double>&);
-    int get_error(void)
+    ErrorCode get_error(void)
     {
         return error_code;
     }
