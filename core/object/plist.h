@@ -12,9 +12,17 @@ template <typename T> bool contains(const T lhs, const T rhs)
 {
     return ((static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs)) == static_cast<unsigned>(rhs)) ? true : false;
 }
-
 // Коды направлений вдоль осей координат
 enum class Direction { Undefined = 0, X = 1, Y = 2, Z = 4 };
+inline Direction operator | (Direction lhs, Direction rhs)
+{
+    return static_cast<Direction> (static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
+}
+
+inline Direction operator |= (Direction& lhs, Direction rhs)
+{
+    return (lhs = static_cast<Direction>(lhs) | static_cast<Direction>(rhs));
+}
 
 // Коды начальных условий
 enum class InitialCondition { Undefined = 0, U = 1, V = 2, W = 4, Ut = 8, Vt = 16, Wt = 32, Utt = 64, Vtt = 128, Wtt = 256 };

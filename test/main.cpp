@@ -52,9 +52,9 @@ void calcTank(void)
     //        object.addBoundaryCondition(DIR_X, "0", "x == 0");
     //        object.addBoundaryCondition(DIR_Y, "0", "y == 0");
 
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, [](double, double, double, double){ return 0.0; }, [](double, double, double z, double){ return (abs(z + 4.7) <= 1.0E-10) ? 1.0 : 0.0; });
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, [](double, double, double, double){ return 0.0; }, [](double x, double, double, double){ return (x == 0.0) ? 1.0 : 0.0; });
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, [](double, double, double, double){ return 0.0; }, [](double, double y, double, double){ return (y == 0.0) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [](double, double, double z, double){ return (abs(z + 4.7) <= 1.0E-10) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [](double x, double, double, double){ return (x == 0.0) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [](double, double y, double, double){ return (y == 0.0) ? 1.0 : 0.0; });
 
 
 
@@ -110,9 +110,9 @@ void calcBalka(void)
     object.addYoungModulus("6.5e+10");
     object.addPoissonRatio("0.3");
     // Распределенная поверхностная нагрузка
-    object.addSurfaceLoad(DIR_Y, "-6 * 10 ** 7", "y == 4");
+    object.addSurfaceLoad(Direction::Y, "-6 * 10 ** 7", "y == 4");
     // Граничные условия
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, "0", "y == 0");
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, "0", "y == 0");
 
     // Запуск расчета
     if (object.start())
@@ -156,7 +156,7 @@ void calcShell(void)
     // object.addSurfaceLoad(DIR_Y, [&](double x, double y, double, double){ return P * sin(atan2(y, x)); }, [](double x, double y, double, double){ return (abs(x * x + y * y - 1.99 * 1.99) <= 1.0E-3) ? 1.0 : 0.0; });
     // Граничные условия
     //        object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, "0", "z == 0 or z == 4.014");
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, [](double, double, double, double){ return 0.0; }, [&](double, double, double z, double){ return (z == z_min || abs(z - z_max) <= eps) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [&](double, double, double z, double){ return (z == z_min || abs(z - z_max) <= eps) ? 1.0 : 0.0; });
 
     // Запуск расчета
     if (object.start())
@@ -187,7 +187,7 @@ void pyfem_test(void)
     // Распределенная поверхностная нагрузка
     object.addPressureLoad(0.05);
     // Граничные условия
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, 0.0, [&](double, double, double z, double){ return (z == z_min || z == z_max) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [&](double, double, double z, double){ return (z == z_min || z == z_max) ? 1.0 : 0.0; });
 
     // Запуск расчета
     if (object.start())
@@ -213,20 +213,20 @@ void calcTank3ds(void)
     // Толщина КЭ
     object.addThickness("0.0028");
     // Распределенная поверхностная нагрузка
-    object.addSurfaceLoad(DIR_X, [](double x, double y, double, double){ return 1000 * cos(atan2(y, x)); }, [](double, double, double z, double){ return (z <= 0 && z >= -16.691) ? 1.0 : 0.0; });
-    object.addSurfaceLoad(DIR_Y, [](double x, double y, double, double){ return 1000 * sin(atan2(y, x)); }, [](double, double, double z, double){ return (z <= 0 && z >= -16.691) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::X, [](double x, double y, double, double){ return 1000 * cos(atan2(y, x)); }, [](double, double, double z, double){ return (z <= 0 && z >= -16.691) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::Y, [](double x, double y, double, double){ return 1000 * sin(atan2(y, x)); }, [](double, double, double z, double){ return (z <= 0 && z >= -16.691) ? 1.0 : 0.0; });
 
-    object.addSurfaceLoad(DIR_X, [](double x, double y, double z, double){ return 1000 * cos(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 1.565))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 1.565) * (z + 1.565) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
-    object.addSurfaceLoad(DIR_Y, [](double x, double y, double z, double){ return 1000 * sin(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 1.565))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 1.565) * (z + 1.565) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
-    object.addSurfaceLoad(DIR_Z, [](double x, double y, double z, double){ return 1000 * cos(atan2(pow(x * x + y *y, 0.5), (z + 1.565))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 1.565) * (z + 1.565) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::X, [](double x, double y, double z, double){ return 1000 * cos(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 1.565))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 1.565) * (z + 1.565) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::Y, [](double x, double y, double z, double){ return 1000 * sin(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 1.565))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 1.565) * (z + 1.565) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::Z, [](double x, double y, double z, double){ return 1000 * cos(atan2(pow(x * x + y *y, 0.5), (z + 1.565))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 1.565) * (z + 1.565) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
 
-    object.addSurfaceLoad(DIR_X, [](double x, double y, double z, double){ return 1000 * cos(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 15.126))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 15.126) * (z + 15.126) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
-    object.addSurfaceLoad(DIR_Y, [](double x, double y, double z, double){ return 1000 * sin(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 15.126))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 15.126) * (z + 15.126) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
-    object.addSurfaceLoad(DIR_Y, [](double x, double y, double z, double){ return 1000 * cos(atan2(pow(x * x + y* y, 0.5), (z + 15.126))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 15.126) * (z + 15.126) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::X, [](double x, double y, double z, double){ return 1000 * cos(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 15.126))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 15.126) * (z + 15.126) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::Y, [](double x, double y, double z, double){ return 1000 * sin(atan2(y, x)) * sin(atan2(pow(x * x + y * y, 0.5), (z + 15.126))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 15.126) * (z + 15.126) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addSurfaceLoad(Direction::Z, [](double x, double y, double z, double){ return 1000 * cos(atan2(pow(x * x + y* y, 0.5), (z + 15.126))); }, [](double x, double y, double z, double){ return (abs(x * x + y * y + (z + 15.126) * (z + 15.126) - 2.5 * 2.5) <= 1.0E-2) ? 1.0 : 0.0; });
     // Граничные условия
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, [](double, double, double, double){ return 0.0; }, [](double, double, double z, double){ return (abs(z + 17.626) <= 1.0E-2) ? 1.0 : 0.0; });
-    object.addBoundaryCondition(DIR_X, [](double, double, double, double){ return 0.0; }, [](double x, double, double, double){ return (abs(x) <= 1.0E-2) ? 1.0 : 0.0; });
-    object.addBoundaryCondition(DIR_Y, [](double, double, double, double){ return 0.0; }, [](double, double y, double, double){ return (abs(y) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [](double, double, double z, double){ return (abs(z + 17.626) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X, [](double, double, double, double){ return 0.0; }, [](double x, double, double, double){ return (abs(x) <= 1.0E-2) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::Y, [](double, double, double, double){ return 0.0; }, [](double, double y, double, double){ return (abs(y) <= 1.0E-2) ? 1.0 : 0.0; });
 
     // Запуск расчета
     if (object.start())
@@ -250,7 +250,7 @@ void calcTank3s6(void)
     //        object.addThickness("0.0015");
     object.addThickness(0.0015);
     // Граничные условия
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, 0.0, [](double x, double y, double z, double){ return (y == -0.643 && abs(x * x + z * z -1.641 * 1.641) <= 0.01) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [](double x, double y, double z, double){ return (y == -0.643 && abs(x * x + z * z -1.641 * 1.641) <= 0.01) ? 1.0 : 0.0; });
     // Распределенная поверхностная нагрузка
     object.addPressureLoad(5000.0, [](double x, double y, double z, double){ return ((y <= 0 && y>=-0.269) && (abs(x * x + z * z - 1.037 * 1.037) <= 0.01)) ? 1.0 : 0.0; });
     object.addPressureLoad(5000.0, [](double x, double y, double z, double){ return ((y < -0.269) && (abs(x * x + z * z + (y + 0.269) * (y + 0.269) - 1.037 * 1.037)) <= 0.01) ? 1.0 : 0.0; });
@@ -387,9 +387,9 @@ void calcNewTank3(void)
 
 
     // Граничные условия
-    object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, 0.0, [&](double, double y, double, double){ return (abs(y - L / 2 - Lt) <= eps) ? 1.0 : 0.0; });
-    object.addBoundaryCondition(DIR_X, 0.0, [&](double x, double, double, double){ return (abs(x) < eps) ? 1.0 : 0.0; });
-    object.addBoundaryCondition(DIR_Z, 0.0, [&](double, double, double z, double){ return (abs(z) < eps) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [&](double, double y, double, double){ return (abs(y - L / 2 - Lt) <= eps) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X, 0.0, [&](double x, double, double, double){ return (abs(x) < eps) ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::Z, 0.0, [&](double, double, double z, double){ return (abs(z) < eps) ? 1.0 : 0.0; });
     // Распределенная поверхностная нагрузка
     object.addPressureLoad(P, [&](double, double y, double, double){ return (y - L / 2 - Lt >= 0) ? 1.0 : 0.0; });
     object.addPressureLoad(P / 2.0, [&](double, double y, double, double){ return (y - L / 2 - Lt < 0) ? 1.0 : 0.0; });

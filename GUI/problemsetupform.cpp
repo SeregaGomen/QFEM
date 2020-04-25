@@ -10,16 +10,6 @@
 #include "ui_problemsetupform.h"
 #include "object/object.h"
 
-inline Direction operator | (Direction lhs, Direction rhs)
-{
-    return static_cast<Direction> (static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
-}
-
-inline Direction operator |= (Direction& lhs, Direction rhs)
-{
-    return (lhs = static_cast<Direction>(lhs) | static_cast<Direction>(rhs));
-}
-
 TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TProblemSetupForm)

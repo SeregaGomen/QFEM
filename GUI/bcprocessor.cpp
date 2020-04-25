@@ -7,7 +7,7 @@ extern TMessenger* msg;
 
 void TBCProcessor::processVertex(void)
 {
-    unsigned numThread = 4, //std::thread::hardware_concurrency() - 1,
+    unsigned numThread = 1, //std::thread::hardware_concurrency() - 1,
              size = object->getMesh().getNumBE(),
              step = size / numThread;
     ErrorCode error = ErrorCode::Undefined;
