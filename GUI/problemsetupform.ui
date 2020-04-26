@@ -522,6 +522,32 @@
        <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
      </property>
     </widget>
+    <widget class="QToolButton" name="tbShowPoissonRatio">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>160</y>
+       <width>24</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Visualization Poisson ratio</string>
+     </property>
+     <property name="statusTip">
+      <string>Visualization Poisson ratio</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="QFEM.qrc">
+       <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="gbYoungModulus">
     <property name="geometry">
@@ -632,10 +658,10 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Visualization parameter</string>
+      <string>Visualization Young's modulus</string>
      </property>
      <property name="statusTip">
-      <string>Visualization parameter</string>
+      <string>Visualization Young's modulus</string>
      </property>
      <property name="text">
       <string>...</string>
@@ -761,6 +787,32 @@
        <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
      </property>
     </widget>
+    <widget class="QToolButton" name="tbShowTemperature">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>160</y>
+       <width>24</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Visualization temperature</string>
+     </property>
+     <property name="statusTip">
+      <string>Visualization temperature</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="QFEM.qrc">
+       <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="gbThermalExpansion">
     <property name="geometry">
@@ -856,6 +908,32 @@
      <property name="icon">
       <iconset resource="QFEM.qrc">
        <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="tbShowAlpha">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>160</y>
+       <width>24</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Visualization thermal expansion coefficient</string>
+     </property>
+     <property name="statusTip">
+      <string>Visualization thermal expansion coefficient</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="QFEM.qrc">
+       <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
      </property>
     </widget>
    </widget>
@@ -969,10 +1047,10 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Visualization parameter</string>
+     <string>Visualization FE thickness</string>
     </property>
     <property name="statusTip">
-     <string>Visualization parameter</string>
+     <string>Visualization FE thickness</string>
     </property>
     <property name="text">
      <string>...</string>
@@ -1630,6 +1708,32 @@
        <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
      </property>
     </widget>
+    <widget class="QToolButton" name="tbShowDensity">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>160</y>
+       <width>24</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Visualization density</string>
+     </property>
+     <property name="statusTip">
+      <string>Visualization density</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="QFEM.qrc">
+       <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="gbDamping">
     <property name="geometry">
@@ -1647,7 +1751,7 @@
      </font>
     </property>
     <property name="title">
-     <string>Damping</string>
+     <string>Damping ratio</string>
     </property>
     <widget class="QTableWidget" name="twDamping">
      <property name="geometry">
@@ -1722,6 +1826,32 @@
      <property name="icon">
       <iconset resource="QFEM.qrc">
        <normaloff>:/images/Add.png</normaloff>:/images/Add.png</iconset>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="tbShowDamping">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>160</y>
+       <width>24</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Visualization damping ratio</string>
+     </property>
+     <property name="statusTip">
+      <string>Visualization damping ratio</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="QFEM.qrc">
+       <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
      </property>
     </widget>
    </widget>
@@ -2006,10 +2136,10 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Visualization parameter</string>
+     <string>Visualization loads</string>
     </property>
     <property name="statusTip">
-     <string>Visualization parameter</string>
+     <string>Visualization loads</string>
     </property>
     <property name="text">
      <string>...</string>
@@ -2141,10 +2271,10 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Visualization parameter</string>
+     <string>Visualization boundary conditions</string>
     </property>
     <property name="statusTip">
-     <string>Visualization parameter</string>
+     <string>Visualization boundary conditions</string>
     </property>
     <property name="text">
      <string>...</string>

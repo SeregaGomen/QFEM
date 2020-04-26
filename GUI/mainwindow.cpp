@@ -756,7 +756,7 @@ bool TMainWindow::checkParams(void)
         }
         if (femObject->getParams().plist.findParameter(ParamType::Damping) == 0)
         {
-            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping parameter!"));
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping ratio!"));
             return false;
         }
         if (femObject->getParams().th == 0.0 or femObject->getParams().t0 < 0 or femObject->getParams().t1 <= 0 or (femObject->getParams().t0 >= femObject->getParams().t1))
@@ -917,7 +917,7 @@ void TMainWindow::sayParams(QString& webOut)
     if (femObject->getParams().fType == FEMType::DynamicProblem)
     {
         sayParam(webOut, tr("Density"), ParamType::Density, false);
-        sayParam(webOut, tr("Damping parameter"), ParamType::Damping, false);
+        sayParam(webOut, tr("Damping ratio"), ParamType::Damping, false);
     }
     // Упруго-пластические параметры задачи
     if (femObject->getParams().pMethod not_eq PlasticityMethod::Linear)
@@ -988,24 +988,24 @@ void TMainWindow::sayParams(QString& webOut)
                     if (contains(it.getInitialCondition(), InitialCondition::W))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[6].c_str()).arg(it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Ut))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[19].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if (contains(it.getInitialCondition(), InitialCondition::Vt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[20].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if (contains(it.getInitialCondition(), InitialCondition::Wt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[21].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if (contains(it.getInitialCondition(), InitialCondition::Utt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[22].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if (contains(it.getInitialCondition(), InitialCondition::Vtt))
+                    if (contains(it.getInitialCondition(), InitialCondition::Vt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[23].c_str()).arg(it.getExpression().c_str()) + "<br>";
-                    if (contains(it.getInitialCondition(), InitialCondition::Wtt))
+                    if (contains(it.getInitialCondition(), InitialCondition::Wt))
                         webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[24].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                    if (contains(it.getInitialCondition(), InitialCondition::Utt))
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[25].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                    if (contains(it.getInitialCondition(), InitialCondition::Vtt))
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[26].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                    if (contains(it.getInitialCondition(), InitialCondition::Wtt))
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[27].c_str()).arg(it.getExpression().c_str()) + "<br>";
                 }
         }
     }
     // --------------- Вспомогательные параметры ---------------
     if (femObject->getParams().variables.size())
     {
-        webOut += "<br>" + tr("Variables") + "<br>";
+        webOut += "<br>" + tr("Global variables") + "<br>";
         for (auto it: femObject->getParams().variables)
             webOut += tr("<b>%1</b> = <b>%2</b>").arg(it.first.c_str()).arg(it.second) + "<br>";
     }

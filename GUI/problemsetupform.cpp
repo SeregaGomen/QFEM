@@ -65,8 +65,20 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
 
     connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowYoungModulus->setEnabled(true); }));
     connect(ui->twYoungModulus->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowYoungModulus->setEnabled(bool(ui->twYoungModulus->rowCount())); }));
+    connect(ui->twPoissonsRatio->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowPoissonRatio->setEnabled(true); }));
+    connect(ui->twPoissonsRatio->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowPoissonRatio->setEnabled(bool(ui->twPoissonsRatio->rowCount())); }));
     connect(ui->twThickness->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowThickness->setEnabled(true); }));
     connect(ui->twThickness->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowThickness->setEnabled(bool(ui->twThickness->rowCount())); }));
+    connect(ui->twThermalExpansion->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowAlpha->setEnabled(true); }));
+    connect(ui->twThermalExpansion->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowAlpha->setEnabled(bool(ui->twThermalExpansion->rowCount())); }));
+    connect(ui->twTemperature->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowTemperature->setEnabled(true); }));
+    connect(ui->twTemperature->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowTemperature->setEnabled(bool(ui->twTemperature->rowCount())); }));
+    connect(ui->twBC->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowBoundaryConditions->setEnabled(true); }));
+    connect(ui->twBC->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowBoundaryConditions->setEnabled(bool(ui->twBC->rowCount())); }));
+    connect(ui->twDensity->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowDensity->setEnabled(true); }));
+    connect(ui->twDensity->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowDensity->setEnabled(bool(ui->twDensity->rowCount())); }));
+    connect(ui->twDamping->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowDamping->setEnabled(true); }));
+    connect(ui->twDamping->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowDamping->setEnabled(bool(ui->twDamping->rowCount())); }));
 
     connect(ui->twVV->model(), &QAbstractItemModel::rowsInserted, ([=](void) { ui->tbShowLoads->setEnabled(true); }));
     connect(ui->twVV->model(), &QAbstractItemModel::rowsRemoved, ([=](void) { ui->tbShowLoads->setEnabled(bool(ui->twVV->rowCount())); }));
@@ -112,17 +124,20 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     connect(ui->tbRemoveDamping, &QToolButton::clicked, ([=](void) { removeRow(ui->twDamping); setEnabledBtn(ui->tbRemoveDamping, ui->twDamping); }));
 
     connect(ui->tbShowYoungModulus, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::YoungModulus)); }));
+    connect(ui->tbShowPoissonRatio, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::PoissonRatio)); }));
     connect(ui->tbShowThickness, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::Thickness)); }));
     connect(ui->tbShowBoundaryConditions, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::BoundaryCondition)); }));
+    connect(ui->tbShowAlpha, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::Alpha)); }));
+    connect(ui->tbShowTemperature, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::Temperature)); }));
+    connect(ui->tbShowDensity, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::Density)); }));
+    connect(ui->tbShowDamping, &QToolButton::clicked, ([=](void) { if (getParams()) emit clicked(static_cast<int>(ParamType::Damping)); }));
+
     connect(ui->tbShowLoads, &QToolButton::clicked, ([=](void)
     {
         ParamType c_param[4] = { ParamType::VolumeLoad, ParamType::SurfaceLoad, ParamType::ConcentratedLoad, ParamType::Pressure_load };
 
         if (getParams()) emit clicked(static_cast<int>(c_param[ui->tabWidgetLoads->currentIndex()]));
     }));
-
-
-//    connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, getLoadTab()); }));
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, ui->tbShowLoads, getLoadTab()); }));
 
     connect(ui->buttonBox, &QDialogButtonBox::rejected, ([=](void) { slotCancelButton(); }));
