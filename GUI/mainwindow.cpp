@@ -124,9 +124,9 @@ void TMainWindow::init(void)
 //    connect(myCout, SIGNAL(messageChanged(QString)), terminal, SLOT(insertPlainText(QString)));
     connect(myCout, SIGNAL(messageChanged(QString)), this, SLOT(slotMsg(QString)));
 //    cout << put_time(localtime(&now), "%c %Z") << endl;
-    if (langCode == 1)
-        cout.imbue(std::locale("ru_RU.utf8"));
-    cout << put_time(localtime(&now), "%c") << endl;
+//    if (langCode == 1)
+//        cout.imbue(std::locale("ru_RU.utf8"));
+    cout << put_time(localtime(&now), "%d-%m-%Y %X") << endl;
 
     myCerr = new QStdRedirector<>(std::cerr, this);
 //    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(setErrColor()));
