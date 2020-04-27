@@ -1087,25 +1087,26 @@ double TMesh::volume2d4(const matrix<double>& px)
 // Объем пирамиды
 double TMesh::volume3d4(const matrix<double>& px)
 {
-    double a = (px(1, 0) - px(0, 0)) * (px(2, 1) - px(0, 1)) * (px(3, 2) - px(0, 2)) + (px(3, 0) - px(0, 0)) * (px(1, 1) - px(0, 1)) * (px(2, 2) - px(0, 2)) + (px(2, 0) - px(0, 0)) * (px(3, 1) - px(0, 1)) * (px(1, 2) - px(0, 2)),
-           b = (px(3, 0) - px(0, 0)) * (px(2, 1) - px(0, 1)) * (px(1, 2) - px(0, 2)) + (px(2, 0) - px(0, 0)) * (px(1, 1) - px(0, 1)) * (px(3, 2) - px(0, 2)) + (px(1, 0) - px(0, 0)) * (px(3, 1) - px(0, 1)) * (px(2, 2) - px(0, 2));
-
-    return (a - b) / 6.0;
+    matrix<double> m = {{ px(1, 0) - px(0, 0), px(1, 1) - px(0, 1), px(1, 2) - px(0, 2) },
+                        { px(2, 0) - px(0, 0), px(2, 1) - px(0, 1), px(2, 2) - px(0, 2) },
+                        { px(3, 0) - px(0, 0), px(3, 1) - px(0, 1), px(3, 2) - px(0, 2) }};
+    return fabs(det3x3(m)) / 6;
 }
 // ----------------------------------------------------------------
 // Объем четырехугольного шестигранника
 double TMesh::volume3d8(const matrix<double>& px)
 {
+    matrix<int> ref = {{0, 1, 4, 7}, {4, 1, 5, 7}, {1, 2, 6, 7}, {1, 5, 6, 7}, {1, 2, 3, 7}, {0, 3, 1, 7}};
+    matrix<double> m;
     double v = 0;
-    unsigned ref[][6] = {{0, 1, 4, 7}, {4, 1, 5, 7}, {1, 2, 6, 7}, {1, 5, 6, 7}, {1, 2, 3, 7}, {0, 3, 1, 7}};
 
     for (int i = 0; i < 6; i++)
-        v += (px(ref[i][1], 0) - px(ref[i][0], 0)) * (px(ref[i][2], 1) - px(ref[i][0], 1)) * (px(ref[i][3], 2) - px(ref[i][0], 2)) +
-             (px(ref[i][1], 1) - px(ref[i][0], 1)) * (px(ref[i][2], 2) - px(ref[i][0], 2)) * (px(ref[i][3], 0) - px(ref[i][0], 0)) +
-             (px(ref[i][1], 2) - px(ref[i][0], 2)) * (px(ref[i][2], 0) - px(ref[i][0], 0)) * (px(ref[i][3], 1) - px(ref[i][0], 1)) -
-             (px(ref[i][1], 2) - px(ref[i][0], 2)) * (px(ref[i][2], 1) - px(ref[i][0], 1)) * (px(ref[i][3], 0) - px(ref[i][0], 0)) -
-             (px(ref[i][1], 1) - px(ref[i][0], 1)) * (px(ref[i][2], 0) - px(ref[i][0], 0)) * (px(ref[i][3], 2) - px(ref[i][0], 2)) -
-             (px(ref[i][1], 0) - px(ref[i][0], 0)) * (px(ref[i][2], 2) - px(ref[i][0], 2)) * (px(ref[i][3], 1) - px(ref[i][0], 1)) / 6.0;
+    {
+        m = {{ px(ref(i, 1), 0) - px(ref(i, 0), 0), px(ref(i, 1), 1) - px(ref(i, 0), 1), px(ref(i, 1), 2) - px(ref(i, 0), 2) },
+             { px(ref(i, 2), 0) - px(ref(i, 0), 0), px(ref(i, 2), 1) - px(ref(i, 0), 1), px(ref(i, 2), 2) - px(ref(i, 0), 2) },
+             { px(ref(i, 3), 0) - px(ref(i, 0), 0), px(ref(i, 3), 1) - px(ref(i, 0), 1), px(ref(i, 3), 2) - px(ref(i, 0), 2) }};
+        v += fabs(det3x3(m)) / 6;
+    }
     return v;
 }
 // -------------------------------------------------------
