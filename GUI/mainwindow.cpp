@@ -126,7 +126,7 @@ void TMainWindow::init(void)
 //    if (langCode == 1)
 //        cout.imbue(std::locale("ru_RU.utf8"));
 //    cout << put_time(localtime(&now), "%d-%m-%Y %X") << endl;
-    cout << QDateTime::currentDateTime().toString("d-MM-yyyy hh.mm.ss").toStdString() << endl;
+    cout << QDateTime::currentDateTime().toString("d-MM-yyyy hh:mm:ss").toStdString() << endl;
 
     myCerr = new QStdRedirector<>(std::cerr, this);
 //    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(setErrColor()));
