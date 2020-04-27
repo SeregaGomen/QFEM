@@ -69,7 +69,7 @@ void TMainWindow::init(void)
     QTextCodec::setCodecForCStrings(codec);
 #endif
     QTextCodec::setCodecForLocale(codec);
-    auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
+//    auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
 
     #ifndef Q_OS_LINUX
         setWindowIcon(QIcon(":/images/app.ico"));
@@ -123,10 +123,10 @@ void TMainWindow::init(void)
     myCout = new QStdRedirector<>(std::cout, this);
 //    connect(myCout, SIGNAL(messageChanged(QString)), terminal, SLOT(insertPlainText(QString)));
     connect(myCout, SIGNAL(messageChanged(QString)), this, SLOT(slotMsg(QString)));
-//    cout << put_time(localtime(&now), "%c %Z") << endl;
 //    if (langCode == 1)
 //        cout.imbue(std::locale("ru_RU.utf8"));
-    cout << put_time(localtime(&now), "%d-%m-%Y %X") << endl;
+//    cout << put_time(localtime(&now), "%d-%m-%Y %X") << endl;
+    cout << QDateTime::currentDateTime().toString("d-MM-yyyy hh.mm.ss").toStdString() << endl;
 
     myCerr = new QStdRedirector<>(std::cerr, this);
 //    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(setErrColor()));
