@@ -360,12 +360,12 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
                     if (not params.getPredicateValue(it, coord))
                         continue;
                     val = params.getExpressionValue(it, coord);
-                    if (contains(direct, Direction::X) or (mesh->isPlate() and contains(direct, Direction::Z))) // X или W - для пластины
+                    if (contains(direct, Direction::X)) // X
                         load[i * mesh->getFreedom() + 0] += val;
                     if (contains(direct, Direction::Y)) // Y
                         load[i * mesh->getFreedom() + 1] += val;
-                    if (contains(direct, Direction::Z)) // Z
-                        load[i * mesh->getFreedom() + 2] += val;
+                    if (contains(direct, Direction::Z)) // Z (W - для пластины обрабатывается особо)
+                        load[i * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val;
                 }
         }
     }
@@ -423,12 +423,12 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
                     val = params.getExpressionValue(it, coord);
                     for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                     {
-                        if (contains(direct, Direction::X) or (mesh->isPlate() and contains(direct, Direction::Z))) // X или W - для пластины
+                        if (contains(direct, Direction::X)) // X
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
                         if (contains(direct, Direction::Y)) // Y
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k];
-                        if (contains(direct, Direction::Z)) // Z
-                            load[mesh->getBE(i, k) * mesh->getFreedom() + 2] += val * share[k];
+                        if (contains(direct, Direction::Z)) // Z или W - для пластины
+                            load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
                     }
                 }
         }
@@ -498,9 +498,9 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
                             // Y
                             if (mesh->getFreedom() > 1)
                                 load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k] * v[1];
-                            // Z
+                            // Z или W - для пластины
                             if (mesh->getFreedom() > 2)
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 2] += val * share[k] * v[2];
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k] * v[2];
                         }
                         else
                             load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
@@ -562,12 +562,12 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
                     val = params.getExpressionValue(it, coord);
                     for (unsigned k = 0; k < mesh->getSizeFE(); k++)
                     {
-                        if (contains(direct, Direction::X)or (mesh->isPlate() and contains(direct, Direction::Z))) // X или W - для пластины
+                        if (contains(direct, Direction::X)) // X или W - для пластины
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 0] += val * share[k];
                         if (contains(direct, Direction::Y)) // Y
                             load[mesh->getFE(i, k) * mesh->getFreedom() + 1] += val * share[k];
                         if (contains(direct, Direction::Z)) // Z
-                            load[mesh->getFE(i, k) * mesh->getFreedom() + 2] += val * share[k];
+                            load[mesh->getFE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
                     }
                 }
         }

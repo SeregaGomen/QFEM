@@ -28,9 +28,9 @@ void TGLParameter::createLoads(void)
               x2;
 
     // Определение максимального значения нагрузки
-    for (int i = 0; i < vertex.size(); i++)
-        if (vertex[i].length() > maxValue)
-            maxValue = vertex[i].length();
+    for (auto it: vertex)
+        if (it.length() > maxValue)
+            maxValue = it.length();
 
     TGLMesh::createObject();
 
