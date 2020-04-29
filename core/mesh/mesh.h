@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <list>
+#include <array>
 #include "fe/fe.h"
 #include "util/matrix.h"
 
@@ -19,8 +20,8 @@ private:
     // Тип КЭ
     FEType feType;
     // Минимальное значение координат
-    vector<double> minX = {0, 0, 0};
-    vector<double> maxX = {0, 0, 0};
+    array<double, 3> minX{0, 0, 0};
+    array<double, 3> maxX{0, 0, 0};
     // Структура сетки
     vector< vector<unsigned> > meshMap;
     // Координаты вершин сетки

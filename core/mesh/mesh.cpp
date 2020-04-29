@@ -853,8 +853,8 @@ bool TMesh::readMESH(string fname)
 // ----------------------------------------------------------------
 void TMesh::getMinMax(void)
 {
-    vector<double> min_x{ x[0][0], (x.size2() > 1) ? x[0][1] : 0, (x.size2() > 2) ? x[0][2] : 0 },
-                   max_x{ x[0][0], (x.size2() > 1) ? x[0][1] : 0, (x.size2() > 2) ? x[0][2] : 0 };
+    array<double, 3> min_x{ x[0][0], (x.size2() > 1) ? x[0][1] : 0, (x.size2() > 2) ? x[0][2] : 0 },
+                     max_x{ x[0][0], (x.size2() > 1) ? x[0][1] : 0, (x.size2() > 2) ? x[0][2] : 0 };
 
     for (unsigned i = 1; i < x.size1(); i++)
     {
