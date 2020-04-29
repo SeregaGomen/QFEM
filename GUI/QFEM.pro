@@ -55,6 +55,7 @@ SOURCES += main.cpp\
     ../core/fe/shape.cpp
 
 HEADERS  += mainwindow.h \
+    ../core/parser/defs.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \
     bcprocessor.h \

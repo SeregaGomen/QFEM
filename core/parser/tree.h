@@ -1,11 +1,10 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include "defs.h"
 #include "node.h"
 
-
-enum class Operation { Undefined, Sin, Cos, Tan, Exp, Asin, Acos, Atan, Atan2, Sinh, Cosh, Tanh, Sqrt, Abs, Plus, Minus, Div, Mul, Pow, Eq, Ne, Lt, Le, Gt, Ge, Not, And, Or };
-
+using namespace Parser;
 
 class Tree
 {
@@ -15,10 +14,10 @@ public:
     Tree(void);
     Tree(double*);
     Tree(double);
-    Tree(Operation, const Tree&);
-    Tree(const Tree&, Operation, const Tree&);
+    Tree(Token, const Tree&);
+    Tree(const Tree&, Token, const Tree&);
     Tree(const Tree&);
-   ~Tree(void);
+    ~Tree(void);
     double value(void);
     Tree operator = (const Tree&);
     Tree operator - (void);

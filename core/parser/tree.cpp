@@ -18,26 +18,26 @@ Tree::Tree(double* value)
     nodePtr = new ArgNode(value);
 }
 /**********************************************************************/
-Tree::Tree(Operation op, const Tree& right)
+Tree::Tree(Token op, const Tree& right)
 {
     nodePtr = new UnaryNode(op, right);
 }
 /**********************************************************************/
-Tree::Tree(const Tree& left, Operation op, const Tree& right)
+Tree::Tree(const Tree& left, Token op, const Tree& right)
 {
     nodePtr = new BinaryNode(left, op, right);
 }
 /**********************************************************************/
 Tree::~Tree(void)
 {
-    if (not --nodePtr->use)
+    if (not nodePtr->dec())
         delete nodePtr;
 }
 /**********************************************************************/
 Tree Tree::operator = (const Tree& value)
 {
-    ++value.nodePtr->use;
-    if (not --nodePtr->use)
+    value.nodePtr->inc();
+    if (not nodePtr->dec())
         delete nodePtr;
     nodePtr = value.nodePtr;
     return *this;
@@ -45,13 +45,13 @@ Tree Tree::operator = (const Tree& value)
 /**********************************************************************/
 Tree Tree::operator - (void)
 {
-    return Tree(Tree(-1.0), Operation::Mul, *this);
+    return Tree(Tree(-1.0), Token::Mul, *this);
 }
 /**********************************************************************/
 Tree::Tree(const Tree& value)
 {
     nodePtr = value.nodePtr;
-    ++nodePtr->use;
+    nodePtr->inc();
 }
 /**********************************************************************/
 double Tree::value(void)
@@ -67,81 +67,81 @@ Tree Tree::operator += (const Tree& r)
 /**********************************************************************/
 Tree operator + (double l, const Tree& r)
 {
-    return Tree(Tree(l), Operation::Plus, r);
+    return Tree(Tree(l), Token::Plus, r);
 }
 /**********************************************************************/
 Tree operator + (const Tree& l, double r)
 {
-    return Tree(l, Operation::Plus, Tree(r));
+    return Tree(l, Token::Plus, Tree(r));
 }
 /**********************************************************************/
 Tree operator + (const Tree& l, const Tree& r)
 {
-    return Tree(l, Operation::Plus, r);
+    return Tree(l, Token::Plus, r);
 }
 /**********************************************************************/
 Tree operator - (double l, const Tree& r)
 {
-    return Tree(Tree(l), Operation::Minus, r);
+    return Tree(Tree(l), Token::Minus, r);
 }
 /**********************************************************************/
 Tree operator - (const Tree& l, double r)
 {
-    return Tree(l, Operation::Minus, Tree(r));
+    return Tree(l, Token::Minus, Tree(r));
 }
 /**********************************************************************/
 Tree operator - (const Tree& l, const Tree& r)
 {
-    return Tree(l, Operation::Minus, r);
+    return Tree(l, Token::Minus, r);
 }
 /**********************************************************************/
 Tree operator * (double l, const Tree& r)
 {
-    return Tree(Tree(l), Operation::Mul, r);
+    return Tree(Tree(l), Token::Mul, r);
 }
 /**********************************************************************/
 Tree operator * (const Tree& l, double r)
 {
-    return Tree(l, Operation::Mul, Tree(r));
+    return Tree(l, Token::Mul, Tree(r));
 }
 /**********************************************************************/
 Tree operator * (const Tree& l, const Tree& r)
 {
-    return Tree(l, Operation::Mul, r);
+    return Tree(l, Token::Mul, r);
 }
 /**********************************************************************/
 Tree operator / (double l, const Tree& r)
 {
-    return Tree(Tree(l), Operation::Div, r);
+    return Tree(Tree(l), Token::Div, r);
 }
 /**********************************************************************/
 Tree operator / (const Tree& l, double r)
 {
-    return Tree(l, Operation::Div, Tree(r));
+    return Tree(l, Token::Div, Tree(r));
 }
 /**********************************************************************/
 Tree operator / (const Tree& l, const Tree& r)
 {
-    return Tree(l, Operation::Div, r);
+    return Tree(l, Token::Div, r);
 }
 /**********************************************************************/
 Tree operator ^ (double l, const Tree& r)
 {
-    return Tree(Tree(l), Operation::Pow, r);
+    return Tree(Tree(l), Token::Pow, r);
 }
 /**********************************************************************/
 Tree operator ^ (const Tree& l, double r)
 {
-    return Tree(l, Operation::Pow, Tree(r));
+    return Tree(l, Token::Pow, Tree(r));
 }
 /**********************************************************************/
 Tree operator ^ (const Tree& l, const Tree& r)
 {
-    return Tree(l, Operation::Pow, r);
+    return Tree(l, Token::Pow, r);
 }
 /**********************************************************************/
 Tree exp(const Tree& r)
 {
-    return Tree(Operation::Exp, r);
+    return Tree(Token::Exp, r);
 }
 /**********************************************************************/

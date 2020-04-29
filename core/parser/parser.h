@@ -7,65 +7,57 @@
 #include "tree.h"
 
 using namespace std;
+using namespace Parser;
 
-/************************************************************************************************/
-enum class Token { Undefined, Delimiter, Numeric, Function, Variable, String, Finished };
-/************************************************************************************************/
-struct idToken
-{
-    string name;
-    Operation op;
-};
 /************************************************************************************************/
 class TParser
 {
 private:
     Tree result;
-    map<string,double> variables; // Таблица переменных
+    map<string, double> variables; // Таблица переменных
     string token;
     char* expression = nullptr;
-    Token token_type = Token::Undefined;
+    Parser::Token tok = Token::Undefined;
+    Parser::TokenType token_type = TokenType::Undefined;
     ErrorCode error_code = ErrorCode::Undefined;
-    Operation tok = Operation::Undefined;
-    vector<idToken> functionList{
-                                    { "SQRT", Operation::Sqrt },
-                                    { "SIN", Operation::Sin },
-                                    { "COS", Operation::Cos },
-                                    { "TAN", Operation::Tan },
-                                    { "EXP", Operation::Exp },
-                                    { "ASIN", Operation::Asin },
-                                    { "ACOS", Operation::Acos },
-                                    { "ATAN", Operation::Atan },
-                                    { "ATAN2", Operation::Atan2 },
-                                    { "SINH", Operation::Sinh },
-                                    { "COSH", Operation::Cosh },
-                                    { "TANH", Operation::Tanh },
-                                    { "ABS", Operation::Abs }
+    vector<Parser::idToken> functionList{
+                                    { "SQRT", Token::Sqrt },
+                                    { "SIN", Token::Sin },
+                                    { "COS", Token::Cos },
+                                    { "TAN", Token::Tan },
+                                    { "EXP", Token::Exp },
+                                    { "ASIN", Token::Asin },
+                                    { "ACOS", Token::Acos },
+                                    { "ATAN", Token::Atan },
+                                    { "ATAN2", Token::Atan2 },
+                                    { "SINH", Token::Sinh },
+                                    { "COSH", Token::Cosh },
+                                    { "TANH", Token::Tanh },
+                                    { "ABS", Token::Abs }
                                 };
     vector<idToken> booleanList{
-                                    { "NOT", Operation::Not },
-                                    { "AND", Operation::And },
-                                    { "OR", Operation::Or }
+                                    { "NOT", Token::Not },
+                                    { "AND", Token::And },
+                                    { "OR", Token::Or }
                                 };
 
     vector<idToken> opeartionList{
-                                    { "+", Operation::Plus },
-                                    { "-", Operation::Minus },
-                                    { "*", Operation::Mul },
-                                    { "/", Operation::Div },
-                                    { "**", Operation::Pow },
-                                    { "==", Operation::Eq },
-                                    { ">", Operation::Gt },
-                                    { "<", Operation::Lt },
-                                    { ">=", Operation::Ge },
-                                    { "<=", Operation::Le },
-                                    { "<>", Operation::Ne }
+                                    { "+", Token::Plus },
+                                    { "-", Token::Minus },
+                                    { "*", Token::Mul },
+                                    { "/", Token::Div },
+                                    { "**", Token::Pow },
+                                    { "==", Token::Eq },
+                                    { ">", Token::Gt },
+                                    { "<", Token::Lt },
+                                    { ">=", Token::Ge },
+                                    { "<=", Token::Le },
+                                    { "<>", Token::Ne }
                                 };
-protected:
-    Token get_token(void);
+    Parser::TokenType get_token(void);
     bool is_delim(char);
     bool is_name(string);
-    bool is_find(vector<idToken>&, string, Operation&);
+    bool is_find(vector<idToken>&, string, Token&);
     /*[[noreturn ]]*/ void error(ErrorCode);
     void compile(void);
     void get_exp(Tree&);

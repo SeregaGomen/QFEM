@@ -15,11 +15,11 @@ void TParser::set_expression(string prog)
 
     expression = const_cast<char*>(prog.c_str());
     error_code = ErrorCode::Undefined;
-    tok = Operation::Undefined;
+    tok = Token::Undefined;
     compile();
 }
 /********************************************************************/
-bool TParser::is_find(vector<idToken>& table, string id, Operation& token)
+bool TParser::is_find(vector<idToken>& table, string id, Token& token)
 {
     transform(id.begin(), id.end(),id.begin(), ::toupper);
     for (auto it : table)
@@ -31,13 +31,13 @@ bool TParser::is_find(vector<idToken>& table, string id, Operation& token)
     return false;
 }
 /********************************************************************/
-Token TParser::get_token(void)
+TokenType TParser::get_token(void)
 {
     token.clear();
-    token_type = Token::Undefined;
-    tok = Operation::Undefined;
+    token_type = TokenType::Undefined;
+    tok = Token::Undefined;
     if (*expression == 0)
-        return (token_type = Token::Finished);
+        return (token_type = TokenType::Finished);
     while (*expression == ' ' or *expression == '\t')
         expression++;
     if (strchr(" +-*/()=.,><",*expression))
@@ -47,7 +47,7 @@ Token TParser::get_token(void)
         if (*expression and strchr("=><*",*expression))
             if (is_find(opeartionList, token + *expression, tok))
                 token += *expression++;
-        return (token_type = Token::Delimiter);
+        return (token_type = TokenType::Delimiter);
     }
     if (isdigit(*expression))
     {
@@ -68,21 +68,21 @@ Token TParser::get_token(void)
             while (isdigit(*expression))
                 token += *expression++;
         }
-        return (token_type = Token::Numeric);
+        return (token_type = TokenType::Numeric);
     }
     if (isalpha(*expression) or *expression == '_')
     {
         while (not is_delim(*expression))
             token += *expression++;
-        token_type = Token::String;
+        token_type = TokenType::String;
     }
-    if (token_type == Token::String)
+    if (token_type == TokenType::String)
     {
         if (is_find(functionList, token,tok))
-            return token_type = Token::Function;
+            return token_type = TokenType::Function;
         if (is_find(booleanList, token,tok))
-            return token_type = Token::Delimiter;
-        return token_type = Token::Variable;
+            return token_type = TokenType::Delimiter;
+        return token_type = TokenType::Variable;
     }
     return token_type;
 }
@@ -109,14 +109,14 @@ bool TParser::is_name(string token)
 /********************************************************************/
 void TParser::compile(void)
 {
-    tok = Operation::Undefined;
-    token_type = Token::Undefined;
+    tok = Token::Undefined;
+    token_type = TokenType::Undefined;
     while (1)
     {
-        if (token_type == Token::Finished)
+        if (token_type == TokenType::Finished)
             break;
         get_exp(result);
-        if (token_type == Token::Delimiter)
+        if (token_type == TokenType::Delimiter)
         {
             if (token[0] == ')')
                 error(ErrorCode::ECramp);
@@ -144,11 +144,11 @@ void TParser::token_or(Tree& code)
     Tree hold;
 
     token_and(code);
-    while (token_type not_eq Token::Finished and tok == Operation::Or)
+    while (token_type not_eq TokenType::Finished and tok == Token::Or)
     {
         get_token();
         token_and(hold);
-        code = Tree(code, Operation::Or, hold);
+        code = Tree(code, Token::Or, hold);
     }
 }
 /********************************************************************/
@@ -157,34 +157,34 @@ void TParser::token_and(Tree& code)
     Tree hold;
 
     token_not(code);
-    while (token_type not_eq Token::Finished and tok == Operation::And)
+    while (token_type not_eq TokenType::Finished and tok == Token::And)
     {
         get_token();
         token_not(hold);
-        code = Tree(code, Operation::And, hold);
+        code = Tree(code, Token::And, hold);
     }
 }
 /********************************************************************/
 void TParser::token_not(Tree& code)
 {
-    Operation op = tok;
+    Token op = tok;
 
-    if (token_type == Token::Delimiter and op == Operation::Not)
+    if (token_type == TokenType::Delimiter and op == Token::Not)
         get_token();
 
     token_add(code);
-    if (op == Operation::Not)
-        code = Tree(Operation::Not, code);
+    if (op == Token::Not)
+        code = Tree(Token::Not, code);
 }
 /********************************************************************/
 void TParser::token_add(Tree& code)
 {
-    Operation op;
+    Token op;
     Tree hold;
     string pm;
 
     token_mul(code);
-    while (token_type not_eq Token::Finished and ((pm = token) == "+" or pm == "-" or pm == ">" or pm == "<" or pm == ">=" or pm == "<=" or pm == "<>" or pm == "=="))
+    while (token_type not_eq TokenType::Finished and ((pm = token) == "+" or pm == "-" or pm == ">" or pm == "<" or pm == ">=" or pm == "<=" or pm == "<>" or pm == "=="))
     {
         get_token();
         token_mul(hold);
@@ -195,19 +195,19 @@ void TParser::token_add(Tree& code)
 /********************************************************************/
 void TParser::token_mul(Tree& code)
 {
-    Operation  op;
+    Token  op;
     Tree hold;
     char pm;
 
     token_pow(code);
-    while (token_type not_eq Token::Finished and ((pm = token[0]) == '*' or pm == '/'))
+    while (token_type not_eq TokenType::Finished and ((pm = token[0]) == '*' or pm == '/'))
     {
         get_token();
         token_pow(hold);
         if (pm == '*')
-            op = Operation::Mul;
+            op = Token::Mul;
         else
-            op = Operation::Div;
+            op = Token::Div;
         code = Tree(code, op, hold);
     }
 }
@@ -217,28 +217,28 @@ void TParser::token_pow(Tree& code)
     Tree hold;
 
     token_un(code);
-    if (token_type not_eq Token::Finished and token == "**")
+    if (token_type not_eq TokenType::Finished and token == "**")
     {
         get_token();
         token_cramp(hold);
-        code = Tree(code, Operation::Pow, hold);
+        code = Tree(code, Token::Pow, hold);
     }
 }
 /********************************************************************/
 void TParser::token_un(Tree& code)
 {
-    Operation op = Operation::Undefined;
+    Token op = Token::Undefined;
 
-    if ((token_type == Token::Delimiter) and (token[0] == '+' or token[0] == '-'))
+    if ((token_type == TokenType::Delimiter) and (token[0] == '+' or token[0] == '-'))
     {
         if (token[0] == '+')
-            op = Operation::Plus;
+            op = Token::Plus;
         else
-            op = Operation::Minus;
+            op = Token::Minus;
         get_token();
     }
     token_cramp(code);
-    if (op not_eq Operation::Undefined)
+    if (op not_eq Token::Undefined)
         code = Tree(op, code);
 }
 /********************************************************************/
@@ -250,14 +250,14 @@ void TParser::token_prim(Tree& code)
 
     switch (token_type)
     {
-        case Token::Variable:
+        case TokenType::Variable:
             var_name = token;
             get_token();
             if (variables.find(var_name) == variables.end())
                 error(ErrorCode::EUndefVariable);
             code = Tree(&(variables[var_name]));
             break;
-        case Token::Numeric:
+        case TokenType::Numeric:
             s << token;
             s >> val;
             if (s.fail())
@@ -266,7 +266,7 @@ void TParser::token_prim(Tree& code)
             code = Tree(val);
             get_token();
             break;
-        case Token::Function:
+        case TokenType::Function:
             token_func(code);
             break;
         default:
@@ -276,7 +276,7 @@ void TParser::token_prim(Tree& code)
 /********************************************************************/
 void TParser::token_cramp(Tree& code)
 {
-    if (token[0] == '(' and token_type == Token::Delimiter)
+    if (token[0] == '(' and token_type == TokenType::Delimiter)
     {
         get_token();
         token_or(code);
@@ -290,10 +290,10 @@ void TParser::token_cramp(Tree& code)
 /********************************************************************/
 void TParser::token_func(Tree& code)
 {
-    Operation fun_tok = tok;
+    Token fun_tok = tok;
     Tree code2;
 
-    if (token_type == Token::Function)
+    if (token_type == TokenType::Function)
     {
         get_token();
         if (not token.length() or token[0] not_eq '(')
@@ -301,13 +301,13 @@ void TParser::token_func(Tree& code)
         get_token();
 
         token_add(code);
-        if (fun_tok == Operation::Atan2)
+        if (fun_tok == Token::Atan2)
         {
             if (token[0] not_eq ',')
                 error(ErrorCode::ESyntax);
             get_token();
             token_add(code2);
-            code = Tree(code, Operation::Atan2, code2);
+            code = Tree(code, Token::Atan2, code2);
         }
         else
             code = Tree(fun_tok, code);

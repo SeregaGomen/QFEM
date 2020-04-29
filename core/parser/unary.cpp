@@ -6,31 +6,31 @@ double UnaryNode::value(void)
 {
     switch (op)
     {
-        case Operation::Minus:
+        case Token::Minus:
             return -val.value();
-        case Operation::Abs:
+        case Token::Abs:
             return fabs(val.value());
-        case Operation::Sqrt:
+        case Token::Sqrt:
             return sqrt(val.value());
-        case Operation::Sin:
+        case Token::Sin:
             return sin(val.value());
-        case Operation::Cos:
+        case Token::Cos:
             return cos(val.value());
-        case Operation::Tan:
+        case Token::Tan:
             return tan(val.value());
-        case Operation::Exp:
+        case Token::Exp:
             return exp(val.value());
-        case Operation::Asin:
+        case Token::Asin:
             return asin(val.value());
-        case Operation::Acos:
+        case Token::Acos:
             return acos(val.value());
-        case Operation::Atan:
+        case Token::Atan:
             return atan(val.value());
-        case Operation::Sinh:
+        case Token::Sinh:
             return sinh(val.value());
-        case Operation::Cosh:
+        case Token::Cosh:
             return cosh(val.value());
-        case Operation::Not:
+        case Token::Not:
             return not int(val.value());
         default:
             break;

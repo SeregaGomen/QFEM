@@ -5,31 +5,31 @@ double BinaryNode::value(void)
 {
     switch (op)
     {
-        case Operation::Plus:
+        case Token::Plus:
             return left.value() + right.value();
-        case Operation::Minus:
+        case Token::Minus:
             return left.value() - right.value();
-        case Operation::Mul:
+        case Token::Mul:
             return left.value() * right.value();
-        case Operation::Div:
+        case Token::Div:
             return left.value() / right.value();
-        case Operation::Pow:
+        case Token::Pow:
             return pow(left.value(),right.value());
-        case Operation::Eq:
+        case Token::Eq:
             return (left.value() == right.value()) ? 1.0 : 0.0;
-        case Operation::Lt:
+        case Token::Lt:
             return (left.value() < right.value()) ? 1.0 : 0.0;
-        case Operation::Le:
+        case Token::Le:
             return (left.value() <= right.value()) ? 1.0 : 0.0;
-        case Operation::Gt:
+        case Token::Gt:
             return (left.value() > right.value()) ? 1.0 : 0.0;
-        case Operation::Ge:
+        case Token::Ge:
             return (left.value() >= right.value()) ? 1.0 : 0.0;
-        case Operation::And:
+        case Token::And:
             return int(left.value()) and int(right.value());
-        case Operation::Or:
+        case Token::Or:
             return int(left.value()) or int(right.value());
-        case Operation::Atan2:
+        case Token::Atan2:
             return atan2(left.value(),right.value());
         default:
             break;
