@@ -69,7 +69,7 @@ private:
     void token_mul(Tree&);
     void token_pow(Tree&);
     void token_un(Tree&);
-    void token_cramp(Tree&);
+    void token_bracket(Tree&);
     void token_prim(Tree&);
 public:
     TParser(void) {}

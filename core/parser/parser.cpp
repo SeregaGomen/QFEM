@@ -119,7 +119,7 @@ void TParser::compile(void)
         if (token_type == TokenType::Delimiter)
         {
             if (token[0] == ')')
-                error(ErrorCode::ECramp);
+                error(ErrorCode::EBracket);
             else
                 error(ErrorCode::ESyntax);
         }
@@ -220,7 +220,7 @@ void TParser::token_pow(Tree& code)
     if (token_type not_eq TokenType::Finished and token == "**")
     {
         get_token();
-        token_cramp(hold);
+        token_bracket(hold);
         code = Tree(code, Token::Pow, hold);
     }
 }
@@ -237,7 +237,7 @@ void TParser::token_un(Tree& code)
             op = Token::Minus;
         get_token();
     }
-    token_cramp(code);
+    token_bracket(code);
     if (op not_eq Token::Undefined)
         code = Tree(op, code);
 }
@@ -255,7 +255,7 @@ void TParser::token_prim(Tree& code)
             get_token();
             if (variables.find(var_name) == variables.end())
                 error(ErrorCode::EUndefVariable);
-            code = Tree(&(variables[var_name]));
+            code = Tree(variables[var_name]);
             break;
         case TokenType::Numeric:
             s << token;
@@ -274,14 +274,14 @@ void TParser::token_prim(Tree& code)
     }
 }
 /********************************************************************/
-void TParser::token_cramp(Tree& code)
+void TParser::token_bracket(Tree& code)
 {
     if (token[0] == '(' and token_type == TokenType::Delimiter)
     {
         get_token();
         token_or(code);
         if(token[0] not_eq ')')
-            error(ErrorCode::ECramp);
+            error(ErrorCode::EBracket);
         get_token();
     }
     else

@@ -10,8 +10,8 @@ private:
     Token op;
     Tree val;
 public:
-    UnaryNode(Token o, const Tree& v) : op(o), val(v) {}
-    ~UnaryNode(void) {}
+    UnaryNode(Token o, const Tree& v) noexcept : op(o), val(v)  {}
+    virtual ~UnaryNode(void) noexcept {}
     double value(void);
 };
 

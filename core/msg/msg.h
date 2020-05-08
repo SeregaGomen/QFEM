@@ -102,7 +102,7 @@ using namespace std;
 
 
 // ----------------------- Коды ошибок -------------------------------
-enum class ErrorCode { Undefined = 0, EOpenFile, EReadFile, EWriteFile, EFormatFile, EUndefTypeFile, EUndefTypeFE, ESyntax, ECramp, EName, EUndefVariable,
+enum class ErrorCode { Undefined = 0, EOpenFile, EReadFile, EWriteFile, EFormatFile, EUndefTypeFile, EUndefTypeFE, ESyntax, EBracket, EName, EUndefVariable,
                        ERedefVariable, EIncorrectFE, EEquationNorSolved, EAbort, EAllocMemory, EStressStrainCurve, EEmptyExpression, EYoungModulus,
                        EPoissonRatio, EThickness, ETemperature, EAlpha, EDensity, EDamping };
 enum class ProcessCode
@@ -195,7 +195,7 @@ inline string sayError(ErrorCode code)
             return S_ERR_UNKNOWN_FE;
         case ErrorCode::ESyntax:
             return S_ERR_SYNTAX;
-        case ErrorCode::ECramp:
+        case ErrorCode::EBracket:
             return S_ERR_CRAMP;
         case ErrorCode::EName:
             return S_ERR_NAME;

@@ -7,14 +7,14 @@ class Node
 private:
     int use = 1; // Количество использований
 public:
-    Node(void) {}
-    virtual ~Node(void) {}
+    Node(void) noexcept {}
+    virtual ~Node(void) noexcept {}
     virtual double value(void) = 0;
-    inline const int inc(void)
+    inline int inc(void) noexcept
     {
         return ++use;
     }
-    inline const int dec(void)
+    inline int dec(void) noexcept
     {
         return --use;
     }

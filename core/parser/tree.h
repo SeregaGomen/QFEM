@@ -12,14 +12,13 @@ private:
     Node* nodePtr;
 public:
     Tree(void);
-    Tree(double*);
     Tree(double);
     Tree(Token, const Tree&);
     Tree(const Tree&, Token, const Tree&);
     Tree(const Tree&);
     ~Tree(void);
     double value(void);
-    Tree operator = (const Tree&);
+    Tree& operator = (const Tree&);
     Tree operator - (void);
     Tree operator += (const Tree&);
     friend Tree operator + (double, const Tree&);

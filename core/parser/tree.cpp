@@ -13,11 +13,6 @@ Tree::Tree(double value)
     nodePtr = new RealNode(value);
 }
 /**********************************************************************/
-Tree::Tree(double* value)
-{
-    nodePtr = new ArgNode(value);
-}
-/**********************************************************************/
 Tree::Tree(Token op, const Tree& right)
 {
     nodePtr = new UnaryNode(op, right);
@@ -34,7 +29,7 @@ Tree::~Tree(void)
         delete nodePtr;
 }
 /**********************************************************************/
-Tree Tree::operator = (const Tree& value)
+Tree& Tree::operator = (const Tree& value)
 {
     value.nodePtr->inc();
     if (not nodePtr->dec())
