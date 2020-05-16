@@ -31,7 +31,6 @@ unix {
 
 
 SOURCES += main.cpp\
-    ../core/solver/eigensolver.cpp \
     bcprocessor.cpp \
     glparam.cpp \
     mainwindow.cpp \
@@ -45,19 +44,14 @@ SOURCES += main.cpp\
     helpdialog.cpp \
     femprocessor.cpp \
     glmesh.cpp \
+    ../core/solver/eigensolver.cpp \
     ../core/mesh/mesh.cpp \
-    ../core/parser/binary.cpp \
     ../core/parser/parser.cpp \
-    ../core/parser/tree.cpp \
-    ../core/parser/unary.cpp \
     ../core/object/object.cpp \
     ../core/object/params.cpp \
     ../core/fe/shape.cpp
 
 HEADERS  += mainwindow.h \
-    ../core/parser/defs.h \
-    ../core/solver/eigensolver.h \
-    ../core/solver/solver.h \
     bcprocessor.h \
     glparam.h \
     problemsetupform.h \
@@ -74,15 +68,14 @@ HEADERS  += mainwindow.h \
     femprocessor.h \
     terminal.h \
     glmesh.h \
+    ../core/parser/defs.h \
+    ../core/solver/eigensolver.h \
+    ../core/solver/solver.h \
     ../core/analyse/analyse.h \
     ../core/msg/msg.h \
     ../core/mesh/mesh.h \
-    ../core/parser/binary.h \
     ../core/parser/node.h \
     ../core/parser/parser.h \
-    ../core/parser/real.h \
-    ../core/parser/tree.h \
-    ../core/parser/unary.h \
     ../core/object/object.h \
     ../core/object/params.h \
     ../core/object/plist.h \

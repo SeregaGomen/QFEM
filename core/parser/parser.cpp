@@ -15,7 +15,7 @@ void TParser::set_expression(string prog)
 
     expression = const_cast<char*>(prog.c_str());
     error_code = ErrorCode::Undefined;
-    tok = Token::Undefined;
+    tok = Token::Indefined;
     compile();
 }
 /********************************************************************/
@@ -34,8 +34,8 @@ bool TParser::is_find(vector<idToken>& table, string id, Token& token)
 TokenType TParser::get_token(void)
 {
     token.clear();
-    token_type = TokenType::Undefined;
-    tok = Token::Undefined;
+    token_type = TokenType::Indefined;
+    tok = Token::Indefined;
     if (*expression == 0)
         return (token_type = TokenType::Finished);
     while (*expression == ' ' or *expression == '\t')
@@ -109,8 +109,8 @@ bool TParser::is_name(string token)
 /********************************************************************/
 void TParser::compile(void)
 {
-    tok = Token::Undefined;
-    token_type = TokenType::Undefined;
+    tok = Token::Indefined;
+    token_type = TokenType::Indefined;
     while (1)
     {
         if (token_type == TokenType::Finished)
@@ -131,7 +131,7 @@ void TParser::error(ErrorCode error)
     throw (error_code = error);
 }
 /********************************************************************/
-void TParser::get_exp(Tree& code)
+void TParser::get_exp(TNode& code)
 {
     get_token();
     if (not token.length())
@@ -139,33 +139,33 @@ void TParser::get_exp(Tree& code)
     token_or(code);
 }
 /********************************************************************/
-void TParser::token_or(Tree& code)
+void TParser::token_or(TNode& code)
 {
-    Tree hold;
+    TNode hold;
 
     token_and(code);
     while (token_type not_eq TokenType::Finished and tok == Token::Or)
     {
         get_token();
         token_and(hold);
-        code = Tree(code, Token::Or, hold);
+        code = TNode(shared_ptr<TNode>(new TNode(code)), Token::Or, shared_ptr<TNode>(new TNode(hold)));
     }
 }
 /********************************************************************/
-void TParser::token_and(Tree& code)
+void TParser::token_and(TNode& code)
 {
-    Tree hold;
+    TNode hold;
 
     token_not(code);
     while (token_type not_eq TokenType::Finished and tok == Token::And)
     {
         get_token();
         token_not(hold);
-        code = Tree(code, Token::And, hold);
+        code = TNode(shared_ptr<TNode>(new TNode(code)), Token::And, shared_ptr<TNode>(new TNode(hold)));
     }
 }
 /********************************************************************/
-void TParser::token_not(Tree& code)
+void TParser::token_not(TNode& code)
 {
     Token op = tok;
 
@@ -174,13 +174,13 @@ void TParser::token_not(Tree& code)
 
     token_add(code);
     if (op == Token::Not)
-        code = Tree(Token::Not, code);
+        code = TNode(Token::Not, shared_ptr<TNode>(new TNode(code)));
 }
 /********************************************************************/
-void TParser::token_add(Tree& code)
+void TParser::token_add(TNode& code)
 {
     Token op;
-    Tree hold;
+    TNode hold;
     string pm;
 
     token_mul(code);
@@ -189,14 +189,13 @@ void TParser::token_add(Tree& code)
         get_token();
         token_mul(hold);
         is_find(opeartionList, pm, op);
-        code = Tree(code, op, hold);
+        code = TNode(shared_ptr<TNode>(new TNode(code)), op, shared_ptr<TNode>(new TNode(hold)));
     }
 }
 /********************************************************************/
-void TParser::token_mul(Tree& code)
+void TParser::token_mul(TNode& code)
 {
-    Token  op;
-    Tree hold;
+    TNode hold;
     char pm;
 
     token_pow(code);
@@ -204,30 +203,26 @@ void TParser::token_mul(Tree& code)
     {
         get_token();
         token_pow(hold);
-        if (pm == '*')
-            op = Token::Mul;
-        else
-            op = Token::Div;
-        code = Tree(code, op, hold);
+        code = TNode(shared_ptr<TNode>(new TNode(code)), (pm == '*') ? Token::Mul : Token::Div, shared_ptr<TNode>(new TNode(hold)));
     }
 }
 /********************************************************************/
-void TParser::token_pow(Tree& code)
+void TParser::token_pow(TNode& code)
 {
-    Tree hold;
+    TNode hold;
 
     token_un(code);
     if (token_type not_eq TokenType::Finished and token == "**")
     {
         get_token();
         token_bracket(hold);
-        code = Tree(code, Token::Pow, hold);
+        code = TNode(shared_ptr<TNode>(new TNode(code)), Token::Pow, shared_ptr<TNode>(new TNode(hold)));
     }
 }
 /********************************************************************/
-void TParser::token_un(Tree& code)
+void TParser::token_un(TNode& code)
 {
-    Token op = Token::Undefined;
+    Token op = Token::Indefined;
 
     if ((token_type == TokenType::Delimiter) and (token[0] == '+' or token[0] == '-'))
     {
@@ -238,11 +233,11 @@ void TParser::token_un(Tree& code)
         get_token();
     }
     token_bracket(code);
-    if (op not_eq Token::Undefined)
-        code = Tree(op, code);
+    if (op not_eq Token::Indefined)
+        code = TNode(op, shared_ptr<TNode>(new TNode(code)));
 }
 /********************************************************************/
-void TParser::token_prim(Tree& code)
+void TParser::token_prim(TNode& code)
 {
     stringstream s;
     string var_name;
@@ -255,7 +250,8 @@ void TParser::token_prim(Tree& code)
             get_token();
             if (variables.find(var_name) == variables.end())
                 error(ErrorCode::EUndefVariable);
-            code = Tree(variables[var_name]);
+//            code = TNode(variables[var_name]);
+            code = variables[var_name];
             break;
         case TokenType::Numeric:
             s << token;
@@ -263,7 +259,7 @@ void TParser::token_prim(Tree& code)
             if (s.fail())
                 error(ErrorCode::ESyntax);
             //            val = std::stod(token);
-            code = Tree(val);
+            code = TNode(val);
             get_token();
             break;
         case TokenType::Function:
@@ -274,7 +270,7 @@ void TParser::token_prim(Tree& code)
     }
 }
 /********************************************************************/
-void TParser::token_bracket(Tree& code)
+void TParser::token_bracket(TNode& code)
 {
     if (token[0] == '(' and token_type == TokenType::Delimiter)
     {
@@ -288,10 +284,10 @@ void TParser::token_bracket(Tree& code)
         token_prim(code);
 }
 /********************************************************************/
-void TParser::token_func(Tree& code)
+void TParser::token_func(TNode& code)
 {
     Token fun_tok = tok;
-    Tree code2;
+    TNode hold;
 
     if (token_type == TokenType::Function)
     {
@@ -306,11 +302,11 @@ void TParser::token_func(Tree& code)
             if (token[0] not_eq ',')
                 error(ErrorCode::ESyntax);
             get_token();
-            token_add(code2);
-            code = Tree(code, Token::Atan2, code2);
+            token_add(hold);
+            code = TNode(shared_ptr<TNode>(new TNode(code)), Token::Atan2, shared_ptr<TNode>(new TNode(hold)));
         }
         else
-            code = Tree(fun_tok, code);
+            code = TNode(fun_tok, shared_ptr<TNode>(new TNode(code)));
         if (token[0] not_eq ')')
             error(ErrorCode::ESyntax);
         get_token();

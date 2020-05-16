@@ -4,7 +4,8 @@
 #include <map>
 #include <vector>
 #include "msg/msg.h"
-#include "tree.h"
+#include "defs.h"
+#include "node.h"
 
 using namespace std;
 using namespace Parser;
@@ -13,12 +14,12 @@ using namespace Parser;
 class TParser
 {
 private:
-    Tree result;
+    TNode result;
     map<string, double> variables; // Таблица переменных
     string token;
     char* expression = nullptr;
-    Parser::Token tok = Token::Undefined;
-    Parser::TokenType token_type = TokenType::Undefined;
+    Parser::Token tok = Token::Indefined;
+    Parser::TokenType token_type = TokenType::Indefined;
     ErrorCode error_code = ErrorCode::Undefined;
     vector<Parser::idToken> functionList{
                                     { "SQRT", Token::Sqrt },
@@ -60,17 +61,17 @@ private:
     bool is_find(vector<idToken>&, string, Token&);
     /*[[noreturn ]]*/ void error(ErrorCode);
     void compile(void);
-    void get_exp(Tree&);
-    void token_or(Tree&);
-    void token_and(Tree&);
-    void token_not(Tree&);
-    void token_add(Tree&);
-    void token_func(Tree&);
-    void token_mul(Tree&);
-    void token_pow(Tree&);
-    void token_un(Tree&);
-    void token_bracket(Tree&);
-    void token_prim(Tree&);
+    void get_exp(TNode&);
+    void token_or(TNode&);
+    void token_and(TNode&);
+    void token_not(TNode&);
+    void token_add(TNode&);
+    void token_func(TNode&);
+    void token_mul(TNode&);
+    void token_pow(TNode&);
+    void token_un(TNode&);
+    void token_bracket(TNode&);
+    void token_prim(TNode&);
 public:
     TParser(void) {}
     ~TParser(void) {}
