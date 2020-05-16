@@ -148,7 +148,7 @@ void TParser::token_or(TNode& code)
     {
         get_token();
         token_and(hold);
-        code = TNode(shared_ptr<TNode>(new TNode(code)), Token::Or, shared_ptr<TNode>(new TNode(hold)));
+        code = TNode(make_shared<TNode>(code), Token::Or, make_shared<TNode>(hold));
     }
 }
 /********************************************************************/
@@ -161,7 +161,7 @@ void TParser::token_and(TNode& code)
     {
         get_token();
         token_not(hold);
-        code = TNode(shared_ptr<TNode>(new TNode(code)), Token::And, shared_ptr<TNode>(new TNode(hold)));
+        code = TNode(make_shared<TNode>(code), Token::And, make_shared<TNode>(hold));
     }
 }
 /********************************************************************/
@@ -174,7 +174,7 @@ void TParser::token_not(TNode& code)
 
     token_add(code);
     if (op == Token::Not)
-        code = TNode(Token::Not, shared_ptr<TNode>(new TNode(code)));
+        code = TNode(Token::Not, make_shared<TNode>(code));
 }
 /********************************************************************/
 void TParser::token_add(TNode& code)
@@ -189,7 +189,7 @@ void TParser::token_add(TNode& code)
         get_token();
         token_mul(hold);
         is_find(opeartionList, pm, op);
-        code = TNode(shared_ptr<TNode>(new TNode(code)), op, shared_ptr<TNode>(new TNode(hold)));
+        code = TNode(make_shared<TNode>(code), op, make_shared<TNode>(hold));
     }
 }
 /********************************************************************/
@@ -203,7 +203,7 @@ void TParser::token_mul(TNode& code)
     {
         get_token();
         token_pow(hold);
-        code = TNode(shared_ptr<TNode>(new TNode(code)), (pm == '*') ? Token::Mul : Token::Div, shared_ptr<TNode>(new TNode(hold)));
+        code = TNode(make_shared<TNode>(code), (pm == '*') ? Token::Mul : Token::Div, make_shared<TNode>(hold));
     }
 }
 /********************************************************************/
@@ -216,7 +216,7 @@ void TParser::token_pow(TNode& code)
     {
         get_token();
         token_bracket(hold);
-        code = TNode(shared_ptr<TNode>(new TNode(code)), Token::Pow, shared_ptr<TNode>(new TNode(hold)));
+        code = TNode(make_shared<TNode>(code), Token::Pow, make_shared<TNode>(hold));
     }
 }
 /********************************************************************/
@@ -234,7 +234,7 @@ void TParser::token_un(TNode& code)
     }
     token_bracket(code);
     if (op not_eq Token::Indefined)
-        code = TNode(op, shared_ptr<TNode>(new TNode(code)));
+        code = TNode(op, make_shared<TNode>(code));
 }
 /********************************************************************/
 void TParser::token_prim(TNode& code)
@@ -303,10 +303,10 @@ void TParser::token_func(TNode& code)
                 error(ErrorCode::ESyntax);
             get_token();
             token_add(hold);
-            code = TNode(shared_ptr<TNode>(new TNode(code)), Token::Atan2, shared_ptr<TNode>(new TNode(hold)));
+            code = TNode(make_shared<TNode>(code), Token::Atan2, make_shared<TNode>(hold));
         }
         else
-            code = TNode(fun_tok, shared_ptr<TNode>(new TNode(code)));
+            code = TNode(fun_tok, make_shared<TNode>(code));
         if (token[0] not_eq ')')
             error(ErrorCode::ESyntax);
         get_token();
