@@ -15,9 +15,9 @@ private:
     shared_ptr<TNode> left;
     shared_ptr<TNode> right;
 public:
-    TNode(double v = 0) : tok{Token::Number}, val{v} {}
+    TNode(double v = 0) : val{v}, tok{Token::Number} {}
     TNode(Token t, shared_ptr<TNode> n) : tok{t}, right{n} {}
-    TNode(shared_ptr<TNode> lhs,  Token t, shared_ptr<TNode> rhs) : left{make_shared<TNode>(*lhs)}, tok{t}, right{make_shared<TNode>(*rhs)} {}
+    TNode(shared_ptr<TNode> lhs,  Token t, shared_ptr<TNode> rhs) : tok{t}, left{make_shared<TNode>(*lhs)}, right{make_shared<TNode>(*rhs)} {}
     TNode(const TNode &rhs) : val{rhs.val}, tok{rhs.tok}, left{rhs.left}, right{rhs.right} {}
     ~TNode(void) noexcept {}
     double value(void)
