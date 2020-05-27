@@ -9,85 +9,6 @@
 #include "object/plist.h"
 #include "analyse/analyse.h"
 #include "mesh/mesh.h"
-#include "fe/fe1d.h"
-#include "fe/fe2d.h"
-#include "fe/fe3d.h"
-#include "fe/fe2dp.h"
-#include "fe/fe3ds.h"
-
-
-//-------------------------------------------------------------
-//            Класс-обертка для TFE с поддержкой RAII
-//-------------------------------------------------------------
-class TRFE
-{
-private:
-    TFE* fe;
-    void createFE(FEType type)
-    {
-        // Создание конечного элемента
-        switch (type)
-        {
-            case FEType::fe1d2:
-                fe = new TFE1D<TShape1D2>();
-                break;
-            case FEType::fe2d3:
-                fe = new TFE2D<TShape2D3>();
-                break;
-            case FEType::fe2d4:
-                fe = new TFE2D<TShape2D4>();
-                break;
-            case FEType::fe2d6:
-                fe = new TFE2D<TShape2D6>();
-                break;
-            case FEType::fe2d3p:
-                fe = new TFE2DP<TShape2D3>();
-                break;
-            case FEType::fe2d4p:
-                fe = new TFE2DP<TShape2D4>();
-                break;
-            case FEType::fe2d6p:
-                fe = new TFE2DP<TShape2D6>();
-                break;
-            case FEType::fe3d4:
-                fe = new TFE3D<TShape3D4>();
-                break;
-            case FEType::fe3d8:
-                fe = new TFE3D<TShape3D8>();
-                break;
-            case FEType::fe3d10:
-                fe = new TFE3D<TShape3D10>();
-                break;
-            case FEType::fe3d3s:
-                fe = new TFE3DS<TShape2D3>();
-                break;
-            case FEType::fe3d4s:
-                fe = new TFE3DS<TShape2D4>();
-                break;
-            case FEType::fe3d6s:
-                fe = new TFE3DS<TShape2D6>();
-                break;
-            default:
-                //throw UNKNOWN_FE_ERR;
-                fe = nullptr;
-        }
-    }
-public:
-    TRFE(FEType type)
-    {
-        createFE(type);
-    }
-    ~TRFE(void)
-    {
-        if (fe)
-            delete fe;
-    }
-    TFE* getFE(void)
-    {
-        return fe;
-    }
-};
-
 
 //-------------------------------------------------------------
 //  Абстрактный класс, реализующий метод конечных элементов
@@ -128,7 +49,7 @@ protected:
         sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
     }
     // Настройка КЭ
-    virtual void setupFE(TFE *fe, unsigned i)
+    virtual void setupFE(unique_ptr<TFE>& fe, unsigned i)
     {
         double val;
         matrix<double> x;

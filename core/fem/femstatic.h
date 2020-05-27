@@ -1,9 +1,15 @@
 #ifndef FEMSTATIC_H
 #define FEMSTATIC_H
 
+#include <memory>
 #include <sstream>
 #include <iomanip>
 #include "fem/fem.h"
+#include "fe/fe1d.h"
+#include "fe/fe2d.h"
+#include "fe/fe3d.h"
+#include "fe/fe2dp.h"
+#include "fe/fe3ds.h"
 
 extern TMessenger* msg;
 
@@ -15,7 +21,7 @@ template <class T> class TFEMStatic : public TFEM
 {
 protected:
     T solver;
-    void ansambleLocalMatrix(TFE*, unsigned);
+    void ansambleLocalMatrix(unique_ptr<TFE>&, unsigned);
     void setLoad(vector<double>&);
     void genResults(vector<double>&, bool isAdd = false);
     void avgResults(matrix<double>&, vector<int>&);
@@ -40,6 +46,43 @@ protected:
     double calcStressIntensity(TResultList&, vector<double>&);
     bool checkBE(unsigned, TParameter&);
     bool checkFE(unsigned, TParameter&);
+    TFE* createFE(FEType type)
+    {
+        // Создание конечного элемента
+        switch (type)
+        {
+        case FEType::fe1d2:
+            return new TFE1D<TShape1D2>();
+        case FEType::fe2d3:
+            return new TFE2D<TShape2D3>();
+        case FEType::fe2d4:
+            return new TFE2D<TShape2D4>();
+        case FEType::fe2d6:
+            return new TFE2D<TShape2D6>();
+        case FEType::fe2d3p:
+            return new TFE2DP<TShape2D3>();
+        case FEType::fe2d4p:
+            return new TFE2DP<TShape2D4>();
+        case FEType::fe2d6p:
+            return new TFE2DP<TShape2D6>();
+        case FEType::fe3d4:
+            return new TFE3D<TShape3D4>();
+        case FEType::fe3d8:
+            return new TFE3D<TShape3D8>();
+        case FEType::fe3d10:
+            return new TFE3D<TShape3D10>();
+        case FEType::fe3d3s:
+            return new TFE3DS<TShape2D3>();
+        case FEType::fe3d4s:
+            return new TFE3DS<TShape2D4>();
+        case FEType::fe3d6s:
+            return new TFE3DS<TShape2D6>();
+        default:
+            //throw UNKNOWN_FE_ERR;
+            break;
+        }
+        return nullptr;
+    }
 public:
     TFEMStatic(string n, TMesh *m, TResultList *r, list<string> *l) : TFEM(n, m, r, l)
     {
@@ -107,7 +150,7 @@ template<class T> void TFEMStatic<T>::startProcess(void)
 //-------------------------------------------------------------
 //                  Ансамблирование ЛМЖ к ГМЖ
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::ansambleLocalMatrix(TFE *fe, unsigned i)
+template<class T> void TFEMStatic<T>::ansambleLocalMatrix(unique_ptr<TFE> &fe, unsigned i)
 {
     unsigned freedom = mesh->getFreedom(),
              size = fe->getSize() * fe->getFreedom();
@@ -233,7 +276,7 @@ template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
 //-----------------------------------------------------------------------------------------
 template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bool isStatic, ErrorCode &error)
 {
-    TRFE fe(TFEM::mesh->getTypeFE());
+    unique_ptr<TFE> fe(createFE(TFEM::mesh->getTypeFE()));
 
     try
     {
@@ -243,11 +286,11 @@ template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bo
             if (isProcessAborted)
                 throw ErrorCode::EAbort;
             // Настройка КЭ
-            setupFE(fe.getFE(), i);
+            setupFE(fe, i);
             // Формирование локальной МЖ (ЛМЖ)
-            fe.getFE()->generate(isStatic);
+            fe->generate(isStatic);
             // Ансамблирование ЛМЖ к ГМЖ
-            ansambleLocalMatrix(fe.getFE(), i);
+            ansambleLocalMatrix(fe, i);
         }
     }
     catch (ErrorCode e)
@@ -662,7 +705,7 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<do
 {
     vector<double> fe_u;
     matrix<double> fe_res(params.numResult(mesh->getTypeFE()), mesh->getSizeFE());
-    TRFE fe(TFEM::mesh->getTypeFE());
+    unique_ptr<TFE> fe(createFE(TFEM::mesh->getTypeFE()));
 
     try
     {
@@ -671,13 +714,13 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<do
             msg->addProgress();
             if (isProcessAborted)
                 throw ErrorCode::EAbort;
-            setupFE(fe.getFE(), i);
+            setupFE(fe, i);
             // Формируем вектор перемещений для текущего КЭ
             fe_u.resize(mesh->getSizeFE() * mesh->getFreedom());
             for (unsigned j = 0; j < mesh->getSizeFE(); j++)
                 for (unsigned k = 0; k < mesh->getFreedom(); k++)
                     fe_u[j * mesh->getFreedom() + k] = u[mesh->getFreedom() * mesh->getFE(i, j) + k];
-            fe.getFE()->calc(fe_res, fe_u);
+            fe->calc(fe_res, fe_u);
             for (unsigned m = 0; m < params.numResult(mesh->getTypeFE()) - mesh->getFreedom(); m++)
                 for (unsigned j = 0; j < mesh->getSizeFE(); j++)
                 {
