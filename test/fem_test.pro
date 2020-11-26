@@ -7,6 +7,7 @@ linux {
 QMAKE_LFLAGS += -pthread
 }
 
+msvc:QMAKE_CXXFLAGS += /permissive-
 
 
 INCLUDEPATH += ../core \
@@ -31,10 +32,7 @@ SOURCES += main.cpp \
     ../core/mesh/mesh.cpp \
     ../core/object/object.cpp \
     ../core/object/params.cpp \
-    ../core/parser/binary.cpp \
     ../core/parser/parser.cpp \
-    ../core/parser/tree.cpp \
-    ../core/parser/unary.cpp \
     ../core/solver/eigensolver.cpp
 
 
@@ -56,12 +54,9 @@ HEADERS += \
     ../core/object/object.h \
     ../core/object/params.h \
     ../core/object/plist.h \
-    ../core/parser/binary.h \
+    ../core/parser/defs.h \
     ../core/parser/node.h \
     ../core/parser/parser.h \
-    ../core/parser/real.h \
-    ../core/parser/tree.h \
-    ../core/parser/unary.h \
     ../core/solver/solver.h \
     ../core/solver/eigensolver.h \
     ../core/util/list.h \

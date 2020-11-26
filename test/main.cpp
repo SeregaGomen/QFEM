@@ -101,6 +101,7 @@ void calcBalka(void)
     if (!object.setMeshFile("../../QFEM/mesh/balka.trp"))
         return;
     object.setTaskParam(FEMType::StaticProblem);
+    object.setNumThread(8);
 
     object.setEps(1.0E-8);
     object.setWidth(15);
@@ -388,9 +389,9 @@ int main()
 {
     msg = new TMessenger();
 
-    calcNewTank3();
+    // calcNewTank3();
     // calcTank();
-    // calcBalka();
+    calcBalka();
     // calcShell();
     // pyfem_test();
     // calcTank3ds();
