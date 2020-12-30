@@ -153,6 +153,9 @@ bool TSetupImageDialog::reload(void)
     params.koff = ui->leKoff->text().toFloat();
     params.alpha = float(ui->hsAlpha->sliderPosition())*0.1f;
     params.bkgColor = bkgColor;
+
+//    qDebug() << params.bkgColor.red() << ' ' << params.bkgColor.green() << ' ' << params.bkgColor.blue() << ' ' << params.bkgColor.alpha();
+
     params.scale = ui->leScale->text().toFloat();
     params.angleX = ui->leAngleX->text().toInt();
     params.angleY = ui->leAngleY->text().toInt();

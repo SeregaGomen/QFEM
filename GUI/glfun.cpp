@@ -1,3 +1,4 @@
+#include <QPainter>
 #include <QVector>
 #include <QVector4D>
 #include <QFileDialog>
@@ -24,6 +25,7 @@ TGLFunction::TGLFunction(TMesh *m, vector<double> *r, vector<double> *x, vector<
 /*******************************************************************/
 void TGLFunction::displayObject(void)
 {
+    initializeGL();
     TGLMesh::displayObject();
     if (params.isShowLegend)
         showLegend();
@@ -245,9 +247,10 @@ void TGLFunction::initColorTable(void)
 /*******************************************************************/
 void TGLFunction::showLegend(void)
 {
+    QPainter painter(this);
     QRect rc = rect();
-    QFont glFont("Courier", 12, QFont::Normal);
-    QFontMetrics fm(glFont);
+    QFont font("Courier", 12, QFont::Normal);
+    QFontMetrics fm(font);
     QString val;
     int num = (fabs(min_u - max_u) < 1.0E-20f) ? 1 : 8,
         h = colorTable.size()/num,
@@ -263,6 +266,7 @@ void TGLFunction::showLegend(void)
     if (not (mesh and mesh->getTypeFE() not_eq FEType::undefined) or rc.height() < 9 * fontH)
         return;
 
+    painter.setFont(font);
     for (int k = colorTable.size() - 1; k >= 0; k -= h)
     {
         if (k - h < 0)
@@ -270,14 +274,14 @@ void TGLFunction::showLegend(void)
             v = stop;
             k = 0;
         }
-        glColor3f(float(colorTable[k].redF()), float(colorTable[k].greenF()), float(colorTable[k].blueF()));
-        glFont.setStyleStrategy(QFont::OpenGLCompatible);
-        renderText(rc.width() - fontW1 - fontW2 - 10, int(cy) ,"█",glFont);
-        glColor3f(1.0f - float(params.bkgColor.redF()), 1.0f - float(params.bkgColor.greenF()), 1.0f - float(params.bkgColor.blueF()));
-        renderText(rc.width() - fontW2 - 10, int(cy), val.asprintf("%+5.3E", double(v)), glFont);
+        painter.setPen(colorTable[k]);
+        painter.drawText(rc.width() - fontW1 - fontW2 - 10, int(cy), "█");
+        painter.setPen(QColor(255 - float(params.bkgColor.red()), 255 - float(params.bkgColor.green()), 255 - float(params.bkgColor.blue())));
+        painter.drawText(rc.width() - fontW2 - 10, int(cy), val.asprintf("%+5.3E", double(v)));
         cy += fontH;
         v -= step;
     }
+
 }
 /*******************************************************************/
 int sort(QVector<QVector4D>& vtx)
@@ -417,7 +421,7 @@ void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
 {
     float colors[3] = { 0.0f, 0.0f, 0.0f };
     float u = min_u,
-          h = (max_u - min_u)/float(colorTable.size()),
+          h = (max_u - min_u) / float(colorTable.size()),
           eps = 0.01f;
 
     if (params.isLight)
@@ -425,13 +429,13 @@ void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
         QMessageBox::warning(this, tr("Warning"), tr("Turn off lights!"));
         return;
     }
-    glReadPixels(e->x(), size().height()- e->y(), 1, 1, GL_RGB, GL_FLOAT, colors);
+    glReadPixels(e->position().x(), size().height()- e->position().y(), 1, 1, GL_RGB, GL_FLOAT, colors);
 
     for (int i = 0; i < colorTable.size(); i++)
     {
         if (fabs(float(colorTable[i].redF()) - colors[0]) < eps and fabs(float(colorTable[i].greenF()) - colors[1]) < eps and fabs(float(colorTable[i].blueF()) - colors[2]) < eps)
         {
-            QToolTip::showText(QPoint(e->x(), size().height()-e->y()), QString::number(double(u),'E'));
+            QToolTip::showText(QPoint(e->position().x(), size().height() - e->position().y()), QString::number(double(u),'E'));
             return;
         }
         u += h;

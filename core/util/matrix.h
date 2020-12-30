@@ -37,7 +37,8 @@ template <typename T> vector<T> operator * (const vector<T>& left, T right)
 {
     vector<T> r = left;
 
-    transform(r.begin(), r.end(), r.begin(), bind1st(multiplies<T>(),right));
+//    transform(r.begin(), r.end(), r.begin(), bind1st(multiplies<T>(), right));
+    transform(r.begin(), r.end(), r.begin(), [right](T &it) -> T { return (it*= right); });
     return r;
 }
 

@@ -1,15 +1,14 @@
 #ifndef GLMESH_H
 #define GLMESH_H
 
-#include <QGLWidget>
-#include <QOpenGLFunctions_3_0>
+#include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QMenu>
 #include "imageparams.h"
 
 class TSetupTaskDialog;
 class TMesh;
 
-class TGLMesh : public QGLWidget, protected QOpenGLFunctions_3_0
+class TGLMesh : public QOpenGLWidget
 // class TGLMesh : public QGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -64,6 +63,10 @@ protected:
     void drawCoordinateCross(void);
     void makeMaterial(float,float,float,float);
     void saveImage(const QString&);
+
+    void renderText(double, double, double, QString, QColor, const QFont & = QFont("Helvetica", 8));
+    inline GLint project(double, double, double, const double [16], const double [16], const int [4], double*, double*, double*);
+    inline void transformPoint(double [4], const double [16], const double [4]);
 
 public:
     TGLMesh(TMesh*, QWidget* = nullptr);

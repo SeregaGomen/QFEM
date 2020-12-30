@@ -141,7 +141,7 @@ public:
         isNegative =
         isNormal =
         isBW = false;
-        bkgColor = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0).darker();
+        bkgColor = QColor::fromCmykF(0.39f, 0.39f, 0.0f, 0.0f).darker();
     }
 };
 

@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui opengl
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui opengl widgets openglwidgets
 
 TARGET = QFEM
 TEMPLATE = app
@@ -13,6 +12,7 @@ TEMPLATE = app
 INCLUDEPATH += ../core \
                ../../../eigen
 
+msvc:LIBS += -lOpenGL32
 msvc:QMAKE_CXXFLAGS += /permissive-
 
 #msvc:QMAKE_CXXFLAGS+= /openmp

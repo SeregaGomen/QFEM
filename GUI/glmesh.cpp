@@ -1,5 +1,7 @@
+#include <QFileDialog>
+#include <QAbstractScrollArea>
+#include <QApplication>
 #include <QtGui>
-#include <QtOpenGL>
 #include <QWheelEvent>
 #include <cmath>
 #include "glmesh.h"
@@ -7,7 +9,7 @@
 #include "fem/fem.h"
 
 /*******************************************************************/
-TGLMesh::TGLMesh(TMesh* m, QWidget* parent) : QGLWidget(parent)
+TGLMesh::TGLMesh(TMesh* m, QWidget* parent) : QOpenGLWidget(parent)
 {
     mesh = m;
 
@@ -68,12 +70,13 @@ void TGLMesh::restore(void)
     params.translateZ = 0.0;
     params.scale = 1.0;
 
-    updateGL();
+    update();
 }
 /*******************************************************************/
 void TGLMesh::repaint(void)
 {
-    qglClearColor(params.bkgColor);
+//    qDebug() << params.bkgColor.redF() << ' ' << params.bkgColor.greenF() << ' ' << params.bkgColor.blueF() << ' ' << params.bkgColor.alphaF();
+//    glClearColor(params.bkgColor.redF(), params.bkgColor.greenF(), params.bkgColor.blueF(), params.bkgColor.alphaF());
     if (xList1)
         glDeleteLists(xList1, 1);
     if (xList2)
@@ -81,7 +84,7 @@ void TGLMesh::repaint(void)
     xList1 = xList2 = 0;
     if (params.isLight)
         setupLight();
-    updateGL();
+    update();
 }
 /*******************************************************************/
 QSize TGLMesh::minimumSizeHint() const
@@ -114,12 +117,14 @@ void TGLMesh::setTranslate(void)
 /*******************************************************************/
 void TGLMesh::initializeGL()
 {
-    initializeOpenGLFunctions();
-    qglClearColor(params.bkgColor);
+//    initializeOpenGLFunctions();
+//    QOpenGLContext::currentContext()->extraFunctions()->glClearColor(params.bkgColor.red(), params.bkgColor.green(), params.bkgColor.blue(), params.bkgColor.alpha());
+//    qDebug() << params.bkgColor.redF() << ' ' << params.bkgColor.greenF() << ' ' << params.bkgColor.blueF() << ' ' << params.bkgColor.alphaF();
+//    glClearColor(params.bkgColor.redF(), params.bkgColor.greenF(), params.bkgColor.blueF(), params.bkgColor.alphaF());
 
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_NORMALIZE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -174,8 +179,8 @@ void TGLMesh::mouseReleaseEvent(QMouseEvent*)
 /*******************************************************************/
 void TGLMesh::mouseMoveEvent(QMouseEvent *event)
 {
-    int dx = event->x() - lastPos.x(),
-        dy = event->y() - lastPos.y();
+    int dx = event->position().x() - lastPos.x(),
+        dy = event->position().y() - lastPos.y();
 
     if ((event->buttons() & Qt::LeftButton) and (QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) == false))
     {
@@ -204,7 +209,7 @@ void TGLMesh::rotate(int dx, int dy, int dz)
     params.angleX += dx/2;
     params.angleY += dy/2;
     params.angleZ += dz/2;
-    updateGL();
+    update();
 }
 /*******************************************************************/
 void TGLMesh::scale(int dx, int dy)
@@ -213,14 +218,14 @@ void TGLMesh::scale(int dx, int dy)
         params.scale *= 1.05f;
     else
         params.scale /= 1.05f;
-    updateGL();
+    update();
 }
 /*******************************************************************/
 void TGLMesh::translate(int dx, int dy)
 {
     params.translateX += dx*radius*0.001f;
     params.translateY -= dy*radius*0.001f;
-    updateGL();
+    update();
 }
 /*******************************************************************/
 void TGLMesh::setupCamera(int width, int height)
@@ -274,24 +279,21 @@ void TGLMesh::makeMaterial(float r,float g,float b,float a)
 void TGLMesh::drawCoordinateCross(void)
 {
     GLint viewport[4];
-//    GLUquadricObj* quadObj = gluNewQuadric();
 
 
-//    gluQuadricDrawStyle(quadObj, GLU_FILL);
-
-    glMatrixMode (GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
 
-    glMatrixMode (GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
 
-    glGetIntegerv (GL_VIEWPORT, viewport);
+    glGetIntegerv(GL_VIEWPORT, viewport);
 
-    glTranslatef (-1, -1, 0.0);
+    glTranslatef(-1, -1, 0.0);
     glScalef (40.0f/viewport[2], 40.0f/viewport[3], 1);
-    glTranslatef (1.25, 1.25, 0.0);
+    glTranslatef(1.25, 1.25, 0.0);
 
     glRotatef(params.angleX, 1.0, 0.0, 0.0);
     glRotatef(params.angleY, 0.0, 1.0, 0.0);
@@ -299,52 +301,44 @@ void TGLMesh::drawCoordinateCross(void)
 
     if (params.isLight)
     {
-        glEnable (GL_COLOR_MATERIAL);
-        glDisable (GL_LIGHTING);
+        glEnable(GL_COLOR_MATERIAL);
+        glDisable(GL_LIGHTING);
     }
 
     glLineWidth (1.0f);
 
     glBegin(GL_LINES);
         glColor3f(1,0,0);
-        glVertex3f (0.0f, 0.0f, 0.0f);
-        glVertex3f (0.9f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.9f, 0.0f, 0.0f);
         glColor3f(0,1,0);
-        glVertex3f (0.0f, 0.0f, 0.0f);
-        glVertex3f (0.0f, 0.9f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.9f, 0.0f);
         glColor3f(0,0,1);
-        glVertex3f (0.0f, 0.0f, 0.0f);
-        glVertex3f (0.0f, 0.0f, 0.9f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 0.9f);
     glEnd ();
 
-    glColor3f(1,0,0);
+    glColor3f(1, 0, 0);
     glPushMatrix();
-    glTranslatef(0.5,0,0);
-    glRotatef(90,0,1,0);
-//    gluCylinder(quadObj,0.1,0,0.4,10,10);
+    glTranslatef(0.5, 0, 0);
+    glRotatef(90, 0, 1, 0);
     glPopMatrix();
 
-    glColor3f(0,1,0);
+    glColor3f(0, 1, 0);
     glPushMatrix();
-    glTranslatef(0,0.5,0);
-    glRotatef(-90,1,0,0);
-//    gluCylinder(quadObj,0.1,0,0.4,10,10);
+    glTranslatef(0, 0.5, 0);
+    glRotatef(-90, 1, 0, 0);
     glPopMatrix();
 
-    glColor3f(0,0,1);
+    glColor3f(0, 0, 1);
     glPushMatrix();
-    glTranslatef(0,0,0.5);
-//    gluCylinder(quadObj,0.1,0,0.4,10,10);
+    glTranslatef(0, 0, 0.5);
     glPopMatrix();
 
-    glColor3f(1,0,0);
-    renderText(1.1, 0.0, 0.0, "X");
-
-    glColor3f(0,1,0);
-    renderText(0.1, 1.0, 0.0, "Y");
-
-    glColor3f(0,0,1);
-    renderText(0.1, 0.0, 1.0, "Z");
+    renderText(1.1, 0.0, 0.0, "X", Qt::red);
+    renderText(0.1, 1.0, 0.0, "Y", Qt::green);
+    renderText(0.1, 0.0, 1.0, "Z", Qt::blue);
 
     if (params.isLight)
     {
@@ -356,16 +350,14 @@ void TGLMesh::drawCoordinateCross(void)
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
-
-//    gluDeleteQuadric(quadObj);
 }
 /*******************************************************************/
 void TGLMesh::setColor(float r, float g, float b, float a)
 {
     if (params.isLight)
-        makeMaterial(r,g,b,a);
+        makeMaterial(r, g, b, a);
     else
-        glColor4f(r,g,b,a);
+        glColor4f(r, g, b, a);
 }
 /*******************************************************************/
 void TGLMesh::keyPressEvent(QKeyEvent* event)
@@ -378,9 +370,9 @@ void TGLMesh::keyPressEvent(QKeyEvent* event)
 void TGLMesh::wheelEvent(QWheelEvent* pe)
 {
     isIdle = false;
-    scale(pe->delta(), pe->delta());
+    scale(pe->angleDelta().x(), pe->angleDelta().y());
     isIdle = true;
-    updateGL();
+    update();
 }
 /*******************************************************************/
 void TGLMesh::loadPaint(void)
@@ -391,7 +383,9 @@ void TGLMesh::loadPaint(void)
 /*******************************************************************/
 void TGLMesh::paintGL(void)
 {
+    glClearColor(params.bkgColor.redF(), params.bkgColor.greenF(), params.bkgColor.blueF(), params.bkgColor.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     if (not mesh)
         return;
@@ -614,7 +608,7 @@ void TGLMesh::showContextMenu(const QPoint &pos)
     {
         if (selectedItem == action1)
         {
-            fileName = QFileDialog::getSaveFileName(this,tr("Saving the image"),fileName,tr("Image files (*.png)"));
+            fileName = QFileDialog::getSaveFileName(this, tr("Saving the image"), fileName, tr("Image files (*.png)"));
 
             if (not fileName.isEmpty())
                 saveImage(fileName);
@@ -663,5 +657,67 @@ void TGLMesh::drawNormal(void)
             glVertex3f(e[0] - x0[0], e[1] - x0[1], e[2] - x0[2]);
         glEnd();
     }
+}
+/*******************************************************************/
+void TGLMesh::renderText(double x, double y, double z, QString text, QColor color, const QFont &font)
+{
+    QPainter painter(this);
+    double textPosX = 0,
+           textPosY = 0,
+           textPosZ = 0,
+           model[4][4],
+           proj[4][4];
+    int view[4];
+
+    glGetDoublev(GL_MODELVIEW_MATRIX, &model[0][0]);
+    glGetDoublev(GL_PROJECTION_MATRIX, &proj[0][0]);
+    glGetIntegerv(GL_VIEWPORT, &view[0]);
+    project(x, y, z, &model[0][0], &proj[0][0], &view[0], &textPosX, &textPosY, &textPosZ);
+
+    textPosY = height() - textPosY; // y is inverted
+    painter.setPen(color);
+    painter.setFont(font);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    painter.drawText(textPosX, textPosY, text); // z = pointT4.z + distOverOp / 4
+//    painter.end();
+}
+/*******************************************************************/
+inline int TGLMesh::project(double objx, double objy, double objz, const double model[16], const double proj[16], const int viewport[4], double *winx, double *winy, double *winz)
+{
+    GLdouble in[4], out[4];
+
+    in[0] = objx;
+    in[1] = objy;
+    in[2] = objz;
+    in[3] = 1.0;
+    transformPoint(out, model, in);
+    transformPoint(in, proj, out);
+
+    if (in[3] == 0.0)
+        return 0;
+
+    in[0] /= in[3];
+    in[1] /= in[3];
+    in[2] /= in[3];
+
+    *winx = viewport[0] + (1 + in[0]) * viewport[2] / 2;
+    *winy = viewport[1] + (1 + in[1]) * viewport[3] / 2;
+
+    *winz = (1 + in[2]) / 2;
+    return 1;
+}
+/*******************************************************************/
+inline void TGLMesh::transformPoint(double out[4], const double m[16], const double in[4])
+{
+#define M(row, col)  m[col * 4 + row]
+    out[0] =
+        M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
+    out[1] =
+        M(1, 0) * in[0] + M(1, 1) * in[1] + M(1, 2) * in[2] + M(1, 3) * in[3];
+    out[2] =
+        M(2, 0) * in[0] + M(2, 1) * in[1] + M(2, 2) * in[2] + M(2, 3) * in[3];
+    out[3] =
+        M(3, 0) * in[0] + M(3, 1) * in[1] + M(3, 2) * in[2] + M(3, 3) * in[3];
+#undef M
 }
 /*******************************************************************/

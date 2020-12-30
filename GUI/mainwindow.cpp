@@ -5,7 +5,6 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QLibraryInfo>
-#include <QTextCodec>
 #include <QtCore>
 #include <QtGui>
 #include <QDockWidget>
@@ -63,12 +62,8 @@ TMainWindow::~TMainWindow()
 
 void TMainWindow::init(void)
 {
-    QTextCodec* codec =  QTextCodec::codecForName("UTF-8");
-#if QT_VERSION < 0x050000
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-#endif
-    QTextCodec::setCodecForLocale(codec);
+////    QTextCodec* codec =  QTextCodec::codecForName("UTF-8");
+////    QTextCodec::setCodecForLocale(codec);
 //    auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
 
     #ifndef Q_OS_LINUX
@@ -819,7 +814,8 @@ void TMainWindow::showProtocol(QString fileName)
     webOut = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
 
     // Получение времени и даты формирования отчета
-    dt.setTime_t(femObject->getResult().getSolutionTime());
+////    dt.setTime_t(femObject->getResult().getSolutionTime());
+    dt.setSecsSinceEpoch(femObject->getResult().getSolutionTime());
     webOut += "<h1>" + tr("The problem has been solving %1 at %2").arg(QString("%1.%2.%3").arg(dt.date().day(), 2, 10, QChar('0')).arg(dt.date().month(), 2, 10, QChar('0')).arg(dt.date().year(), 2, 10, QChar('0'))).arg(QString("%1:%2").arg(dt.time().hour(), 2, 10, QChar('0')).arg(dt.time().minute(), 2, 10, QChar('0'))) + "</h1>";
     webOut += tr("Object: <b>%1</b> (nodes: <b>%2</b>, finite elements: <b>%3</b>)<br>").arg(femObject->getObjectName().c_str()).arg(femObject->getMesh().getNumVertex()).arg(femObject->getMesh().getNumFE());
     webOut += tr("FE type: <b>%1</b><br>").arg(femObject->getMesh().feName().c_str());
@@ -1099,7 +1095,8 @@ bool TMainWindow::saveQFPF(QString fileName)
     TFEMObject* femObject = femProcessor->getFEMObject();
 
     // ------------- Заголовок -----------------
-    dt.setTime_t(femObject->getResult().getSolutionTime());
+////    dt.setTime_t(femObject->getResult().getSolutionTime());
+    dt.setSecsSinceEpoch(femObject->getResult().getSolutionTime());
     header.insert("Title", QJsonValue::fromVariant("QFEM problem file"));
     header.insert("Object", QJsonValue::fromVariant(femObject->getObjectName().c_str()));
     header.insert("DateTime", QJsonValue::fromVariant(dt.currentDateTime()));
@@ -1486,7 +1483,8 @@ bool TMainWindow::saveQRES(QString fileName)
                 header;
 
     // ------------- Заголовок -----------------
-    dt.setTime_t(femProcessor->getFEMObject()->getResult().getSolutionTime());
+////    dt.setTime_t(femProcessor->getFEMObject()->getResult().getSolutionTime());
+    dt.setSecsSinceEpoch(femProcessor->getFEMObject()->getResult().getSolutionTime());
     header.insert("Title", "QFEM results file");
     header.insert("Object", femProcessor->getFEMObject()->getObjectName().c_str());
     header.insert("DateTime", dt.currentDateTime().toString());
@@ -1633,7 +1631,7 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
     TResultList &result = femProcessor->getFEMObject()->getResult();
 
     result.clear();
-    for (auto value: resultArr)
+    for (QJsonValue value: resultArr)
     {
         res.clear();
         name = value["Function"].toString();
@@ -1784,7 +1782,7 @@ void TMainWindow::setupLanguage(void)
     QTranslator* dlgTranslator = new QTranslator(qApp);
 
     // Локализация (стандартных диалогов, e.t.c, ...)
-    if (dlgTranslator->load(translatorFileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+    if (dlgTranslator->load(translatorFileName, QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
         qApp->installTranslator(dlgTranslator);
 
     translator = new QTranslator(qApp);
@@ -1820,7 +1818,7 @@ void TMainWindow::slotAppSettings(void)
             qApp->removeTranslator(translator);
             break;
         case 1: // Russian
-            translator->load("QFEM_RU");
+            (void)translator->load("QFEM_RU");
             qApp->installTranslator(translator);
             break;
     }
@@ -1869,7 +1867,7 @@ void TMainWindow::slotDataCopy(void)
     if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))
     {
         qobject_cast<TGLMesh*>(tabWidget->currentWidget())->loadPaint();
-        clipboard->setImage(qobject_cast<TGLMesh*>(tabWidget->currentWidget())->grabFrameBuffer(true));
+        clipboard->setImage(qobject_cast<TGLMesh*>(tabWidget->currentWidget())->grabFramebuffer());
     }
     else
     {
