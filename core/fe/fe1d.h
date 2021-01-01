@@ -25,11 +25,11 @@ protected:
             D.resize(freedom * shape->size, freedom * shape->size);
         }
 
+        jacobian = (shape->x(1, 0) - shape->x(0, 0)) * 0.5;
         // Численное интегрирование по формуле Гаусса на отрезке [-0,5; 0,5]
         for (unsigned i = 0; i < shape->w.size(); i++)
         {
             // Якобиан
-            jacobian = (shape->x(1, 0) - shape->x(0, 0)) * 0.5;
             // Обратная матрица Якоби
             inverted_jacobi = jacobian;
             // Производные функций формы
