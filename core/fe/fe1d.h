@@ -25,13 +25,12 @@ protected:
             D.resize(freedom * shape->size, freedom * shape->size);
         }
 
-        jacobian = (shape->x(1, 0) - shape->x(0, 0)) * 0.5;
+        // Якобиан и обратная матрица Якоби
+        jacobian = inverted_jacobi = (shape->x(1, 0) - shape->x(0, 0)) * 0.5;
+
         // Численное интегрирование по формуле Гаусса на отрезке [-0,5; 0,5]
         for (unsigned i = 0; i < shape->w.size(); i++)
         {
-            // Якобиан
-            // Обратная матрица Якоби
-            inverted_jacobi = jacobian;
             // Производные функций формы
             dx = inverted_jacobi * dynamic_cast<T*>(shape)->shape_dxi(i);
             // Матрица градиентов
