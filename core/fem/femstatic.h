@@ -155,7 +155,6 @@ template<class T> void TFEMStatic<T>::ansambleLocalMatrix(unique_ptr<TFE> &fe, u
     unsigned freedom = mesh->getFreedom(),
              size = fe->getSize() * fe->getFreedom();
 
-
     // Учет матрицы
     for (unsigned l = 0; l < size; l++)
     {

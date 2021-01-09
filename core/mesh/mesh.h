@@ -248,6 +248,7 @@ public:
         }
     }
     FEType getDataFE(unsigned, unsigned&, unsigned&, unsigned&);
+    FEType getDataFE(string, unsigned&, unsigned&, unsigned&);
     bool is1D(void)
     {
         return (feType == FEType::fe1d2) ? true : false;

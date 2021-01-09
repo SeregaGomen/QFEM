@@ -56,7 +56,7 @@ bool TMesh::read(string fname)
     return error;
 }
 // ------------- Определение параметров КЭ ----------------------
-FEType TMesh::getDataFE(unsigned type, unsigned& feSize, unsigned& beSize, unsigned& feDim)
+FEType TMesh::getDataFE(unsigned type, unsigned& beSize, unsigned& feSize, unsigned& feDim)
 {
     FEType ret;
 
@@ -143,6 +143,35 @@ FEType TMesh::getDataFE(unsigned type, unsigned& feSize, unsigned& beSize, unsig
         default:
             feSize = beSize = feDim = 0;
             ret = FEType::undefined;
+    }
+    return ret;
+}
+//-----------------------------------------------------------------
+FEType TMesh::getDataFE(string type, unsigned& beSize, unsigned& feSize, unsigned& feDim)
+{
+    FEType ret = FEType::undefined;
+    vector<tuple<string, FEType, int, int, int>> feTypeTable{
+        { "fe1d2", FEType::fe1d2, 1, 2, 1 },
+        { "fe2d3", FEType::fe2d3, 2, 3, 2 },
+        { "fe2d4", FEType::fe2d4, 2, 4, 2 },
+        { "fe2d6", FEType::fe2d6, 3, 6, 2 },
+        { "fe2d3p", FEType::fe2d3p, 0, 3, 2 },
+        { "fe2d4p", FEType::fe2d4p, 0, 4, 2 },
+        { "fe2d6p", FEType::fe2d6p, 0, 6, 2 },
+        { "fe3d4", FEType::fe3d4, 3, 4, 3 },
+        { "fe3d8", FEType::fe3d8, 4, 8, 3 },
+        { "fe3d10", FEType::fe3d8, 6, 10, 3 },
+        { "fe3d3s", FEType::fe3d3s, 0, 3, 3 },
+        { "fe3d4s", FEType::fe3d4s, 0, 4, 3 },
+        { "fe3d6s", FEType::fe3d6s, 0, 6, 3 } };
+    auto index = find_if(feTypeTable.begin(), feTypeTable.end(), [type](const auto &it) { return get<0>(it) == type; });
+
+    if (index != feTypeTable.end())
+    {
+        ret = get<1>(*index);
+        beSize = get<2>(*index);
+        feSize = get<3>(*index);
+        feDim = get<4>(*index);
     }
     return ret;
 }
@@ -315,7 +344,7 @@ bool TMesh::readTRP(string fname)
     }
     // Cчитываем тип КЭ
     in.read(reinterpret_cast<char*>(&temp), sizeof(unsigned));
-    if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == FEType::undefined)
+    if ((feType = getDataFE(temp, surfaceSize, feSize, feDim)) == FEType::undefined)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -371,11 +400,13 @@ bool TMesh::readTRP(string fname)
 // ------------------- Чтение TRPA-файла -----------------------
 bool TMesh::readTRPA(string fname)
 {
+    stringstream ss;
     fstream in(fname.c_str(), ios::in | ios::binary);
     unsigned temp,
              surfaceSize,
              feSize,
              feDim;
+    string type;
 
     clear();
     if (not in.is_open())
@@ -383,13 +414,29 @@ bool TMesh::readTRPA(string fname)
         cerr << sayError(ErrorCode::EOpenFile) << endl;
         return (error = true);
     }
-    in >> temp;
-    if ((feType = getDataFE(temp, feSize, surfaceSize, feDim)) == FEType::undefined)
+    in >> type;
+    ss << type;
+    ss >> temp;
+    if (ss.fail())
     {
-        in.close();
-        cerr << sayError(ErrorCode::EFormatFile) << endl;
-        return (error = true);
+        if ((feType = getDataFE(type, surfaceSize, feSize, feDim)) == FEType::undefined)
+        {
+            in.close();
+            cerr << sayError(ErrorCode::EFormatFile) << endl;
+            return (error = true);
+        }
     }
+    else
+    {
+        if ((feType = getDataFE(temp, surfaceSize, feSize, feDim)) == FEType::undefined)
+        {
+            in.close();
+            cerr << sayError(ErrorCode::EFormatFile) << endl;
+            return (error = true);
+        }
+
+    }
+
     in >> temp;
     if (in.fail() or temp == 0 or feDim < 1 or feDim > 3)
     {
@@ -584,7 +631,7 @@ bool TMesh::read(ifstream& in)
     in >> str;
     // Cчитываем тип КЭ
     in >> val;
-    if ((feType = getDataFE(val, feSize, surfaceSize, feDim)) == FEType::undefined)
+    if ((feType = getDataFE(val, surfaceSize, feSize, feDim)) == FEType::undefined)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
