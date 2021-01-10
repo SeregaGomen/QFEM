@@ -26,7 +26,8 @@ protected:
         }
 
         // Якобиан и обратная матрица Якоби
-        jacobian = inverted_jacobi = (shape->x(1, 0) - shape->x(0, 0)) * 0.5;
+        jacobian = (shape->x(1, 0) - shape->x(0, 0)) * 0.5;
+        inverted_jacobi = 1.0 / jacobian;
 
         // Численное интегрирование по формуле Гаусса на отрезке [-0,5; 0,5]
         for (unsigned i = 0; i < shape->w.size(); i++)
