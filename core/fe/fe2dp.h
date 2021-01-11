@@ -12,11 +12,8 @@ template <class T> class TFE2DP : public TFE2D<T>
 protected:
     matrix<double> extra_elastic_matrix(void)
     {
-        matrix<double> d(2, 2);
-
-        d(0, 0) = 1.0;  d(0, 1) = 0.0;
-        d(1, 0) = 0.0;  d(1, 1) = 1.0;
-        return d * (TFE::e / (2.0 + 2.0 * TFE::m));
+        return { { TFE::e / (2.0 + 2.0 * TFE::m),  0.0 },
+            { 0.0,  TFE::e / (2.0 + 2.0 * TFE::m) } };
     }
     void generate(bool isStatic = true)
     {
@@ -24,10 +21,8 @@ protected:
         matrix<double> bm(3, TFE::freedom * TFE::shape->size),
                        bp(2, TFE::freedom * TFE::shape->size),
                        c(TFE::freedom, TFE::freedom * TFE::shape->size),
-                       jacobi(2, 2),
+                       jacobi,
                        inverted_jacobi;
-        vector<double> dx,
-                       dy;
 
         TFE::K.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
         TFE::load.resize(TFE::freedom * TFE::shape->size, 1);
@@ -40,30 +35,20 @@ protected:
         for (unsigned i = 0; i < TFE::shape->w.size(); i++)
         {
             // Матрица Якоби
-            jacobi.fill(0);
-            for (unsigned j = 0; j < 2; j++)
-                for (unsigned k = 0; k < TFE::shape->size; k++)
-                {
-                    jacobi(0, j) += dynamic_cast<T*>(TFE::shape)->shape_dxi(i)[k] * TFE::shape->x(k, j);
-                    jacobi(1, j) += dynamic_cast<T*>(TFE::shape)->shape_deta(i)[k] * TFE::shape->x(k, j);
-                }
+            jacobi = TFE::shape->jacobi(i);
 
             // Якобиан
-            jacobian = det2x2(jacobi);
+            jacobian = det(jacobi);
 
             // Обратная матрица Якоби
-            inverted_jacobi = inv2x2(jacobi);
-
-            // Производные функций формы
-            dx = inverted_jacobi(0, 0) * dynamic_cast<T*>(TFE::shape)->shape_dxi(i) + inverted_jacobi(0, 1) * dynamic_cast<T*>(TFE::shape)->shape_deta(i);
-            dy = inverted_jacobi(1, 0) * dynamic_cast<T*>(TFE::shape)->shape_dxi(i) + inverted_jacobi(1, 1) * dynamic_cast<T*>(TFE::shape)->shape_deta(i);
+            inverted_jacobi = inv(jacobi);
 
             // Матрица градиентов
             for (unsigned j = 0; j < TFE::shape->size; j++)
             {
-                bm(0, TFE::freedom * j + 2) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 0) = dx[j];
-                bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 0) = dy[j];
-                bp(0, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 1) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
+                bm(0, TFE::freedom * j + 2) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 0) = inverted_jacobi(0, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(0, 1) * TFE::shape->shape_deta(i, j);
+                bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 0) = inverted_jacobi(1, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(1, 1) * TFE::shape->shape_deta(i, j);
+                bp(0, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 1) = TFE::shape->shape(i, j);
                 if (not isStatic)
                     c(0, TFE::freedom * j + 0) = c(1, TFE::freedom * j + 1) = c(2, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
             }

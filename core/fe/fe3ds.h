@@ -47,11 +47,9 @@ protected:
                        bp(3, TFE::freedom * TFE::shape->size),
                        bc(2, TFE::freedom * TFE::shape->size),
                        c(TFE::freedom, TFE::freedom * TFE::shape->size),
-                       jacobi(2, 2),
+                       jacobi,
                        inverted_jacobi,
                        m = prepareTransformMatrix(); // Подготовка матрицы преобразования
-        vector<double> dx,
-                       dy;
 
         TFE::K.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
         TFE::load.resize(TFE::freedom * TFE::shape->size, 1);
@@ -64,30 +62,20 @@ protected:
         for (unsigned i = 0; i < TFE::shape->w.size(); i++)
         {
             // Матрица Якоби
-            jacobi.fill(0);
-            for (unsigned j = 0; j < 2; j++)
-                for (unsigned k = 0; k < TFE::shape->size; k++)
-                {
-                    jacobi(0, j) += dynamic_cast<T*>(TFE::shape)->shape_dxi(i)[k] * TFE::shape->x(k, j);
-                    jacobi(1, j) += dynamic_cast<T*>(TFE::shape)->shape_deta(i)[k] * TFE::shape->x(k, j);
-                }
+            jacobi = TFE::shape->jacobi(i);
 
             // Якобиан
-            jacobian = det2x2(jacobi);
+            jacobian = det(jacobi);
 
             // Обратная матрица Якоби
-            inverted_jacobi = inv2x2(jacobi);
-
-            // Производные функций формы
-            dx = inverted_jacobi(0, 0) * dynamic_cast<T*>(TFE::shape)->shape_dxi(i) + inverted_jacobi(0, 1) * dynamic_cast<T*>(TFE::shape)->shape_deta(i);
-            dy = inverted_jacobi(1, 0) * dynamic_cast<T*>(TFE::shape)->shape_dxi(i) + inverted_jacobi(1, 1) * dynamic_cast<T*>(TFE::shape)->shape_deta(i);
+            inverted_jacobi = inv(jacobi);
 
             // Матрицы градиентов
             for (unsigned j = 0; j < TFE::shape->size; j++)
             {
-                bm(0, TFE::freedom * j + 0) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 3) = bp(2, TFE::freedom * j + 4) = bc(0, TFE::freedom * j + 2) = dx[j];
-                bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 0) = bp(1, TFE::freedom * j + 4) = bp(2, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 2) = dy[j];
-                bc(0, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 4) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
+                bm(0, TFE::freedom * j + 0) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 3) = bp(2, TFE::freedom * j + 4) = bc(0, TFE::freedom * j + 2) = inverted_jacobi(0, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(0, 1) * TFE::shape->shape_deta(i, j);
+                bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 0) = bp(1, TFE::freedom * j + 4) = bp(2, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 2) = inverted_jacobi(1, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(1, 1) * TFE::shape->shape_deta(i, j);
+                bc(0, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 4) = TFE::shape->shape(i, j);
                 if (not isStatic)
                     c(0, TFE::freedom * j + 0) = c(1, TFE::freedom * j + 1) = c(2, TFE::freedom * j + 2) = c(3, TFE::freedom * j + 3) = c(4, TFE::freedom * j + 4) = c(5, TFE::freedom * j + 5) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
             }

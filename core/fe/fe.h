@@ -43,41 +43,41 @@ protected:
 public:
     TFE(void) {}
     virtual ~TFE(void) {}
-    virtual void setCoord(matrix<double>& px)
+    virtual void setCoord(matrix<double> &x)
     {
-        shape->create(px);
+        shape->create(x);
     }
-    void setYoungModulus(double pe)
+    void setYoungModulus(double e)
     {
-        e = pe;
+        this->e = e;
     }
-    void setPoissonRatio(double pm)
+    void setPoissonRatio(double m)
     {
-        m = pm;
+        this->m = m;
     }
-    void setEps(double p)
+    void setEps(double eps)
     {
-        eps = p;
+        this->eps = eps;
     }
-    void setThickness(double p)
+    void setThickness(double thickness)
     {
-        thickness = p;
+        this->thickness = thickness;
     }
-    void setDensity(double p)
+    void setDensity(double density)
     {
-        density = p;
+        this->density = density;
     }
-    void setDamping(double p)
+    void setDamping(double damping)
     {
-        damping = p;
+        this->damping = damping;
     }
-    void setAlpha(double p)
+    void setAlpha(double alpha)
     {
-        alpha = p;
+        this->alpha = alpha;
     }
-    void setTemperature(double p)
+    void setTemperature(double dT)
     {
-        dT = p;
+        this->dT = dT;
     }
     unsigned getSize(void)
     {
@@ -114,7 +114,7 @@ public:
     // Вычисление стандартных результатов КЭ (деформаций, напряжений, etc)
     virtual void calc(matrix<double>&, vector<double>&) = 0;
     // Процедура генерации локальных матриц жесткости, масс, демпфирования
-    virtual void generate(bool isStatic = true) = 0;
+    virtual void generate(bool = true) = 0;
 };
 //---------------------------------------------------------
 

@@ -13,7 +13,6 @@ protected:
     {
         double jacobian,
                inverted_jacobi;
-        vector<double> dx;
         matrix<double> b(1, shape->size),
                        c(freedom, shape->size);
 
@@ -32,12 +31,10 @@ protected:
         // Численное интегрирование по формуле Гаусса на отрезке [-0,5; 0,5]
         for (unsigned i = 0; i < shape->w.size(); i++)
         {
-            // Производные функций формы
-            dx = inverted_jacobi * dynamic_cast<T*>(shape)->shape_dxi(i);
             // Матрица градиентов
             for (unsigned j = 0; j < shape->size; j++)
             {
-                b(0, freedom * j) = dx[j];
+                b(0, freedom * j) = inverted_jacobi * shape->shape_dxi(i, j);
                 if (not isStatic)
                     c(0, freedom * j) = dynamic_cast<T*>(shape)->shape(i, j);
             }
@@ -72,7 +69,7 @@ public:
         for (unsigned i = 0; i < shape->size; i++)
         {
             for (unsigned j = 0; j < shape->size; j++)
-                b(0, freedom * j) = dynamic_cast<T*>(shape)->shape_dx(i, j);
+                b(0, freedom * j) = shape->shape_dx(i, j);
             strain = b * u;
             stress = e * strain;
             res(0, i) += strain(0, 0);

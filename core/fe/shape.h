@@ -13,7 +13,7 @@ protected:
     // Коэффициенты функций форм
     matrix<double> c;
     // Структура изопараметрической функции формы
-    virtual double shape_coeff(unsigned, unsigned) = 0;
+    virtual double shape_coeff(int, int) = 0;
 public:
     // Количество узлов КЭ
     unsigned size = 0;
@@ -28,6 +28,18 @@ public:
     virtual ~TShape() {}
     // Вычисление коэффициентов функций формы
     void create(matrix<double>&);
+    // Якобиан
+    virtual matrix<double> jacobi(int = 0) = 0;
+    // Значения функции формы
+    virtual double shape(int, int) = 0;
+    // ... производных локальных функций формы
+    virtual double shape_dxi(int, int) = 0;
+    virtual double shape_dpsi(int, int) = 0;
+    virtual double shape_deta(int, int) = 0;
+    // ... производных глобальных функций формы
+    virtual double shape_dx(int, int) = 0;
+    virtual double shape_dy(int, int) = 0;
+    virtual double shape_dz(int, int) = 0;
 };
 //-----------------------------------------------------------------------
 //          Линейные функции формы одномерного двухузлового КЭ
@@ -35,11 +47,9 @@ public:
 class TShape1D2 : public TShape
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0) }[j];
     }
 public:
     TShape1D2(void) : TShape()
@@ -49,19 +59,33 @@ public:
         w = { 0.55555555556, 0.88888888889, 0.55555555556 };
     }
     ~TShape1D2(void) {}
-    double shape(unsigned i, unsigned j)
+    double shape(int i, int j)
     {
-        vector<double> v{ (1.0 - xi[i]) * 0.5, (1.0 + xi[i]) * 0.5 };
-
-        return v[j];
+        return vector<double>{ (1.0 - xi[i]) * 0.5, (1.0 + xi[i]) * 0.5 }[j];
     }
-    vector<double> shape_dxi(unsigned)
+    double shape_dxi(int, int j)
     {
-        return { -0.5, 0.5 };
+        return vector<double>{ -0.5, 0.5 }[j];
     }
-    double shape_dx(unsigned, unsigned j)
+    double shape_deta(int, int)
+    {
+        return 0;
+    }
+    double shape_dpsi(int, int)
+    {
+        return 0;
+    }
+    double shape_dx(int, int j)
     {
         return c(1, j);
+    }
+    double shape_dy(int, int)
+    {
+        return 0;
+    }
+    double shape_dz(int, int)
+    {
+        return 0;
     }
     double edge_volume(const matrix<double>&)
     {
@@ -75,6 +99,10 @@ public:
     {
         return { 1.0 };
     }
+    matrix<double> jacobi(int)
+    {
+        return { { (x(1, 0) - x(0, 0)) * 0.5 } };
+    }
 };
 //-----------------------------------------------------------------------
 //                  Линейные функции формы треугольного КЭ
@@ -82,11 +110,9 @@ public:
 class TShape2D3 : public TShape
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0), x(i, 1) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0), x(i, 1) }[j];
     }
 public:
     TShape2D3(void) : TShape()
@@ -96,44 +122,60 @@ public:
         eta = { 0.5, 0.0, 0.5 };
         w = { 0.166666666667, 0.166666666667, 0.166666666667 };
     }
-    ~TShape2D3(void) {}
-    double shape(unsigned i, unsigned j)
+    virtual ~TShape2D3(void) {}
+    double shape(int i, int j)
     {
-        vector<double> v{ 1.0 - xi[i] - eta[i], xi[i], eta[i] };
-
-        return v[j];
+        return vector<double>{ 1.0 - xi[i] - eta[i], xi[i], eta[i] }[j];
     }
-    vector<double> shape_dxi(unsigned)
+    double shape_dxi(int, int j)
     {
-        return { -1.0, 1.0, 0.0 };
+        return vector<double>{ -1.0, 1.0, 0.0 }[j];
     }
-    vector<double> shape_deta(unsigned)
+    double shape_deta(int, int j)
     {
-        return { -1.0, 0.0, 1.0 };
+        return vector<double>{ -1.0, 0.0, 1.0 }[j];
     }
-    double shape_dx(unsigned, unsigned j)
+    double shape_dpsi(int, int)
+    {
+        return 0;
+    }
+    double shape_dx(int, int j)
     {
         return c(1, j);
     }
-    double shape_dy(unsigned, unsigned j)
+    double shape_dy(int, int j)
     {
         return c(2, j);
+    }
+    double shape_dz(int, int)
+    {
+        return 0;
+    }
+    matrix<double> jacobi(int i)
+    {
+        matrix<double> jacobi(2, 2);
+
+        for (unsigned j = 0; j < 2; j++)
+            for (unsigned k = 0; k < size; k++)
+            {
+                jacobi(0, j) += shape_dxi(i, k) * x(k, j);
+                jacobi(1, j) += shape_deta(i, k) * x(k, j);
+            }
+        return jacobi;
     }
 };
 //-----------------------------------------------------------------------
 //              Билинейные функции формы четырехугольного КЭ
 //-----------------------------------------------------------------------
-class TShape2D4 : public TShape
+class TShape2D4 : public TShape2D3
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1) }[j];
     }
 public:
-    TShape2D4(void) : TShape()
+    TShape2D4(void) : TShape2D3()
     {
         size = 4;
         xi = { -0.57735027, -0.57735027, 0.57735027, 0.57735027 };
@@ -141,27 +183,33 @@ public:
         w = { 1.0, 1.0, 1.0, 1.0 };
     }
     ~TShape2D4(void) {}
-    double shape(unsigned i, unsigned j)
+    double shape(int i, int j)
     {
-        vector<double> v{ 0.25*(1.0 - xi[i])*(1.0 - eta[i]), 0.25*(1.0 + xi[i])*(1.0 - eta[i]), 0.25*(1.0 + xi[i])*(1.0 + eta[i]), 0.25*(1.0 - xi[i])*(1.0 + eta[i]) };
-
-        return v[j];
+        return vector<double>{ 0.25 * (1.0 - xi[i]) * (1.0 - eta[i]), 0.25 * (1.0 + xi[i]) * (1.0 - eta[i]), 0.25 * (1.0 + xi[i]) * (1.0 + eta[i]), 0.25 * (1.0 - xi[i]) * (1.0 + eta[i]) }[j];
     }
-    vector<double> shape_dxi(unsigned i)
+    double shape_dxi(int i, int j)
     {
-        return {-0.25*(1.0 - eta[i]), 0.25*(1.0 - eta[i]), 0.25*(1.0 + eta[i]), -0.25*(1.0 + eta[i]) };
+        return vector<double>{ -0.25 * (1.0 - eta[i]), 0.25 * (1.0 - eta[i]), 0.25 * (1.0 + eta[i]), -0.25 * (1.0 + eta[i]) }[j];
     }
-    vector<double> shape_deta(unsigned i)
+    double shape_deta(int i, int j)
     {
-        return { -0.25*(1.0 - xi[i]), -0.25*(1.0 + xi[i]), 0.25*(1.0 + xi[i]), 0.25*(1.0 - xi[i]) };
+        return vector<double>{ -0.25 * (1.0 - xi[i]), -0.25 * (1.0 + xi[i]), 0.25 * (1.0 + xi[i]), 0.25 * (1.0 - xi[i]) }[j];
     }
-    double shape_dx(unsigned i, unsigned j)
+    double shape_dpsi(int, int)
+    {
+        return 0;
+    }
+    double shape_dx(int i, int j)
     {
         return c(1, j) + c(3, j) * x(i, 1);
     }
-    double shape_dy(unsigned i, unsigned j)
+    double shape_dy(int i, int j)
     {
         return c(2, j) + c(3, j) * x(i, 0);
+    }
+    double shape_dz(int, int)
+    {
+        return 0;
     }
 };
 //-----------------------------------------------------------------------
@@ -170,11 +218,9 @@ public:
 class TShape2D6 : public TShape2D3
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1) }[j];
     }
 public:
     TShape2D6(void) : TShape2D3()
@@ -185,27 +231,37 @@ public:
         w = { 0.225, 0.0666666666667, 0.0666666666667, 0.0666666666667, 0.025, 0.025, 0.025 };
     }
     ~TShape2D6(void) {}
-    double shape(unsigned i, unsigned j)
+    double shape(int i, int j)
     {
-        vector<double> v{ (1.0 - xi[i] - eta[i]) * (2.0 * (1.0 - xi[i] - eta[i]) - 1.0), xi[i] * (2.0 * xi[i] - 1.0), eta[i] * (2.0 * eta[i] - 1.0), 4.0 * (1.0 - xi[i] - eta[i]) * xi[i],  4.0 * xi[i] * eta[i], 4.0 * (1.0 - xi[i] - eta[i]) * eta[i] };
-
-        return v[j];
+        return vector<double>{ (1.0 - xi[i] - eta[i]) * (2.0 * (1.0 - xi[i] - eta[i]) - 1.0),
+                    xi[i] * (2.0 * xi[i] - 1.0), eta[i] * (2.0 * eta[i] - 1.0),
+                    4.0 * (1.0 - xi[i] - eta[i]) * xi[i],
+                    4.0 * xi[i] * eta[i],
+                    4.0 * (1.0 - xi[i] - eta[i]) * eta[i] }[j];
     }
-    vector<double> shape_dxi(unsigned i)
+    double shape_dxi(int i, int j)
     {
-        return { -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 4.0 * xi[i] - 1.0, 0.0, -8.0 * xi[i] + 4.0 - 4.0 * eta[i], 4.0 * eta[i], -4.0 * eta[i] };
+        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 4.0 * xi[i] - 1.0, 0.0, -8.0 * xi[i] + 4.0 - 4.0 * eta[i], 4.0 * eta[i], -4.0 * eta[i] }[j];
     }
-    vector<double> shape_deta(unsigned i)
+    double shape_deta(int i, int j)
     {
-        return { -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 0.0, 4.0 * eta[i] - 1.0, -4.0 * xi[i], 4.0 * xi[i], -8.0 * eta[i] + 4.0 - 4.0 * xi[i] };
+        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 0.0, 4.0 * eta[i] - 1.0, -4.0 * xi[i], 4.0 * xi[i], -8.0 * eta[i] + 4.0 - 4.0 * xi[i] }[j];
     }
-    double shape_dx(unsigned i, unsigned j)
+    double shape_dpsi(int, int)
+    {
+        return 0;
+    }
+    double shape_dx(int i, int j)
     {
         return c(1, j) + c(3, j) * x(i, 1) + 2.0 * c(4, j) * x(i, 0);
     }
-    double shape_dy(unsigned i, unsigned j)
+    double shape_dy(int i, int j)
     {
         return c(2, j) + c(3, j) * x(i, 0) + 2.0 * c(5, j) * x(i, 1);
+    }
+    double shape_dz(int, int)
+    {
+        return 0;
     }
 };
 //-----------------------------------------------------------------------
@@ -214,11 +270,9 @@ public:
 class TShape3D4 : public TShape
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 2) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 2) }[j];
     }
 public:
     TShape3D4(void) : TShape()
@@ -229,52 +283,61 @@ public:
         psi = { 0.25, 0.16666666667, 0.16666666667, 0.5, 0.16666666667 };
         w = { -0.13333333333, 0.075, 0.075, 0.075, 0.075 };
     }
-    ~TShape3D4() {}
-    double shape(unsigned i, unsigned j)
+    virtual ~TShape3D4() {}
+    double shape(int i, int j)
     {
-        vector<double> v{ 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] };
-
-        return v[j];
+        return vector<double>{ 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] }[j];
     }
-    vector<double> shape_dxi(unsigned)
+    double shape_dxi(int, int j)
     {
-        return { -1.0, 1.0, 0.0, 0.0 };
+        return vector<double>{ -1.0, 1.0, 0.0, 0.0 }[j];
     }
-    vector<double> shape_deta(unsigned)
+    double shape_deta(int, int j)
     {
-        return { -1.0, 0.0, 1.0, 0.0 };
+        return vector<double>{ -1.0, 0.0, 1.0, 0.0 }[j];
     }
-    vector<double> shape_dpsi(unsigned)
+    double shape_dpsi(int, int j)
     {
-        return { -1.0, 0.0, 0.0, 1.0 };
+        return vector<double>{ -1.0, 0.0, 0.0, 1.0 }[j];
     }
-    double shape_dx(unsigned, unsigned j)
+    double shape_dx(int, int j)
     {
         return c(1, j);
     }
-    double shape_dy(unsigned, unsigned j)
+    double shape_dy(int, int j)
     {
         return c(2, j);
     }
-    double shape_dz(unsigned, unsigned j)
+    double shape_dz(int, int j)
     {
         return c(3, j);
+    }
+    matrix<double> jacobi(int i)
+    {
+        matrix<double> jacobi(3, 3);
+
+        for (unsigned j = 0; j < 3; j++)
+            for (unsigned k = 0; k < size; k++)
+            {
+                jacobi(0, j) += shape_dxi(i, k) * x(k, j);
+                jacobi(1, j) += shape_deta(i, k) * x(k, j);
+                jacobi(2, j) += shape_dpsi(i, k) * x(k, j);
+            }
+        return jacobi;
     }
 };
 //-----------------------------------------------------------------------
 //    Билинейные функции формы шестигранной четырехугольной призмы
 //-----------------------------------------------------------------------
-class TShape3D8 : public TShape
+class TShape3D8 : public TShape3D4
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 1) * x(i, 2) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 1) * x(i, 2) }[j];
     }
 public:
-    TShape3D8(void) : TShape()
+    TShape3D8(void) : TShape3D4()
     {
         size = 8;
         xi = { -0.57735026919, -0.57735026919, -0.57735026919, -0.57735026919, 0.57735026919, 0.57735026919, 0.57735026919, 0.57735026919 };
@@ -283,7 +346,7 @@ public:
         w = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
     }
     ~TShape3D8(void) {}
-    double shape(unsigned i, unsigned j)
+    double shape(int i, int j)
     {
         vector<double> v{
                           0.125 * (1.0 - xi[i]) * (1.0 - eta[i]) * (1.0 - psi[i]),
@@ -298,48 +361,48 @@ public:
 
         return v[j];
     }
-    vector<double> shape_dxi(unsigned i)
+    double shape_dxi(int i, int j)
     {
-        return { -0.125 * (1.0 - eta[i]) * (1.0 - psi[i]),
+        return vector<double>{ -0.125 * (1.0 - eta[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 - eta[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 + eta[i]) * (1.0 - psi[i]),
                  -0.125 * (1.0 + eta[i]) * (1.0 - psi[i]),
                  -0.125 * (1.0 - eta[i]) * (1.0 + psi[i]),
                   0.125 * (1.0 - eta[i]) * (1.0 + psi[i]),
                   0.125 * (1.0 + eta[i]) * (1.0 + psi[i]),
-                 -0.125 * (1.0 + eta[i]) * (1.0 + psi[i]) };
+                 -0.125 * (1.0 + eta[i]) * (1.0 + psi[i]) }[j];
     }
-    vector<double> shape_deta(unsigned i)
+    double shape_deta(int i, int j)
     {
-        return { -0.125 * (1.0 - xi[i]) * (1.0 - psi[i]),
+        return vector<double>{ -0.125 * (1.0 - xi[i]) * (1.0 - psi[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 + xi[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 - xi[i]) * (1.0 - psi[i]),
                  -0.125 * (1.0 - xi[i]) * (1.0 + psi[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 + psi[i]),
                   0.125 * (1.0 + xi[i]) * (1.0 + psi[i]),
-                  0.125 * (1.0 - xi[i]) * (1.0 + psi[i]) };
+                  0.125 * (1.0 - xi[i]) * (1.0 + psi[i]) }[j];
     }
-    vector<double> shape_dpsi(unsigned i)
+    double shape_dpsi(int i, int j)
     {
-        return { -0.125 * (1.0 - xi[i]) * (1.0 - eta[i]),
+        return vector<double>{ -0.125 * (1.0 - xi[i]) * (1.0 - eta[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 - eta[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 + eta[i]),
                  -0.125 * (1.0 - xi[i]) * (1.0 + eta[i]),
                   0.125 * (1.0 - xi[i]) * (1.0 - eta[i]),
                   0.125 * (1.0 + xi[i]) * (1.0 - eta[i]),
                   0.125 * (1.0 + xi[i]) * (1.0 + eta[i]),
-                  0.125 * (1.0 - xi[i]) * (1.0 + eta[i]) };
+                  0.125 * (1.0 - xi[i]) * (1.0 + eta[i]) }[j];
     }
-    double shape_dx(unsigned i, unsigned j)
+    double shape_dx(int i, int j)
     {
         return c(1, j) + c(4, j) * x(i, 1) + c(5, j) * x(i, 2) + c(7, j) * x(i, 1) * x(i, 2);
     }
-    double shape_dy(unsigned i, unsigned j)
+    double shape_dy(int i, int j)
     {
         return c(2, j) + c(4, j) * x(i, 0) + c(6, j) * x(i, 2) + c(7, j) * x(i, 0) * x(i, 2);
     }
-    double shape_dz(unsigned i, unsigned j)
+    double shape_dz(int i, int j)
     {
         return c(3, j) + c(5, j) * x(i, 0) + c(6, j) * x(i, 1) + c(7, j) * x(i, 0)* x(i, 1);
     }
@@ -350,11 +413,9 @@ public:
 class TShape3D10 : public TShape3D4
 {
 protected:
-    double shape_coeff(unsigned i, unsigned j)
+    double shape_coeff(int i, int j)
     {
-        vector<double> s = { 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1), x(i, 2) * x(i, 2) };
-
-        return s[j];
+        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1), x(i, 2) * x(i, 2) }[j];
     }
 public:
     TShape3D10(void) : TShape3D4()
@@ -366,41 +427,40 @@ public:
         w = { -0.13333333333, 0.075, 0.075, 0.075, 0.075 };
     }
     ~TShape3D10(void) {}
-    double shape(unsigned i, unsigned j)
+    double shape(int i, int j)
     {
-        vector<double> s = { 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] },
-                       v{ s[0] * (2.0 * s[0] - 1.0), s[1] * (2.0 * s[1] - 1.0), s[2] * (2.0 * s[2] - 1.0), s[3] * (2.0 * s[3] - 1.0),
-                          4.0 * s[0] * s[1], 4.0 * s[1] * s[2], 4.0 * s[0] * s[2], 4.0 * s[2] * s[3], 4.0 * s[1] * s[3], 4.0 * s[0] * s[3] };
+        vector<double> s = { 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] };
 
-        return v[j];
+        return vector<double>{ s[0] * (2.0 * s[0] - 1.0), s[1] * (2.0 * s[1] - 1.0), s[2] * (2.0 * s[2] - 1.0), s[3] * (2.0 * s[3] - 1.0),
+                    4.0 * s[0] * s[1], 4.0 * s[1] * s[2], 4.0 * s[0] * s[2], 4.0 * s[2] * s[3], 4.0 * s[1] * s[3], 4.0 * s[0] * s[3] }[j];
     }
-    vector<double> shape_dxi(unsigned i)
+    double shape_dxi(int i, int j)
     {
-        return { -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 4.0 * xi[i] - 1.0,
+        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 4.0 * xi[i] - 1.0,
                   0.0, 0.0, -8.0 * xi[i] + 4.0 - 4.0 * eta[i] - 4.0 * psi[i],
-                  4.0 * eta[i], -4.0 * eta[i], 0.0, 4.0 * psi[i], -4.0 * psi[i] };
+                  4.0 * eta[i], -4.0 * eta[i], 0.0, 4.0 * psi[i], -4.0 * psi[i] }[j];
     }
-    vector<double> shape_deta(unsigned i)
+    double shape_deta(int i, int j)
     {
-        return { -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 4.0 * eta[i] - 1.0, 0.0,
+        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 4.0 * eta[i] - 1.0, 0.0,
                  -4.0 * xi[i], 4.0 * xi[i], -8.0 * eta[i] + 4.0 - 4.0 * xi[i] - 4.0 * psi[i],
-                  4.0 * psi[i], 0.0, -4.0 * psi[i] };
+                  4.0 * psi[i], 0.0, -4.0 * psi[i] }[j];
     }
-    vector<double> shape_dpsi(unsigned i)
+    double shape_dpsi(int i, int j)
     {
-        return { -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 0.0, 4.0 * psi[i] - 1.0,
+        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 0.0, 4.0 * psi[i] - 1.0,
                  -4.0 * xi[i], 0.0, -4.0 * eta[i], 4.0 * eta[i], 4.0 * xi[i],
-                 -8.0 * psi[i] + 4.0 - 4.0 * xi[i] - 4.0 * eta[i] };
+                 -8.0 * psi[i] + 4.0 - 4.0 * xi[i] - 4.0 * eta[i] }[j];
     }
-    double shape_dx(unsigned i, unsigned j)
+    double shape_dx(int i, int j)
     {
         return c(1, j) + 2.0 * c(7, j) * x(i, 0) + c(4, j) * x(i, 1) + c(5, j) * x(i, 2);
     }
-    double shape_dy(unsigned i, unsigned j)
+    double shape_dy(int i, int j)
     {
         return c(2, j) + c(4, j) * x(i, 0) + 2.0 * c(8, j) * x(i, 1) + c(6, j) * x(i, 2);
     }
-    double shape_dz(unsigned i, unsigned j)
+    double shape_dz(int i, int j)
     {
         return c(3, j) + c(5, j) * x(i, 0) + c(6, j) * x(i, 1) + 2.0 * c(9, j) * x(i, 2);
     }

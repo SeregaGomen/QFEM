@@ -3,6 +3,7 @@
 
 //#define DEBUG
 
+#include <cassert>
 #include <algorithm>
 #include <functional>
 #include <vector>
@@ -344,16 +345,35 @@ template <typename T> matrix<T> transpose(const matrix<T>& m)
     return res;
 }
 
-template <typename T> T det2x2(const matrix<T>& m)
+template <typename T> T det(const matrix<T> &m)
+{
+    assert(m.size1() == m.size2() and m.size1() < 4);
+    return m.size1() == 1 ? m[0][0] : m.size1() == 2 ? det2x2(m) : det3x3(m);
+}
+
+
+template <typename T> T det2x2(const matrix<T> &m)
 {
     return m(0, 0) * m(1, 1) - m(0, 1) * m(1, 0);
 }
-template <typename T> T det3x3(const matrix<T>& m)
+
+template <typename T> T det3x3(const matrix<T> &m)
 {
     return m(0, 0) * m(1, 1) * m(2, 2) + m(0, 1) * m(1, 2) * m(2, 0) + m(0, 2) * m(1, 0) * m(2, 1) -
            m(0, 2) * m(1, 1) * m(2, 0) - m(0, 0) * m(1, 2) * m(2, 1) - m(0, 1) * m(1, 0) * m(2, 2);
 }
-template <typename T> matrix<T> inv2x2(const matrix<T>& m)
+
+template <typename T> matrix<T> inv(const matrix<T> &m)
+{
+    matrix<T> res(m.size1(), m.size2());
+
+    assert(m.size1() == m.size2() and m.size1() < 4);
+    if (m.size1() == 1)
+        res(0, 0) = 1.0 / m(0, 0);
+    return m.size1() == 1 ? res : m.size1() == 2 ? inv2x2(m) : inv3x3(m);
+}
+
+template <typename T> matrix<T> inv2x2(const matrix<T> &m)
 {
     matrix<T> res(2, 2);
 
@@ -361,7 +381,8 @@ template <typename T> matrix<T> inv2x2(const matrix<T>& m)
     res(1, 0) = -m(1, 0); res(1, 1) = m(0, 0);
     return res / det2x2(m);
 }
-template <typename T> matrix<T> inv3x3(const matrix<T>& m)
+
+template <typename T> matrix<T> inv3x3(const matrix<T> &m)
 {
     matrix<T> res(3, 3);
 
