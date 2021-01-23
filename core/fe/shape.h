@@ -1,6 +1,8 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+#include <Eigen/Dense>
+#include "msg/msg.h"
 #include "util/matrix.h"
 
 //-----------------------------------------------------------------------
@@ -27,7 +29,30 @@ public:
     TShape(void) {}
     virtual ~TShape() {}
     // Вычисление коэффициентов функций формы
-    void create(matrix<double>&);
+    void create(matrix<double> &px)
+    {
+        using namespace Eigen;
+
+        MatrixXd A(size, size);
+        VectorXd b(size);
+
+        x = px;
+        c.resize(size, size);
+        for (unsigned i = 0; i < size; i++)
+        {
+            for (unsigned j = 0; j < size; j++)
+            {
+                for (unsigned k = 0; k < size; k++)
+                    A(j, k) = shape_coeff(j, k);
+                b(j) = (i == j) ? 1.0 : 0.0;
+            }
+            if (A.determinant() == 0.0)
+                throw ErrorCode::EIncorrectFE;
+            b = A.colPivHouseholderQr().solve(b);
+            for (unsigned j = 0; j < size; j++)
+                c(j, i) = b(j);
+        }
+    }
     // Якобиан
     virtual matrix<double> jacobi(int = 0) = 0;
     // Значения функции формы

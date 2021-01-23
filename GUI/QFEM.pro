@@ -48,8 +48,7 @@ SOURCES += main.cpp\
     ../core/mesh/mesh.cpp \
     ../core/parser/parser.cpp \
     ../core/object/object.cpp \
-    ../core/object/params.cpp \
-    ../core/fe/shape.cpp
+    ../core/object/params.cpp
 
 HEADERS  += mainwindow.h \
     bcprocessor.h \
