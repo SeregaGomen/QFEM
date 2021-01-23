@@ -57,9 +57,9 @@ protected:
             TFE::K += ((transpose(bm) * TFE2D<T>::elastic_matrix() * bm) * (pow(TFE::thickness, 3) / 12.0) +
                        (transpose(bp) * extra_elastic_matrix() * bp) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (TFE::dT not_eq 0.0 and TFE::alpha not_eq 0.0)
+            if (TFE::temperature not_eq 0.0 and TFE::alpha not_eq 0.0)
                 for (unsigned j = 0; j < TFE::getSize(); j++)
-                    TFE::load[j * TFE::freedom][0] += TFE::e * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
+                    TFE::load[j * TFE::freedom][0] += TFE::e * TFE::alpha * TFE::temperature * TFE::shape->w[i] * abs(jacobian);
                 // TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 0.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
                 // TFE::load += (transpose(bp) * extra_elastic_matrix() * vector<double>{ 1.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
             if (not isStatic)
@@ -74,7 +74,7 @@ public:
     {
         TFE::freedom = 3;
     }
-    virtual ~TFE2DP() {}
+    virtual ~TFE2DP() = default;
     void calc(matrix<double>& res, vector<double>& u)
     {
         matrix<double> bm(3, TFE::shape->size * TFE::freedom),

@@ -54,8 +54,8 @@ protected:
             // Вычисление локальной матрицы жесткости
             K += (transpose(b) * elastic_matrix() * b) * shape->w[i] * thickness * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (dT != 0.0 && alpha != 0.0)
-                load += transpose(b) * elastic_matrix() * vector<double>{dT * alpha, dT * alpha, 0} * shape->w[i] * abs(jacobian);
+            if (temperature != 0.0 && alpha != 0.0)
+                load += transpose(b) * elastic_matrix() * vector<double>{temperature * alpha, temperature * alpha, 0} * shape->w[i] * abs(jacobian);
             if (!isStatic)
             {
                 M += (transpose(c) * c) * density * shape->w[i] * thickness * abs(jacobian);
@@ -69,10 +69,7 @@ public:
         freedom = 2;
         shape = new T();
     }
-    virtual ~TFE2D()
-    {
-        delete shape;
-    }
+    virtual ~TFE2D() = default;
     void calc(matrix<double>& res, vector<double>& u)
     {
         matrix<double> b(3, shape->size * freedom),

@@ -29,7 +29,7 @@ protected:
     // Толщина (для плоских и оболочечных элементов) или площадь сечение (для одномерных КЭ)
     double thickness;
     // Температура
-    double dT = 0;
+    double temperature = 0;
     // Коэффициент температурного расширения
     double alpha = 0;
     // Погрешность сравнения с нулем (для определения "плохих" КЭ)
@@ -41,8 +41,11 @@ protected:
     // Вектор-столбец нагрузки
     matrix<double> load;
 public:
-    TFE(void) {}
-    virtual ~TFE(void) {}
+    TFE(void) = default;
+    virtual ~TFE(void)
+    {
+        delete shape;
+    }
     virtual void setCoord(matrix<double> &x)
     {
         shape->create(x);
@@ -75,9 +78,9 @@ public:
     {
         this->alpha = alpha;
     }
-    void setTemperature(double dT)
+    void setTemperature(double temperature)
     {
-        this->dT = dT;
+        this->temperature = temperature;
     }
     unsigned getSize(void)
     {

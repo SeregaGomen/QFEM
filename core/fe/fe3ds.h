@@ -85,8 +85,8 @@ protected:
                        (transpose(bp) * TFE2D<T>::elastic_matrix() * bp) * (pow(TFE::thickness, 3) / 12.0) +
                        (transpose(bc) * TFE2DP<T>::extra_elastic_matrix() * bc) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
             // Вычисление температурной нагрузки
-            if (TFE::dT not_eq 0.0 and TFE::alpha not_eq 0.0)
-                TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 1.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
+            if (TFE::temperature not_eq 0.0 and TFE::alpha not_eq 0.0)
+                TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 1.0, 0.0 }) * TFE::alpha * TFE::temperature * TFE::shape->w[i] * abs(jacobian);
             if (not isStatic)
             {
                 TFE::M += (transpose(c) * c) * TFE::density * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);
@@ -121,7 +121,7 @@ public:
     {
         TFE::freedom = 6;
     }
-    virtual ~TFE3DS(void) {}
+    virtual ~TFE3DS(void) = default;
     void setCoord(matrix<double>& px)
     {
         matrix<double> nx;
