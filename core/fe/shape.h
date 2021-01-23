@@ -2,6 +2,7 @@
 #define SHAPE_H
 
 #include <Eigen/Dense>
+#include <array>
 #include "msg/msg.h"
 #include "util/matrix.h"
 
@@ -26,8 +27,8 @@ public:
     vector<double> psi;
     vector<double> eta;
     vector<double> w;
-    TShape(void) {}
-    virtual ~TShape() {}
+    TShape(void) noexcept = default ;
+    virtual ~TShape() noexcept = default;
     // Вычисление коэффициентов функций формы
     void create(matrix<double> &px)
     {
@@ -74,7 +75,7 @@ class TShape1D2 : public TShape
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0) }[j];
+        return array<double, 2>{ 1.0, x(i, 0) }[j];
     }
 public:
     TShape1D2(void) : TShape()
@@ -86,11 +87,11 @@ public:
     ~TShape1D2(void) {}
     double shape(int i, int j)
     {
-        return vector<double>{ (1.0 - xi[i]) * 0.5, (1.0 + xi[i]) * 0.5 }[j];
+        return array<double, 2>{ (1.0 - xi[i]) * 0.5, (1.0 + xi[i]) * 0.5 }[j];
     }
     double shape_dxi(int, int j)
     {
-        return vector<double>{ -0.5, 0.5 }[j];
+        return array<double, 2>{ -0.5, 0.5 }[j];
     }
     double shape_deta(int, int)
     {
@@ -137,7 +138,7 @@ class TShape2D3 : public TShape
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0), x(i, 1) }[j];
+        return array<double, 3>{ 1.0, x(i, 0), x(i, 1) }[j];
     }
 public:
     TShape2D3(void) : TShape()
@@ -150,15 +151,15 @@ public:
     virtual ~TShape2D3(void) {}
     double shape(int i, int j)
     {
-        return vector<double>{ 1.0 - xi[i] - eta[i], xi[i], eta[i] }[j];
+        return array<double, 3>{ 1.0 - xi[i] - eta[i], xi[i], eta[i] }[j];
     }
     double shape_dxi(int, int j)
     {
-        return vector<double>{ -1.0, 1.0, 0.0 }[j];
+        return array<double, 3>{ -1.0, 1.0, 0.0 }[j];
     }
     double shape_deta(int, int j)
     {
-        return vector<double>{ -1.0, 0.0, 1.0 }[j];
+        return array<double, 3>{ -1.0, 0.0, 1.0 }[j];
     }
     double shape_dpsi(int, int)
     {
@@ -197,7 +198,7 @@ class TShape2D4 : public TShape2D3
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1) }[j];
+        return array<double, 4>{ 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1) }[j];
     }
 public:
     TShape2D4(void) : TShape2D3()
@@ -210,15 +211,15 @@ public:
     ~TShape2D4(void) {}
     double shape(int i, int j)
     {
-        return vector<double>{ 0.25 * (1.0 - xi[i]) * (1.0 - eta[i]), 0.25 * (1.0 + xi[i]) * (1.0 - eta[i]), 0.25 * (1.0 + xi[i]) * (1.0 + eta[i]), 0.25 * (1.0 - xi[i]) * (1.0 + eta[i]) }[j];
+        return array<double, 4>{ 0.25 * (1.0 - xi[i]) * (1.0 - eta[i]), 0.25 * (1.0 + xi[i]) * (1.0 - eta[i]), 0.25 * (1.0 + xi[i]) * (1.0 + eta[i]), 0.25 * (1.0 - xi[i]) * (1.0 + eta[i]) }[j];
     }
     double shape_dxi(int i, int j)
     {
-        return vector<double>{ -0.25 * (1.0 - eta[i]), 0.25 * (1.0 - eta[i]), 0.25 * (1.0 + eta[i]), -0.25 * (1.0 + eta[i]) }[j];
+        return array<double, 4>{ -0.25 * (1.0 - eta[i]), 0.25 * (1.0 - eta[i]), 0.25 * (1.0 + eta[i]), -0.25 * (1.0 + eta[i]) }[j];
     }
     double shape_deta(int i, int j)
     {
-        return vector<double>{ -0.25 * (1.0 - xi[i]), -0.25 * (1.0 + xi[i]), 0.25 * (1.0 + xi[i]), 0.25 * (1.0 - xi[i]) }[j];
+        return array<double, 4>{ -0.25 * (1.0 - xi[i]), -0.25 * (1.0 + xi[i]), 0.25 * (1.0 + xi[i]), 0.25 * (1.0 - xi[i]) }[j];
     }
     double shape_dpsi(int, int)
     {
@@ -245,7 +246,7 @@ class TShape2D6 : public TShape2D3
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1) }[j];
+        return array<double, 6>{ 1.0, x(i, 0), x(i, 1), x(i, 0) * x(i, 1), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1) }[j];
     }
 public:
     TShape2D6(void) : TShape2D3()
@@ -258,7 +259,7 @@ public:
     ~TShape2D6(void) {}
     double shape(int i, int j)
     {
-        return vector<double>{ (1.0 - xi[i] - eta[i]) * (2.0 * (1.0 - xi[i] - eta[i]) - 1.0),
+        return array<double, 6>{ (1.0 - xi[i] - eta[i]) * (2.0 * (1.0 - xi[i] - eta[i]) - 1.0),
                     xi[i] * (2.0 * xi[i] - 1.0), eta[i] * (2.0 * eta[i] - 1.0),
                     4.0 * (1.0 - xi[i] - eta[i]) * xi[i],
                     4.0 * xi[i] * eta[i],
@@ -266,11 +267,11 @@ public:
     }
     double shape_dxi(int i, int j)
     {
-        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 4.0 * xi[i] - 1.0, 0.0, -8.0 * xi[i] + 4.0 - 4.0 * eta[i], 4.0 * eta[i], -4.0 * eta[i] }[j];
+        return array<double, 6>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 4.0 * xi[i] - 1.0, 0.0, -8.0 * xi[i] + 4.0 - 4.0 * eta[i], 4.0 * eta[i], -4.0 * eta[i] }[j];
     }
     double shape_deta(int i, int j)
     {
-        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 0.0, 4.0 * eta[i] - 1.0, -4.0 * xi[i], 4.0 * xi[i], -8.0 * eta[i] + 4.0 - 4.0 * xi[i] }[j];
+        return array<double, 6>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i], 0.0, 4.0 * eta[i] - 1.0, -4.0 * xi[i], 4.0 * xi[i], -8.0 * eta[i] + 4.0 - 4.0 * xi[i] }[j];
     }
     double shape_dpsi(int, int)
     {
@@ -297,7 +298,7 @@ class TShape3D4 : public TShape
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 2) }[j];
+        return array<double, 4>{ 1.0, x(i, 0), x(i, 1), x(i, 2) }[j];
     }
 public:
     TShape3D4(void) : TShape()
@@ -311,19 +312,19 @@ public:
     virtual ~TShape3D4() {}
     double shape(int i, int j)
     {
-        return vector<double>{ 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] }[j];
+        return array<double, 4>{ 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] }[j];
     }
     double shape_dxi(int, int j)
     {
-        return vector<double>{ -1.0, 1.0, 0.0, 0.0 }[j];
+        return array<double, 4>{ -1.0, 1.0, 0.0, 0.0 }[j];
     }
     double shape_deta(int, int j)
     {
-        return vector<double>{ -1.0, 0.0, 1.0, 0.0 }[j];
+        return array<double, 4>{ -1.0, 0.0, 1.0, 0.0 }[j];
     }
     double shape_dpsi(int, int j)
     {
-        return vector<double>{ -1.0, 0.0, 0.0, 1.0 }[j];
+        return array<double, 4>{ -1.0, 0.0, 0.0, 1.0 }[j];
     }
     double shape_dx(int, int j)
     {
@@ -359,7 +360,7 @@ class TShape3D8 : public TShape3D4
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 1) * x(i, 2) }[j];
+        return array<double, 8>{ 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 1) * x(i, 2) }[j];
     }
 public:
     TShape3D8(void) : TShape3D4()
@@ -373,7 +374,7 @@ public:
     ~TShape3D8(void) {}
     double shape(int i, int j)
     {
-        vector<double> v{
+        array<double, 8> v{
                           0.125 * (1.0 - xi[i]) * (1.0 - eta[i]) * (1.0 - psi[i]),
                           0.125 * (1.0 + xi[i]) * (1.0 - eta[i]) * (1.0 - psi[i]),
                           0.125 * (1.0 + xi[i]) * (1.0 + eta[i]) * (1.0 - psi[i]),
@@ -388,7 +389,7 @@ public:
     }
     double shape_dxi(int i, int j)
     {
-        return vector<double>{ -0.125 * (1.0 - eta[i]) * (1.0 - psi[i]),
+        return array<double, 8>{ -0.125 * (1.0 - eta[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 - eta[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 + eta[i]) * (1.0 - psi[i]),
                  -0.125 * (1.0 + eta[i]) * (1.0 - psi[i]),
@@ -399,7 +400,7 @@ public:
     }
     double shape_deta(int i, int j)
     {
-        return vector<double>{ -0.125 * (1.0 - xi[i]) * (1.0 - psi[i]),
+        return array<double, 8>{ -0.125 * (1.0 - xi[i]) * (1.0 - psi[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 + xi[i]) * (1.0 - psi[i]),
                   0.125 * (1.0 - xi[i]) * (1.0 - psi[i]),
@@ -410,7 +411,7 @@ public:
     }
     double shape_dpsi(int i, int j)
     {
-        return vector<double>{ -0.125 * (1.0 - xi[i]) * (1.0 - eta[i]),
+        return array<double, 8>{ -0.125 * (1.0 - xi[i]) * (1.0 - eta[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 - eta[i]),
                  -0.125 * (1.0 + xi[i]) * (1.0 + eta[i]),
                  -0.125 * (1.0 - xi[i]) * (1.0 + eta[i]),
@@ -440,7 +441,7 @@ class TShape3D10 : public TShape3D4
 protected:
     double shape_coeff(int i, int j)
     {
-        return vector<double>{ 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1), x(i, 2) * x(i, 2) }[j];
+        return array<double, 10>{ 1.0, x(i, 0), x(i, 1), x(i, 2), x(i, 0) * x(i, 1), x(i, 0) * x(i, 2), x(i, 1) * x(i, 2), x(i, 0) * x(i, 0), x(i, 1) * x(i, 1), x(i, 2) * x(i, 2) }[j];
     }
 public:
     TShape3D10(void) : TShape3D4()
@@ -454,26 +455,25 @@ public:
     ~TShape3D10(void) {}
     double shape(int i, int j)
     {
-        vector<double> s = { 1.0 - xi[i] - eta[i] - psi[i], xi[i], eta[i], psi[i] };
-
-        return vector<double>{ s[0] * (2.0 * s[0] - 1.0), s[1] * (2.0 * s[1] - 1.0), s[2] * (2.0 * s[2] - 1.0), s[3] * (2.0 * s[3] - 1.0),
-                    4.0 * s[0] * s[1], 4.0 * s[1] * s[2], 4.0 * s[0] * s[2], 4.0 * s[2] * s[3], 4.0 * s[1] * s[3], 4.0 * s[0] * s[3] }[j];
+        return array<double, 10>{ (1.0 - xi[i] - eta[i] - psi[i]) * (2.0 * (1.0 - xi[i] - eta[i] - psi[i]) - 1.0), xi[i] * (2.0 * xi[i] - 1.0), eta[i] * (2.0 * eta[i] - 1.0),
+                    psi[i] * (2.0 * psi[i] - 1.0), 4.0 * (1.0 - xi[i] - eta[i] - psi[i]) * xi[i], 4.0 * xi[i] * eta[i], 4.0 * (1.0 - xi[i] - eta[i] - psi[i]) * eta[i],
+                    4.0 * eta[i] * psi[i], 4.0 * xi[i] * psi[i], 4.0 * (1.0 - xi[i] - eta[i] - psi[i]) * psi[i] }[j];
     }
     double shape_dxi(int i, int j)
     {
-        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 4.0 * xi[i] - 1.0,
+        return array<double, 10>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 4.0 * xi[i] - 1.0,
                   0.0, 0.0, -8.0 * xi[i] + 4.0 - 4.0 * eta[i] - 4.0 * psi[i],
                   4.0 * eta[i], -4.0 * eta[i], 0.0, 4.0 * psi[i], -4.0 * psi[i] }[j];
     }
     double shape_deta(int i, int j)
     {
-        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 4.0 * eta[i] - 1.0, 0.0,
+        return array<double, 10>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 4.0 * eta[i] - 1.0, 0.0,
                  -4.0 * xi[i], 4.0 * xi[i], -8.0 * eta[i] + 4.0 - 4.0 * xi[i] - 4.0 * psi[i],
                   4.0 * psi[i], 0.0, -4.0 * psi[i] }[j];
     }
     double shape_dpsi(int i, int j)
     {
-        return vector<double>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 0.0, 4.0 * psi[i] - 1.0,
+        return array<double, 10>{ -3.0 + 4.0 * xi[i] + 4.0 * eta[i] + 4.0 * psi[i], 0.0, 0.0, 4.0 * psi[i] - 1.0,
                  -4.0 * xi[i], 0.0, -4.0 * eta[i], 4.0 * eta[i], 4.0 * xi[i],
                  -8.0 * psi[i] + 4.0 - 4.0 * xi[i] - 4.0 * eta[i] }[j];
     }
