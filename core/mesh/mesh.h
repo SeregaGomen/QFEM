@@ -49,6 +49,10 @@ public:
         feType = FEType::undefined;
         error = false;
     }
+    TMesh(FEType type, matrix<double> &x, matrix<unsigned> &fe, matrix<unsigned> &be)
+    {
+        setMesh(type, x, fe, be);
+    }
     ~TMesh(void)
     {
         clear();
@@ -130,7 +134,7 @@ public:
         return be.size1();
     }
     void createMeshMap(void);
-    void getCoordVertex(unsigned i, vector<double>& coord)
+    void getCoordVertex(unsigned i, vector<double> &coord)
     {
 //        coord.resize(x.size2());
         coord.resize(3);
@@ -184,13 +188,17 @@ public:
     bool write(string);
     friend ostream& operator << (ostream&, TMesh&);
     string feName(void);
-    void setMesh(FEType p_type, matrix<double>& p_x, matrix<unsigned>& p_fe, matrix<unsigned>& p_be)
+    bool setMesh(string file)
+    {
+        return read(file);
+    }
+    void setMesh(FEType type, matrix<double> &x, matrix<unsigned> &fe, matrix<unsigned> &be)
     {
         clear();
-        feType = p_type;
-        x = p_x;
-        fe = p_fe;
-        be = p_be;
+        this->feType = type;
+        this->x = x;
+        this->fe = fe;
+        this->be = be;
         getMinMax();
         createMeshMap();
     }

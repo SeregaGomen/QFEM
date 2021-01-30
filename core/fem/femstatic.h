@@ -17,11 +17,11 @@ extern TMessenger* msg;
 //  Реализация конечно-элементного расчета в соответствии с
 //  вариационным принципом Лагранжа
 //----------------------------------------------------------
-template <class T> class TFEMStatic : public TFEM
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> class TFEMStatic : public TFEM
 {
 protected:
-    T solver;
-    void ansambleLocalMatrix(unique_ptr<TFE>&, unsigned);
+    SOLVER solver;
+    void ansambleLocalMatrix(TFE&, unsigned);
     void setLoad(vector<double>&);
     void genResults(vector<double>&, bool isAdd = false);
     void avgResults(matrix<double>&, vector<int>&);
@@ -35,7 +35,7 @@ protected:
     void getFEResult(matrix<double>&, vector<double>&, vector<int>&, unsigned, unsigned, ErrorCode&);
     void getMatrix(unsigned, unsigned, bool, ErrorCode&);
     void getLoad(vector<double>&, unsigned, unsigned, ErrorCode&);
-    void getStressIntensity(TResultList&, vector<double>&, unsigned, unsigned);
+    void getStressIntensity(TResults&, vector<double>&, unsigned, unsigned);
     void calcBoundaryCondition(void);
     void calcGlobalMatrix(bool = true);
     void calcLoad(vector<double>&, double = 0);
@@ -43,48 +43,11 @@ protected:
     void calcSurfaceLoad(vector<double>&, double = 0);
     void calcVolumeLoad(vector<double>&, double = 0);
     void calcPressureLoad(vector<double>&, double = 0);
-    double calcStressIntensity(TResultList&, vector<double>&);
+    double calcStressIntensity(TResults&, vector<double>&);
     bool checkBE(unsigned, TParameter&);
     bool checkFE(unsigned, TParameter&);
-    TFE* createFE(FEType type)
-    {
-        // Создание конечного элемента
-        switch (type)
-        {
-        case FEType::fe1d2:
-            return new TFE1D<TShape1D2>();
-        case FEType::fe2d3:
-            return new TFE2D<TShape2D3>();
-        case FEType::fe2d4:
-            return new TFE2D<TShape2D4>();
-        case FEType::fe2d6:
-            return new TFE2D<TShape2D6>();
-        case FEType::fe2d3p:
-            return new TFE2DP<TShape2D3>();
-        case FEType::fe2d4p:
-            return new TFE2DP<TShape2D4>();
-        case FEType::fe2d6p:
-            return new TFE2DP<TShape2D6>();
-        case FEType::fe3d4:
-            return new TFE3D<TShape3D4>();
-        case FEType::fe3d8:
-            return new TFE3D<TShape3D8>();
-        case FEType::fe3d10:
-            return new TFE3D<TShape3D10>();
-        case FEType::fe3d3s:
-            return new TFE3DS<TShape2D3>();
-        case FEType::fe3d4s:
-            return new TFE3DS<TShape2D4>();
-        case FEType::fe3d6s:
-            return new TFE3DS<TShape2D6>();
-        default:
-            //throw UNKNOWN_FE_ERR;
-            break;
-        }
-        return nullptr;
-    }
 public:
-    TFEMStatic(string n, TMesh *m, TResultList *r, list<string> *l) : TFEM(n, m, r, l)
+    TFEMStatic(string n, TMesh *m, TResults *r, list<string> *l = nullptr) : TFEM(n, m, r, l)
     {
         TFEM::params.fType = FEMType::StaticProblem;
     }
@@ -94,7 +57,7 @@ public:
 //----------------------------------------------------------
 //                     Запуск расчета
 //----------------------------------------------------------
-template<class T> void TFEMStatic<T>::startProcess(void)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::startProcess(void)
 {
     unsigned hour,
              min,
@@ -142,35 +105,35 @@ template<class T> void TFEMStatic<T>::startProcess(void)
     TFEM::end(hour, min, sec);
     // Сохраняем информацию о времени расчета
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
-    TFEM::notes->push_back(out.str());
+    if (TFEM::notes)
+        TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
-
     printResultSummary();
 }
 //-------------------------------------------------------------
 //                  Ансамблирование ЛМЖ к ГМЖ
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::ansambleLocalMatrix(unique_ptr<TFE> &fe, unsigned i)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::ansambleLocalMatrix(TFE &fe, unsigned i)
 {
     unsigned freedom = mesh->getFreedom(),
-             size = fe->getSize() * fe->getFreedom();
+             size = fe.getSize() * fe.getFreedom();
 
     // Учет матрицы
     for (unsigned l = 0; l < size; l++)
     {
         for (unsigned k = l; k < size; k++)
         {
-            solver.addStiffness(fe->getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
             if (l not_eq k)
-                solver.addStiffness(fe->getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
         }
-        solver.addLoad(fe->getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);
+        solver.addLoad(fe.getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);
     }
 }
 //-----------------------------------------------------------------------------------------
 //                 Предварительное вычисление значений узловой нагрузки
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcLoad(vector<double> &load, double t)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcLoad(vector<double> &load, double t)
 {
     calcConcentratedLoad(load, t);
     calcSurfaceLoad(load, t);
@@ -180,7 +143,7 @@ template<class T> void TFEMStatic<T>::calcLoad(vector<double> &load, double t)
 //-----------------------------------------------------------------------------------------
 //                  Формирование результатов
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::saveResult(matrix<double> &res, bool isAdd)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::saveResult(matrix<double> &res, bool isAdd)
 {
     if (not isAdd)
         results->clear();
@@ -196,7 +159,7 @@ template<class T> void TFEMStatic<T>::saveResult(matrix<double> &res, bool isAdd
 //-------------------------------------------------------------
 //                  Формирование результатов
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::genResults(vector<double> &u, bool isAdd)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::genResults(vector<double> &u, bool isAdd)
 {
     matrix<double> res;
 
@@ -212,7 +175,7 @@ template<class T> void TFEMStatic<T>::genResults(vector<double> &u, bool isAdd)
 //-------------------------------------------------------------------------------
 // Проверка соответствия граничного элемента предикату отбора (всех его вершин)
 //-------------------------------------------------------------------------------
-template<class T> bool TFEMStatic<T>::checkBE(unsigned index, TParameter &p)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> bool TFEMStatic<SOLVER, SHAPE, FE>::checkBE(unsigned index, TParameter &p)
 {
     vector<double> coord;
 
@@ -227,7 +190,7 @@ template<class T> bool TFEMStatic<T>::checkBE(unsigned index, TParameter &p)
 //-------------------------------------------------------------------------------
 // Проверка соответствия конечного элемента предикату отбора (всех его вершин)
 //-------------------------------------------------------------------------------
-template<class T> bool TFEMStatic<T>::checkFE(unsigned index, TParameter &p)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> bool TFEMStatic<SOLVER, SHAPE, FE>::checkFE(unsigned index, TParameter &p)
 {
     vector<double> coord;
 
@@ -242,7 +205,7 @@ template<class T> bool TFEMStatic<T>::checkFE(unsigned index, TParameter &p)
 //-----------------------------------------------------------------------------------------
 //                Осреднение результатов расчета деформаций, напряжений, ...
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::avgResults(matrix<double> &result, vector<int> &counter)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::avgResults(matrix<double> &result, vector<int> &counter)
 {
     for (unsigned i = mesh->getFreedom(); i < params.numResult(mesh->getTypeFE()); i++)
         for (unsigned j = 0; j< mesh->getNumVertex(); j++)
@@ -256,7 +219,7 @@ template<class T> void TFEMStatic<T>::avgResults(matrix<double> &result, vector<
 //-----------------------------------------------------------------------------------------
 //             Формирование глобальных матриц жесткости, масс и демпфирования
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcGlobalMatrix(bool isStatic)
 {
     unsigned step = TFEM::mesh->getNumFE() / numThread;
     ErrorCode error = ErrorCode::Undefined;
@@ -264,7 +227,7 @@ template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
 
     msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingDynamicMatrix, 1, TFEM::mesh->getNumFE());
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<T>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
+        thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
     for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
     if (error not_eq ErrorCode::Undefined)
         throw error;
@@ -273,9 +236,9 @@ template<class T> void TFEMStatic<T>::calcGlobalMatrix(bool isStatic)
 //-----------------------------------------------------------------------------------------
 //             Вычисление локальных МЖ, ММ и МД для заданного интервала узлов
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bool isStatic, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getMatrix(unsigned begin, unsigned end, bool isStatic, ErrorCode &error)
 {
-    unique_ptr<TFE> fe(createFE(TFEM::mesh->getTypeFE()));
+    FE<SHAPE> fe;
 
     try
     {
@@ -287,7 +250,7 @@ template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bo
             // Настройка КЭ
             setupFE(fe, i);
             // Формирование локальной МЖ (ЛМЖ)
-            fe->generate(isStatic);
+            fe.generate(isStatic);
             // Ансамблирование ЛМЖ к ГМЖ
             ansambleLocalMatrix(fe, i);
         }
@@ -300,7 +263,7 @@ template<class T> void TFEMStatic<T>::getMatrix(unsigned begin, unsigned end, bo
 //-------------------------------------------------------------
 //                  Учет граничных условий
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcBoundaryCondition(void)
 {
     ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
@@ -310,7 +273,7 @@ template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
     {
         msg->setProcess(ProcessCode::UsingBoundaryCondition, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error not_eq ErrorCode::Undefined)
             throw error;
@@ -320,7 +283,7 @@ template<class T> void TFEMStatic<T>::calcBoundaryCondition(void)
 //-----------------------------------------------------------------------------------------
 //             Вычисление граничных условий для заданного интервала узлов
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsigned end, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getBoundaryCondition(unsigned begin, unsigned end, ErrorCode &error)
 {
     double val;
     unsigned freedom = TFEM::mesh->getFreedom();
@@ -360,7 +323,7 @@ template<class T> void TFEMStatic<T>::getBoundaryCondition(unsigned begin, unsig
 //-----------------------------------------------------------------------------------------
 //         Предварительное вычисление значений узловой сосредоточенной нагрузки
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcConcentratedLoad(vector<double> &load, double t)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcConcentratedLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
@@ -370,7 +333,7 @@ template<class T> void TFEMStatic<T>::calcConcentratedLoad(vector<double> &load,
     {
         msg->setProcess(ProcessCode::GeneratingConcentratedLoad, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getConcentratedLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getConcentratedLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error not_eq ErrorCode::Undefined)
             throw error;
@@ -380,7 +343,7 @@ template<class T> void TFEMStatic<T>::calcConcentratedLoad(vector<double> &load,
 //-----------------------------------------------------------------------------------------
 //           Вычисление сосредоточенной нагрузки для заданного диапазона узлов
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getConcentratedLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
     Direction direct;
     double val;
@@ -419,7 +382,7 @@ template<class T> void TFEMStatic<T>::getConcentratedLoad(vector<double> &load, 
 //-----------------------------------------------------------------------------------------
 //         Предварительное вычисление значений поверхностной нагрузки
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, double t)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcSurfaceLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumBE() / numThread;
@@ -429,7 +392,7 @@ template<class T> void TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, doub
     {
         msg->setProcess(ProcessCode::GeneratingSurfaceLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getSurfaceLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getSurfaceLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error not_eq ErrorCode::Undefined)
             throw error;
@@ -439,7 +402,7 @@ template<class T> void TFEMStatic<T>::calcSurfaceLoad(vector<double> &load, doub
 //-----------------------------------------------------------------------------------------
 //     Вычисление поверхностной нагрузки для заданного диапазона граничных элементов
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getSurfaceLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
     Direction direct;
     double val;
@@ -483,7 +446,7 @@ template<class T> void TFEMStatic<T>::getSurfaceLoad(vector<double> &load, unsig
 //-----------------------------------------------------------------------------------------
 //                Предварительное вычисление значений нагрузки давлением
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcPressureLoad(vector<double> &load, double t)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcPressureLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumBE() / numThread;
@@ -493,7 +456,7 @@ template<class T> void TFEMStatic<T>::calcPressureLoad(vector<double> &load, dou
     {
         msg->setProcess(ProcessCode::GeneratingPressureLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getPressureLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getPressureLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error not_eq ErrorCode::Undefined)
             throw error;
@@ -503,7 +466,7 @@ template<class T> void TFEMStatic<T>::calcPressureLoad(vector<double> &load, dou
 //-----------------------------------------------------------------------------------------
 //      Вычисление нагрузки давлением для заданного диапазона граничных элементов
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getPressureLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
     double val;
     vector<double> share,
@@ -558,7 +521,7 @@ template<class T> void TFEMStatic<T>::getPressureLoad(vector<double> &load, unsi
 //-----------------------------------------------------------------------------------------
 //         Предварительное вычисление значений объемной нагрузки
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcVolumeLoad(vector<double> &load, double t)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcVolumeLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumFE() / numThread;
@@ -568,7 +531,7 @@ template<class T> void TFEMStatic<T>::calcVolumeLoad(vector<double> &load, doubl
     {
         msg->setProcess(ProcessCode::GeneratingVolumeLoad, 1, mesh->getNumFE());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<T>::getVolumeLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getVolumeLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error not_eq ErrorCode::Undefined)
             throw error;
@@ -578,7 +541,7 @@ template<class T> void TFEMStatic<T>::calcVolumeLoad(vector<double> &load, doubl
 //-----------------------------------------------------------------------------------------
 //         Вычисление объемной нагрузки для заданного интервала конечных элементов
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getVolumeLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
     Direction direct;
     double val;
@@ -622,20 +585,20 @@ template<class T> void TFEMStatic<T>::getVolumeLoad(vector<double> &load, unsign
 //-----------------------------------------------------------------------------------------
 //                       Вычисление интенсивности напряжений
 //-----------------------------------------------------------------------------------------
-template<class T> double TFEMStatic<T>::calcStressIntensity(TResultList &res, vector<double> &si)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> double TFEMStatic<SOLVER, SHAPE, FE>::calcStressIntensity(TResults &res, vector<double> &si)
 {
     unsigned step = TFEM::mesh->getNumVertex() / numThread;
     vector<thread> thr(numThread);
 
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<T>::getStressIntensity, this, ref(res), ref(si), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
+        thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getStressIntensity, this, ref(res), ref(si), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     return *std::max_element(si.begin(), si.end());
 }
 //--------------------------------------------------------------------------------------------------------------
 // Вычисление интенсивности напряжений Si=((Sxx-Syy)^2+(Sxx-Szz)^2+(Syy-Szz)^2+6*(Sxy^2+Sxz^2+Syz^2))^0.5/2^0.5
 //--------------------------------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getStressIntensity(TResultList &res, vector<double> &si, unsigned begin, unsigned end)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getStressIntensity(TResults &res, vector<double> &si, unsigned begin, unsigned end)
 {
     double m_sqrt1_2 = 0.5 * sqrt(2.0);
 
@@ -673,7 +636,7 @@ template<class T> void TFEMStatic<T>::getStressIntensity(TResultList &res, vecto
 //-------------------------------------------------------------
 //                  Формирование результатов
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<double> &u)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::calcResult(matrix<double> &res, vector<double> &u)
 {
     ErrorCode error = ErrorCode::Undefined;
     unsigned step = TFEM::mesh->getNumFE() / numThread;
@@ -689,7 +652,7 @@ template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<dou
     // Вычисляем стандартные результаты по всем КЭ
     msg->setProcess(ProcessCode::GeneratingResult, 1, TFEM::mesh->getNumFE());
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<T>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
+        thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     if (error not_eq ErrorCode::Undefined)
         throw error;
@@ -700,11 +663,11 @@ template<class T> void TFEMStatic<T>::calcResult(matrix<double> &res, vector<dou
 //-----------------------------------------------------------------------------------------
 //             Вычисление стандартных результатов КЭ для заданного интервала
 //-----------------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<double> &u, vector<int> &counter, unsigned begin, unsigned end, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getFEResult(matrix<double> &res, vector<double> &u, vector<int> &counter, unsigned begin, unsigned end, ErrorCode &error)
 {
+    FE<SHAPE> fe;
     vector<double> fe_u;
     matrix<double> fe_res(params.numResult(mesh->getTypeFE()), mesh->getSizeFE());
-    unique_ptr<TFE> fe(createFE(TFEM::mesh->getTypeFE()));
 
     try
     {
@@ -719,7 +682,7 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<do
             for (unsigned j = 0; j < mesh->getSizeFE(); j++)
                 for (unsigned k = 0; k < mesh->getFreedom(); k++)
                     fe_u[j * mesh->getFreedom() + k] = u[mesh->getFreedom() * mesh->getFE(i, j) + k];
-            fe->calc(fe_res, fe_u);
+            fe.calc(fe_res, fe_u);
             for (unsigned m = 0; m < params.numResult(mesh->getTypeFE()) - mesh->getFreedom(); m++)
                 for (unsigned j = 0; j < mesh->getSizeFE(); j++)
                 {
@@ -738,7 +701,7 @@ template<class T> void TFEMStatic<T>::getFEResult(matrix<double> &res, vector<do
 //-------------------------------------------------------------
 //      Формирование глобального вектора-столбца нагрузки
 //-------------------------------------------------------------
-template<class T> void TFEMStatic<T>::setLoad(vector<double> &load)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::setLoad(vector<double> &load)
 {
     ErrorCode error = ErrorCode::Undefined;
     int size = mesh->getNumVertex() * mesh->getFreedom();
@@ -747,14 +710,14 @@ template<class T> void TFEMStatic<T>::setLoad(vector<double> &load)
 
     msg->setProcess(ProcessCode::UsingLoad, 1, size);
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<T>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
+        thr[i] = thread(&TFEMStatic<SOLVER, SHAPE, FE>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     if (error not_eq ErrorCode::Undefined)
         throw error;
     msg->stopProcess();
 }
 //-------------------------------------------------------------------------------
-template<class T> void TFEMStatic<T>::getLoad(vector<double> &load, unsigned begin, unsigned end, ErrorCode &error)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStatic<SOLVER, SHAPE, FE>::getLoad(vector<double> &load, unsigned begin, unsigned end, ErrorCode &error)
 {
     for (unsigned i = begin; i < end; i++)
     {

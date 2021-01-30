@@ -197,6 +197,34 @@ public:
     double getExpressionValue(TParameter&, double, double, double, double = 0);
     bool write(ofstream&);
     bool read(ifstream&);
+    void addYoungModulus(double e, string p = "")
+    {
+        plist.addYoungModulus(e, p);
+    }
+    void addPoissonRatio(double m, string p = "")
+    {
+        plist.addPoissonRatio(m, p);
+    }
+    void addThickness(double t, string p = "")
+    {
+        plist.addThickness(t, p);
+    }
+    void addBoundaryCondition(Direction dir, double v, string p)
+    {
+        plist.addBoundaryCondition(v, p, dir);
+    }
+    void addVoluneLoad(Direction dir, double v, string p = "")
+    {
+        plist.addVolumeLoad(v, p, dir);
+    }
+    void addPressureLoad(double v, string p = "")
+    {
+        plist.addPressureLoad(v, p);
+    }
+    void addConcentratedLoad(Direction dir, double v, string p = "")
+    {
+        plist.addConcentratedLoad(v, p, dir);
+    }
 };
 
 #endif // PARAMS_H

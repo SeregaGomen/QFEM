@@ -27,8 +27,8 @@ public:
     vector<double> psi;
     vector<double> eta;
     vector<double> w;
-    TShape(void) noexcept = default ;
-    virtual ~TShape() noexcept = default;
+    TShape(void) noexcept {}
+    virtual ~TShape() noexcept {}
     // Вычисление коэффициентов функций формы
     void create(matrix<double> &px)
     {

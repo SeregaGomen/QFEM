@@ -23,6 +23,117 @@ bool TFEMObject::setMeshFile(string n)
     return not mesh.read(fileName);
 }
 //---------------------------------------------------------
+TFEM *TFEMObject::createStaticProblem(void)
+{
+    // Создание конечного элемента
+    switch (mesh.getTypeFE())
+    {
+    case FEType::fe1d2:
+        return new TFEMStatic<TEigenSolver, TShape1D2, TFE1D>(objName, &mesh, &results, &notes);
+    case FEType::fe2d3:
+        return new TFEMStatic<TEigenSolver, TShape2D3, TFE2D>(objName, &mesh, &results, &notes);
+    case FEType::fe2d4:
+        return new TFEMStatic<TEigenSolver, TShape2D4, TFE2D>(objName, &mesh, &results, &notes); ;
+    case FEType::fe2d6:
+        return new TFEMStatic<TEigenSolver, TShape2D6, TFE2D>(objName, &mesh, &results, &notes);
+    case FEType::fe2d3p:
+        return new TFEMStatic<TEigenSolver, TShape2D3, TFE2DP>(objName, &mesh, &results, &notes);
+    case FEType::fe2d4p:
+        return new TFEMStatic<TEigenSolver, TShape2D4, TFE2DP>(objName, &mesh, &results, &notes);
+    case FEType::fe2d6p:
+        return new TFEMStatic<TEigenSolver, TShape2D6, TFE2DP>(objName, &mesh, &results, &notes);
+    case FEType::fe3d4:
+        return new TFEMStatic<TEigenSolver, TShape3D4, TFE3D>(objName, &mesh, &results, &notes);
+    case FEType::fe3d8:
+        return new TFEMStatic<TEigenSolver, TShape3D8, TFE3D>(objName, &mesh, &results, &notes);
+    case FEType::fe3d10:
+        return new TFEMStatic<TEigenSolver, TShape3D10, TFE3D>(objName, &mesh, &results, &notes);
+    case FEType::fe3d3s:
+        return new TFEMStatic<TEigenSolver, TShape2D3, TFE3DS>(objName, &mesh, &results, &notes);
+    case FEType::fe3d4s:
+        return new TFEMStatic<TEigenSolver, TShape2D4, TFE3DS>(objName, &mesh, &results, &notes);
+    case FEType::fe3d6s:
+        return new TFEMStatic<TEigenSolver, TShape2D6, TFE3DS>(objName, &mesh, &results, &notes);
+    default:
+        break;
+    }
+    return nullptr;
+}
+//---------------------------------------------------------
+TFEM *TFEMObject::createDynamicProblem(void)
+{
+    // Создание конечного элемента
+    switch (mesh.getTypeFE())
+    {
+    case FEType::fe1d2:
+        return new TFEMDynamic<TEigenSolver, TShape1D2, TFE1D>(objName, &mesh, &results, &notes);
+    case FEType::fe2d3:
+        return new TFEMDynamic<TEigenSolver, TShape2D3, TFE2D>(objName, &mesh, &results, &notes);
+    case FEType::fe2d4:
+        return new TFEMDynamic<TEigenSolver, TShape2D4, TFE2D>(objName, &mesh, &results, &notes); ;
+    case FEType::fe2d6:
+        return new TFEMDynamic<TEigenSolver, TShape2D6, TFE2D>(objName, &mesh, &results, &notes);
+    case FEType::fe2d3p:
+        return new TFEMDynamic<TEigenSolver, TShape2D3, TFE2DP>(objName, &mesh, &results, &notes);
+    case FEType::fe2d4p:
+        return new TFEMDynamic<TEigenSolver, TShape2D4, TFE2DP>(objName, &mesh, &results, &notes);
+    case FEType::fe2d6p:
+        return new TFEMDynamic<TEigenSolver, TShape2D6, TFE2DP>(objName, &mesh, &results, &notes);
+    case FEType::fe3d4:
+        return new TFEMDynamic<TEigenSolver, TShape3D4, TFE3D>(objName, &mesh, &results, &notes);
+    case FEType::fe3d8:
+        return new TFEMDynamic<TEigenSolver, TShape3D8, TFE3D>(objName, &mesh, &results, &notes);
+    case FEType::fe3d10:
+        return new TFEMDynamic<TEigenSolver, TShape3D10, TFE3D>(objName, &mesh, &results, &notes);
+    case FEType::fe3d3s:
+        return new TFEMDynamic<TEigenSolver, TShape2D3, TFE3DS>(objName, &mesh, &results, &notes);
+    case FEType::fe3d4s:
+        return new TFEMDynamic<TEigenSolver, TShape2D4, TFE3DS>(objName, &mesh, &results, &notes);
+    case FEType::fe3d6s:
+        return new TFEMDynamic<TEigenSolver, TShape2D6, TFE3DS>(objName, &mesh, &results, &notes);
+    default:
+        break;
+    }
+    return nullptr;
+}
+//---------------------------------------------------------
+TFEM *TFEMObject::createMSVProblem(void)
+{
+    // Создание конечного элемента
+    switch (mesh.getTypeFE())
+    {
+    case FEType::fe1d2:
+        return new TFEMStaticMVS<TEigenSolver, TShape1D2, TFE1D>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe2d3:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D3, TFE2D>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe2d4:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D4, TFE2D>(params.loadStep, objName, &mesh, &results, &notes); ;
+    case FEType::fe2d6:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D6, TFE2D>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe2d3p:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D3, TFE2DP>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe2d4p:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D4, TFE2DP>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe2d6p:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D6, TFE2DP>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe3d4:
+        return new TFEMStaticMVS<TEigenSolver, TShape3D4, TFE3D>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe3d8:
+        return new TFEMStaticMVS<TEigenSolver, TShape3D8, TFE3D>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe3d10:
+        return new TFEMStaticMVS<TEigenSolver, TShape3D10, TFE3D>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe3d3s:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D3, TFE3DS>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe3d4s:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D4, TFE3DS>(params.loadStep, objName, &mesh, &results, &notes);
+    case FEType::fe3d6s:
+        return new TFEMStaticMVS<TEigenSolver, TShape2D6, TFE3DS>(params.loadStep, objName, &mesh, &results, &notes);
+    default:
+        break;
+    }
+    return nullptr;
+}
+//---------------------------------------------------------
 bool TFEMObject::start(void)
 {
 //    Eigen::initParallel();
@@ -37,12 +148,12 @@ bool TFEMObject::start(void)
         {
             case FEMType::StaticProblem:
                 if (params.pMethod == PlasticityMethod::Linear) // Упругий расчет
-                    fem = new TFEMStatic<TEigenSolver>(objName, &mesh, &results, &notes);
+                    fem = createStaticProblem();
                 else if (params.pMethod == PlasticityMethod::MVS)
-                    fem = new TFEMStaticMVS<TEigenSolver>(params.loadStep, objName, &mesh, &results, &notes);
+                    fem = createMSVProblem();
                 break;
             case FEMType::DynamicProblem:
-                fem = new TFEMDynamic<TEigenSolver>(objName, &mesh, &results, &notes);
+                fem = createDynamicProblem();
         }
         // Задание количества потоков
         fem->setNumThread(numThread);

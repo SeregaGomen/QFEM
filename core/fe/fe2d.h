@@ -15,6 +15,35 @@ protected:
                  { m * e / (1.0 - m * m),    e / (1.0 - m * m),  0 },
                  { 0,    0,    0.5 * (1.0 - m) * e / (1.0 - m * m) } };
     }
+public:
+    TFE2D(void) : TFE()
+    {
+        freedom = 2;
+        shape = new T();
+    }
+    virtual ~TFE2D() = default;
+    void calc(matrix<double>& res, vector<double>& u)
+    {
+        matrix<double> b(3, shape->size * freedom),
+                       stress,
+                       strain;
+
+        for (unsigned i = 0; i < shape->size; i++)
+        {
+            for (unsigned j = 0; j < shape->size; j++)
+            {
+                b(0, j * freedom + 0) = b(2, j * freedom + 1) = shape->shape_dx(i, j);
+                b(1, j * freedom + 1) = b(2, j * freedom + 0) = shape->shape_dy(i, j);
+            }
+            strain = b * u;
+            stress = elastic_matrix() * strain;
+            for (unsigned j = 0; j < 3; j++)
+            {
+                res(j, i) += strain(j, 0);
+                res(j + 3, i) += stress(j, 0);
+            }
+        }
+    }
     void generate(bool isStatic = true)
     {
         double jacobian;
@@ -60,35 +89,6 @@ protected:
             {
                 M += (transpose(c) * c) * density * shape->w[i] * thickness * abs(jacobian);
                 D += (transpose(c) * c) * damping * shape->w[i] * thickness * abs(jacobian);
-            }
-        }
-    }
-public:
-    TFE2D(void) : TFE()
-    {
-        freedom = 2;
-        shape = new T();
-    }
-    virtual ~TFE2D() = default;
-    void calc(matrix<double>& res, vector<double>& u)
-    {
-        matrix<double> b(3, shape->size * freedom),
-                       stress,
-                       strain;
-
-        for (unsigned i = 0; i < shape->size; i++)
-        {
-            for (unsigned j = 0; j < shape->size; j++)
-            {
-                b(0, j * freedom + 0) = b(2, j * freedom + 1) = shape->shape_dx(i, j);
-                b(1, j * freedom + 1) = b(2, j * freedom + 0) = shape->shape_dy(i, j);
-            }
-            strain = b * u;
-            stress = elastic_matrix() * strain;
-            for (unsigned j = 0; j < 3; j++)
-            {
-                res(j, i) += strain(j, 0);
-                res(j + 3, i) += stress(j, 0);
             }
         }
     }

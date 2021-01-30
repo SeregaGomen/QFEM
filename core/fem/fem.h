@@ -25,11 +25,11 @@ protected:
     // Параметры расчета
     TFEMParams params;
     // КЭ-сетка
-    TMesh* mesh;
+    TMesh *mesh;
     // Результаты расчета
-    TResultList* results;
+    TResults *results;
     // Список примечаний (заметок) по процессу решения задачи
-    list<string>* notes;
+    list<string> *notes;
     // Признак того, что процесс расчета запущен
     bool isProcessStarted;
     // Признак того, что процесс расчета прерван
@@ -42,14 +42,14 @@ protected:
         timer = chrono::system_clock::now();
     }
     // Получение времени окончания расчета
-    void end(unsigned& hour, unsigned& min, unsigned& sec)
+    void end(unsigned &hour, unsigned &min, unsigned &sec)
     {
         hour = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) / 3600;
         min = (unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) % 3600) / 60;
         sec = unsigned(static_cast< chrono::duration<double> >(chrono::system_clock::now() - timer).count()) - hour * 3600 - min * 60;
     }
     // Настройка КЭ
-    virtual void setupFE(unique_ptr<TFE>& fe, unsigned i)
+    virtual void setupFE(TFE &fe, unsigned i)
     {
         double val;
         matrix<double> x;
@@ -57,42 +57,42 @@ protected:
 
         // Загрузка координат КЭ
         mesh->getCoordFE(i, x);
-        fe->setCoord(x);
+        fe.setCoord(x);
         // Получение координат центра КЭ
         mesh->getCenterFE(i, cx);
         // Загрузка в КЭ модуля упругости
         if ((val = params.getYoungModule(cx)) == 0.0)
             throw ErrorCode::EYoungModulus;
         // Загрузка в КЭ коэффициента Пуассона
-        fe->setYoungModulus(val);
+        fe.setYoungModulus(val);
         if ((val = params.getPoissonRatio(cx)) == 0.0 and not mesh->is1D())
             throw ErrorCode::EPoissonRatio;
-        fe->setPoissonRatio(val);
+        fe.setPoissonRatio(val);
         // Загрузка толщины элемента
         if (not mesh->is3D())
         {
             if ((val = params.getThickness(cx)) == 0.0)
                 throw ErrorCode::EThickness;
-            fe->setThickness(val);
+            fe.setThickness(val);
         }
         // Загрузка температуры
-        fe->setTemperature(params.getTemperature(cx));
+        fe.setTemperature(params.getTemperature(cx));
         // Загрузка альфы
-        fe->setAlpha(params.getAlpha(cx));
+        fe.setAlpha(params.getAlpha(cx));
         // Загрузка плотности
         if (params.fType == FEMType::DynamicProblem)
         {
             if ((val = params.getDensity(cx)) == 0.0)
                 throw ErrorCode::EDensity;
-            fe->setDensity(val);
+            fe.setDensity(val);
             // Загрузка параметра демпфирования
             if ((val = params.getDamping(cx)) == 0.0)
                 throw ErrorCode::EDamping;
-            fe->setDamping(val);
+            fe.setDamping(val);
         }
     }
 public:
-    TFEM(string n, TMesh* m, TResultList* r, list<string>* l = nullptr)
+    TFEM(string n, TMesh *m, TResults *r, list<string> *l = nullptr)
     {
         objName = n;
         mesh = m;
@@ -107,7 +107,7 @@ public:
     {
         isProcessAborted = true;
     }
-    void setParams(TFEMParams& p)
+    void setParams(TFEMParams &p)
     {
         params = p;
     }

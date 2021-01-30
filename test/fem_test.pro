@@ -28,7 +28,6 @@ unix {
 }
 
 SOURCES += main.cpp \
-    ../core/fe/shape.cpp \
     ../core/mesh/mesh.cpp \
     ../core/object/object.cpp \
     ../core/object/params.cpp \

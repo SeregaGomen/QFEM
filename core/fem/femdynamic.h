@@ -11,7 +11,7 @@ extern TMessenger* msg;
 //  вариационным принципом Гамильтона-Остроградского
 //  (способ интегрирования - метод Вильсона)
 //----------------------------------------------------------
-template <class T> class TFEMDynamic : public TFEMStatic<T>
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> class TFEMDynamic : public TFEMStatic<SOLVER, SHAPE, FE>
 {
 private:
     double t; // Текущий момент времени
@@ -28,7 +28,7 @@ protected:
     void genResults(vector<double>&, bool = false);
     void saveResult(matrix<double>&, bool);
 public:
-    TFEMDynamic(string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
+    TFEMDynamic(string n, TMesh* m, TResults* r, list<string>* l) : TFEMStatic<SOLVER, SHAPE, FE>(n, m, r, l)
     {
         t = 0;
         TFEM::params.fType = FEMType::DynamicProblem;
@@ -39,7 +39,7 @@ public:
 //----------------------------------------------------------
 //                     Запуск расчета
 //----------------------------------------------------------
-template<class T> void TFEMDynamic<T>::startProcess(void)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::startProcess(void)
 {
     unsigned hour,
              min,
@@ -48,13 +48,13 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
     ostringstream out;
 
     TFEM::begin();
-    t = TFEMStatic<T>::params.t0 + TFEMStatic<T>::params.th;
+    t = TFEMStatic<SOLVER, SHAPE, FE>::params.t0 + TFEMStatic<SOLVER, SHAPE, FE>::params.th;
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
-    TFEMStatic<T>::solver.setMatrix(TFEM::mesh, true);
+    TFEMStatic<SOLVER, SHAPE, FE>::solver.setMatrix(TFEM::mesh, true);
 
     // Формирование глобальных матриц жесткости, масс и демпфирования
-    TFEMStatic<T>::calcGlobalMatrix(false);
+    TFEMStatic<SOLVER, SHAPE, FE>::calcGlobalMatrix(false);
 
     // Формирование "статической" левой части СЛАУ и сохранение ее для последующего использования
     createDynamicMatrix(TFEM::params.th, TFEM::params.theta);
@@ -70,8 +70,8 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
         // Формирование динамической правой части СЛАУ
         createDynamicVector();
         // Учет граничных условий
-        TFEMStatic<T>::calcBoundaryCondition();
-        if (TFEMStatic<T>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
+        TFEMStatic<SOLVER, SHAPE, FE>::calcBoundaryCondition();
+        if (TFEMStatic<SOLVER, SHAPE, FE>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
             genResults(result); // Вычисление результатов
         if (TFEM::isProcessAborted)
             throw ErrorCode::EAbort;
@@ -82,20 +82,21 @@ template<class T> void TFEMDynamic<T>::startProcess(void)
             t += TFEM::params.th;
     }
 
-    TFEMStatic<T>::solver.clear();
+    TFEMStatic<SOLVER, SHAPE, FE>::solver.clear();
     TFEM::isProcessStarted = false;
     TFEM::isProcessCalculated = true;
 
     TFEM::end(hour, min, sec);
     // Сохраняем информацию о времени расчета
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ');
-    TFEM::notes->push_back(out.str());
+    if (TFEM::notes)
+        TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
 }
 //-------------------------------------------------------------
 //           Ансамблирование ЛМЖ, ЛММ и ЛМД к ГМЖ
 //-------------------------------------------------------------
-template<class T> void TFEMDynamic<T>::ansambleLocalMatrix(TFE* fe, unsigned i)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::ansambleLocalMatrix(TFE* fe, unsigned i)
 {
     unsigned freedom = fe->getFreedom(),
              size = fe->getSize() * fe->getFreedom();
@@ -105,21 +106,21 @@ template<class T> void TFEMDynamic<T>::ansambleLocalMatrix(TFE* fe, unsigned i)
     {
         for (unsigned k = l; k < size; k++)
         {
-            TFEMStatic<T>::solver.addMatrixStiffnessElement(fe->getStiffnessMatrix(l, k), TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            TFEMStatic<T>::solver.addMatrixMassElement(fe->getMassMatrix(l, k), TFEM::mesh->getFE(i, l / freedom)*freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            TFEMStatic<T>::solver.addMatrixDampingElement(fe->getDampingMatrix(l, k), TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            TFEMStatic<SOLVER, SHAPE, FE>::solver.addMatrixStiffnessElement(fe->getStiffnessMatrix(l, k), TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            TFEMStatic<SOLVER, SHAPE, FE>::solver.addMatrixMassElement(fe->getMassMatrix(l, k), TFEM::mesh->getFE(i, l / freedom)*freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            TFEMStatic<SOLVER, SHAPE, FE>::solver.addMatrixDampingElement(fe->getDampingMatrix(l, k), TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom);
             if (l not_eq k)
             {
-                TFEMStatic<T>::solver.addMatrixStiffnessElement(fe->getStiffnessMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
-                TFEMStatic<T>::solver.addMatrixMassElement(fe->getMassMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
-                TFEMStatic<T>::solver.addMatrixDampingElement(fe->getDampingMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                TFEMStatic<SOLVER, SHAPE, FE>::solver.addMatrixStiffnessElement(fe->getStiffnessMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                TFEMStatic<SOLVER, SHAPE, FE>::solver.addMatrixMassElement(fe->getMassMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                TFEMStatic<SOLVER, SHAPE, FE>::solver.addMatrixDampingElement(fe->getDampingMatrix(l, k), TFEM::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEM::mesh->getFE(i, l / freedom) * freedom + l % freedom);
             }
         }
-        TFEMStatic<T>::solver.addLoadElement(fe->getLoad(l), l);
+        TFEMStatic<SOLVER, SHAPE, FE>::solver.addLoadElement(fe->getLoad(l), l);
     }
 }
 //---------------------------------------------------------
-template<class T> void TFEMDynamic<T>::getInitialCondition(void)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::getInitialCondition(void)
 {
     TParser parser;
     InitialCondition init;
@@ -159,12 +160,12 @@ template<class T> void TFEMDynamic<T>::getInitialCondition(void)
 //-------------------------------------------------------------
 //                  Формирование результатов
 //-------------------------------------------------------------
-template<class T> void TFEMDynamic<T>::genResults(vector<double>& result, bool isAdd)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::genResults(vector<double>& result, bool isAdd)
 {
     matrix<double> newResult;
 
     // Вычисляем стандартные результаты по всем КЭ
-    TFEMStatic<T>::calcResult(newResult, result);
+    TFEMStatic<SOLVER, SHAPE, FE>::calcResult(newResult, result);
 
     // Вычисляем скорости и ускорения
     calcDynamicResult(newResult);
@@ -176,7 +177,7 @@ template<class T> void TFEMDynamic<T>::genResults(vector<double>& result, bool i
     TFEM::results->setCurrentSolutionTime();
 }
 //---------------------------------------------------------
-template<class T> void TFEMDynamic<T>::saveResult(matrix<double>& newResult, bool)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::saveResult(matrix<double>& newResult, bool)
 {
     stringstream s;
 
@@ -192,7 +193,7 @@ template<class T> void TFEMDynamic<T>::saveResult(matrix<double>& newResult, boo
 //---------------------------------------------------------
 //    Вычисление скоростей и ускорений (Ut,...,Utt,..)
 //---------------------------------------------------------
-template<class T> void TFEMDynamic<T>::calcDynamicResult(matrix<double>& results)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::calcDynamicResult(matrix<double>& results)
 {
     double ut,
            utt;
@@ -215,7 +216,7 @@ template<class T> void TFEMDynamic<T>::calcDynamicResult(matrix<double>& results
 //-----------------------------------------------------------------------------
 // Формирование "динамической" правой части СЛАУ для текущего момента времени
 //-----------------------------------------------------------------------------
-template<class T> void TFEMDynamic<T>::createDynamicVector(void)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::createDynamicVector(void)
 {
     unsigned nvtx = TFEM::mesh->getNumVertex(),
              freedom = TFEM::mesh->getFreedom(),
@@ -231,7 +232,7 @@ template<class T> void TFEMDynamic<T>::createDynamicVector(void)
                    r2(size);
 
     // Вычисление вектора нагрузок для текущего момента времени
-    TFEMStatic<T>::calcLoad(load, t);
+    TFEMStatic<SOLVER, SHAPE, FE>::calcLoad(load, t);
 
     // Получаем значения U, Ut и Utt предыдущей итерации (или из начальных условий)
     for (unsigned i = 0; i < nvtx; i++)
@@ -240,21 +241,21 @@ template<class T> void TFEMDynamic<T>::createDynamicVector(void)
             u1[i * freedom + j] = (k1 * u0[j][i] + 2.0 * k2 * u0[u0.size1() - 2 * dim + j][i] + 2.0 * u0[u0.size1() - dim + j][i]) / k2;
             u2[i * freedom + j] = (k2 * u0[j][i] + 2.0 * u0[u0.size1() - 2 * dim + j][i] + k3 * u0[u0.size1() - dim + j][i]) / k1;
         }
-    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getMassMatrix(), u1, r1);
-    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getDampingMatrix(), u2, r2);
-//    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getMM(), u1, r1);
-//    TFEMStatic<T>::solver.product(TFEMStatic<T>::solver.getDM(), u2, r2);
+    TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getMassMatrix(), u1, r1);
+    TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getDampingMatrix(), u2, r2);
+//    TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getMM(), u1, r1);
+//    TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getDM(), u2, r2);
 
     // Формирование столбца правой части с учетом "динамической" составляющей
     for (unsigned i = 0; i < size; i++)
         load[i] += (r1[i] + r2[i]);
 
-    TFEMStatic<T>::setLoad(load);
+    TFEMStatic<SOLVER, SHAPE, FE>::setLoad(load);
 }
 //--------------------------------------------------------------------------
 // Формирование левой части СЛАУ в динамике (согласно методу Тета-Вильсона)
 //--------------------------------------------------------------------------
-template<class T> void TFEMDynamic<T>::createDynamicMatrix(double th, double theta)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMDynamic<SOLVER, SHAPE, FE>::createDynamicMatrix(double th, double theta)
 {
     double val,
            k1 = 3.0 / (theta * th),
@@ -263,9 +264,9 @@ template<class T> void TFEMDynamic<T>::createDynamicMatrix(double th, double the
     for (unsigned i = 0; i < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); i++)
         for (unsigned j = 0; j < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); j++)
         {
-            val = k1 * TFEMStatic<T>::solver.getDamping(i, j) + k2 * TFEMStatic<T>::solver.getMass(i, j);
+            val = k1 * TFEMStatic<SOLVER, SHAPE, FE>::solver.getDamping(i, j) + k2 * TFEMStatic<SOLVER, SHAPE, FE>::solver.getMass(i, j);
             if (val not_eq 0.0)
-                TFEMStatic<T>::solver.addStiffness(val, i, j);
+                TFEMStatic<SOLVER, SHAPE, FE>::solver.addStiffness(val, i, j);
         }
 }
 //--------------------------------------------------------------------------

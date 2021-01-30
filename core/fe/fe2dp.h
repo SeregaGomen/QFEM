@@ -15,60 +15,6 @@ protected:
         return { { TFE::e / (2.0 + 2.0 * TFE::m),  0.0 },
             { 0.0,  TFE::e / (2.0 + 2.0 * TFE::m) } };
     }
-    void generate(bool isStatic = true)
-    {
-        double jacobian;
-        matrix<double> bm(3, TFE::freedom * TFE::shape->size),
-                       bp(2, TFE::freedom * TFE::shape->size),
-                       c(TFE::freedom, TFE::freedom * TFE::shape->size),
-                       jacobi,
-                       inverted_jacobi;
-
-        TFE::K.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
-        TFE::load.resize(TFE::freedom * TFE::shape->size, 1);
-        if (not isStatic)
-        {
-            TFE::M.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
-            TFE::D.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
-        }
-        // Интегрирование по формуле Гаусса
-        for (unsigned i = 0; i < TFE::shape->w.size(); i++)
-        {
-            // Матрица Якоби
-            jacobi = TFE::shape->jacobi(i);
-
-            // Якобиан
-            jacobian = det(jacobi);
-
-            // Обратная матрица Якоби
-            inverted_jacobi = inv(jacobi);
-
-            // Матрица градиентов
-            for (unsigned j = 0; j < TFE::shape->size; j++)
-            {
-                bm(0, TFE::freedom * j + 2) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 0) = inverted_jacobi(0, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(0, 1) * TFE::shape->shape_deta(i, j);
-                bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 0) = inverted_jacobi(1, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(1, 1) * TFE::shape->shape_deta(i, j);
-                bp(0, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 1) = TFE::shape->shape(i, j);
-                if (not isStatic)
-                    c(0, TFE::freedom * j + 0) = c(1, TFE::freedom * j + 1) = c(2, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
-            }
-
-            // Вычисление локальной матрицы жесткости
-            TFE::K += ((transpose(bm) * TFE2D<T>::elastic_matrix() * bm) * (pow(TFE::thickness, 3) / 12.0) +
-                       (transpose(bp) * extra_elastic_matrix() * bp) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
-            // Вычисление температурной нагрузки
-            if (TFE::temperature not_eq 0.0 and TFE::alpha not_eq 0.0)
-                for (unsigned j = 0; j < TFE::getSize(); j++)
-                    TFE::load[j * TFE::freedom][0] += TFE::e * TFE::alpha * TFE::temperature * TFE::shape->w[i] * abs(jacobian);
-                // TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 0.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
-                // TFE::load += (transpose(bp) * extra_elastic_matrix() * vector<double>{ 1.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
-            if (not isStatic)
-            {
-                TFE::M += (transpose(c) * c) * TFE::density * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);
-                TFE::D += (transpose(c) * c) * TFE::damping * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);
-            }
-        }
-    }
 public:
     TFE2DP(void) : TFE2D<T>()
     {
@@ -158,6 +104,60 @@ public:
     vector<double> surfaceLoadShare(void)
     {
         return TFE2D<T>::shape->volumeLoadShare();
+    }
+    void generate(bool isStatic = true)
+    {
+        double jacobian;
+        matrix<double> bm(3, TFE::freedom * TFE::shape->size),
+                       bp(2, TFE::freedom * TFE::shape->size),
+                       c(TFE::freedom, TFE::freedom * TFE::shape->size),
+                       jacobi,
+                       inverted_jacobi;
+
+        TFE::K.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
+        TFE::load.resize(TFE::freedom * TFE::shape->size, 1);
+        if (not isStatic)
+        {
+            TFE::M.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
+            TFE::D.resize(TFE::freedom * TFE::shape->size, TFE::freedom * TFE::shape->size);
+        }
+        // Интегрирование по формуле Гаусса
+        for (unsigned i = 0; i < TFE::shape->w.size(); i++)
+        {
+            // Матрица Якоби
+            jacobi = TFE::shape->jacobi(i);
+
+            // Якобиан
+            jacobian = det(jacobi);
+
+            // Обратная матрица Якоби
+            inverted_jacobi = inv(jacobi);
+
+            // Матрица градиентов
+            for (unsigned j = 0; j < TFE::shape->size; j++)
+            {
+                bm(0, TFE::freedom * j + 2) = bm(2, TFE::freedom * j + 1) = bp(0, TFE::freedom * j + 0) = inverted_jacobi(0, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(0, 1) * TFE::shape->shape_deta(i, j);
+                bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 0) = inverted_jacobi(1, 0) * TFE::shape->shape_dxi(i, j) + inverted_jacobi(1, 1) * TFE::shape->shape_deta(i, j);
+                bp(0, TFE::freedom * j + 2) = bp(1, TFE::freedom * j + 1) = TFE::shape->shape(i, j);
+                if (not isStatic)
+                    c(0, TFE::freedom * j + 0) = c(1, TFE::freedom * j + 1) = c(2, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape(i, j);
+            }
+
+            // Вычисление локальной матрицы жесткости
+            TFE::K += ((transpose(bm) * TFE2D<T>::elastic_matrix() * bm) * (pow(TFE::thickness, 3) / 12.0) +
+                       (transpose(bp) * extra_elastic_matrix() * bp) * (TFE::thickness * 5.0 / 6.0)) * TFE::shape->w[i] * abs(jacobian);
+            // Вычисление температурной нагрузки
+            if (TFE::temperature not_eq 0.0 and TFE::alpha not_eq 0.0)
+                for (unsigned j = 0; j < TFE::getSize(); j++)
+                    TFE::load[j * TFE::freedom][0] += TFE::e * TFE::alpha * TFE::temperature * TFE::shape->w[i] * abs(jacobian);
+                // TFE::load += (transpose(bm) * TFE2D<T>::elastic_matrix() * vector<double>{ 1.0, 0.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
+                // TFE::load += (transpose(bp) * extra_elastic_matrix() * vector<double>{ 1.0, 0.0 }) * TFE::alpha * TFE::dT * TFE::shape->w[i] * abs(jacobian);
+            if (not isStatic)
+            {
+                TFE::M += (transpose(c) * c) * TFE::density * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);
+                TFE::D += (transpose(c) * c) * TFE::damping * TFE::shape->w[i] * TFE::thickness * TFE::density * abs(jacobian);
+            }
+        }
     }
 };
 

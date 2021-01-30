@@ -22,21 +22,21 @@ private:
     double time;
 public:
     TResult(void) {}
-    TResult(const TResult& r)
+    TResult(const TResult &r)
     {
         results = r.results;
         name = r.name;
         time = r.time;
     }
-    TResult(vector<double>& res, string fname, double t = 0)
+    TResult(vector<double> &res, string fname, double t = 0)
     {
         results = res;
         name = fname;
         time = t;
     }
-    TResult(double* res, unsigned sz, string fname, double t = 0)
+    TResult(double *res, unsigned sz, string fname, double t = 0)
     {
-        results.assign(res,res+sz);
+        results.assign(res, res + sz);
         name = fname;
         time = t;
     }
@@ -56,7 +56,7 @@ public:
             return false;
         return true;
     }
-    bool read(ifstream& in)
+    bool read(ifstream &in)
     {
         string str;
         unsigned len;
@@ -77,22 +77,22 @@ public:
             return false;
         return true;
     }
-    vector<double>& getResults(void)
+    vector<double> &getResults(void)
     {
         return results;
     }
-    double& getResults(unsigned i)
+    double &getResults(unsigned i)
     {
         return results[i];
     }
-    TResult& operator = (const TResult& r)
+    TResult &operator = (const TResult &r)
     {
         name = r.name;
         results = r.results;
         time = r.time;
         return *this;
     }
-    void add(const TResult& r)
+    void add(const TResult &r)
     {
         results += r.results;
     }
@@ -116,15 +116,15 @@ public:
 /***************************************************/
 /*           Список результатов расчета            */
 /***************************************************/
-class TResultList
+class TResults
 {
 private:
     time_t sdt;
     vector<TResult> result;
 public:
-    TResultList(void) {}
-    ~TResultList(void) {}
-    void setSolutionTime(time_t& t)
+    TResults(void) {}
+    ~TResults(void) {}
+    void setSolutionTime(time_t &t)
     {
         sdt = t;
     }
@@ -136,7 +136,7 @@ public:
     {
         return sdt;
     }
-    void setResult(vector<double>& res, string n, double t = 0)
+    void setResult(vector<double> &res, string n, double t = 0)
     {
         TResult c(res, n, t);
 
@@ -148,7 +148,7 @@ public:
             }
         result.push_back(c);
     }
-    void addResult(vector<double>& res, string n)
+    void addResult(vector<double> &res, string n)
     {
         TResult c(res, n);
 
@@ -160,7 +160,7 @@ public:
             }
         result.push_back(c);
     }
-    void setResult(double* res, unsigned sz, string n, double t = 0)
+    void setResult(double *res, unsigned sz, string n, double t = 0)
     {
         TResult c(res, sz, n, t);
 
@@ -172,7 +172,7 @@ public:
             }
         result.push_back(c);
     }
-    void addResult(double* res, unsigned sz, string n)
+    void addResult(double *res, unsigned sz, string n)
     {
         TResult c(res, sz, n);
 
@@ -184,11 +184,11 @@ public:
             }
         result.push_back(c);
     }
-    TResult& operator [] (unsigned i)
+    TResult &operator [] (unsigned i)
     {
         return result[i];
     }
-    bool write(ofstream& out)
+    bool write(ofstream &out)
     {
 //        out <<  localtime(&sdt)->tm_mday << ' ' << localtime(&sdt)->tm_mon << ' ' << localtime(&sdt)->tm_year << ' ' << localtime(&sdt)->tm_hour << ' ' << localtime(&sdt)->tm_min << ' ' << localtime(&sdt)->tm_sec << endl;
         out << "Results" << endl;
@@ -201,7 +201,7 @@ public:
                 return false;
         return !out.fail();
     }
-    bool read(ifstream& in)
+    bool read(ifstream &in)
     {
         string str;
         int num;

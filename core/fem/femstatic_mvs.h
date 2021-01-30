@@ -12,7 +12,7 @@ extern TMessenger* msg;
 //          Реализация конечно-элементного расчета в соответствии с
 //          методом упругих решений (статика)
 //----------------------------------------------------------------------------
-template <class T> class TFEMStaticMVS : public TFEMStatic<T>
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> class TFEMStaticMVS : public TFEMStatic<SOLVER, SHAPE, FE>
 {
 private:
     int iterNo;                                                  // Номер итерации (0 - признак того, что расчет линейный)
@@ -22,10 +22,10 @@ private:
     vector<double> si;                                           // Интенсивность напряжений (по узлам)
     vector<double> e0;                                           // Модули упругости (для каждого КЭ), полученные на предыдущей итерации
     vector<unsigned> index0;                                     // Индекс упругих свойств, полученный на предыдущей итерации
-    virtual void setupFE(unique_ptr<TFE>&, unsigned) override;   // Настройка парметров КЭ (для нелинейного случая)
+    virtual void setupFE(TFE&, unsigned) override;   // Настройка парметров КЭ (для нелинейного случая)
     void calcIteration(void);
 public:
-    TFEMStaticMVS(double& step, string n, TMesh* m, TResultList* r, list<string>* l) : TFEMStatic<T>(n, m, r, l)
+    TFEMStaticMVS(double &step, string n, TMesh *m, TResults *r, list<string> *l) : TFEMStatic<SOLVER, SHAPE, FE>(n, m, r, l)
     {
         loadStep = step;
         iterNo = 0;
@@ -37,7 +37,7 @@ public:
 //----------------------------------------------------------------------------
 //                                Запуск расчета
 //----------------------------------------------------------------------------
-template<class T> void TFEMStaticMVS<T>::startProcess(void)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStaticMVS<SOLVER, SHAPE, FE>::startProcess(void)
 
 {
     double maxSi,
@@ -55,14 +55,14 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     bool isLoaded = false;
     ostringstream out;
 
-    cout << S_NUM_THREAD << TFEMStatic<T>::numThread << endl;
+    cout << S_NUM_THREAD << TFEMStatic<SOLVER, SHAPE, FE>::numThread << endl;
 
     TFEM::isProcessStarted = true;
     TFEM::isProcessAborted = false;
 
     TFEM::begin();
     // Предварительное вычисление компонент нагрузки
-    TFEMStatic<T>::calcLoad(load);
+    TFEMStatic<SOLVER, SHAPE, FE>::calcLoad(load);
 
     maxSsc = TFEM::params.getMinStress();
 
@@ -73,31 +73,31 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     do
     {
         isStopLocalIteration = true;
-        TFEMStatic<T>::solver.setMatrix(TFEM::mesh);
+        TFEMStatic<SOLVER, SHAPE, FE>::solver.setMatrix(TFEM::mesh);
         // Формирование ГМЖ
-        TFEMStatic<T>::calcGlobalMatrix();
+        TFEMStatic<SOLVER, SHAPE, FE>::calcGlobalMatrix();
 
         // Учет нагрузки
-        TFEMStatic<T>::setLoad(load);
+        TFEMStatic<SOLVER, SHAPE, FE>::setLoad(load);
 
         // Учет краевых условий
-        TFEMStatic<T>::calcBoundaryCondition();
+        TFEMStatic<SOLVER, SHAPE, FE>::calcBoundaryCondition();
 
         // Решение СЛАУ
-        if (TFEMStatic<T>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
+        if (TFEMStatic<SOLVER, SHAPE, FE>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
         {
             // Вычисление дополнительных результатов
             if (iterNo == 0)
             {
-                TFEMStatic<T>::genResults(result);
+                TFEMStatic<SOLVER, SHAPE, FE>::genResults(result);
                 // Вычисление интенсивности напряжений
-                maxSi = TFEMStatic<T>::calcStressIntensity(*TFEM::results, si);
+                maxSi = TFEMStatic<SOLVER, SHAPE, FE>::calcStressIntensity(*TFEM::results, si);
             }
             else
                 if (isStopLocalIteration)
                 {
-                    TFEMStatic<T>::genResults(result, true);
-                    maxSi = TFEMStatic<T>::calcStressIntensity(*TFEM::results, si);
+                    TFEMStatic<SOLVER, SHAPE, FE>::genResults(result, true);
+                    maxSi = TFEMStatic<SOLVER, SHAPE, FE>::calcStressIntensity(*TFEM::results, si);
                     TFEM::results->setResult(si, "Si");
                 }
 
@@ -141,12 +141,12 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
         else
         {
             TFEM::isProcessCalculated = false;
-            TFEMStatic<T>::solver.clear();
+            TFEMStatic<SOLVER, SHAPE, FE>::solver.clear();
             if (TFEM::isProcessAborted)
                 throw ErrorCode::EAbort;
             return;
         }
-        TFEMStatic<T>::solver.clear();
+        TFEMStatic<SOLVER, SHAPE, FE>::solver.clear();
     }
     while (not isStopGlobalIteration);
 
@@ -156,16 +156,20 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
     TFEM::end(hour, min, sec);
     // Выводим и сохраняем информацию об итерационном процессе
     out << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
-    TFEM::notes->push_back(out.str());
+    if (TFEM::notes)
+        TFEM::notes->push_back(out.str());
     out.str("");
     out << S_MSG_SI << maxSi << endl;
-    TFEM::notes->push_back(out.str());
+    if (TFEM::notes)
+        TFEM::notes->push_back(out.str());
     out.str("");
     out << S_MSG_ITERATION << --count << endl;
-    TFEM::notes->push_back(out.str());
+    if (TFEM::notes)
+        TFEM::notes->push_back(out.str());
     out.str("");
     out << S_MSG_LEAD_TIME << setfill('0') << setw(2) << hour << ':' << setfill('0') << setw(2) << min << ':' << setfill('0') << setw(2) << sec << setfill(' ') << endl;
-    TFEM::notes->push_back(out.str());
+    if (TFEM::notes)
+        TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
     // Вывод коэффициента изменения нагрузки P = P0 * k1 * (1 + k2 * n), где:
     // k1 - коэффициент пропуска упругой зоны (возврата в упругую зону);
@@ -176,7 +180,7 @@ template<class T> void TFEMStaticMVS<T>::startProcess(void)
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ
 //----------------------------------------------------------------------------
-template<class T> void TFEMStaticMVS<T>::setupFE(unique_ptr<TFE>& fe, unsigned i)
+template <typename SOLVER, typename SHAPE, template<typename> typename FE> void TFEMStaticMVS<SOLVER, SHAPE, FE>::setupFE(TFE &fe, unsigned i)
 {
     double newE,
            feSi = si[TFEM::mesh->getFE(i, 0)];
@@ -219,10 +223,10 @@ template<class T> void TFEMStaticMVS<T>::setupFE(unique_ptr<TFE>& fe, unsigned i
     if (index not_eq index0[i])
         newE = fabsl((ssCurve[index][0] - ssCurve[index0[i]][0]) / (ssCurve[index][1] - ssCurve[index0[i]][1]));
     else
-        newE = (e0[i] == 0.0) ? fe->getYoungModulus() : e0[i];
+        newE = (e0[i] == 0.0) ? fe.getYoungModulus() : e0[i];
 
-    fe->setYoungModulus(newE);
-    fe->setPoissonRatio(TFEM::params.getPoissonRatio(cx));
+    fe.setYoungModulus(newE);
+    fe.setPoissonRatio(TFEM::params.getPoissonRatio(cx));
 
     // Проверка на изменение модуля упругости по сравнению с предыдущей итерацией
     if (index not_eq index0[i])

@@ -8,7 +8,29 @@
 //----------------------------------------------------
 template <class T> class TFE1D : public TFE
 {
-protected:
+public:
+    TFE1D(void) : TFE()
+    {
+        freedom = 1;
+        shape = new T();
+    }
+    virtual ~TFE1D() = default;
+    void calc(matrix<double>& res, vector<double>& u)
+    {
+        matrix<double> stress,
+                       strain,
+                       b(1, shape->size);
+
+        for (unsigned i = 0; i < shape->size; i++)
+        {
+            for (unsigned j = 0; j < shape->size; j++)
+                b(0, freedom * j) = shape->shape_dx(i, j);
+            strain = b * u;
+            stress = e * strain;
+            res(0, i) += strain(0, 0);
+            res(1, i) += stress(0, 0);
+        }
+    }
     void generate(bool isStatic = true)
     {
         double jacobian,
@@ -48,29 +70,6 @@ protected:
                 M += ((transpose(c) * c) * (density * shape->w[i] * thickness * abs(jacobian)));
                 D += ((transpose(c) * c) * (damping * shape->w[i] * thickness * abs(jacobian)));
             }
-        }
-    }
-public:
-    TFE1D(void) : TFE()
-    {
-        freedom = 1;
-        shape = new T();
-    }
-    virtual ~TFE1D() = default;
-    void calc(matrix<double>& res, vector<double>& u)
-    {
-        matrix<double> stress,
-                       strain,
-                       b(1, shape->size);
-
-        for (unsigned i = 0; i < shape->size; i++)
-        {
-            for (unsigned j = 0; j < shape->size; j++)
-                b(0, freedom * j) = shape->shape_dx(i, j);
-            strain = b * u;
-            stress = e * strain;
-            res(0, i) += strain(0, 0);
-            res(1, i) += stress(0, 0);
         }
     }
 };

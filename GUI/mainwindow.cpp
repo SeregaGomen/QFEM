@@ -1329,7 +1329,7 @@ void TMainWindow::repaintResults(void)
 // Запись результатов расчета в JSON
 void TMainWindow::saveResults(QJsonObject &main)
 {
-    TResultList &result = femProcessor->getFEMObject()->getResult();
+    TResults &result = femProcessor->getFEMObject()->getResult();
     QJsonObject res;
     QJsonArray resultObj;
 
@@ -1628,7 +1628,7 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
     QString name;
     double t;
     vector<double> res;
-    TResultList &result = femProcessor->getFEMObject()->getResult();
+    TResults &result = femProcessor->getFEMObject()->getResult();
 
     result.clear();
     for (QJsonValue value: resultArr)

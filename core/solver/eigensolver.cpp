@@ -7,10 +7,12 @@
 
 extern TMessenger* msg;
 
-bool TEigenSolver::solve(vector<double>& r, double, bool&)
+bool TEigenSolver::solve(vector<double> &r, double, bool&)
 {
-    PardisoLLT< SparseMatrix<double> > solver;
-//    SimplicialLLT< SparseMatrix<double> > solver;
+//    PardisoLLT<SparseMatrix<double>> solver;
+//    SimplicialLLT<SparseMatrix<double>> solver;
+//    ConjugateGradient<SparseMatrix<double>, Eigen::Upper> solver;
+    BiCGSTAB<SparseMatrix<double>> solver;
     VectorXd x,
              load = Map<VectorXd, Unaligned>(loadVector.data(), unsigned(loadVector.size()));
 
