@@ -22,12 +22,11 @@ private:
     bool isProcessCalculated;           // ... успешно завершен
     list<string> notes;                 // Вспомогательная информация по решению задачи
     TFEMParams params;                  // Параметры решения задачи
-    TResults results;                // Результаты расчета
+    TResults results;                   // Результаты расчета
     TFEM *fem;                          // Реализация МКЭ
     TMesh mesh;                         // КЭ сетка
-    TFEM *createStaticProblem(void);
-    TFEM *createDynamicProblem(void);
-    TFEM *createMSVProblem(void);
+    template<typename SOLVER>
+    TFEM *createProblem(void);          // Создание задачи с заданным решателем
 public:
     TFEMObject(void)
     {

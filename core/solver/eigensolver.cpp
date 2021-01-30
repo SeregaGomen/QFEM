@@ -9,12 +9,12 @@ extern TMessenger* msg;
 
 bool TEigenSolver::solve(vector<double> &r, double, bool&)
 {
-//    PardisoLLT<SparseMatrix<double>> solver;
+    PardisoLLT<SparseMatrix<double>> solver;
 //    SimplicialLLT<SparseMatrix<double>> solver;
 //    ConjugateGradient<SparseMatrix<double>, Eigen::Upper> solver;
-    BiCGSTAB<SparseMatrix<double>> solver;
+//    BiCGSTAB<SparseMatrix<double>> solver;
     VectorXd x,
-             load = Map<VectorXd, Unaligned>(loadVector.data(), unsigned(loadVector.size()));
+             right = Map<VectorXd, Unaligned>(loadVector.data(), unsigned(loadVector.size()));
 
 //    cerr << globalStiffnessMatrix.nonZeros() << endl;
     /////////////
@@ -28,15 +28,17 @@ bool TEigenSolver::solve(vector<double> &r, double, bool&)
         throw ErrorCode::EEquationNorSolved;
 
     msg->setProcess(ProcessCode::SolutionSystemEquation);
-    x = solver.solve(load);
+    x = solver.solve(right);
     msg->stop();
 
-    if(solver.info() not_eq Success)
+    if (solver.info() not_eq Success)
         throw ErrorCode::EEquationNorSolved;
 
-    r.resize(unsigned(stiffnessMatrix.rows()));
-    for (unsigned i = 0; i < r.size(); i++)
-        r[i] = x(i);
+    r.resize(stiffnessMatrix.rows());
+    copy(&x[0], x.data() + x.cols() * x.rows(), r.begin());
+//    for (unsigned i = 0; i < r.size(); i++)
+//        r[i] = x(i);
+
     return true;
 }
 

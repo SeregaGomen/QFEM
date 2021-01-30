@@ -834,6 +834,7 @@ void TProblemSetupForm::setVolumeLoad(void)
     ui->twVV->setColumnWidth(3, 24);
     ui->twVV->setColumnWidth(4, 24);
 
+    ui->twVV->setColumnHidden(2, false);
     ui->twVV->setColumnHidden(3, false);
     ui->twVV->setColumnHidden(4, false);
 
@@ -924,6 +925,7 @@ void TProblemSetupForm::setConcentratedLoad(void)
     ui->twCV->setColumnWidth(4, 24);
 
 
+    ui->twCV->setColumnHidden(2, false);
     ui->twCV->setColumnHidden(3, false);
     ui->twCV->setColumnHidden(4, false);
 
