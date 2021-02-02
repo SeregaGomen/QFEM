@@ -49,7 +49,8 @@ public:
             }
             if (A.determinant() == 0.0)
                 throw ErrorCode::EIncorrectFE;
-            b = A.colPivHouseholderQr().solve(b);
+//            b = A.colPivHouseholderQr().solve(b);
+            b = A.ldlt().solve(b);
             for (unsigned j = 0; j < size; j++)
                 c(j, i) = b(j);
         }
