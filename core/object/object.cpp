@@ -3,6 +3,7 @@
 #include "fem/femdynamic.h"
 #include "solver/eigensolver.h"
 #include "solver/cgsolver.h"
+#include "solver/bccsolver.h"
 
 int langCode = 0; // Код языка (0 - английский, 1 - русский)
 

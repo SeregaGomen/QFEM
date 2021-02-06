@@ -33,7 +33,9 @@ unix {
 
 
 SOURCES += main.cpp\
+    ../core/solver/bccsolver.cpp \
     ../core/solver/cgsolver.cpp \
+    ../core/solver/sparse32.cpp \
     bcprocessor.cpp \
     glparam.cpp \
     mainwindow.cpp \
@@ -54,7 +56,9 @@ SOURCES += main.cpp\
     ../core/object/params.cpp
 
 HEADERS  += mainwindow.h \
+    ../core/solver/bccsolver.h \
     ../core/solver/cgsolver.h \
+    ../core/solver/sparse32.h \
     bcprocessor.h \
     glparam.h \
     problemsetupform.h \

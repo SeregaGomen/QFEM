@@ -64,6 +64,9 @@ template <typename SOLVER, typename SHAPE, template<typename> typename FE> void 
 
     // Итерационный процесс по времени
     cout << S_MSG_TIME_ITERATION << endl;
+
+//    TFEMStatic<SOLVER, SHAPE, FE>::solver.saveStiffnessMatrix("matrix.dat");
+
     while (t <= TFEM::params.t1)
     {
         cout << TFEM::params.names[3] << '=' << t << endl;
@@ -80,6 +83,8 @@ template <typename SOLVER, typename SHAPE, template<typename> typename FE> void 
             t = TFEM::params.t1;
         else
             t += TFEM::params.th;
+
+//        TFEMStatic<SOLVER, SHAPE, FE>::solver.loadStiffnessMatrix("matrix.dat");
     }
 
     TFEMStatic<SOLVER, SHAPE, FE>::solver.clear();
