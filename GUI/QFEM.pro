@@ -5,12 +5,14 @@
 #-------------------------------------------------
 
 QT += core gui opengl widgets openglwidgets
-
 TARGET = QFEM
 TEMPLATE = app
+DEFINES += BOOST_ALL_NO_LIB
+
 
 INCLUDEPATH += ../core \
-               ../../../eigen
+               ../../../eigen \
+               ../../../boost
 
 msvc:LIBS += -lOpenGL32
 msvc:QMAKE_CXXFLAGS += /permissive-
@@ -31,6 +33,7 @@ unix {
 
 
 SOURCES += main.cpp\
+    ../core/solver/cgsolver.cpp \
     bcprocessor.cpp \
     glparam.cpp \
     mainwindow.cpp \
@@ -51,6 +54,7 @@ SOURCES += main.cpp\
     ../core/object/params.cpp
 
 HEADERS  += mainwindow.h \
+    ../core/solver/cgsolver.h \
     bcprocessor.h \
     glparam.h \
     problemsetupform.h \

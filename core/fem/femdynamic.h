@@ -243,8 +243,6 @@ template <typename SOLVER, typename SHAPE, template<typename> typename FE> void 
         }
     TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getMassMatrix(), u1, r1);
     TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getDampingMatrix(), u2, r2);
-//    TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getMM(), u1, r1);
-//    TFEMStatic<SOLVER, SHAPE, FE>::solver.product(TFEMStatic<SOLVER, SHAPE, FE>::solver.getDM(), u2, r2);
 
     // Формирование столбца правой части с учетом "динамической" составляющей
     for (unsigned i = 0; i < size; i++)

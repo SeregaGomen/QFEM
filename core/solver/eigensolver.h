@@ -1,7 +1,6 @@
 #ifndef EIGENSOLVER_H
 #define EIGENSOLVER_H
 
-#include <mutex>
 #include <Eigen/Sparse>
 #include "solver.h"
 
@@ -10,11 +9,11 @@ using namespace std;
 
 class TMesh;
 
-class TEigenSolver : public TSolver< SparseMatrix<double> >
+class TEigenSolver : public TSolver<SparseMatrix<double>>
 {
 private:
     VectorXi memMap;
-    mutex mtx;
+protected:
     bool loadMatrix(string, SparseMatrix<double>&);
     bool saveMatrix(string, SparseMatrix<double>&);
 public:

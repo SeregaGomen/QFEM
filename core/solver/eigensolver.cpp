@@ -108,29 +108,25 @@ void TEigenSolver::print(string fname)
     out.close();
 }
 
-bool TEigenSolver::saveMatrix(string fname, SparseMatrix<double>& globalMatrix)
+bool TEigenSolver::saveMatrix(string fname, SparseMatrix<double> &globalMatrix)
 {
     fstream out(fname, ios::out | ios::binary);
-    int signature = 12031971,
-        len = 0;
+    size_t size = globalMatrix.cols(),
+           nnz = globalMatrix.nonZeros();
     double val;
 
     if (not out.is_open())
         return false;
-    // Запись сигнатуры
-    out.write(reinterpret_cast<char*>(&signature), sizeof(int));
-    // Вычисление количества ненулевых элементов
-    for (int k = 0; k < globalMatrix.outerSize(); ++k)
-        for (SparseMatrix<double>::InnerIterator it(globalMatrix,k); it; ++it)
-            len++;
-    out.write(reinterpret_cast<char*>(&len), sizeof(int));
+    // Запись размерности матрицы и кол-ва ненулевых членов
+    out.write((char*)(&size), sizeof(size_t));
+    out.write((char*)(&nnz), sizeof(size_t));
     // Запись ненулевых элементов
     for (int k = 0; k < globalMatrix.outerSize(); ++k)
         for (SparseMatrix<double>::InnerIterator it(globalMatrix,k); it; ++it)
         {
-            out.write(reinterpret_cast<char*>(&(len = int(it.row()))), sizeof(int));
-            out.write(reinterpret_cast<char*>(&(len = int(it.col()))), sizeof(int));
-            out.write(reinterpret_cast<char*>(&(val = int(it.value()))), sizeof(double));
+            out.write((char*)&(nnz = int(it.row())), sizeof(size_t));
+            out.write((char*)&(nnz = int(it.col())), sizeof(size_t));
+            out.write((char*)&(val = int(it.value())), sizeof(double));
         }
     out.close();
     return not out.fail();
@@ -138,37 +134,29 @@ bool TEigenSolver::saveMatrix(string fname, SparseMatrix<double>& globalMatrix)
 
 bool TEigenSolver::loadMatrix(string fname, SparseMatrix<double>& globalMatrix)
 {
-    int len,
-        signature,
-        row,
-        col;
+    size_t size,
+           nnz,
+           row,
+           col;
     double val;
     fstream in(fname, ios::in | ios::binary);
 
     if (not in.is_open())
         return false;
 
+    in.read((char*)(&size), sizeof(size_t));
+    in.read((char*)(&nnz), sizeof(size_t));
     // Резервируем объем необходимой памяти
+    globalMatrix.resize(size, size);
     globalMatrix.setZero();
-    globalMatrix.reserve(memMap);
-    in.read(reinterpret_cast<char*>(&signature), sizeof(int));
-    if (signature not_eq 12031971)
-    {
-        in.close();
-        return false;
-    }
-    in.read(reinterpret_cast<char*>(&len), sizeof(int));
+    globalMatrix.reserve(nnz);
 
-
-    for (int i = 0; i < len; i++)
+    for (auto i = 0u; i < nnz; i++)
     {
-        in.read(reinterpret_cast<char*>(&row), sizeof(int));
-        in.read(reinterpret_cast<char*>(&col), sizeof(int));
-        in.read(reinterpret_cast<char*>(&val), sizeof(double));
-        if (in.good())
-            globalMatrix.coeffRef(row,col) = val;
-        else
-            break;
+        in.read((char*)&row, sizeof(size_t));
+        in.read((char*)&col, sizeof(size_t));
+        in.read((char*)&val, sizeof(double));
+        globalMatrix.coeffRef(row, col) = val;
     }
     in.close();
     return not in.fail();

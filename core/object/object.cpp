@@ -2,6 +2,7 @@
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
 #include "solver/eigensolver.h"
+#include "solver/cgsolver.h"
 
 int langCode = 0; // Код языка (0 - английский, 1 - русский)
 
@@ -188,7 +189,9 @@ bool TFEMObject::start(void)
     cout << endl << S_MSG_START << endl;
     try
     {
-        fem = createProblem<TEigenSolver>();
+//        fem = createProblem<TEigenSolver>();
+        fem = createProblem<TCGSolver>();
+//        fem = createProblem<TBCCSolver>();
         // Задание количества потоков
         fem->setNumThread(numThread);
         // Задание параметров расчета

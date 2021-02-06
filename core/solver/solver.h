@@ -1,6 +1,7 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
+#include <mutex>
 #include <string>
 #include "util/matrix.h"
 
@@ -11,6 +12,7 @@ class TMesh;
 template <class T> class TSolver
 {
 protected:
+    mutex mtx;
     T stiffnessMatrix;
     T massMatrix;
     T dampingMatrix;
