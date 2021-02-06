@@ -12,14 +12,14 @@ using namespace std;
 class TMesh;
 
 using BoostSparseMatrix = boost::numeric::ublas::compressed_matrix<double, boost::numeric::ublas::row_major>;
-using Vector = boost::numeric::ublas::vector<double>;
+using BoostVector = boost::numeric::ublas::vector<double>;
 
 class TCGSolver : public TSolver<BoostSparseMatrix>
 {
 private:
 //    boost::mutex mtx_;
-    void residual(const BoostSparseMatrix&, const Vector&, const Vector&, Vector&);
-    void sps_prod(const BoostSparseMatrix&, const Vector&, Vector&);
+    void residual(const BoostSparseMatrix&, const BoostVector&, const BoostVector&, BoostVector&);
+    void sps_prod(const BoostSparseMatrix&, const BoostVector&, BoostVector&);
 protected:
     bool loadMatrix(string, BoostSparseMatrix&);
     bool saveMatrix(string, BoostSparseMatrix&);

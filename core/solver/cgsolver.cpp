@@ -9,8 +9,7 @@ using namespace std;
 
 extern TMessenger* msg;
 
-
-void TCGSolver::residual(const BoostSparseMatrix &A, const Vector &x, const Vector &b, Vector &r)
+void TCGSolver::residual(const BoostSparseMatrix &A, const BoostVector &x, const BoostVector &b, BoostVector &r)
 {
     for (auto i = 0u; i < A.size1(); ++ i)
     {
@@ -24,7 +23,7 @@ void TCGSolver::residual(const BoostSparseMatrix &A, const Vector &x, const Vect
     }
 }
 
-void TCGSolver::sps_prod(const BoostSparseMatrix &A, const Vector &x, Vector &r)
+void TCGSolver::sps_prod(const BoostSparseMatrix &A, const BoostVector &x, BoostVector &r)
 {
     for (auto i = 0u; i < A.size1(); ++ i)
     {
@@ -45,7 +44,7 @@ bool TCGSolver::solve(vector<double> &result, double eps, bool &isAborted)
     bool is_ok = false;
     double alpha, beta, residn;
 
-    Vector resid(loadVector.size()),
+    BoostVector resid(loadVector.size()),
            d,            // search direction
            resid_old,
            temp(loadVector.size()),
@@ -187,7 +186,7 @@ bool TCGSolver::loadMatrix(string fname, BoostSparseMatrix &globalMatrix)
 
 void TCGSolver::product(BoostSparseMatrix &matr, vector<double> &vec, vector<double> &res)
 {
-    Vector lhs(vec.size()),
+    BoostVector lhs(vec.size()),
            rhs(vec.size());
 
     copy(vec.begin(), vec.end(), rhs.begin());
