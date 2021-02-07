@@ -190,8 +190,8 @@ bool TFEMObject::start(void)
     cout << endl << S_MSG_START << endl;
     try
     {
-//        fem = createProblem<TEigenSolver>();
-        fem = createProblem<TCGSolver>();
+        fem = createProblem<TEigenSolver>();
+//        fem = createProblem<TCGSolver>();
 //        fem = createProblem<TBCCSolver>();
         // Задание количества потоков
         fem->setNumThread(numThread);
