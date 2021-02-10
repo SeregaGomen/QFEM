@@ -43,18 +43,18 @@ bool TCGSolver::solve(vector<double> &result, double eps, bool &isAborted)
     size_t niter = 10 * loadVector.size();
     bool is_ok = false;
     double alpha, beta, residn;
-
     BoostVector resid(loadVector.size()),
-           d,            // search direction
-           resid_old,
-           temp(loadVector.size()),
-           b(loadVector.size()),
-           x;
+                d,            // search direction
+                resid_old,
+                temp(loadVector.size()),
+                b(loadVector.size()),
+                x;
+    BoostSparseMatrix BSM(stiffnessMatrix);
 
     copy(loadVector.begin(), loadVector.end(), b.begin());
     x = b;
 
-    residual(stiffnessMatrix, x, b, resid);
+    residual(BSM, x, b, resid);
 
     d = resid;
     // CG loop
@@ -64,7 +64,7 @@ bool TCGSolver::solve(vector<double> &result, double eps, bool &isAborted)
     {
         if (isAborted)
             break;
-        sps_prod(stiffnessMatrix, d, temp);
+        sps_prod(BSM, d, temp);
         alpha = inner_prod(resid, resid) / inner_prod(d, temp);
         x += (d*alpha);
         resid_old = resid;
@@ -89,19 +89,13 @@ bool TCGSolver::solve(vector<double> &result, double eps, bool &isAborted)
 
 void TCGSolver::setMatrix(TMesh *mesh, bool isDynamic)
 {
-    size_t globalSize = mesh->getNumVertex() * mesh->getFreedom(),
-           nonZeros = 0;
+    size_t globalSize = mesh->getNumVertex() * mesh->getFreedom();
 
-    // Резервируем объем необходимой памяти
-    for (auto i = 0u; i < mesh->getNumVertex(); i++)
-        for (auto j = 0u; j < mesh->getFreedom(); j++)
-            nonZeros += mesh->getMeshMap(i).size() * mesh->getFreedom(); // * mesh->getFreedom();
-
-    stiffnessMatrix = BoostSparseMatrix(globalSize, globalSize, nonZeros);
+    stiffnessMatrix.resize(globalSize, globalSize);
     if (isDynamic)
     {
-        massMatrix = BoostSparseMatrix(globalSize, globalSize, nonZeros);
-        dampingMatrix = BoostSparseMatrix(globalSize, globalSize, nonZeros);
+        massMatrix.resize(globalSize, globalSize);
+        dampingMatrix.resize(globalSize, globalSize);
     }
     loadVector.resize(mesh->getNumVertex() * mesh->getFreedom());
 }
@@ -133,7 +127,7 @@ void TCGSolver::setBoundaryCondition(unsigned index, double value)
     loadVector[index] = value * stiffnessMatrix(index, index);
 }
 
-bool TCGSolver::saveMatrix(string fname, BoostSparseMatrix &globalMatrix)
+bool TCGSolver::saveMatrix(string fname, VectorOfVector &globalMatrix)
 {
     fstream out(fname, ios::out | ios::binary);
     size_t size = globalMatrix.size1(),
@@ -147,8 +141,8 @@ bool TCGSolver::saveMatrix(string fname, BoostSparseMatrix &globalMatrix)
     // Запись количества ненулевых эоементов
     out.write((const char*)&nnz, sizeof(size_t));
     // Запись ненулевых элементов
-    for(BoostSparseMatrix::const_iterator1 rowIter = globalMatrix.begin1(); rowIter != globalMatrix.end1(); ++rowIter)
-        for(BoostSparseMatrix::const_iterator2 colIter = rowIter.begin(); colIter != rowIter.end(); ++colIter)
+    for(auto rowIter = globalMatrix.begin1(); rowIter != globalMatrix.end1(); ++rowIter)
+        for(auto colIter = rowIter.begin(); colIter != rowIter.end(); ++colIter)
         {
             out.write((const char*)&(nnz = colIter.index1()), sizeof(size_t));
             out.write((const char*)&(nnz = colIter.index2()), sizeof(size_t));
@@ -158,7 +152,7 @@ bool TCGSolver::saveMatrix(string fname, BoostSparseMatrix &globalMatrix)
     return not out.fail();
 }
 
-bool TCGSolver::loadMatrix(string fname, BoostSparseMatrix &globalMatrix)
+bool TCGSolver::loadMatrix(string fname, VectorOfVector &globalMatrix)
 {
     size_t nnz,
            row,
@@ -172,19 +166,20 @@ bool TCGSolver::loadMatrix(string fname, BoostSparseMatrix &globalMatrix)
 
     in.read((char*)&size, sizeof(size_t));
     in.read((char*)&nnz, sizeof(size_t));
-    globalMatrix = BoostSparseMatrix(size, size, nnz);
+    globalMatrix.resize(size, size);
     for (auto i = 0u; i < nnz; i++)
     {
         in.read((char*)&row, sizeof(size_t));
         in.read((char*)&col, sizeof(size_t));
         in.read((char*)&val, sizeof(double));
-        globalMatrix.insert_element(row, col, val);
+//        globalMatrix.insert_element(row, col, val);
+        globalMatrix(row, col) = val;
     }
     in.close();
     return not in.fail();
 }
 
-void TCGSolver::product(BoostSparseMatrix &matr, vector<double> &vec, vector<double> &res)
+void TCGSolver::product(VectorOfVector &matr, vector<double> &vec, vector<double> &res)
 {
     BoostVector lhs(vec.size()),
            rhs(vec.size());

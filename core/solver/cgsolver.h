@@ -2,7 +2,8 @@
 #define CGSOLVER_H
 
 #include <string>
-#include <boost/numeric/ublas/matrix_sparse.hpp>
+#include <boost/numeric/ublas/vector_of_vector.hpp>
+//#include <boost/numeric/ublas/matrix_sparse.hpp>
 //#include <boost/thread/mutex.hpp>
 //#include <boost/thread/lock_guard.hpp>
 #include "solver.h"
@@ -13,16 +14,17 @@ class TMesh;
 
 using BoostSparseMatrix = boost::numeric::ublas::compressed_matrix<double, boost::numeric::ublas::row_major>;
 using BoostVector = boost::numeric::ublas::vector<double>;
+using VectorOfVector = boost::numeric::ublas::generalized_vector_of_vector<double, boost::numeric::ublas::row_major, boost::numeric::ublas::vector<boost::numeric::ublas::compressed_vector<double>>>;
 
-class TCGSolver : public TSolver<BoostSparseMatrix>
+class TCGSolver : public TSolver<VectorOfVector>
 {
 private:
 //    boost::mutex mtx_;
     void residual(const BoostSparseMatrix&, const BoostVector&, const BoostVector&, BoostVector&);
     void sps_prod(const BoostSparseMatrix&, const BoostVector&, BoostVector&);
 protected:
-    bool loadMatrix(string, BoostSparseMatrix&);
-    bool saveMatrix(string, BoostSparseMatrix&);
+    bool loadMatrix(string, VectorOfVector&);
+    bool saveMatrix(string, VectorOfVector&);
 public:
     TCGSolver(void) {}
     virtual ~TCGSolver(void)
@@ -80,7 +82,7 @@ public:
     }
     bool solve(vector<double>&, double, bool&);
     void print(string);
-    void product(BoostSparseMatrix&, vector<double>&, vector<double>&);
+    void product(VectorOfVector&, vector<double>&, vector<double>&);
 };
 
 #endif // CGSOLVER_H

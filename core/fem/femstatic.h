@@ -93,6 +93,9 @@ template <typename SOLVER, typename SHAPE, template<typename> typename FE> void 
     // solver.print("matr.res");
     //////////////////
 
+//    solver.saveStiffnessMatrix("matrix.dat");
+//    solver.loadStiffnessMatrix("matrix.dat");
+
     // Решение СЛАУ
     if (solver.solve(res, params.eps, isProcessAborted))
         genResults(res); // Вычисление дополнительных результатов
