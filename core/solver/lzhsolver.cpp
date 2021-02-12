@@ -18,9 +18,9 @@ double TLZHSolver::scalar_product(VectorXd &lhs, VectorXd &rhs)
 
 bool TLZHSolver::solve(vector<double> &res, double eps, bool &isAborted)
 {
-    unsigned size = stiffnessMatrix.size(),
+    unsigned size = (unsigned)stiffnessMatrix.rows(),
              i,
-             maxIter = size;
+             maxIter = 5 * size;
     double norm,
            new_norm,
            err,
