@@ -4,6 +4,7 @@
 #include "solver/eigensolver.h"
 #include "solver/cgsolver.h"
 #include "solver/bccsolver.h"
+#include "solver/lzhsolver.h"
 
 int langCode = 0; // Код языка (0 - английский, 1 - русский)
 
@@ -191,7 +192,8 @@ bool TFEMObject::start(void)
     try
     {
 //        fem = createProblem<TEigenSolver>();
-        fem = createProblem<TCGSolver>();
+//        fem = createProblem<TCGSolver>();
+        fem = createProblem<TLZHSolver>();
 //        fem = createProblem<TBCCSolver>();
         // Задание количества потоков
         fem->setNumThread(numThread);

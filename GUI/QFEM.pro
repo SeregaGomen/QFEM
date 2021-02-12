@@ -33,9 +33,6 @@ unix {
 
 
 SOURCES += main.cpp\
-    ../core/solver/bccsolver.cpp \
-    ../core/solver/cgsolver.cpp \
-    ../core/solver/sparse32.cpp \
     bcprocessor.cpp \
     glparam.cpp \
     mainwindow.cpp \
@@ -49,6 +46,10 @@ SOURCES += main.cpp\
     helpdialog.cpp \
     femprocessor.cpp \
     glmesh.cpp \
+    ../core/solver/bccsolver.cpp \
+    ../core/solver/cgsolver.cpp \
+    ../core/solver/lzhsolver.cpp \
+    ../core/solver/sparse32.cpp \
     ../core/solver/eigensolver.cpp \
     ../core/mesh/mesh.cpp \
     ../core/parser/parser.cpp \
@@ -56,9 +57,6 @@ SOURCES += main.cpp\
     ../core/object/params.cpp
 
 HEADERS  += mainwindow.h \
-    ../core/solver/bccsolver.h \
-    ../core/solver/cgsolver.h \
-    ../core/solver/sparse32.h \
     bcprocessor.h \
     glparam.h \
     problemsetupform.h \
@@ -75,6 +73,10 @@ HEADERS  += mainwindow.h \
     femprocessor.h \
     terminal.h \
     glmesh.h \
+    ../core/solver/bccsolver.h \
+    ../core/solver/cgsolver.h \
+    ../core/solver/lzhsolver.h \
+    ../core/solver/sparse32.h \
     ../core/parser/defs.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \
