@@ -90,12 +90,12 @@ bool TBCCSolver::saveMatrix(string fname, BCCS_Matrix& globalMatrix)
     if (out.fail())
         return false;
 
-    out.write(reinterpret_cast<char*>(&globalMatrix.nvtxs), sizeof(int));
-    out.write(reinterpret_cast<char*>(&globalMatrix.nnz), sizeof(int));
-    out.write(reinterpret_cast<char*>(&globalMatrix.blksze), sizeof(int));
-    out.write(reinterpret_cast<char*>(globalMatrix.aptrs), unsigned(globalMatrix.nvtxs + 1) * sizeof(int));
-    out.write(reinterpret_cast<char*>(globalMatrix.ainds), unsigned(globalMatrix.aptrs[globalMatrix.nvtxs]) * sizeof(int));
-    out.write(reinterpret_cast<char*>(globalMatrix.avals), unsigned(len) * sizeof(double));
+    out.write((char*)&globalMatrix.nvtxs, sizeof(int));
+    out.write((char*)&globalMatrix.nnz, sizeof(int));
+    out.write((char*)&globalMatrix.blksze, sizeof(int));
+    out.write((char*)globalMatrix.aptrs, (globalMatrix.nvtxs + 1) * sizeof(int));
+    out.write((char*)globalMatrix.ainds, globalMatrix.aptrs[globalMatrix.nvtxs] * sizeof(int));
+    out.write((char*)globalMatrix.avals, len * sizeof(double));
     out.close();
     return !out.fail();
 }
@@ -108,28 +108,28 @@ bool TBCCSolver::loadMatrix(string fname, BCCS_Matrix& globalMatrix)
     if (in.fail())
         return false;
 
-    in.read(reinterpret_cast<char*>(&globalMatrix.nvtxs), sizeof(int));
-    in.read(reinterpret_cast<char*>(&globalMatrix.nnz), sizeof(int));
-    in.read(reinterpret_cast<char*>(&globalMatrix.blksze), sizeof(int));
-    if ((globalMatrix.aptrs = new int[unsigned(globalMatrix.nvtxs + 1)]) == nullptr)
+    in.read((char*)&globalMatrix.nvtxs, sizeof(int));
+    in.read((char*)&globalMatrix.nnz, sizeof(int));
+    in.read((char*)&globalMatrix.blksze, sizeof(int));
+    if ((globalMatrix.aptrs = new int[globalMatrix.nvtxs + 1]) == nullptr)
     {
         in.close();
         return false;
     }
-    in.read(reinterpret_cast<char*>(&globalMatrix.aptrs), unsigned(globalMatrix.nvtxs + 1) * sizeof(int));
-    if ((globalMatrix.ainds = new int[unsigned(globalMatrix.aptrs[globalMatrix.nvtxs])]) == nullptr)
+    in.read((char*)globalMatrix.aptrs, (globalMatrix.nvtxs + 1) * sizeof(int));
+    if ((globalMatrix.ainds = new int[globalMatrix.aptrs[globalMatrix.nvtxs]]) == nullptr)
     {
         in.close();
         return false;
     }
-    in.read(reinterpret_cast<char*>(globalMatrix.ainds), unsigned(globalMatrix.aptrs[globalMatrix.nvtxs]) * sizeof(int));
-    len = unsigned(globalMatrix.aptrs[globalMatrix.nvtxs] * globalMatrix.blksze * globalMatrix.blksze);
+    in.read((char*)globalMatrix.ainds, globalMatrix.aptrs[globalMatrix.nvtxs] * sizeof(int));
+    len = globalMatrix.aptrs[globalMatrix.nvtxs] * globalMatrix.blksze * globalMatrix.blksze;
     if ((globalMatrix.avals = new double[len]) == nullptr)
     {
         in.close();
         return false;
     }
-    in.read(reinterpret_cast<char*>(globalMatrix.avals), len * sizeof(double));
+    in.read((char*)globalMatrix.avals, len * sizeof(double));
     in.close();
     return !in.fail();
 }

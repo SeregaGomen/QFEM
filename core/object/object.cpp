@@ -193,8 +193,8 @@ bool TFEMObject::start(void)
     {
 //        fem = createProblem<TEigenSolver>();
 //        fem = createProblem<TCGSolver>();
-        fem = createProblem<TLZHSolver>();
-//        fem = createProblem<TBCCSolver>();
+//        fem = createProblem<TLZHSolver>();
+        fem = createProblem<TBCCSolver>();
         // Задание количества потоков
         fem->setNumThread(numThread);
         // Задание параметров расчета
