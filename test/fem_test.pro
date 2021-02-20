@@ -2,6 +2,7 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
+DEFINES += BOOST_ALL_NO_LIB
 
 linux {
 QMAKE_LFLAGS += -pthread
@@ -11,11 +12,12 @@ msvc:QMAKE_CXXFLAGS += /permissive-
 
 
 INCLUDEPATH += ../core \
-               ../../../eigen
+               ../../../eigen \
+               ../../../boost
 
-msvc:QMAKE_CXXFLAGS+= /openmp
-gcc:QMAKE_CXXFLAGS+= -fopenmp
-gcc:QMAKE_LFLAGS += -fopenmp
+#msvc:QMAKE_CXXFLAGS+= /openmp
+#gcc:QMAKE_CXXFLAGS+= -fopenmp
+#gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
     INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
@@ -32,7 +34,9 @@ SOURCES += main.cpp \
     ../core/object/object.cpp \
     ../core/object/params.cpp \
     ../core/parser/parser.cpp \
-    ../core/solver/eigensolver.cpp
+    ../core/solver/bccsolver.cpp \
+    ../core/solver/eigensolver.cpp \
+    ../core/solver/sparse32.cpp
 
 
 HEADERS += \
@@ -56,7 +60,9 @@ HEADERS += \
     ../core/parser/defs.h \
     ../core/parser/node.h \
     ../core/parser/parser.h \
+    ../core/solver/bccsolver.h \
     ../core/solver/solver.h \
     ../core/solver/eigensolver.h \
+    ../core/solver/sparse32.h \
     ../core/util/list.h \
     ../core/util/matrix.h
