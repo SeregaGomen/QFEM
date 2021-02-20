@@ -3,7 +3,7 @@
 
 #include <string>
 #include "solver.h"
-#include "sparse32.h"
+#include "sparse/sparse_bccs.h"
 #include "util/matrix.h"
 
 using namespace std;

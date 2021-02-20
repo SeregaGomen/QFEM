@@ -49,7 +49,7 @@ SOURCES += main.cpp\
     ../core/solver/bccsolver.cpp \
     ../core/solver/cgsolver.cpp \
     ../core/solver/lzhsolver.cpp \
-    ../core/solver/sparse32.cpp \
+    ../core/sparse/sparse_bccs.cpp \
     ../core/solver/eigensolver.cpp \
     ../core/mesh/mesh.cpp \
     ../core/parser/parser.cpp \
@@ -76,7 +76,7 @@ HEADERS  += mainwindow.h \
     ../core/solver/bccsolver.h \
     ../core/solver/cgsolver.h \
     ../core/solver/lzhsolver.h \
-    ../core/solver/sparse32.h \
+    ../core/sparse/sparse_bccs.h \
     ../core/parser/defs.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \

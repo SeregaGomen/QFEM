@@ -5,7 +5,7 @@
 #include <cstring>
 #include <vector>
 
-#include "sparse32.h"
+#include "sparse_bccs.h"
 #include "../msg/msg.h"
 
 extern TMessenger *msg;
