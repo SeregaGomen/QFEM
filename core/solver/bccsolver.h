@@ -35,39 +35,39 @@ public:
     void setMatrix(TMesh*, bool = false);
     void setStiffness(double value, unsigned i, unsigned j)
     {
-        spSetElem(&stiffnessMatrix, int(i), int(j), value);
+        spSetElem(stiffnessMatrix, i, j, value);
     }
     void setMass(double value, unsigned i, unsigned j)
     {
-        spSetElem(&massMatrix, int(i), int(j), value);
+        spSetElem(massMatrix, i, j, value);
     }
     void setDamping(double value, unsigned i, unsigned j)
     {
-        spSetElem(&dampingMatrix, int(i), int(j), value);
+        spSetElem(dampingMatrix, i, j, value);
     }
     void addStiffness(double value ,unsigned i, unsigned j)
     {
-        spAddElem(&stiffnessMatrix, int(i), int(j), value);
+        spAddElem(stiffnessMatrix, i, j, value);
     }
-    void addMass(double value ,unsigned i, unsigned j)
+    void addMass(double value, unsigned i, unsigned j)
     {
-        spAddElem(&massMatrix, int(i), int(j), value);
+        spAddElem(massMatrix, i, j, value);
     }
     void addDamping(double value, unsigned i, unsigned j)
     {
-        spAddElem(&dampingMatrix, int(i), int(j), value);
+        spAddElem(dampingMatrix, i, j, value);
     }
     double getStiffness(unsigned i, unsigned j)
     {
-        return spGetElem(&stiffnessMatrix, int(i), int(j));
+        return spGetElem(stiffnessMatrix, i, j);
     }
     double getMass(unsigned i, unsigned j)
     {
-        return spGetElem(&massMatrix, int(i), int(j));
+        return spGetElem(massMatrix, i, j);
     }
     double getDamping(unsigned i,unsigned j)
     {
-        return spGetElem(&dampingMatrix, int(i), int(j));
+        return spGetElem(dampingMatrix, i, j);
     }
     bool solve(vector<double>&, double, bool&);
     void print(string);

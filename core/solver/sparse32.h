@@ -75,17 +75,15 @@ struct BCCS_Matrix
   }
 };
 /*******************************************************************/
-int spOrder(BCCS_Factor*, BCCS_Matrix*, bool*);
-int spFactor(BCCS_Factor*, BCCS_Matrix*, double, bool*);
-int spSolve(BCCS_Factor*, double*);
-int spSetMatrix(BCCS_Matrix*, const int*, int, int, int, int);
-double spGetElem(BCCS_Matrix*, int, int);
-void spSetElem(BCCS_Matrix*, int, int, double);
-void spAddElem(BCCS_Matrix*, int, int, double);
-int spMulMatrix(BCCS_Matrix*, const double*, double*);
-int spMulMatrix(BCCS_Matrix*, double);
-void *spMalloc(int);
-void spFree(void*);
+int spOrder(BCCS_Factor&, BCCS_Matrix&, bool&);
+int spFactor(BCCS_Factor&, BCCS_Matrix&, double, bool&);
+int spSolve(BCCS_Factor&, double*);
+int spSetMatrix(BCCS_Matrix&, const int*, int, int, int, int);
+int spMulMatrix(BCCS_Matrix&, const double*, double*);
+int spMulMatrix(BCCS_Matrix&, double);
+double spGetElem(BCCS_Matrix&, int, int);
+void spSetElem(BCCS_Matrix&, int, int, double);
+void spAddElem(BCCS_Matrix&, int, int, double);
 /*******************************************************************/
 
 #endif /* SPARSE32_H */

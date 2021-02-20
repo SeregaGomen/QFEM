@@ -24,21 +24,8 @@ int cmp(const void *x1, const void *x2)
 /*   FUNCTION: genqmd                                               */
 /*                                                                  */
 /********************************************************************/
-int genqmd(
-        const int nvtxs,
-        const int xadj[],
-        int adjncy[],
-        int perm[],
-        int invp[],
-        int degree[],
-        int marker[],
-        int reach[],
-        int nbrhd[],
-        int qsize[],
-        int qlink[],
-        int qhead[],
-        int *maxnonz,
-        int *maxsub)
+int genqmd(const int nvtxs, const int *xadj, int *adjncy, int *perm, int *invp, int *degree, int *marker, int *reach, int *nbrhd, int *qsize,
+            int *qlink, int *qhead, int *maxnonz, int *maxsub)
 {
     int     MinDeg, thresh, Deg, nDeg,
             nxnode, search, num, ip, np, counter, Flag, SetPower,
@@ -366,14 +353,14 @@ void dtrsd(int n, const signed char d[], double r[])
 
 } /* end dtrsd */
 /*****************************************************************/
-int spSetMatrix(BCCS_Matrix *matrix, const int* mesh, int nelmnts, int elmsze, int nvtxs, int blksz)
+int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, int nvtxs, int blksz)
 {
     int   i, j, m, k, n, nedges, node,
             *nptr, *mark, *nind, *aptrs, *ainds,
             nnz, len;
 
 
-    matrix->nvtxs = nvtxs;
+    matrix.nvtxs = nvtxs;
 
     /* allocate & set all element adjacency lenghts to null */
     nptr = (int *) malloc ( (nvtxs+1) * sizeof(int));
@@ -412,8 +399,7 @@ int spSetMatrix(BCCS_Matrix *matrix, const int* mesh, int nelmnts, int elmsze, i
 
     mark = (int *) malloc (nvtxs * sizeof(int));
 
-    matrix->aptrs = aptrs =
-            (int *) malloc ( (nvtxs+1) * sizeof(int));
+    matrix.aptrs = aptrs = (int *) malloc ( (nvtxs+1) * sizeof(int));
 
     /* calculate memory for adjacency structure */
     fill_n(mark, size_t(nvtxs), -1);
@@ -432,7 +418,7 @@ int spSetMatrix(BCCS_Matrix *matrix, const int* mesh, int nelmnts, int elmsze, i
         }
     }
     aptrs[nvtxs] = nedges;
-    matrix->ainds = ainds = (int *) malloc (nedges * sizeof(int));
+    matrix.ainds = ainds = (int *) malloc (nedges * sizeof(int));
 
     /* save adjacency structure */
     fill_n(mark, size_t(nvtxs), -1);
@@ -459,46 +445,46 @@ int spSetMatrix(BCCS_Matrix *matrix, const int* mesh, int nelmnts, int elmsze, i
     free(nptr);
 
 
-    nnz = matrix->aptrs[matrix->nvtxs];
-    matrix->blksze = blksz;
-    len = nnz * matrix->blksze * matrix->blksze;
-    matrix->avals = (double *) malloc (len * sizeof(double));
-    fill_n(matrix->avals, size_t(len), 0);
+    nnz = matrix.aptrs[matrix.nvtxs];
+    matrix.blksze = blksz;
+    len = nnz * matrix.blksze * matrix.blksze;
+    matrix.avals = (double *) malloc (len * sizeof(double));
+    fill_n(matrix.avals, size_t(len), 0);
 
 
     return(0);
 }
 /*****************************************************************/
-int spMulMatrix(BCCS_Matrix *matrix, const double* x, double *y)
+int spMulMatrix(BCCS_Matrix &matrix, const double* x, double *y)
 {
     int i, j, bi, bj, strt, stop, node, sqrblk, ilim;
     const double *cx, *a, *ca;
     double *cy, *cv;
 
-    sqrblk = matrix->blksze * matrix->blksze;
-    for (ilim = matrix->nvtxs * matrix->blksze - 8, cv = y, i = 0; i <= ilim; i += 8, cv += 8)
+    sqrblk = matrix.blksze * matrix.blksze;
+    for (ilim = matrix.nvtxs * matrix.blksze - 8, cv = y, i = 0; i <= ilim; i += 8, cv += 8)
         cv[0] = cv[1] = cv[2] = cv[3] = cv[4] = cv[5] = cv[6] = cv[7] = 0;
-    for(; i < matrix->nvtxs * matrix->blksze; i++)
+    for(; i < matrix.nvtxs * matrix.blksze; i++)
         y[i] = 0;
 
     cx = x;
 
-    for (i = 0; i < matrix->nvtxs; i++, cx += matrix->blksze)
+    for (i = 0; i < matrix.nvtxs; i++, cx += matrix.blksze)
     {
 
-        strt = matrix->aptrs[i];
-        stop = matrix->aptrs[i+1];
-        a = &matrix->avals[sqrblk*strt];
+        strt = matrix.aptrs[i];
+        stop = matrix.aptrs[i+1];
+        a = &matrix.avals[sqrblk*strt];
 
         for (j = strt; j < stop; j++, a += sqrblk)
         {
 
-            node = matrix->ainds[j];
-            cy = &y[matrix->blksze*node];
+            node = matrix.ainds[j];
+            cy = &y[matrix.blksze*node];
             ca = a;
 
-            for (bi = 0; bi < matrix->blksze; bi++, ca += matrix->blksze)
-                for (bj = 0; bj < matrix->blksze; bj++)
+            for (bi = 0; bi < matrix.blksze; bi++, ca += matrix.blksze)
+                for (bj = 0; bj < matrix.blksze; bj++)
                     cy[bj] += ca[bj] * cx[bi];
 
         }
@@ -506,17 +492,17 @@ int spMulMatrix(BCCS_Matrix *matrix, const double* x, double *y)
     return 0;
 }
 /*****************************************************************/
-int spMulMatrix(BCCS_Matrix *matrix, double K)
+int spMulMatrix(BCCS_Matrix &matrix, double K)
 {
-    int len = matrix->aptrs[matrix->nvtxs] * matrix->blksze * matrix->blksze,
+    int len = matrix.aptrs[matrix.nvtxs] * matrix.blksze * matrix.blksze,
             i;
 
     for (i = 0; i < len; i++)
-        matrix->avals[i] *= K;
+        matrix.avals[i] *= K;
     return(0);
 }
 /***********************************************************************/
-int merge(int a[], int alen, int b[], int blen, int t[])
+int merge(int *a, int alen, int *b, int blen, int *t)
 {
     int   i, j, k;
 
@@ -551,19 +537,17 @@ int merge(int a[], int alen, int b[], int blen, int t[])
     return(k);
 }
 /********************************************************************/
-static int funInSymbolic(BCCS_Factor *factor, int nvtxs, const int* aptrs, const int* ainds)
+static int funInSymbolic(BCCS_Factor &factor, const int* aptrs, const int* ainds)
 {
-    int      i, j, k, node, lsize, setsze,
-            strt, stop,
-            *xlvals, *xlinds, *linds,
-            *pool, *mrglnk, *stack, *nodeset;
+    int i, j, k, node, lsize, setsze, strt, stop, nvtxs, *xlvals, *xlinds, *linds, *pool, *mrglnk, *stack, *nodeset;
     const int *perm, *invp;
 
-    perm = factor->perm;
-    invp = factor->invp;
-    factor->xlvals = xlvals = (int *) malloc ((nvtxs+1) * sizeof(int));
-    factor->xlinds = xlinds = (int *) malloc (nvtxs * sizeof(int));
-    factor->opcount = 0.0;
+    perm = factor.perm;
+    invp = factor.invp;
+    nvtxs = factor.nvtxs;
+    factor.xlvals = xlvals = (int *) malloc ((nvtxs+1) * sizeof(int));
+    factor.xlinds = xlinds = (int *) malloc (nvtxs * sizeof(int));
+    factor.opcount = 0.0;
 
     /* allocate work memory */
     pool = (int *) malloc ((3*nvtxs) * sizeof(int));
@@ -591,8 +575,8 @@ static int funInSymbolic(BCCS_Factor *factor, int nvtxs, const int* aptrs, const
 
         /* isolated root */
         if(strt == stop) {
-            xlinds[k] = factor->ispace;
-            xlvals[k+1] = factor->lspace;
+            xlinds[k] = factor.ispace;
+            xlvals[k+1] = factor.lspace;
             continue;
         }
 
@@ -625,29 +609,29 @@ static int funInSymbolic(BCCS_Factor *factor, int nvtxs, const int* aptrs, const
         {
             /* it's indistinguishable node */
             xlinds[k] = xlinds[k-1] + 1;
-            factor->lspace += setsze;
-            xlvals[k+1] = factor->lspace;
+            factor.lspace += setsze;
+            xlvals[k+1] = factor.lspace;
 
         } else {
 
-            if(factor->ispace + setsze > lsize) {
+            if(factor.ispace + setsze > lsize) {
                 lsize = 2*lsize;
                 linds = (int *) realloc (linds, lsize * sizeof(int));
             }
 
-            j = factor->ispace;
+            j = factor.ispace;
             for(i=0; i<setsze; i++) {
                 linds[j++] = nodeset[i];
             }
 
-            xlinds[k] = factor->ispace;
-            factor->ispace += setsze;
-            factor->lspace += setsze;
-            xlvals[k+1] = factor->lspace;
+            xlinds[k] = factor.ispace;
+            factor.ispace += setsze;
+            factor.lspace += setsze;
+            xlvals[k+1] = factor.lspace;
 
         }
 
-        factor->opcount += (double)(setsze * setsze);
+        factor.opcount += (double)(setsze * setsze);
 
         if(setsze > 1) {
             i = linds[xlinds[k]];
@@ -657,31 +641,24 @@ static int funInSymbolic(BCCS_Factor *factor, int nvtxs, const int* aptrs, const
 
     } /* next k */
 
-    assert(xlvals[nvtxs] == factor->lspace);
+    assert(xlvals[nvtxs] == factor.lspace);
     free(pool);
 
     /* truncate row indices array */
-    factor->linds =
-            (int *) realloc (linds, factor->ispace * sizeof(int));
+    factor.linds = (int *) realloc (linds, factor.ispace * sizeof(int));
 
     return(0);
 }
 /********************************************************************/
-int spOrder(BCCS_Factor *factor, BCCS_Matrix *matrix, bool* aborted)
+int spOrder(BCCS_Factor &factor, BCCS_Matrix &matrix, bool &aborted)
 {
 
-    int       i, j, k, l, nvtxs, error, nedges, strt, stop,
-            *perm, *invp, *mempool, *xadj, *adjncy, maxlnz, ispace;
+    int i, j, k, l, nvtxs, error, nedges, strt, stop, *perm, *invp, *mempool, *xadj, *adjncy, maxlnz, ispace;
     const int *aptrs, *ainds;
 
-    if((factor == NULL) ||
-            (matrix == NULL)) {
-        return(-1);
-    }
-
-    nvtxs = matrix -> nvtxs;
-    aptrs = matrix -> aptrs;
-    ainds = matrix -> ainds;
+    nvtxs = matrix.nvtxs;
+    aptrs = matrix.aptrs;
+    ainds = matrix.ainds;
 
 
     /* allocate standart graph structure without diagonal indices */
@@ -696,7 +673,7 @@ int spOrder(BCCS_Factor *factor, BCCS_Matrix *matrix, bool* aborted)
     {
 
         msg->addProgress();
-        if (*aborted)
+        if (aborted)
         {
             //          msg->setError(ABORT_ERR);
             free(xadj);
@@ -719,11 +696,11 @@ int spOrder(BCCS_Factor *factor, BCCS_Matrix *matrix, bool* aborted)
     xadj[nvtxs] = l;
     assert(l == nedges);
 
-    factor->nvtxs = nvtxs;
+    factor.nvtxs = nvtxs;
 
     /* now compute permutation */
-    factor->perm = perm = (int *) malloc (nvtxs * sizeof(int));
-    factor->invp = invp = (int *) malloc (nvtxs * sizeof(int));
+    factor.perm = perm = (int *) malloc (nvtxs * sizeof(int));
+    factor.invp = invp = (int *) malloc (nvtxs * sizeof(int));
 
 
     mempool = (int *) malloc (7 * nvtxs * sizeof(int));
@@ -742,146 +719,17 @@ int spOrder(BCCS_Factor *factor, BCCS_Matrix *matrix, bool* aborted)
     if(error != 0) return(error);
 
     /* perform symbolic factorization */
-    error = funInSymbolic(factor, nvtxs, aptrs, ainds);
+    error = funInSymbolic(factor, aptrs, ainds);
 
-    return(factor->error = error);
+    return(factor.error = error);
 }
 /*************************************************************/
 /* GENERAL SPARSE SYMMETRIC SCHEME, CLASSIC FUN-IN ALGORITHM */
 /*************************************************************/
-int gsfct1(BCCS_Factor *factor, BCCS_Matrix *matrix, double eps)
-{
-    int       i, j, k, n, knew, isub, nvtxs,
-            strt, stop, node, error, *link, *first;
-    double     Djj, Ljk, value, scalef, dmin, dmax,
-            *temp, *lvals, *dvals;
-    signed char     *svals;
-    const int *aptrs, *ainds, *perm, *invp, *xlvals, *xlinds, *linds;
-    const double*   avals;
-
-    dmin =  DBL_MAX;
-    dmax = -DBL_MAX;
-
-    /* load data from structure */
-    nvtxs  = factor -> nvtxs;
-    perm   = factor -> perm;
-    invp   = factor -> invp;
-    xlvals = factor -> xlvals;
-    xlinds = factor -> xlinds;
-    linds  = factor -> linds;
-    svals  = factor -> svals;
-    dvals  = factor -> dvals;
-    lvals  = factor -> lvals;
-    aptrs  = matrix -> aptrs;
-    ainds  = matrix -> ainds;
-    avals  = matrix -> avals;
-
-    /* one-linked list */
-    link  = (int *) malloc (nvtxs * sizeof(int));
-    /* first for updateing */
-    first = (int *) malloc (nvtxs * sizeof(int));
-    /* column accumulator */
-    temp  = (double *) malloc (nvtxs * sizeof(double));
-
-    /* set all links as empty and clear temp */
-    for(i=0; i<nvtxs; i++) {
-        temp[i] = 0.0;
-        link[i] = nvtxs;
-    }
-
-    for(error=j=0; j<nvtxs; j++) {
-
-        /* form A structure */
-        node = perm[j];
-        strt = aptrs[node];
-        stop = aptrs[node+1];
-        assert(strt < stop);
-        for(i=strt; i<stop; i++) {
-            node = invp[ainds[i]];
-            if(node < j) continue;
-            temp[node] = avals[i];
-        }
-
-        Djj = temp[j];
-
-        /* merge with previous columns */
-        for(k=link[j]; k<nvtxs; k=knew) {
-            knew = link[k];
-            strt = first[k];
-            stop = xlvals[k+1];
-            Ljk = lvals[strt];
-            value = Ljk * (double) svals[k];
-            Djj -= Ljk * value;
-
-            strt++;
-            first[k] = strt;
-            if(strt >= stop) continue;
-
-            i = xlinds[k] + strt - xlvals[k];
-            isub = linds[i];
-            link[k] = link[isub];
-            link[isub] = k;
-            if(value == 0.0) continue;
-
-            for(n=strt; n<stop; n++) {
-                temp[linds[i++]] -= lvals[n] * value;
-            }
-        }
-
-        /* test stability */
-        value = fabs(Djj);
-        if(value < dmin) dmin = value;
-        if(value > dmax) dmax = value;
-        if(value < eps) {
-            error = 1;
-            break;
-        }
-
-        /* factor diagonal value */
-        if(Djj < 0.0) {
-            Djj = sqrt(value);
-            factor->hyperbolic++;
-            svals[j] = -1;
-            scalef = -1.0 / Djj;
-        } else {
-            Djj = sqrt(value);
-            svals[j] = 1;
-            scalef = 1.0 / Djj;
-        }
-
-        /* save diagonal */
-        dvals[j] = Djj;
-
-        strt = xlvals[j];
-        stop = xlvals[j+1];
-        if(strt >= stop) continue;
-
-        /* update links */
-        first[j] = xlvals[j];
-        i = xlinds[j];
-        isub = linds[i];
-        link[j] = link[isub];
-        link[isub] = j;
-
-        /* scale subdiagonal */
-        for(n=strt; n<stop; n++) {
-            node = linds[i++];
-            lvals[n] = temp[node] * scalef;
-            temp[node] = 0.0;
-        }
-    }
-
-    free(temp);
-    free(first);
-    free(link);
-
-    return(error);
-}
-/*********************************************************************/
-int gsfctb(BCCS_Factor *factor, BCCS_Matrix *matrix, int blksze, double eps, bool* aborted)
+int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
 {
     int      error, i, j, k, n, node, strt, stop, knew, isub,
-            bi, bj, bk, denter, fenter, colsze, nvtxs,
+            bi, bj, bk, denter, fenter, colsze, nvtxs, blksze,
             *link, *first;
     double    **translate;
     const int *aptrs, *ainds, *perm, *invp, *xlvals, *xlinds, *linds;
@@ -896,22 +744,24 @@ int gsfctb(BCCS_Factor *factor, BCCS_Matrix *matrix, int blksze, double eps, boo
             HH[MAXBLKSZE * MAXBLKSZE],
             DD[MAXBLKSZE * MAXBLKSZE];
 
-    /* check possible HH,DD,rd overflow */
-    assert(blksze < MAXBLKSZE);
 
     /* load data from structure */
-    nvtxs  = factor -> nvtxs;
-    perm   = factor -> perm;
-    invp   = factor -> invp;
-    xlinds = factor -> xlinds;
-    xlvals = factor -> xlvals;
-    linds  = factor -> linds;
-    svals  = factor -> svals;
-    dvals  = factor -> dvals;
-    lvals  = factor -> lvals;
-    aptrs  = matrix -> aptrs;
-    ainds  = matrix -> ainds;
-    avals  = matrix -> avals;
+    nvtxs  = factor.nvtxs;
+    perm   = factor.perm;
+    invp   = factor.invp;
+    xlinds = factor.xlinds;
+    xlvals = factor.xlvals;
+    linds  = factor.linds;
+    svals  = factor.svals;
+    dvals  = factor.dvals;
+    lvals  = factor.lvals;
+    aptrs  = matrix.aptrs;
+    ainds  = matrix.ainds;
+    avals  = matrix.avals;
+    blksze = matrix.blksze;
+
+    /* check possible HH,DD,rd overflow */
+    assert(blksze < MAXBLKSZE);
 
     /* switch to even-odd */
     //  odd = blksze % 2;
@@ -942,7 +792,7 @@ int gsfctb(BCCS_Factor *factor, BCCS_Matrix *matrix, int blksze, double eps, boo
     msg->setProcess(ProcessCode::FactorizationSystemEquation, 0, nvtxs - 1, 10);
     for (error = j = 0; j<nvtxs; j++, msg->addProgress())
     {
-        if (*aborted)
+        if (aborted)
         {
             //         msg->setError(ABORT_ERR);
             free(link);
@@ -1077,7 +927,7 @@ int gsfctb(BCCS_Factor *factor, BCCS_Matrix *matrix, int blksze, double eps, boo
             /* check indefinity */
             if(value < 0.0) {
                 value = -value;
-                factor->hyperbolic++;
+                factor.hyperbolic++;
                 sval = -1.0;
                 ps[bi] = -1;
             } else {
@@ -1181,101 +1031,69 @@ before_return:
     return error;
 }
 /*********************************************************************/
-int spFactor(BCCS_Factor *factor, BCCS_Matrix *matrix, double eps, bool* aborted)
+int spFactor(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
 {
     int       error, nvtxs, blksze, memsze, denter;
 
     /* test arguments */
-    if( (factor == NULL) ||
-            (matrix == NULL) ||
-            (matrix->aptrs == NULL) ||
-            (matrix->ainds == NULL) ||
-            (matrix->avals == NULL) ||
-            (matrix->blksze <= 0) ||
-            (matrix->blksze >= MAXBLKSZE) ||
-            (matrix->nvtxs != factor->nvtxs) ||
-            //      (factor->level < LEVEL_SYMBOLIC) ||
-            (factor->error != 0) ) return(1);
+    if((matrix.aptrs == NULL) ||
+       (matrix.ainds == NULL) ||
+       (matrix.avals == NULL) ||
+       (matrix.blksze <= 0) ||
+       (matrix.blksze >= MAXBLKSZE) ||
+       (matrix.nvtxs != factor.nvtxs) ||
+       (factor.error != 0) )
+        return 1;
 
     /* load data from structure */
-    nvtxs  = matrix -> nvtxs;
-    blksze = matrix -> blksze;
-
-
-    /* set blksze */
-    factor->blksze = blksze;
-
-    /* set numerical stability */
+    nvtxs  = matrix.nvtxs;
+    factor.blksze = blksze = matrix.blksze;
 
     /* clear hyperbolic counter */
-    factor -> hyperbolic = 0;
+    factor.hyperbolic = 0;
 
     /* free memory for reentrance */
-    if(factor->vpool) free(factor->vpool);
-    if(factor->svals) free(factor->svals);
+    if (factor.vpool)
+        free(factor.vpool);
+    if (factor.svals)
+        free(factor.svals);
 
     /* allocate main lvals array */
     denter = (blksze * (blksze + 1)) / 2;
-    memsze = factor->lspace * blksze * blksze + nvtxs * denter;
+    memsze = factor.lspace * blksze * blksze + nvtxs * denter;
     ///////////////////////////
-    if ((factor->vpool = (double*) malloc (memsze * sizeof(double))) == NULL)
+    if ((factor.vpool = (double*) malloc (memsze * sizeof(double))) == NULL)
         throw ErrorCode::EAllocMemory;
     ///////////////////////////
-    factor -> dvals = factor->vpool;
-    factor -> lvals = &factor->vpool[denter * nvtxs];
+    factor.dvals = factor.vpool;
+    factor.lvals = &factor.vpool[denter * nvtxs];
 
     /* allocate diagonal flags array */
-    factor->svals = (signed char *) malloc (nvtxs * blksze * sizeof(signed char));
+    factor.svals = (signed char *) malloc (nvtxs * blksze * sizeof(signed char));
 
-    switch(blksze) {
-    case 1:
-        error = gsfct1(factor, matrix, eps);
-        break;
-    default:
-        error = gsfctb(factor, matrix, blksze, eps, aborted);
-        break;
-    }
+    error = gsfctb(factor, matrix, eps, aborted);
 
-
-    return(factor->error = error);
+    return factor.error = error;
 }
 /********************************************************************/
-void permrv(double rhs[], const int* order, int nvtxs, int blksze)
+void permrv(double *rhs, const int* order, int nvtxs, int blksze)
 {
-    int    i, j, node;
+    int i, j, node;
     double  *ptri, *ptrn;
 
-    switch (blksze) {
+    for(i=0; i<nvtxs; i++)
+    {
+        node = order[i];
+        if(node == i)
+            continue;
+        while(node < i)
+            node = order[node];
 
-    case 1:
-        for(i=0; i<nvtxs; i++)
-        {
-            node = order[i];
-            if(node == i) continue;
-            while(node < i) {
-                node = order[node];
-            }
-            swap(rhs[node], rhs[i]);
-        }
-        break;
-
-    default:
-        for(i=0; i<nvtxs; i++)
-        {
-            node = order[i];
-            if(node == i) continue;
-            while(node < i) {
-                node = order[node];
-            }
-            ptri = &rhs[blksze*i];
-            ptrn = &rhs[blksze*node];
-            for(j=0; j<blksze; j++) {
-                swap(ptrn[j], ptri[j]);
-            }
-        }
-        break;
-
-    }  /* end blksze switch */
+        ptri = &rhs[blksze*i];
+        ptrn = &rhs[blksze*node];
+        for(j=0; j<blksze; j++)
+            swap(ptrn[j], ptri[j]);
+    }
 
 } /* end permrv */
 /*******************************************************************/
@@ -1283,73 +1101,24 @@ void permrv(double rhs[], const int* order, int nvtxs, int blksze)
 /*             GENERAL SPARSE SYMMETRIC SYSTEM                     */
 /*                                                                 */
 /*******************************************************************/
-void gsslv1(BCCS_Factor *factor, double rhs[])
+void gsslvb(BCCS_Factor &factor, double* rght)
 {
-    int      i, j, k, strt, stop, nvtxs;
-    const int *xlvals, *xlinds, *linds;
-    const double *lvals, *dvals;
-    double    value;
-
-    /* load data from structure */
-    nvtxs  = factor -> nvtxs;
-    xlvals = factor -> xlvals;
-    xlinds = factor -> xlinds;
-    linds  = factor -> linds;
-    dvals  = factor -> dvals;
-    lvals  = factor -> lvals;
-
-    /* forward substitution */
-    for(j=0; j<nvtxs; j++) {
-        value = dvals[j];
-        assert(value != 0.0);
-        value = (rhs[j] /= value);
-        strt = xlvals[j];
-        stop = xlvals[j+1];
-        i = xlinds[j];
-        for(k=strt; k<stop; k++) {
-            rhs[linds[i++]] -= lvals[k] * value;
-        }
-    }
-
-    /* special diagonal subsystem */
-    if(factor->hyperbolic > 0)
-        dtrsd(nvtxs, factor->svals, rhs);
-
-    /* backward substitution */
-    for(j=nvtxs-1; j>=0; j--) {
-        strt = xlvals[j];
-        stop = xlvals[j+1];
-        if(strt < stop) {
-            value = 0.0;
-            i = xlinds[j];
-            for(k=strt; k<stop; k++) {
-                value += lvals[k] * rhs[linds[i++]];
-            }
-            rhs[j] -= value;
-        }
-        value = dvals[j];
-        assert(value != 0.0);
-        rhs[j] /= value;
-    }
-}
-/********************************************************************/
-void gsslvb(BCCS_Factor *factor, double rght[], int blksze)
-{
-    int       i, j, k, nvtxs, brow, bcol, colsze,
-            strt, stop, denter, fenter, run;
+    int i, j, k, nvtxs, brow, bcol, colsze, strt, stop, denter, fenter, run, blksze;
     const int *xlvals, *xlinds, *linds;
     const double *dvals, *lvals, *diagj, *curdiag, *nonzk, *lblk;
-    double     value, *rghtj, *rghtk;
+    double value, *rghtj, *rghtk;
+
+    blksze = factor.blksze;
+    nvtxs  = factor.nvtxs;
+    xlvals = factor.xlvals;
+    xlinds = factor.xlinds;
+    linds  = factor.linds;
+    dvals  = factor.dvals;
+    lvals  = factor.lvals;
 
     fenter = blksze * blksze;
     denter = (blksze * (blksze + 1)) / 2;
 
-    nvtxs  = factor -> nvtxs;
-    xlvals = factor -> xlvals;
-    xlinds = factor -> xlinds;
-    linds  = factor -> linds;
-    dvals  = factor -> dvals;
-    lvals  = factor -> lvals;
 
     /* === forward substitution === */
     diagj = dvals;
@@ -1398,8 +1167,8 @@ void gsslvb(BCCS_Factor *factor, double rght[], int blksze)
     }
 
     /* === diagonal substitution === */
-    if(factor->hyperbolic > 0)
-        dtrsd(blksze*nvtxs, factor->svals, rght);
+    if(factor.hyperbolic > 0)
+        dtrsd(blksze*nvtxs, factor.svals, rght);
 
     /* === backward substitution === */
     diagj = &dvals[nvtxs*denter - blksze];
@@ -1443,75 +1212,72 @@ void gsslvb(BCCS_Factor *factor, double rght[], int blksze)
     }
 }
 /*********************************************************************/
-int spSolve(BCCS_Factor *factor,        double rhs[])
+int spSolve(BCCS_Factor &factor, double *rhs)
 {
     msg->setProcess(ProcessCode::SolutionSystemEquation);
     /* direct permutation */
-    permrv(rhs, factor->perm, factor->nvtxs, factor->blksze);
+    permrv(rhs, factor.perm, factor.nvtxs, factor.blksze);
     /* choose optimised variant or universal */
-    if (factor->blksze == 1)
-        gsslv1(factor, rhs);
-    else
-        gsslvb(factor, rhs, factor->blksze);
+    gsslvb(factor, rhs);
     /* invert permutation */
-    permrv(rhs, factor->invp, factor->nvtxs, factor->blksze);
+    permrv(rhs, factor.invp, factor.nvtxs, factor.blksze);
     msg->stop();
 
 
     return(0);
 }
 /*********************************************************************/
-double spGetElem(BCCS_Matrix *matrix, int i, int j)
+double spGetElem(BCCS_Matrix &matrix, int i, int j)
 {
     int k, strt, stop, col, row, ofst;
 
 
-    col  = i / matrix->blksze;
-    row  = j / matrix->blksze;
-    ofst = matrix->blksze * (i % matrix->blksze) + (j % matrix->blksze);
+    col  = i / matrix.blksze;
+    row  = j / matrix.blksze;
+    ofst = matrix.blksze * (i % matrix.blksze) + (j % matrix.blksze);
 
-    strt = matrix->aptrs[col];
-    stop = matrix->aptrs[col+1];
+    strt = matrix.aptrs[col];
+    stop = matrix.aptrs[col+1];
     for (k = strt; k < stop; k++)
-        if (matrix->ainds[k] == row)
-            return matrix->avals[matrix->blksze * matrix->blksze * k + ofst];
+        if (matrix.ainds[k] == row)
+            return matrix.avals[matrix.blksze * matrix.blksze * k + ofst];
     return 0;
 }
 /*********************************************************************/
-void spSetElem(BCCS_Matrix *matrix, int i, int j, double val)
+void spSetElem(BCCS_Matrix &matrix, int i, int j, double val)
 {
     int k, strt, stop, col, row, ofst;
 
 
-    col  = i / matrix->blksze;
-    row  = j / matrix->blksze;
-    ofst = matrix->blksze * (i % matrix->blksze) + (j % matrix->blksze);
+    col  = i / matrix.blksze;
+    row  = j / matrix.blksze;
+    ofst = matrix.blksze * (i % matrix.blksze) + (j % matrix.blksze);
 
-    strt = matrix->aptrs[col];
-    stop = matrix->aptrs[col+1];
+    strt = matrix.aptrs[col];
+    stop = matrix.aptrs[col+1];
     for (k = strt; k < stop; k++)
-        if (matrix->ainds[k] == row)
+        if (matrix.ainds[k] == row)
         {
-            matrix->avals[matrix->blksze * matrix->blksze * k + ofst] = val;
+            matrix.avals[matrix.blksze * matrix.blksze * k + ofst] = val;
             break;
         }
 }
 /*********************************************************************/
-void spAddElem(BCCS_Matrix *matrix, int i, int j, double val)
+void spAddElem(BCCS_Matrix &matrix, int i, int j, double val)
 {
     int k, strt, stop, col, row, ofst;
 
 
-    col  = i / matrix->blksze;
-    row  = j / matrix->blksze;
-    ofst = matrix->blksze * (i % matrix->blksze) + (j % matrix->blksze);
+    col  = i / matrix.blksze;
+    row  = j / matrix.blksze;
+    ofst = matrix.blksze * (i % matrix.blksze) + (j % matrix.blksze);
 
-    strt = matrix->aptrs[col];
-    stop = matrix->aptrs[col+1];
+    strt = matrix.aptrs[col];
+    stop = matrix.aptrs[col+1];
     for (k = strt; k < stop; k++)
-        if (matrix->ainds[k] == row)
+        if (matrix.ainds[k] == row)
         {
-            matrix->avals[matrix->blksze * matrix->blksze * k + ofst] += val;
+            matrix.avals[matrix.blksze * matrix.blksze * k + ofst] += val;
             break;
         }
 }
