@@ -1,77 +1,92 @@
 #ifndef SPARSE32_H
 #define SPARSE32_H
 
+#include <cstdlib>
 
 /*******************************************************************/
-class BCCS_Matrix
+#define MAXINDEX     0x40000000
+#define MAXBLKSZE    16
+/*******************************************************************/
+struct BCCS_Factor
 {
-public:
-    int error = 0,
-        lspace = 0,
-        ispace = 0,
-        hyperbolic = 0,
-        *perm = nullptr,
-        *invp = nullptr,
-        *xlinds = nullptr,
-        *xlvals = nullptr,
-        *linds = nullptr,
-        nvtxs = 0,
-        nnz = 0,
-        blksze = 0,
-        dtype = 0,
-        *aptrs = nullptr,
-        *ainds = nullptr;
-    signed char *svals = nullptr;
-    double opcount = 0,
-           *vpool = nullptr,
-           *dvals = nullptr,
-           *lvals = nullptr,
-           *avals = nullptr;
-    BCCS_Matrix(void) {}
-    ~BCCS_Matrix(void)
-    {
-        clear();
-    }
-    void clear(void)
-    {
-        if (perm)
-            delete [] perm;
-        if (invp)
-            delete [] invp;
-        if (xlinds)
-            delete [] xlinds;
-        if (xlvals)
-            delete [] xlvals;
-        if (linds)
-            delete [] linds;
-        if (svals)
-            delete [] svals;
-        if (vpool)
-            delete [] vpool;
-        if (aptrs)
-            delete [] aptrs;
-        if (ainds)
-            delete [] ainds;
-        if (avals)
-            delete [] avals;
-        nvtxs = nnz = blksze = dtype = 0;
-        perm = invp = xlinds = xlvals = linds = aptrs = ainds = nullptr;
-        avals = vpool = dvals = lvals = nullptr;
-        svals = nullptr;
-    }
-    void spSetElem(int, int, double);
-    void spAddElem(int, int, double);
-    void spPrepareMatrix(int);
-    void spSetMatrix(const int*, int, int, int, int);
-    void spMulMatrix(double);
-    void spMulMatrix(const double*, double*);
-    double spGetElem(int, int);
+  int          nvtxs = 0, blksze = 0, error = 0, level = 0;
+  int          lspace = 0, ispace = 0, nnzextra = 0, supcnt = 0, nroots = 0;
+  int          hyperbolic = 0;
+  int          *ipool = nullptr, *isuper = nullptr;
+  int          *perm = nullptr, *invp = nullptr, *xlinds = nullptr, *xlvals = nullptr;
+  int          *Llen = nullptr, *xsinds = nullptr, *xtinds = nullptr, *tinds = nullptr;
+  int          *linds = nullptr;
+  signed char  *svals = nullptr;
+  double       *vpool = nullptr;
+  double       *dvals = nullptr;
+  double       *lvals = nullptr;
+  double       opcount = 0, opextra = 0;
+  double       ssthresh = 0, precision = 0;
+  BCCS_Factor() = default;
+  ~BCCS_Factor()
+  {
+      if (perm)
+          free(perm);
+      if (invp)
+          free(invp);
+      if (xlinds)
+          free(xlinds);
+      if (xlvals)
+          free(xlvals);
+      if (linds)
+          free(linds);
+      if (svals)
+          free(svals);
+      if (vpool)
+          free(vpool);
+      if (xtinds)
+          free(xtinds);
+      if (tinds)
+          free(tinds);
+      if (Llen)
+          free(Llen);
+  }
 };
 /*******************************************************************/
-int spOrder(BCCS_Matrix&, bool&);
-int spFactor(BCCS_Matrix&, double, bool&);
-int spSolve(BCCS_Matrix&, double*);
-/***********************************************************************/
+struct BCCS_Matrix
+{
+  int      nvtxs = 0;
+  int      nnz = 0;
+  int      blksze = 0;
+  int      dtype = 0;
+  int      *aptrs = nullptr;
+  int      *ainds = nullptr;
+  double   *avals = nullptr;
+  BCCS_Matrix() = default;
+  ~BCCS_Matrix()
+  {
+      clear();
+  }
+  void clear(void)
+  {
+      if (aptrs)
+          free(aptrs);
+      if (ainds)
+          free(ainds);
+      if (avals)
+          free(avals);
+      aptrs = ainds = nullptr;
+      avals = nullptr;
+  }
+};
+/*******************************************************************/
+int spOrder(BCCS_Factor*, BCCS_Matrix*, bool*);
+int spFactor(BCCS_Factor*, BCCS_Matrix*, double, bool*);
+int spSolve(BCCS_Factor*, double*);
+int spSetMatrix(BCCS_Matrix*, const int*, int, int, int, int);
+double spGetElem(BCCS_Matrix*, int, int);
+void spSetElem(BCCS_Matrix*, int, int, double);
+void spAddElem(BCCS_Matrix*, int, int, double);
+int spMulMatrix(BCCS_Matrix*, const double*, double*);
+int spMulMatrix(BCCS_Matrix*, double);
+void *spMalloc(int);
+void spFree(void*);
+/*******************************************************************/
 
-#endif // SPARSE32_H
+#endif /* SPARSE32_H */
 

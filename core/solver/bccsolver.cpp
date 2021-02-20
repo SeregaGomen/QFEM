@@ -12,25 +12,26 @@ extern TMessenger* msg;
 bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
 {
     int error;
+    BCCS_Factor factor;
 
     /////////////
     // print("matr.txt");
     ///
 
-    if ((error = spOrder(stiffnessMatrix, isAborted)))
+    if ((error = spOrder(&factor, &stiffnessMatrix, &isAborted)))
     {
         if (!isAborted)
             throw ErrorCode::EEquationNorSolved;
         return false;
     }
 
-    if ((error = spFactor(stiffnessMatrix, eps, isAborted)))
+    if ((error = spFactor(&factor, &stiffnessMatrix, eps, &isAborted)))
     {
         if (!isAborted)
             throw ErrorCode::EEquationNorSolved;
         return false;
     }
-    spSolve(stiffnessMatrix, loadVector.data());
+    spSolve(&factor, loadVector.data());
     if (isAborted)
         return false;
     result = loadVector;
@@ -43,11 +44,11 @@ bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
 
 void TBCCSolver::setMatrix(TMesh *mesh, bool isDynamic)
 {
-    stiffnessMatrix.spSetMatrix(reinterpret_cast<const int*>(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
+    spSetMatrix(&stiffnessMatrix, (const int*)(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
     if (isDynamic)
     {
-        massMatrix.spSetMatrix(reinterpret_cast<const int*>(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
-        dampingMatrix.spSetMatrix(reinterpret_cast<const int*>(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
+        spSetMatrix(&massMatrix, (const int*)(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
+        spSetMatrix(&dampingMatrix, (const int*)(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
     }
     loadVector.resize(mesh->getNumVertex()*mesh->getFreedom());
 }
@@ -64,7 +65,7 @@ void TBCCSolver::print(string fname)
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
-            out << setw(20) << setprecision(5) << stiffnessMatrix.spGetElem(i, j) << ' ';
+            out << setw(20) << setprecision(5) << spGetElem(&stiffnessMatrix, i, j) << ' ';
         out << setw(20) << setprecision(5) << loadVector[unsigned(i)] << endl;
     }
     out.close();
@@ -74,12 +75,12 @@ void TBCCSolver::setBoundaryCondition(unsigned index, double value)
 {
     for (auto i = 0; i < stiffnessMatrix.nvtxs * stiffnessMatrix.blksze; i++)
         if (i not_eq int(index))
-            if (stiffnessMatrix.spGetElem(index, i) not_eq 0)
+            if (spGetElem(&stiffnessMatrix, index, i) not_eq 0)
             {
-                stiffnessMatrix.spSetElem(index, i, value);
-                stiffnessMatrix.spSetElem(i, index, value);
+                spSetElem(&stiffnessMatrix, index, i, value);
+                spSetElem(&stiffnessMatrix, i, index, value);
             }
-    loadVector[index] = value * stiffnessMatrix.spGetElem(index, index);
+    loadVector[index] = value * spGetElem(&stiffnessMatrix, index, index);
 }
 
 bool TBCCSolver::saveMatrix(string fname, BCCS_Matrix& globalMatrix)
@@ -134,8 +135,8 @@ bool TBCCSolver::loadMatrix(string fname, BCCS_Matrix& globalMatrix)
     return !in.fail();
 }
 
-void TBCCSolver::product(BCCS_Matrix &matr, vector<double> &vec, vector<double> &res)
+void TBCCSolver::product(BCCS_Matrix &matrix, vector<double> &vec, vector<double> &res)
 {
 //    res.resize(vec.size());
-    matr.spMulMatrix(vec.data(), res.data());
+    spMulMatrix(&matrix, vec.data(), res.data());
 }
