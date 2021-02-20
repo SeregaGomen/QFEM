@@ -1,8 +1,6 @@
 #ifndef SPARSE32_H
 #define SPARSE32_H
 
-#include <cstdlib>
-
 /*******************************************************************/
 #define MAXINDEX     0x40000000
 #define MAXBLKSZE    16
@@ -25,26 +23,16 @@ struct BCCS_Factor
   BCCS_Factor() = default;
   ~BCCS_Factor()
   {
-      if (perm)
-          free(perm);
-      if (invp)
-          free(invp);
-      if (xlinds)
-          free(xlinds);
-      if (xlvals)
-          free(xlvals);
-      if (linds)
-          free(linds);
-      if (svals)
-          free(svals);
-      if (vpool)
-          free(vpool);
-      if (xtinds)
-          free(xtinds);
-      if (tinds)
-          free(tinds);
-      if (Llen)
-          free(Llen);
+      delete [] perm;
+      delete [] invp;
+      delete [] xlinds;
+      delete [] xlvals;
+      delete [] linds;
+      delete [] svals;
+      delete [] vpool;
+      delete [] xtinds;
+      delete [] tinds;
+      delete [] Llen;
   }
 };
 /*******************************************************************/
@@ -64,12 +52,9 @@ struct BCCS_Matrix
   }
   void clear(void)
   {
-      if (aptrs)
-          free(aptrs);
-      if (ainds)
-          free(ainds);
-      if (avals)
-          free(avals);
+      delete [] aptrs;
+      delete [] ainds;
+      delete [] avals;
       aptrs = ainds = nullptr;
       avals = nullptr;
   }

@@ -363,7 +363,7 @@ int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, i
     matrix.nvtxs = nvtxs;
 
     /* allocate & set all element adjacency lenghts to null */
-    nptr = (int *) malloc ( (nvtxs+1) * sizeof(int));
+    nptr = new int[nvtxs + 1];
     fill_n(nptr, size_t(nvtxs), 0);
 
     /* calculate sizes for list of all references to adjacency elements */
@@ -382,7 +382,7 @@ int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, i
         node += j;
     }
     nptr[nvtxs] = node;
-    nind = (int *) malloc (node * sizeof(int));
+    nind = new int[node];
 
     /* save into nind all references to adjacency elements */
     for(k=i=0; i<nelmnts; i++) {
@@ -397,9 +397,9 @@ int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, i
     }
     nptr[0] = 0;
 
-    mark = (int *) malloc (nvtxs * sizeof(int));
+    mark = new int [nvtxs];
 
-    matrix.aptrs = aptrs = (int *) malloc ( (nvtxs+1) * sizeof(int));
+    matrix.aptrs = aptrs = new int[nvtxs + 1];
 
     /* calculate memory for adjacency structure */
     fill_n(mark, size_t(nvtxs), -1);
@@ -418,7 +418,7 @@ int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, i
         }
     }
     aptrs[nvtxs] = nedges;
-    matrix.ainds = ainds = (int *) malloc (nedges * sizeof(int));
+    matrix.ainds = ainds = new int [nedges];
 
     /* save adjacency structure */
     fill_n(mark, size_t(nvtxs), -1);
@@ -440,15 +440,15 @@ int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, i
     }
 
     /* free work memory */
-    free(mark);
-    free(nind);
-    free(nptr);
+    delete [] mark;
+    delete [] nind;
+    delete [] nptr;
 
 
     nnz = matrix.aptrs[matrix.nvtxs];
     matrix.blksze = blksz;
     len = nnz * matrix.blksze * matrix.blksze;
-    matrix.avals = (double *) malloc (len * sizeof(double));
+    matrix.avals = new double[len];
     fill_n(matrix.avals, size_t(len), 0);
 
 
@@ -545,19 +545,19 @@ static int funInSymbolic(BCCS_Factor &factor, const int* aptrs, const int* ainds
     perm = factor.perm;
     invp = factor.invp;
     nvtxs = factor.nvtxs;
-    factor.xlvals = xlvals = (int *) malloc ((nvtxs+1) * sizeof(int));
-    factor.xlinds = xlinds = (int *) malloc (nvtxs * sizeof(int));
+    factor.xlvals = xlvals = new int[nvtxs + 1];
+    factor.xlinds = xlinds = new int[nvtxs];
     factor.opcount = 0.0;
 
     /* allocate work memory */
-    pool = (int *) malloc ((3*nvtxs) * sizeof(int));
+    pool = new int [3 * nvtxs];
     mrglnk  = pool;
     stack   = pool + nvtxs;
     nodeset = pool + 2*nvtxs;
 
     /* allocate initial buffer for compressed row indices */
     lsize = 20 * nvtxs;
-    linds = (int *) malloc (lsize * sizeof(int));
+    linds = new int [lsize];
 
     /* must be */
     xlvals[0] = 0;
@@ -642,7 +642,7 @@ static int funInSymbolic(BCCS_Factor &factor, const int* aptrs, const int* ainds
     } /* next k */
 
     assert(xlvals[nvtxs] == factor.lspace);
-    free(pool);
+    delete [] pool;
 
     /* truncate row indices array */
     factor.linds = (int *) realloc (linds, factor.ispace * sizeof(int));
@@ -663,8 +663,8 @@ int spOrder(BCCS_Factor &factor, BCCS_Matrix &matrix, bool &aborted)
 
     /* allocate standart graph structure without diagonal indices */
     nedges = aptrs[nvtxs] - nvtxs;
-    xadj = (int *) malloc ((nvtxs+1) * sizeof(int));
-    adjncy = (int *) malloc (nedges * sizeof(int));
+    xadj = new int[nvtxs + 1];
+    adjncy = new int[nedges];
 
     /* form (xadj,adjncy) from (aptrs,ainds) */
 
@@ -676,8 +676,8 @@ int spOrder(BCCS_Factor &factor, BCCS_Matrix &matrix, bool &aborted)
         if (aborted)
         {
             //          msg->setError(ABORT_ERR);
-            free(xadj);
-            free(adjncy);
+            delete [] xadj;
+            delete [] adjncy;
             return 1;
         }
 
@@ -699,29 +699,23 @@ int spOrder(BCCS_Factor &factor, BCCS_Matrix &matrix, bool &aborted)
     factor.nvtxs = nvtxs;
 
     /* now compute permutation */
-    factor.perm = perm = (int *) malloc (nvtxs * sizeof(int));
-    factor.invp = invp = (int *) malloc (nvtxs * sizeof(int));
+    factor.perm = perm = new int [nvtxs];
+    factor.invp = invp = new int [nvtxs];
 
 
-    mempool = (int *) malloc (7 * nvtxs * sizeof(int));
-    error = genqmd(nvtxs, xadj, adjncy, perm, invp,
-                   &mempool[0*nvtxs],
-            &mempool[1*nvtxs],
-            &mempool[2*nvtxs],
-            &mempool[3*nvtxs],
-            &mempool[4*nvtxs],
-            &mempool[5*nvtxs],
-            &mempool[6*nvtxs], &maxlnz, &ispace);
-    free(mempool);
-
-    free(xadj);
-    free(adjncy);
-    if(error != 0) return(error);
+    mempool = new int [7 * nvtxs];
+    error = genqmd(nvtxs, xadj, adjncy, perm, invp, &mempool[0*nvtxs], &mempool[1*nvtxs], &mempool[2*nvtxs], &mempool[3*nvtxs],
+                   &mempool[4*nvtxs], &mempool[5*nvtxs], &mempool[6*nvtxs], &maxlnz, &ispace);
+    delete [] mempool;
+    delete [] xadj;
+    delete [] adjncy;
+    if (error != 0)
+        return (error);
 
     /* perform symbolic factorization */
     error = funInSymbolic(factor, aptrs, ainds);
 
-    return(factor.error = error);
+    return factor.error = error;
 }
 /*************************************************************/
 /* GENERAL SPARSE SYMMETRIC SCHEME, CLASSIC FUN-IN ALGORITHM */
@@ -779,9 +773,9 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
     dmax = -DBL_MAX;
 
     /* allocate work memory */
-    link      = (int *) malloc (nvtxs * sizeof(int));
-    first     = (int *) malloc (nvtxs * sizeof(int));
-    translate = (double**) malloc (nvtxs * sizeof(double*));
+    link      = new int[nvtxs];
+    first     = new int[nvtxs];
+    translate = new double*[nvtxs];
 
     /* set all links as empty */
     fill_n(link, size_t(nvtxs), nvtxs);
@@ -795,9 +789,9 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
         if (aborted)
         {
             //         msg->setError(ABORT_ERR);
-            free(link);
-            free(first);
-            free(translate);
+            delete [] link;
+            delete [] first;
+            delete [] translate;
             return 1;
         }
 
@@ -1024,9 +1018,9 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
     msg->stopProcess();
 
 before_return:
-    free(translate);
-    free(first);
-    free(link);
+    delete [] translate;
+    delete [] first;
+    delete [] link;
 
     return error;
 }
@@ -1053,23 +1047,21 @@ int spFactor(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted
     factor.hyperbolic = 0;
 
     /* free memory for reentrance */
-    if (factor.vpool)
-        free(factor.vpool);
-    if (factor.svals)
-        free(factor.svals);
+    delete [] factor.vpool;
+    delete [] factor.svals;
 
     /* allocate main lvals array */
     denter = (blksze * (blksze + 1)) / 2;
     memsze = factor.lspace * blksze * blksze + nvtxs * denter;
     ///////////////////////////
-    if ((factor.vpool = (double*) malloc (memsze * sizeof(double))) == NULL)
+    if ((factor.vpool = new double[memsze]) == NULL)
         throw ErrorCode::EAllocMemory;
     ///////////////////////////
     factor.dvals = factor.vpool;
     factor.lvals = &factor.vpool[denter * nvtxs];
 
     /* allocate diagonal flags array */
-    factor.svals = (signed char *) malloc (nvtxs * blksze * sizeof(signed char));
+    factor.svals = new signed char[nvtxs * blksze];
 
     error = gsfctb(factor, matrix, eps, aborted);
 
