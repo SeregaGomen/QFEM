@@ -42,7 +42,7 @@ bool TLZHSolver::solve(vector<double> &res, double eps, bool &isAborted)
     for (i = 0; i < maxIter; i++)
     {
         if (isAborted)
-            return false;
+            break;
 
         R = stiffnessMatrix * s;
         err = scalar_product(R, s);
