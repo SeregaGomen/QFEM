@@ -233,7 +233,7 @@ bool TMesh::write(string fname)
     string ext;
 
     // Определяем тип файла
-    pos = fname.find_last_of('.');
+//    pos = fname.find_last_of('.');
     if ((pos = fname.find_last_of('.')) == string::npos)
     {
         cerr << sayError(ErrorCode::EUndefTypeFile) << endl;

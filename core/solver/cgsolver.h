@@ -27,10 +27,7 @@ protected:
     bool saveMatrix(string, VectorOfVector&);
 public:
     TCGSolver(void) {}
-    virtual ~TCGSolver(void)
-    {
-        clear();
-    }
+    virtual ~TCGSolver(void) {}
     void clear(void)
     {
         loadVector.clear();

@@ -20,10 +20,7 @@ private:
     bool saveMatrix(string, BCCS_Matrix&);
 public:
     TBCCSolver(void) {}
-    virtual ~TBCCSolver(void)
-    {
-        clear();
-    }
+    virtual ~TBCCSolver(void) {}
     void clear(void)
     {
         loadVector.clear();
