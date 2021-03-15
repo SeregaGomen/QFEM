@@ -23,7 +23,7 @@ private:
     array<double, 3> minX{0, 0, 0};
     array<double, 3> maxX{0, 0, 0};
     // Структура сетки
-    vector< vector<unsigned> > meshMap;
+    vector<vector<unsigned>> meshMap;
     // Координаты вершин сетки
     matrix<double> x;
     // Связи между узлами в КЭ
@@ -36,6 +36,7 @@ private:
     bool readVOL(string);
     bool readMESH(string);
     bool readTRPA(string);
+    bool readTetgen(string);
     bool writeTRP(string);
     bool writeTRPA(string);
     double volume1d2(const matrix<double>&);

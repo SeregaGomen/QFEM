@@ -18,7 +18,7 @@ bool TMesh::read(string fname)
 
     clear();
     // Определяем тип файла
-    pos = fname.find_last_of('.');
+//    pos = fname.find_last_of('.');
     if ((pos = fname.find_last_of('.')) == string::npos)
     {
         cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
@@ -36,6 +36,8 @@ bool TMesh::read(string fname)
         error = readVOL(fname);
     else if (ext == "MESH")
         error = readMESH(fname);
+    else if (ext == "NODE" or ext == "ELE" or ext == "FACE")
+        error = readTetgen(fname);
     else
     {
         cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
@@ -1155,6 +1157,106 @@ double TMesh::volume3d8(const matrix<double>& px)
         v += fabs(det3x3(m)) / 6;
     }
     return v;
+}
+// -------------------------------------------------------
+bool TMesh::readTetgen(string fname)
+{
+    fstream in;
+    int num,
+        tmp;
+    string name;
+
+    clear();
+
+    // Чтение узлов (*.node)
+    name = fname.substr(0, fname.find_last_of('.')) + ".node";
+    in.open(name, ios::in);
+    if (not in.is_open())
+    {
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
+        return (error = true);
+    }
+    in >> num >> tmp >> tmp >> tmp;
+    if (in.fail() or num == 0)
+    {
+        in.close();
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        return (error = true);
+    }
+    x.resize(num, 3);
+    for (auto i = 0; i < num; i++)
+    {
+        in >> tmp >> x(i, 0) >> x(i, 1) >> x(i, 2);
+        if (in.fail())
+        {
+            in.close();
+            cerr << sayError(ErrorCode::EReadFile) << endl;
+            return (error = true);
+        }
+    }
+    in.close();
+
+    // Чтение КЭ (*.ele)
+    name = fname.substr(0, fname.find_last_of('.')) + ".ele";
+    in.open(name, ios::in);
+    if (not in.is_open())
+    {
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
+        return (error = true);
+    }
+
+    in >> num >> tmp >> tmp;
+    if (in.fail() or num == 0)
+    {
+        in.close();
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        return (error = true);
+    }
+    fe.resize(num, 4);
+    for (auto i = 0; i < num; i++)
+    {
+        in >> tmp >> fe(i, 0) >> fe(i, 1) >> fe(i, 2) >> fe(i, 3);
+        fe(i, 0)--; fe(i, 1)--; fe(i, 2)--; fe(i, 3)--;
+        if (in.fail())
+        {
+            in.close();
+            cerr << sayError(ErrorCode::EReadFile) << endl;
+            return (error = true);
+        }
+    }
+    in.close();
+
+    // Чтение ГЭ (*.face)
+    name = fname.substr(0, fname.find_last_of('.')) + ".face";
+    in.open(name, ios::in);
+    if (not in.is_open())
+    {
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
+        return (error = true);
+    }
+    in >> num >> tmp;
+    if (in.fail() or num == 0)
+    {
+        in.close();
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        return (error = true);
+    }
+    be.resize(num, 3);
+    for (auto i = 0; i < num; i++)
+    {
+        in >> tmp >> be(i, 0) >> be(i, 1) >> be(i, 2) >> tmp;
+        be(i, 0)--; be(i, 1)--; be(i, 2)--;
+        if (in.fail())
+        {
+            in.close();
+            cerr << sayError(ErrorCode::EReadFile) << endl;
+            return (error = true);
+        }
+    }
+    in.close();
+    feType = FEType::fe3d4;
+    cout << *this << endl;
+    return false;
 }
 // -------------------------------------------------------
 //          Создание списка связей узлов сетки
