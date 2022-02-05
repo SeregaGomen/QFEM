@@ -1,0 +1,199 @@
+{
+    "Header": {
+        "DateTime": "2018-07-09T07:26:41",
+        "Object": "tank",
+        "Title": "QFEM problem file"
+    },
+    "Mesh": {
+        "File": "tank.msh"
+    },
+    "Parameters": {
+        "Accuracy": "1e-6",
+        "BoundaryConditions": [
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "8",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "64",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "2",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "16",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "128",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "4",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "32",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "256",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "1",
+                "Expression": "P*cos(atan2(y,x))",
+                "Predicate": "(z <= 0 and z >= -16.691) and (abs(x^2 + y^2 - (R-min)^2) <= eps)",
+                "Type": "4"
+            },
+            {
+                "Direct": "2",
+                "Expression": "P*sin(atan2(y,x))",
+                "Predicate": "(z <= 0 and z >= -16.691) and (abs(x^2 + y^2 - (R-min)^2) <= eps)",
+                "Type": "4"
+            },
+            {
+                "Direct": "1",
+                "Expression": "P*cos(atan2(y,x))*sin(atan2((x^2+y^2)^0.5,(z -c0)))",
+                "Predicate": "(abs(x^2 + y^2 + (z - c0)^2 - r^2) <= eps)",
+                "Type": "4"
+            },
+            {
+                "Direct": "2",
+                "Expression": "P*sin(atan2(y,x))*sin(atan2((x^2+y^2)^0.5,(z - c0)))",
+                "Predicate": "(abs(x^2 + y^2 + (z - c0)^2 - r^2) <= eps)",
+                "Type": "4"
+            },
+            {
+                "Direct": "4",
+                "Expression": "P*cos(atan2((x^2+y^2)^0.5,(z - c0)))",
+                "Predicate": "(abs(x^2 + y^2 + (z - c0)^2 - r^2) <= eps)",
+                "Type": "4"
+            },
+            {
+                "Direct": "1",
+                "Expression": "P*cos(atan2(y,x))*sin(atan2((x^2+y^2)^0.5,(z -c1)))",
+                "Predicate": "(abs(x^2 + y^2 + (z - c1)^2 - (r - min)^2) <= 0.01)",
+                "Type": "4"
+            },
+            {
+                "Direct": "2",
+                "Expression": "P*sin(atan2(y,x))*sin(atan2((x^2+y^2)^0.5,(z - c1)))",
+                "Predicate": "(abs(x^2 + y^2 + (z - c1)^2 - (r - min)^2) <= 0.01)",
+                "Type": "4"
+            },
+            {
+                "Direct": "4",
+                "Expression": "P*cos(atan2((x^2+y^2)^0.5,(z - c1)))",
+                "Predicate": "(abs(x^2 + y^2 + (z - c1)^2 - (r - min)^2) <= 0.01)",
+                "Type": "4"
+            },
+            {
+                "Direct": "7",
+                "Expression": "0",
+                "Predicate": "abs(z-l) < eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "abs(x) < eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "2",
+                "Expression": "0",
+                "Predicate": "abs(y) < eps",
+                "Type": "2"
+            }
+        ],
+        "DynamicParameters": {
+            "T0": "0",
+            "T1": "0",
+            "TH": "0",
+            "WilsonTheta": "1.37"
+        },
+        "Names": [
+            "x",
+            "y",
+            "z",
+            "t",
+            "U",
+            "V",
+            "W",
+            "Exx",
+            "Eyy",
+            "Ezz",
+            "Exy",
+            "Exz",
+            "Eyz",
+            "Sxx",
+            "Syy",
+            "Szz",
+            "Sxy",
+            "Sxz",
+            "Syz",
+            "Ut",
+            "Vt",
+            "Wt",
+            "Utt",
+            "Vtt",
+            "Wtt"
+        ],
+        "Nonlinearity": {
+            "CalculationMethod": 0,
+            "LoadStep": "0.01",
+            "MechanicalProperty": [
+            ]
+        },
+        "OutputParameters": {
+            "Precision": "5",
+            "Width": "12"
+        },
+        "PhysicalParameters": {
+            "Damping": "0",
+            "Density": "0",
+            "PoissonsRatio": "0.3",
+            "YoungsModulus": "6.67e+10"
+        },
+        "ProblemType": "Static",
+        "ThermalParameters": {
+            "Alpha": "0",
+            "dT": "0"
+        },
+        "Variables": [
+            "P 10000",
+            "R 1.95",
+            "c0 -1.56445",
+            "c1 -15.1266",
+            "eps 0.0001",
+            "l 0.889",
+            "min 0.0028",
+            "r 2.5"
+        ]
+    }
+}
