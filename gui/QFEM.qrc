@@ -1,0 +1,43 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/copy.png</file>
+        <file>images/cut.png</file>
+        <file>images/new.png</file>
+        <file>images/open.png</file>
+        <file>images/paste.png</file>
+        <file>images/save.png</file>
+        <file>images/main.png</file>
+        <file>images/terminal.png</file>
+        <file>images/scale.png</file>
+        <file>images/rotate.png</file>
+        <file>images/translate.png</file>
+        <file>images/main16.png</file>
+        <file>images/2.png</file>
+        <file>images/First.png</file>
+        <file>images/Add.png</file>
+        <file>images/Del.png</file>
+        <file>images/Last.png</file>
+        <file>images/Next.png</file>
+        <file>images/Prior.png</file>
+        <file>images/build.png</file>
+        <file>images/runprog.png</file>
+        <file>images/configure.png</file>
+        <file>images/analyse.png</file>
+        <file>images/imagesetup.png</file>
+        <file>images/funct.png</file>
+        <file>images/kformula.png</file>
+        <file>images/stopprog.png</file>
+        <file>images/app.ico</file>
+        <file>images/settings.png</file>
+        <file>images/start-sq.png</file>
+        <file>images/stop-sq.png</file>
+        <file>images/start-icon.png</file>
+        <file>images/stop-icon.png</file>
+        <file>images/setup-icon.png</file>
+        <file>images/formula-icon.png</file>
+        <file>images/rotate-icon.png</file>
+        <file>images/move-icon.png</file>
+        <file>images/about-icon.png</file>
+        <file>images/view.png</file>
+    </qresource>
+</RCC>
