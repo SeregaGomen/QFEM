@@ -1,0 +1,275 @@
+{
+    "Header": {
+        "DateTime": "2019-10-25T06:05:37.942",
+        "Object": "tank3s6",
+        "Title": "QFEM problem file"
+    },
+    "Mesh": {
+        "File": "D:/Work/Qt/QFEM/QFEM/mesh/tank3/gmsh/shell/tank3s6.trpa"
+    },
+    "Parameters": {
+        "Accuracy": "1e-10",
+        "BoundaryConditions": [
+            {
+                "Direct": "0",
+                "Expression": "6.5E+10",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "7"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.3",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "8"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0015",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "11"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "10"
+            },
+            {
+                "Direct": "0",
+                "Expression": "",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "12"
+            },
+            {
+                "Direct": "0",
+                "Expression": "",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "13"
+            },
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "8",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "64",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "2",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "16",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "128",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "4",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "32",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "256",
+                "Expression": "0",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "1"
+            },
+            {
+                "Direct": "0",
+                "Expression": "P - p",
+                "Predicate": "(y <= 0 and y>=-L) and (abs(x**2 + z**2 - R**2) <= eps)",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "P - p",
+                "Predicate": "(y < -L) and (abs(x**2 + z**2 + (y + L)**2 - R**2) <= eps)",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "P",
+                "Predicate": "(y > 0) and (abs(x**2 + y**2 + z**2 - R**2) <= eps)",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "p",
+                "Predicate": "(y == -1.724) and (x**2+z**2 - 0.342**2 <= eps)",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "p",
+                "Predicate": "(y == -1.944) and (x**2+z**2 - 0.660**2 <= eps)",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "p",
+                "Predicate": "(y > -0.641 and y <-0.0234) and abs(y-((x**2+z**2)**0.5)*(-1.0644108554)-1.1013629509)<=eps",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "p",
+                "Predicate": "(y>-1.944 and y <-1.7235) and abs(y - ((x**2 + z**2)**0.5)*(-1.0018498686)+1.3808172524)<=eps",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "p",
+                "Predicate": "(y>-1.944 and y < -0.6431) and abs(y - ((x**2 + z**2)**0.5)*(1.3260378897) + 2.8163434974)<=eps",
+                "StressStrainCurve": [
+                ],
+                "Type": "6"
+            },
+            {
+                "Direct": "7",
+                "Expression": "0",
+                "Predicate": "y == -0.643 and abs(x**2 + z**2 -1.641**2) <= eps\t",
+                "StressStrainCurve": [
+                ],
+                "Type": "2"
+            },
+            {
+                "Direct": "0",
+                "Expression": "",
+                "Predicate": "",
+                "StressStrainCurve": [
+                ],
+                "Type": "14"
+            }
+        ],
+        "DynamicParameters": {
+            "T0": "0",
+            "T1": "0",
+            "TH": "0",
+            "WilsonTheta": "1.37"
+        },
+        "Names": [
+            "x",
+            "y",
+            "z",
+            "t",
+            "U",
+            "V",
+            "W",
+            "Tx",
+            "Ty",
+            "Tz",
+            "Exx",
+            "Eyy",
+            "Ezz",
+            "Exy",
+            "Exz",
+            "Eyz",
+            "Sxx",
+            "Syy",
+            "Szz",
+            "Sxy",
+            "Sxz",
+            "Syz",
+            "Ut",
+            "Vt",
+            "Wt",
+            "Utt",
+            "Vtt",
+            "Wtt"
+        ],
+        "Nonlinearity": {
+            "CalculationMethod": 0,
+            "LoadStep": "0.01"
+        },
+        "OutputParameters": {
+            "Precision": "5",
+            "Width": "12"
+        },
+        "ProblemType": "Static",
+        "Variables": [
+            "L 0.269",
+            "P 10000",
+            "R 1.037",
+            "eps 0.01",
+            "p 5000"
+        ]
+    }
+}

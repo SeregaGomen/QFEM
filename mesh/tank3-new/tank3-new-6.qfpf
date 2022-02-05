@@ -1,0 +1,272 @@
+{
+    "Header": {
+        "DateTime": "2020-01-23T21:38:42.061",
+        "Object": "tank3-new",
+        "Title": "QFEM problem file"
+    },
+    "Mesh": {
+        "File": "tank3-new-6.trpa"
+    },
+    "Parameters": {
+        "Accuracy": "1e-10",
+        "BoundaryConditions": [
+            {
+                "Direct": "0",
+                "Expression": "7.1E+10",
+                "Predicate": "",
+                "Type": "7"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.3",
+                "Predicate": "",
+                "Type": "8"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0032",
+                "Predicate": "y > (L / 2 + Lt + sqrt(R*R - 0.17*0.17))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0019",
+                "Predicate": "y > (L / 2 + Lt + sqrt(R*R - 0.365*0.365))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0032",
+                "Predicate": "y > (L / 2 + Lt + sqrt(R*R - 0.418*0.418))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0019",
+                "Predicate": "y > (L / 2 + Lt + sqrt(R*R - 0.94*0.94))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.003",
+                "Predicate": "y > (L / 2 + Lt + sqrt(R*R - 0.9645*0.9645))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0019",
+                "Predicate": "y > (L / 2 +Lt + sqrt(R*R - 1.029*1.029))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.003",
+                "Predicate": "y > (L / 2 + 0.061)",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.058",
+                "Predicate": "y > (L / 2 + 0.031)",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.003",
+                "Predicate": "y > L / 2 - 0.020",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0023",
+                "Predicate": "abs(y) <= L / 2 - 0.020",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.003",
+                "Predicate": "y > -L / 2",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.007",
+                "Predicate": "y > -(L/2 + Lb)",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0015",
+                "Predicate": "y > -(L/2 + Lb + sqrt(R*R - 0.479*0.479))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0024",
+                "Predicate": "y > -(L/2 + Lb + sqrt(R*R - 0.4365*0.4365))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.007",
+                "Predicate": "y > -(L/2 +Lb + sqrt(R*R - 0.425*0.425))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0125",
+                "Predicate": "y > -(L/2 + Lb + sqrt(R*R - 0.403*0.403))",
+                "Type": "9"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0024",
+                "Predicate": "",
+                "Type": "9"
+            },
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "8",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "64",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "2",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "16",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "128",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "4",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "32",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "256",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "0",
+                "Expression": "P",
+                "Predicate": "y - L / 2 - Lt >= 0",
+                "Type": "6"
+            },
+            {
+                "Direct": "0",
+                "Expression": "P/2",
+                "Predicate": "y - L / 2 - Lt < 0",
+                "Type": "6"
+            },
+            {
+                "Direct": "7",
+                "Expression": "0",
+                "Predicate": "abs(y - L / 2 - Lt) <= eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "abs(x) < eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "4",
+                "Expression": "0",
+                "Predicate": "abs(z) < eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "0",
+                "Expression": "{{1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12} }",
+                "Predicate": "",
+                "Type": "14"
+            }
+        ],
+        "DynamicParameters": {
+            "T0": "0",
+            "T1": "0",
+            "TH": "0",
+            "WilsonTheta": "1.37"
+        },
+        "Names": [
+            "x",
+            "y",
+            "z",
+            "t",
+            "U",
+            "V",
+            "W",
+            "Tx",
+            "Ty",
+            "Tz",
+            "Exx",
+            "Eyy",
+            "Ezz",
+            "Exy",
+            "Exz",
+            "Eyz",
+            "Sxx",
+            "Syy",
+            "Szz",
+            "Sxy",
+            "Sxz",
+            "Syz",
+            "Ut",
+            "Vt",
+            "Wt",
+            "Utt",
+            "Vtt",
+            "Wtt"
+        ],
+        "Nonlinearity": {
+            "CalculationMethod": 1,
+            "LoadStep": "5"
+        },
+        "OutputParameters": {
+            "Precision": "5",
+            "Width": "12"
+        },
+        "ProblemType": "Static",
+        "Variables": [
+            "L 0.22",
+            "Lb 0.047",
+            "Lt 0.0435",
+            "P 10000",
+            "R 1.037",
+            "eps 0.001"
+        ]
+    }
+}
