@@ -101,6 +101,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
         genResults(res); // Вычисление дополнительных результатов
     else
         throw ErrorCode::EEquationNotSolved;
+
     if (isProcessAborted)
         throw ErrorCode::EAbort;
     isProcessStarted = false;
