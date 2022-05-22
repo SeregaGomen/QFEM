@@ -447,13 +447,132 @@ void calcNewTank3(void)
 //}
 
 
+void calcNewTank1(void)
+{
+    TFEMObject object;
+    matrix<double> ssc = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
+    double eps = 0.001,
+           C = 1.454,
+           CX_BOT = 20.7657,
+           CX_TOP = -8.5497,
+           D = 3.9,
+           FI_B = -0.872665,
+           FI_T = -2.26893,
+           H = 0.06,
+           K2_BOT = 0.0520196,
+           K2_TOP = 0.0520196,
+           L = 12.216,
+           L1 = 1.767,
+           L2 = 2.122,
+           L3 = 1.654,
+           L4 = 1.09,
+           P = 100,
+           R = 2.5;
+
+    //if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
+    //if (!object.setMeshFile("/home/serg/work/tank-new/tank.trpa"))
+    if (!object.setMeshFile("D:/work/tank-new/tank.trpa"))
+        return;
+    object.setNumThread(8);
+    object.setTaskParam(FEMType::StaticProblem);
+
+    // Упругие характеристики
+    object.addYoungModulus(6.67E+10);
+    object.addPoissonRatio(0.3);
+    // Толщина КЭ
+    object.addThickness([&](double x, double y, double z, double) {
+        double ret = 0.0083;
+
+        if (x >= 0 and x <= L)
+            ret = 0.0105;
+        else if (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C))
+            ret = 0.0075;
+        else if (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C))
+            ret = 0.0075;
+        else if (x >= (R * cos(FI_T) + C) and x <= 0)
+            ret = 0.07;
+        else if (x >= L and x <= (R * cos(FI_B) + L - C))
+            ret = 0.07;
+        else if (x >= L3 - H / 2.0 and x <= L3 + H / 2)
+            ret = 0.02;
+        else if (x >= 2 * L3 - H / 2 and x <= 2 * L3 + H / 2)
+            ret = 0.02;
+        else if (x >= 3 * L3 - H and x <= 3 * L3 + H)
+            ret = 0.04;
+        else if (x >= 4 * L3 - H / 2 and x <= 4 * L3 + H / 2)
+            ret = 0.02;
+        else if (x >= 5 * L3 - H / 2 and x <= 5 * L3 + H / 2)
+            ret = 0.02;
+        else if (x >= 6 * L3 - H / 2 and x <= 6 * L3 + H / 2)
+            ret = 0.02;
+        else if (x >= 6 * L3 - H / 2 + L4 and x <= 6 * L3 + H / 2 + L4)
+            ret = 0.02;
+        return ret;
+    });
+
+    // Граничные условия
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z,
+                                0.0,
+                                [&](double x, double, double, double) {
+        return abs(x - L - L2) <= eps ? 1.0 : 0.0;
+    });
+//    object.addBoundaryCondition(Direction::Z,
+//                                0.0,
+//                                [&](double, double y, double, double) {
+//        return abs(y) <= eps ? 1.0 : 0.0;
+//    });
+//    object.addBoundaryCondition(Direction::Y,
+//                                0.0,
+//                                [&](double, double, double z, double) {
+//        return abs(z) <= eps ? 1.0 : 0.0;
+//    });
+    // Распределенная поверхностная нагрузка
+    object.addPressureLoad(P,
+                           [&](double x, double, double, double) {
+        return x >= 0 and x <= L ? 1.0 : 0.0;
+    });
+    object.addPressureLoad(P,
+                           [&](double x, double y, double z, double) {
+        return abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C) ? 1.0 : 0.0;
+    });
+    object.addPressureLoad(P,
+                           [&](double x, double y, double z, double) {
+        return abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C) ? 1.0 : 0.0;
+    });
+    object.addPressureLoad(P,
+                           [&](double x, double y, double z, double) {
+        return (x>= (R * cos(FI_T) + C) and x <= 0) and abs(pow(y, 2) + pow(z, 2) - K2_TOP * pow(x - CX_TOP, 2)) < eps ? 1.0 : 0.0;
+    });
+    object.addPressureLoad(P,
+                           [&](double x, double y, double z, double) {
+        return (x >= L and x <= (R * cos(FI_B) + L - C)) and abs(pow(y, 2) + pow(z, 2)  - K2_BOT * pow(x - CX_BOT, 2)) < eps ? 1.0 : 0.0;
+    });
+    // Диаграмма деформирования
+    object.addStressStrainCurve(ssc);
+    // Шаг по нагрузке
+    object.setLoadStep(5);
+    // Способ расчета пластичности
+    object.setPlasticityMethod(PlasticityMethod::MVS);
+
+
+    // Запуск расчета
+    if (object.start())
+    {
+        object.saveResult(object.stdResName());
+        object.printResult(object.stdTxtResName());
+    }
+
+}
+
+
 int main()
 {
     msg = new TMessenger();
 
+    calcNewTank1();
     // calcNewTank3();
     // calcTank();
-    calcBalka();
+    // calcBalka();
     // calcShell();
     // pyfem_test();
     // calcTank3ds();
@@ -462,3 +581,4 @@ int main()
     delete msg;
     return 0;
 }
+

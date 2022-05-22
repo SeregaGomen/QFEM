@@ -1,5 +1,5 @@
 #include <ctime>
-//#include <Eigen/PardisoSupport>
+#include <Eigen/PardisoSupport>
 #include <Eigen/SparseCholesky>
 #include "mesh/mesh.h"
 #include "solver/eigensolver.h"
@@ -9,8 +9,8 @@ extern TMessenger* msg;
 
 bool TEigenSolver::solve(vector<double> &r, double, bool&)
 {
-//    PardisoLLT<SparseMatrix<double>> solver;
-    SimplicialLLT<SparseMatrix<double>> solver;
+    PardisoLLT<SparseMatrix<double>> solver;
+//    SimplicialLLT<SparseMatrix<double>> solver;
 //    ConjugateGradient<SparseMatrix<double>, Eigen::Upper> solver;
 //    BiCGSTAB<SparseMatrix<double>> solver;
     VectorXd x,

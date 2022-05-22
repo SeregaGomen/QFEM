@@ -5,7 +5,7 @@ CONFIG -= qt
 DEFINES += BOOST_ALL_NO_LIB
 
 linux {
-QMAKE_LFLAGS += -pthread
+    QMAKE_LFLAGS += -pthread
 }
 
 msvc:QMAKE_CXXFLAGS += /permissive-
@@ -36,7 +36,9 @@ SOURCES += main.cpp \
     ../core/parser/parser.cpp \
     ../core/solver/bccsolver.cpp \
     ../core/solver/eigensolver.cpp \
-    ../core/solver/sparse32.cpp
+    ../core/solver/envsolver.cpp \
+    ../core/sparse/sparse_bccs.cpp \
+    ../core/sparse/sparse_env.cpp
 
 
 HEADERS += \
@@ -61,8 +63,10 @@ HEADERS += \
     ../core/parser/node.h \
     ../core/parser/parser.h \
     ../core/solver/bccsolver.h \
+    ../core/solver/envsolver.h \
     ../core/solver/solver.h \
     ../core/solver/eigensolver.h \
-    ../core/solver/sparse32.h \
+    ../core/sparse/sparse_bccs.h \
+    ../core/sparse/sparse_env.h \
     ../core/util/list.h \
     ../core/util/matrix.h

@@ -21,15 +21,15 @@ msvc:QMAKE_CXXFLAGS += /permissive-
 #gcc:QMAKE_CXXFLAGS+= -fopenmp
 #gcc:QMAKE_LFLAGS += -fopenmp
 
-#win32 {
-#    INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
-#    LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
-#}
-#
-#unix {
-#    INCLUDEPATH +=../../../intel/mkl/include/
-#    LIBS += -L$$PWD/../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
-#}
+win32 {
+    INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
+    LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+}
+
+unix {
+    INCLUDEPATH +=../../../intel/mkl/include/
+    LIBS += -L$$PWD/../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+}
 
 
 SOURCES += main.cpp\
