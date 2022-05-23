@@ -483,9 +483,7 @@ void calcNewTank1(void)
     object.addThickness([&](double x, double y, double z, double) {
         double ret = 0.0083;
 
-        if (x >= 0 and x <= L)
-            ret = 0.0105;
-        else if (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C))
+        if (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C))
             ret = 0.0075;
         else if (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C))
             ret = 0.0075;
@@ -507,6 +505,9 @@ void calcNewTank1(void)
             ret = 0.02;
         else if (x >= 6 * L3 - H / 2 + L4 and x <= 6 * L3 + H / 2 + L4)
             ret = 0.02;
+        else if (x >= 0 and x <= L)
+            ret = 0.0105;
+
         return ret;
     });
 
@@ -550,7 +551,7 @@ void calcNewTank1(void)
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc);
     // Шаг по нагрузке
-    object.setLoadStep(5);
+    object.setLoadStep(10);
     // Способ расчета пластичности
     object.setPlasticityMethod(PlasticityMethod::MVS);
 
