@@ -461,14 +461,14 @@ void calcNewTank1(void)
            C = 1.454,
            CX_BOT = 20.7657,
            CX_TOP = -8.5497,
-           D = 3.9,
+           // D = 3.9,
            FI_B = -0.872665,
            FI_T = -2.26893,
            H = 0.06,
            K2_BOT = 0.0520196,
            K2_TOP = 0.0520196,
            L = 12.216,
-           L1 = 1.767,
+           // L1 = 1.767,
            L2 = 2.122,
            L3 = 1.654,
            L4 = 1.09,
@@ -477,7 +477,8 @@ void calcNewTank1(void)
 
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank.trpa"))
-    if (!object.setMeshFile("D:/work/tank-new/tank_1.trpa"))
+    // if (!object.setMeshFile("D:/work/tank-new/tank_1.trpa"))
+    if (!object.setMeshFile("D:/work/tank-new/tank_2.trpa"))
         return;
     object.setNumThread(5);
     object.setTaskParam(FEMType::StaticProblem);
@@ -496,31 +497,16 @@ void calcNewTank1(void)
     object.addThickness([&](double x, double y, double z, double) {
         double ret = 0.0083;
 
-        if (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C))
+        if ((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)))
             ret = 0.0075;
-        else if (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C))
-            ret = 0.0075;
-        else if (x >= (R * cos(FI_T) + C) and x <= 0)
+        else if ((x >= (R * cos(FI_T) + C) and x <= 0) or ((x >= L and x <= (R * cos(FI_B) + L - C))))
             ret = 0.07;
-        else if (x >= L and x <= (R * cos(FI_B) + L - C))
-            ret = 0.07;
-        else if (x >= L3 - H / 2.0 and x <= L3 + H / 2)
-            ret = 0.02;
-        else if (x >= 2 * L3 - H / 2 and x <= 2 * L3 + H / 2)
-            ret = 0.02;
+        else if ((x >= L3 - H / 2.0 and x <= L3 + H / 2) or ((x >= 2 * L3 - H / 2 and x <= 2 * L3 + H / 2)) or (x >= 4 * L3 - H / 2 and x <= 4 * L3 + H / 2) or (x >= 5 * L3 - H / 2 and x <= 5 * L3 + H / 2) or (x >= 6 * L3 - H / 2 and x <= 6 * L3 + H / 2) or (x >= 6 * L3 - H / 2 + L4 and x <= 6 * L3 + H / 2 + L4))
+            ret = 0.0255;
         else if (x >= 3 * L3 - H and x <= 3 * L3 + H)
             ret = 0.04;
-        else if (x >= 4 * L3 - H / 2 and x <= 4 * L3 + H / 2)
-            ret = 0.02;
-        else if (x >= 5 * L3 - H / 2 and x <= 5 * L3 + H / 2)
-            ret = 0.02;
-        else if (x >= 6 * L3 - H / 2 and x <= 6 * L3 + H / 2)
-            ret = 0.02;
-        else if (x >= 6 * L3 - H / 2 + L4 and x <= 6 * L3 + H / 2 + L4)
-            ret = 0.02;
         else if (x >= 0 and x <= L)
             ret = 0.0105;
-
         return ret;
     });
 
