@@ -665,14 +665,14 @@ void TGLMesh::renderText(double x, double y, double z, QString text, QColor colo
     double textPosX = 0,
            textPosY = 0,
            textPosZ = 0,
-           model[4][4],
-           proj[4][4];
+           model[16],
+           proj[16];
     int view[4];
 
-    glGetDoublev(GL_MODELVIEW_MATRIX, &model[0][0]);
-    glGetDoublev(GL_PROJECTION_MATRIX, &proj[0][0]);
-    glGetIntegerv(GL_VIEWPORT, &view[0]);
-    project(x, y, z, &model[0][0], &proj[0][0], &view[0], &textPosX, &textPosY, &textPosZ);
+    glGetDoublev(GL_MODELVIEW_MATRIX, model);
+    glGetDoublev(GL_PROJECTION_MATRIX, proj);
+    glGetIntegerv(GL_VIEWPORT, view);
+    project(x, y, z, model, proj, view, &textPosX, &textPosY, &textPosZ);
 
     textPosY = height() - textPosY; // y is inverted
     painter.setPen(color);
@@ -709,15 +709,9 @@ inline int TGLMesh::project(double objx, double objy, double objz, const double 
 /*******************************************************************/
 inline void TGLMesh::transformPoint(double out[4], const double m[16], const double in[4])
 {
-#define M(row, col)  m[col * 4 + row]
-    out[0] =
-        M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
-    out[1] =
-        M(1, 0) * in[0] + M(1, 1) * in[1] + M(1, 2) * in[2] + M(1, 3) * in[3];
-    out[2] =
-        M(2, 0) * in[0] + M(2, 1) * in[1] + M(2, 2) * in[2] + M(2, 3) * in[3];
-    out[3] =
-        M(3, 0) * in[0] + M(3, 1) * in[1] + M(3, 2) * in[2] + M(3, 3) * in[3];
-#undef M
+    out[0] = m[0] * in[0] + m[4] * in[1] + m[8] * in[2] + m[12] * in[3];
+    out[1] = m[1] * in[0] + m[5] * in[1] + m[9] * in[2] + m[13] * in[3];
+    out[2] = m[2] * in[0] + m[6] * in[1] + m[10] * in[2] + m[14] * in[3];
+    out[3] = m[3] * in[0] + m[7] * in[1] + m[11] * in[2] + m[15] * in[3];
 }
 /*******************************************************************/
