@@ -172,9 +172,25 @@ void TParser::token_not(TNode& code)
     if (token_type == TokenType::Delimiter and op == Token::Not)
         get_token();
 
-    token_add(code);
+    token_eq(code);
     if (op == Token::Not)
         code = TNode(Token::Not, make_shared<TNode>(code));
+}
+/********************************************************************/
+void TParser::token_eq(TNode& code)
+{
+    Token op;
+    TNode hold;
+    string pm;
+
+    token_add(code);
+    while (token_type not_eq TokenType::Finished and ((pm = token) == ">" or pm == "<" or pm == ">=" or pm == "<=" or pm == "<>" or pm == "=="))
+    {
+        get_token();
+        token_add(hold);
+        is_find(opeartionList, pm, op);
+        code = TNode(make_shared<TNode>(code), op, make_shared<TNode>(hold));
+    }
 }
 /********************************************************************/
 void TParser::token_add(TNode& code)
@@ -184,7 +200,7 @@ void TParser::token_add(TNode& code)
     string pm;
 
     token_mul(code);
-    while (token_type not_eq TokenType::Finished and ((pm = token) == "+" or pm == "-" or pm == ">" or pm == "<" or pm == ">=" or pm == "<=" or pm == "<>" or pm == "=="))
+    while (token_type not_eq TokenType::Finished and ((pm = token) == "+" or pm == "-"))
     {
         get_token();
         token_mul(hold);

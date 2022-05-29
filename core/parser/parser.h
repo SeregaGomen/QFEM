@@ -65,6 +65,7 @@ private:
     void token_or(TNode&);
     void token_and(TNode&);
     void token_not(TNode&);
+    void token_eq(TNode&);
     void token_add(TNode&);
     void token_func(TNode&);
     void token_mul(TNode&);

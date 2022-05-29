@@ -496,7 +496,6 @@ void calcNewTank1(void)
     // Толщина КЭ
     object.addThickness([&](double x, double y, double z, double) {
         double ret = 0.0083;
-
         if ((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)))
             ret = 0.0075;
         else if ((x >= (R * cos(FI_T) + C) and x <= 0) or ((x >= L and x <= (R * cos(FI_B) + L - C))))
