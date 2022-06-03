@@ -2,7 +2,6 @@
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
 #include "solver/eigensolver.h"
-#include "solver/cgsolver.h"
 #include "solver/bccsolver.h"
 #include "solver/lzhsolver.h"
 #include "solver/envsolver.h"

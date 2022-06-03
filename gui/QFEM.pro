@@ -11,8 +11,7 @@ DEFINES += BOOST_ALL_NO_LIB
 
 
 INCLUDEPATH += ../core \
-               ../../../eigen \
-               ../../../boost
+               ../../../eigen
 
 msvc:LIBS += -lOpenGL32
 msvc:QMAKE_CXXFLAGS += /permissive-
@@ -22,8 +21,10 @@ msvc:QMAKE_CXXFLAGS += /permissive-
 #gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
-    INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
-    LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+    #INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
+    #LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2022.1.0/include/'
+    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2022.1.0/lib/intel64/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
 }
 
 unix {
@@ -49,7 +50,6 @@ SOURCES += main.cpp\
     femprocessor.cpp \
     glmesh.cpp \
     ../core/solver/bccsolver.cpp \
-    ../core/solver/cgsolver.cpp \
     ../core/solver/lzhsolver.cpp \
     ../core/sparse/sparse_bccs.cpp \
     ../core/solver/eigensolver.cpp \
@@ -78,7 +78,6 @@ HEADERS  += mainwindow.h \
     terminal.h \
     glmesh.h \
     ../core/solver/bccsolver.h \
-    ../core/solver/cgsolver.h \
     ../core/solver/lzhsolver.h \
     ../core/sparse/sparse_bccs.h \
     ../core/parser/defs.h \
@@ -128,3 +127,4 @@ OTHER_FILES += \
 
 # win:message(in scope win)
 # unix:message(in scope unix)
+
