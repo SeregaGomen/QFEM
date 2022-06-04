@@ -252,34 +252,35 @@ void TGLFunction::showLegend(void)
     QFont font("Courier", 12, QFont::Normal);
     QFontMetrics fm(font);
     QString val;
-    int num = (fabs(min_u - max_u) < 1.0E-20f) ? 1 : 8,
-        h = colorTable.size()/num,
-        fontW1 = fm.horizontalAdvance("12"),
+    int fontW1 = fm.horizontalAdvance("12"),
         fontW2 = fm.horizontalAdvance("1234567890"),
         fontH = fm.height();
-    float start = max_u,
-          stop = min_u,
-          step = (max_u - min_u) / num,
-          v = start,
-          cy = rc.top() + 20;
+//    double start = max_u[0],
+//           stop = min_u[0],
+//           step = (max_u[0] - min_u[0]) / num,
+//           v = start,
+//           cy = rc.top() + 20;
+    int start = getColorIndex(min_u[0]),
+        stop = getColorIndex(max_u[0]),
+        cy = rc.top() + 20;
+    double step = double(stop - start) / 6.0,
+           v = min_u[0],
+           h = (max_u[0] - min_u[0]) / 6.0;
 
     if (not (mesh and mesh->getTypeFE() not_eq FEType::undefined) or rc.height() < 9 * fontH)
         return;
 
     painter.setFont(font);
-    for (int k = colorTable.size() - 1; k >= 0; k -= h)
+    for (int k = 0; k < 7; k++)
     {
-        if (k - h < 0)
-        {
-            v = stop;
-            k = 0;
-        }
-        painter.setPen(colorTable[k]);
+        if (k == 6)
+            v = max_u[0];
+        painter.setPen(colorTable[k * step + start]);
         painter.drawText(rc.width() - fontW1 - fontW2 - 10, int(cy), "█");
         painter.setPen(QColor(255 - float(params.bkgColor.red()), 255 - float(params.bkgColor.green()), 255 - float(params.bkgColor.blue())));
         painter.drawText(rc.width() - fontW2 - 10, int(cy), val.asprintf("%+5.3E", double(v)));
         cy += fontH;
-        v -= step;
+        v += h;
     }
 
 }
@@ -397,7 +398,7 @@ void TGLFunction::drawTriangle3D(QVector<QVector4D>& tri)
 /*******************************************************************/
 int TGLFunction::getColorIndex(float u)
 {
-    int ret = int(floor((u - min_u) / (max_u - min_u) * float(params.numColor)));
+    int ret = int(floor((u - min_u[1]) / (max_u[1] - min_u[1]) * double(params.numColor)));
 
     return (ret < 0) ? 0 : ((ret > params.numColor - 1) ? params.numColor - 1 : ret);
 }
@@ -420,8 +421,8 @@ float TGLFunction::cZ(unsigned i)
 void TGLFunction::mouseDoubleClickEvent(QMouseEvent* e)
 {
     float colors[3] = { 0.0f, 0.0f, 0.0f };
-    float u = min_u,
-          h = (max_u - min_u) / float(colorTable.size()),
+    float u = min_u[0],
+          h = (max_u[0] - min_u[0]) / float(colorTable.size()),
           eps = 0.01f;
 
     if (params.isLight)

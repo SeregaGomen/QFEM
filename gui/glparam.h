@@ -13,15 +13,17 @@ class TGLParameter : public TGLFunction
 private:
     ParamType paramType;
     QVector<QVector4D> vertex;
-    void getMinMax(float &min, float &max)
+    void getMinMax(double min[2], double max[2])
     {
-        min = std::numeric_limits<float>::max();
-        max = std::numeric_limits<float>::min();
+        min[0] = std::numeric_limits<float>::max();
+        max[0] = std::numeric_limits<float>::min();
         for (auto v: vertex)
         {
-            min = qMin(min, v.w());
-            max = qMax(max, v.w());
+            min[0] = qMin(min[0], v.w());
+            max[0] = qMax(max[0], v.w());
         }
+        min[1] = -qMax(abs(min[0]), abs(max[0]));
+        max[1] = abs(min[1]);
     }
     void createLoads(void);
     void createBoundaryConditions(void);

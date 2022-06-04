@@ -283,7 +283,7 @@ bool TFEMObject::loadResult(string fname)
     msg->setProcess(ProcessCode::ReadingResult);
     // Считывание заголовка
     getline(in, str);
-    if (str not_eq "Core QFEM results file")
+    if (str not_eq "Core QFEM results file" and str not_eq "FEM Solver Results File")
     {
         msg->stop();
         in.close();

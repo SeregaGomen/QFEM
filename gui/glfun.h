@@ -9,19 +9,20 @@ class TGLFunction : public TGLMesh
 {
     Q_OBJECT
 private:
-    float min_u = 0;
-    float max_u = 0;
+    double min_u[2] = {0, 0};
+    double max_u[2] = {0, 0};
     vector<double> *results;    // Результаты расчета
     vector<double> *dx;         // Смещения
     vector<double> *dy;         // ...
     vector<double> *dz;         // ...
     QString expression;         // Выражение, с помощью которого вычислена визуализируемая функция
     QVector<QColor> colorTable;
-
-    virtual void getMinMax(float &min, float &max)
+    virtual void getMinMax(double min[2], double max[2])
     {
-        min = float(*min_element(results->begin(), results->end()));
-        max = float(*max_element(results->begin(), results->end()));
+        min[0] = *min_element(results->begin(), results->end());
+        max[0] = *max_element(results->begin(), results->end());
+        min[1] = abs(min[0]) > abs(max[0]) ? -abs(min[0]) : -abs(max[0]);
+        max[1] = abs(min[1]);
     }
     void drawSegment(QVector<QVector4D>&);
     void showLegend(void);

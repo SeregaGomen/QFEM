@@ -1526,7 +1526,7 @@ void TMainWindow::loadMesh(const QJsonObject &meshObj)
                      be;
     TMesh &mesh = femProcessor->getFEMObject()->getMesh();
 
-    mesh.getDataFE(mesh.convertFEType(FEType(fe_type)), fe_size, be_size, fe_dim);
+    mesh.getDataFE(mesh.convertFEType(FEType(fe_type)), be_size, fe_size, fe_dim);
     x.resize(ja_x.size(), fe_dim);
     for (unsigned i = 0; i < unsigned(ja_x.size()); i++)
     {

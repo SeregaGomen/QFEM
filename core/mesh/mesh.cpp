@@ -632,8 +632,8 @@ bool TMesh::read(ifstream& in)
     //    getline(in, str);
     in >> str;
     // Cчитываем тип КЭ
-    in >> val;
-    if ((feType = getDataFE(val, surfaceSize, feSize, feDim)) == FEType::undefined)
+    in >> str;
+    if ((feType = getDataFE(str, surfaceSize, feSize, feDim)) == FEType::undefined)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
