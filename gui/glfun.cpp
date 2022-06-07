@@ -267,7 +267,7 @@ void TGLFunction::showLegend(void)
            v = min_u[0],
            h = (max_u[0] - min_u[0]) / 6.0;
 
-    if (not (mesh and mesh->getTypeFE() not_eq FEType::undefined) or rc.height() < 9 * fontH)
+    if (not (mesh and mesh->getTypeFE() not_eq FEType::undefined) or rc.height() < 9 * fontH or colorTable.size() == 0)
         return;
 
     painter.setFont(font);
