@@ -83,9 +83,9 @@ string TFEMParams::getName(unsigned i, FEType type)
 //--------------------------------------------------------------------
 // Извлечение значения параметра, соответствующего заданной координате
 //--------------------------------------------------------------------
-double TFEMParams::getScalarParam(ParamType p, vector<double>& cx)
+double TFEMParams::getScalarParam(ParamType p, vector<double> &cx)
 {
-    matrix<double> tmp;
+    vector<double> tmp;
     double res = 0;
 
     getParam(p, cx, res, tmp);
@@ -94,14 +94,14 @@ double TFEMParams::getScalarParam(ParamType p, vector<double>& cx)
 //--------------------------------------------------------------------
 //           Извлечение диаграммы деформирования материала
 //--------------------------------------------------------------------
-void TFEMParams::getMatrixParam(vector<double>& cx, matrix<double>& res)
+void TFEMParams::getVectorParam(vector<double> &cx, vector<double> &res)
 {
     double tmp;
 
     getParam(ParamType::StressStrainCurve, cx, tmp, res);
 }
 //--------------------------------------------------------------------
-void TFEMParams::getParam(ParamType p, vector<double>& cx, double& d, matrix<double>& m)
+void TFEMParams::getParam(ParamType p, vector<double> &cx, double &d, vector<double> &m)
 {
     for (auto it : plist)
         if (it.getType() == p)
@@ -123,10 +123,10 @@ double TFEMParams::getMinStress(void)
     for (auto it : plist)
         if (it.getType() == ParamType::StressStrainCurve)
         {
-            if (not it.getStressStrainCurve().size1())
+            if (not it.getStressStrainCurve().size())
                 throw ErrorCode::EStressStrainCurve;
-            if (it.getStressStrainCurve().size1() && it.getStressStrainCurve(1, 0) < res)
-                res = it.getStressStrainCurve(1, 0);
+            if (it.getStressStrainCurve().size() && it.getStressStrainCurve(1) < res)
+                res = it.getStressStrainCurve(1);
         }
     return res;
 }

@@ -651,14 +651,13 @@ void TProblemSetupForm::setTableValue(ParamType type, QTableWidget* tw, bool isD
             tw->insertRow(count);
             if (type == ParamType::StressStrainCurve)
             {
-                ssc = "{";
-                for (unsigned i = 0; i < it->getStressStrainCurve().size1(); i++)
+                ssc = "";
+                for (unsigned i = 0; i < it->getStressStrainCurve().size(); i++)
                 {
-                    ssc += "{" + QString("%1").arg(it->getStressStrainCurve(i, 0)) + "," + QString("%1").arg(it->getStressStrainCurve(i, 1)) + "}";
-                    if (i < it->getStressStrainCurve().size1() - 1)
-                        ssc += ",";
+                    ssc += QString("%1").arg(it->getStressStrainCurve(i));
+                    if (i < it->getStressStrainCurve().size() - 1)
+                        ssc += ", ";
                 }
-                ssc += "}";
                 newItem = new QTableWidgetItem(QString("%1").arg(ssc.toStdString().c_str()));
             }
             else
@@ -1016,39 +1015,13 @@ void TProblemSetupForm::setPlasticityParam(void)
     setTableValue(ParamType::StressStrainCurve, ui->twStressStrainCurve, false);
 }
 
-bool TProblemSetupForm::decodeStressStarinCurve(string str, matrix<double>& ssc)
+bool TProblemSetupForm::decodeStressStarinCurve(string str, vector<double> &ssc)
 {
-    char ch[4];
-    double val[2];
-    stringstream ss(str);
-    vector<double> v;
+    QStringList qs = QString(str.c_str()).split(',');
 
-    str.erase(remove(str.begin(), str.end(), ' '), str.end());
-    ss >> ch[0];
-    if (ch[0] not_eq '{')
-        return false;
-    while (ss.good())
-    {
-        ss >> ch[0] >> val[0] >> ch[1] >> val[1] >> ch[2] >> ch[3];
-        if (ss.bad())
-            return false;
-        if (ch[0] not_eq '{' or ch[1] not_eq ',' or ch[2] not_eq '}')
-            return false;
-        if (ch[3] not_eq ',' and ch[3] not_eq '}')
-            return false;
-        v.push_back(val[0]);
-        v.push_back(val[1]);
-        if (ch[3] == '}')
-            break;
-    }
-    if (ss.bad())
-        return false;
-    ssc.resize(unsigned(v.size() / 2), 2);
-    for (unsigned i = 0; i < v.size(); i += 2)
-    {
-        ssc[i / 2][0] = v[i];
-        ssc[i / 2][1] = v[i + 1];
-    }
+    ssc.resize(qs.size());
+    for (unsigned i = 0; i < qs.size(); i++)
+        ssc[i] = qs[i].toDouble();
     return true;
 }
 
@@ -1187,7 +1160,7 @@ bool TProblemSetupForm::checkPlasticity(void)
 {
     double val;
     bool  isOk;
-    matrix<double> ssc;
+    vector<double> ssc;
 
     if (ui->rbLinear->isChecked())
         return true;
@@ -1556,7 +1529,7 @@ void TProblemSetupForm::getFunNames(void)
 
 void TProblemSetupForm::getPlasticityParam(void)
 {
-    matrix<double> ssc(unsigned(ui->twStressStrainCurve->rowCount()), 2);
+    vector<double> ssc(unsigned(ui->twStressStrainCurve->rowCount()));
 
     femObject->getParams().pMethod = (ui->rbLinear->isChecked()) ? PlasticityMethod::Linear : (ui->rbMVS->isChecked()) ? PlasticityMethod::MVS : PlasticityMethod::MES;
     femObject->getParams().loadStep = ui->textLoadStep->text().toDouble();

@@ -9,22 +9,37 @@ void calcTank(void)
 {
     TFEMObject object;
     // Свойства материала АМг6М
-    matrix<double> ssc = {
-                            { 1.30E+8, 0.0020 },
-                            { 1.40E+8, 0.0024 },
-                            { 1.50E+8, 0.0030 },
-                            { 1.60E+8, 0.0040 },
-                            { 1.70E+8, 0.0055 },
-                            { 1.80E+8, 0.0079 },
-                            { 1.90E+8, 0.0130 },
-                            { 2.00E+8, 0.0150 },
-                            { 2.10E+8, 0.0248 },
-                            { 2.20E+8, 0.0320 },
-                            { 2.30E+8, 0.0361 },
-                            { 2.70E+8, 0.0500 },
-                            { 3.09E+8, 0.1000 },
-                            { 3.30E+8, 0.1500 }
-                          };
+//    matrix<double> ssc = {
+//                            { 1.30E+8, 0.0020 },
+//                            { 1.40E+8, 0.0024 },
+//                            { 1.50E+8, 0.0030 },
+//                            { 1.60E+8, 0.0040 },
+//                            { 1.70E+8, 0.0055 },
+//                            { 1.80E+8, 0.0079 },
+//                            { 1.90E+8, 0.0130 },
+//                            { 2.00E+8, 0.0150 },
+//                            { 2.10E+8, 0.0248 },
+//                            { 2.20E+8, 0.0320 },
+//                            { 2.30E+8, 0.0361 },
+//                            { 2.70E+8, 0.0500 },
+//                            { 3.09E+8, 0.1000 },
+//                            { 3.30E+8, 0.1500 }
+//                          };
+    vector<double> ssc = {
+                             1.30E+8 / 0.0020,
+                             1.40E+8 / 0.0024,
+                             1.50E+8 / 0.0030,
+                             1.60E+8 / 0.0040,
+                             1.70E+8 / 0.0055,
+                             1.80E+8 / 0.0079,
+                             1.90E+8 / 0.0130,
+                             2.00E+8 / 0.0150,
+                             2.10E+8 / 0.0248,
+                             2.20E+8 / 0.0320,
+                             2.30E+8 / 0.0361,
+                             2.70E+8 / 0.0500,
+                             3.09E+8 / 0.1000,
+                             3.30E+8 / 0.1500};
 
     if (!object.setMeshFile("../../QFEM/mesh/tank-0_25.trp"))
         return;
@@ -348,7 +363,8 @@ void calcNewTank3(void)
            L = 0.22,
            Lt = 0.0435,
            P = 1;
-    matrix<double> ssc = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
+    // matrix<double> ssc = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
+    vector<double> ssc = { 1.25525e+08, 1.27486e+08, 1.37293e+08, 1.471e+08, 1.56906e+08, 1.66713e+08, 1.7652e+08, 1.86326e+08, 1.96133e+08, 3.13813e+08};
 
     if (!object.setMeshFile("../../QFEM/mesh/tank3-new/tank3-new.trpa"))
         return;
@@ -450,9 +466,8 @@ void calcNewTank3(void)
 void calcNewTank1(void)
 {
     TFEMObject object;
-    // matrix<double> ssc = { {1.25525e+08, 0.001882}, {1.27486e+08, 0.002}, {1.37293e+08, 0.00241}, {1.471e+08, 0.0031}, {1.56906e+08, 0.0041}, {1.66713e+08, 0.0055}, {1.7652e+08, 0.008}, {1.86326e+08, 0.013}, {1.96133e+08, 0.0188}, {3.13813e+08, 0.12}};
-    matrix<double> ssc1 = {{6.5e+10, 0.002}, {1.5e+10, 0.004}, {5.0e+9, 0.008}, {1.25e+9, 0.12}};
-    matrix<double> ssc2 = {{7.3e+10, 0.003}, {2.0e+10, 0.006}, {4.0e+9, 0.016}, {1.43e+9, 0.072}};
+    vector<double> ssc1 = {6.5e+10, 1.5e+10, 5.0e+9, 1.25e+9};
+    vector<double> ssc2 = {7.3e+10, 2.0e+10, 4.0e+9, 1.43e+9};
     // matrix<double> ssc2 = ssc1;
     double eps = 0.001,
            E1 = 6.5e+10,
@@ -472,7 +487,7 @@ void calcNewTank1(void)
            L2 = 2.122,
            L3 = 1.654,
            L4 = 1.09,
-           P = 100,
+           P = 142196,
            R = 2.5;
 
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
@@ -480,7 +495,7 @@ void calcNewTank1(void)
     // if (!object.setMeshFile("D:/work/tank-new/tank_1.trpa"))
     if (!object.setMeshFile("D:/work/tank-new/tank_2.trpa"))
         return;
-    object.setNumThread(5);
+    object.setNumThread(7);
     object.setTaskParam(FEMType::StaticProblem);
 
     // Упругие характеристики
@@ -495,17 +510,23 @@ void calcNewTank1(void)
     object.addPoissonRatio(0.3);
     // Толщина КЭ
     object.addThickness([&](double x, double y, double z, double) {
-        double ret = 0.0083;
-        if ((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)))
-            ret = 0.0075;
-        else if ((x >= (R * cos(FI_T) + C) and x <= 0) or ((x >= L and x <= (R * cos(FI_B) + L - C))))
-            ret = 0.07;
-        else if ((x >= L3 - H / 2.0 and x <= L3 + H / 2) or ((x >= 2 * L3 - H / 2 and x <= 2 * L3 + H / 2)) or (x >= 4 * L3 - H / 2 and x <= 4 * L3 + H / 2) or (x >= 5 * L3 - H / 2 and x <= 5 * L3 + H / 2) or (x >= 6 * L3 - H / 2 and x <= 6 * L3 + H / 2) or (x >= 6 * L3 - H / 2 + L4 and x <= 6 * L3 + H / 2 + L4))
+        double ret = 0.016;
+        if (((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps) and (x <= (R * cos(FI_T) + C))) or ((abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps) and (x >= (R * cos(FI_B) + L - C))))
+            ret = 0.0046;
+        else if (((x >= (R * cos(FI_T) + C)) and (x <= 0)) or ((x >= L) and (x <= (R * cos(FI_B) + L - C))) or ((x >= 4 * L3 - H / 2) and (x <= 4 * L3 + H / 2)))
+            ret = 0.05;
+        else if (((x >= L3 - H / 2.0) and (x <= L3 + H / 2)) or ((x >= 2 * L3 - H / 2) and (x <= 2 * L3 + H / 2)) or ((x >= 5 * L3 - H / 2) and (x <= 5 * L3 + H / 2)) or ((x >= 6 * L3 - H / 2) and (x <= 6 * L3 + H / 2)) or ((x >= 6 * L3 - H / 2 + L4) and (x <= 6 * L3 + H / 2 + L4)))
             ret = 0.0255;
-        else if (x >= 3 * L3 - H and x <= 3 * L3 + H)
+        else if ((x >= 3 * L3 - H) and (x <= 3 * L3 + H))
             ret = 0.04;
-        else if (x >= 0 and x <= L)
-            ret = 0.0105;
+        else if ((x >= 0 and x <= (L3 - H / 2)) or (x >= (L3 + H / 2) and x <= (2 * L3 - H / 2)) or (x >= (2 * L3 + H / 2) and x <= (3 * L3 - H)) or (x >= (4 * L3 + H / 2) and x <= (5 * L3 - H / 2)) or (x >= (5 * L3 + H / 2) and x <= (6 * L3 - H / 2)))
+            ret = 0.0045;
+        else if ((x >= (3 * L3 + H)) and (x <= (4 * L3 - H / 2)))
+            ret = 0.0046;
+        else if ((x >= (6 * L3 + H / 2) and x <= (6 * L3 - H / 2 + L4)) or (x >= (6 * L3 + H / 2 + L4) and x <= L))
+            ret = 0.0052;
+        else if (x < 0)
+            ret = 0.0143;
         return ret;
     });
 
@@ -540,16 +561,16 @@ void calcNewTank1(void)
     });
     object.addPressureLoad(P,
                            [&](double x, double y, double z, double) {
-        return (x>= (R * cos(FI_T) + C) and x <= 0) and abs(pow(y, 2) + pow(z, 2) - K2_TOP * pow(x - CX_TOP, 2)) < eps ? 1.0 : 0.0;
+        return (x>= (R * cos(FI_T) + C) and x <= 0) and abs(y * y + z * z - K2_TOP * (x - CX_TOP) * (x - CX_TOP)) < eps ? 1.0 : 0.0;
     });
     object.addPressureLoad(P,
                            [&](double x, double y, double z, double) {
-        return (x >= L and x <= (R * cos(FI_B) + L - C)) and abs(pow(y, 2) + pow(z, 2)  - K2_BOT * pow(x - CX_BOT, 2)) < eps ? 1.0 : 0.0;
+        return (x >= L and x <= (R * cos(FI_B) + L - C)) and abs(y * y + z * z  - K2_BOT * (x - CX_BOT) * (x - CX_BOT)) < eps ? 1.0 : 0.0;
     });
     // Диаграмма деформирования
     object.addStressStrainCurve(ssc1,
                                 [&](double x, double y, double z, double) {
-        return (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)) ? 1.0 : 0.0;
+        return (abs(R * R - ((x - C) * (x - C)  + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)) ? 1.0 : 0.0;
     });
     object.addStressStrainCurve(ssc2,
                                 [&](double x, double y, double z, double) {

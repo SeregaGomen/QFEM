@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QMenu>
 #include <QItemDelegate>
-#include "util/matrix.h"
+#include <string>
 
 class QToolButton;
 class QTableWidget;
@@ -44,7 +44,7 @@ public:
     void changeLanguage(void);
     void clear(void);
     void setup(void);
-    bool decodeStressStarinCurve(string, matrix<double>&);
+    bool decodeStressStarinCurve(std::string, std::vector<double>&);
     bool getParams(void);
 
 private slots:

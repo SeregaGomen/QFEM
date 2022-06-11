@@ -183,8 +183,8 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
     double newE,
            feSi = si[TFEM::mesh->getFE(i, 0)];
     unsigned index;
-    vector<double> cx;
-    matrix<double> ssCurve;
+    vector<double> cx,
+                   ssCurve;
 
     TFEM::setupFE(fe, i);
     // -------------- Линейный (упругий) случай ------------------
@@ -194,7 +194,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
     // Загружаем диаграмму деформирования, соответствующую текущему КЭ
     TFEM::mesh->getCenterFE(i, cx);
     TFEM::params.getStressStrainCurve(cx, ssCurve);
-    if (ssCurve.size1() == 0)
+    if (ssCurve.size() == 0)
         throw ErrorCode::EStressStrainCurve;
 
     // Определяем среднюю по КЭ интенсивность наряжений
@@ -204,14 +204,14 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
 
     // ------------- Нелинейный случай ----------------
     // Поиск в таблице свойств материала соответствующего напряжения
-    if (feSi < ssCurve[1][0])
+    if (feSi < ssCurve[1])
         index = 0;
     else
-        for (index = 1; index < ssCurve.size1(); index++)
-            if (feSi > ssCurve[index - 1][0] and feSi <= ssCurve[index][0])
+        for (index = 1; index < ssCurve.size(); index++)
+            if (feSi > ssCurve[index - 1] and feSi <= ssCurve[index])
                 break;
 
-    if (index == ssCurve.size1())
+    if (index == ssCurve.size())
     {
         // Достигнут предел текучести
         index--;
@@ -219,7 +219,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
     }
 
     if (index not_eq index0[i])
-        newE = fabsl((ssCurve[index][0] - ssCurve[index0[i]][0]) / (ssCurve[index][1] - ssCurve[index0[i]][1]));
+        newE = fabsl(ssCurve[index] - ssCurve[index0[i]]);
     else
         newE = (e0[i] == 0.0) ? fe.getYoungModulus() : e0[i];
 
