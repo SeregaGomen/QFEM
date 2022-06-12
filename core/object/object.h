@@ -482,15 +482,15 @@ public:
         params.variables[name] = val;
     }
     // Диаграмма деформирования
-    void addStressStrainCurve(vector<double> &ssc, function<double (double, double, double, double)> p)
+    void addStressStrainCurve(matrix<double> &ssc, function<double (double, double, double, double)> p)
     {
         params.plist.addStressStrainCurve(ssc, p);
     }
-    void addStressStrainCurve(vector<double> &ssc, string p)
+    void addStressStrainCurve(matrix<double> &ssc, string p)
     {
         params.plist.addStressStrainCurve(ssc, p);
     }
-    void addStressStrainCurve(vector<double> &ssc)
+    void addStressStrainCurve(matrix<double> &ssc)
     {
         params.plist.addStressStrainCurve(ssc, "");
     }

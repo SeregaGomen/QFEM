@@ -927,8 +927,8 @@ void TMainWindow::sayParams(QString& webOut)
             {
                 webOut += QString("<br>%1. <b>%2</b>: %3").arg(num++).arg(tr("Predicate")).arg(it.getPredicate().c_str());// + "<br>";
                 webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("N")).arg(tr("Stress")).arg(tr("Deformation"));
-                for (unsigned i = 0; i < it.getStressStrainCurve().size(); i++)
-                    webOut += QString("<tr><td>%1</td><td>%2</td></tr>").arg(i + 1).arg(it.getStressStrainCurve(i), int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
+                for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
+                    webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>").arg(i + 1).arg(it.getStressStrainCurve(i, 0), int(femObject->getParams().width), 'e', int(femObject->getParams().precision)).arg(it.getStressStrainCurve(i, 1), int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
                 webOut += "</table><br>";
 
             }
@@ -1138,7 +1138,7 @@ bool TMainWindow::loadQFPF(QString fileName)
     string expr,
            pred;
     ParamType type;
-    vector<double> ssc;
+    matrix<double> ssc;
 
 
     file.setFileName(fileName);
@@ -1395,9 +1395,10 @@ void TMainWindow::saveParam(QJsonObject &main)
         bc.insert("Predicate", it.getPredicate().c_str());
         if (it.getType() == ParamType::StressStrainCurve)
         {
-            val = "";
-            for (unsigned i = 0; i < it.getStressStrainCurve().size(); i++)
-                val += QString("%1%2").arg(it.getStressStrainCurve(i)).arg((i < it.getStressStrainCurve().size() - 1) ? ", " : "");
+            val = "{";
+            for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
+                val += QString("{%1, %2}%3 ").arg(it.getStressStrainCurve(i, 0)).arg(it.getStressStrainCurve(i, 1)).arg((i < it.getStressStrainCurve().size1() - 1) ? "," : "");
+            val += "}";
             bc.insert("Expression", val);
         }
         else
@@ -1594,7 +1595,7 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
         int direct = static_cast<QJsonValue>(value)["Direct"].toInt();
         QString predicate = static_cast<QJsonValue>(value)["Predicate"].toString(),
                 expression = static_cast<QJsonValue>(value)["Expression"].toString();
-        vector<double> ssc;
+        matrix<double> ssc;
 
         if (type == ParamType::StressStrainCurve)
         {

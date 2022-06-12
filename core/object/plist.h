@@ -112,7 +112,7 @@ struct ParamValue
 {
     string s_value;
     function<double (double, double, double, double)> f_value;
-    vector<double> m_value;
+    matrix<double> m_value;
     void operator = (string val)
     {
         s_value = val;
@@ -121,7 +121,7 @@ struct ParamValue
     {
         f_value = val;
     }
-    void operator = (const vector<double> &val)
+    void operator = (const matrix<double> &val)
     {
         m_value = val;
     }
@@ -175,19 +175,19 @@ public:
         predicate = p;
         attr = a;
     }
-    TParameter(vector<double> &m, string p)
+    TParameter(matrix<double> &m, string p)
     {
         type = ParamType::StressStrainCurve;
         e_value = m;
         predicate = p;
     }
-    TParameter(vector<double> &m, function<double (double, double, double, double)> p)
+    TParameter(matrix<double> &m, function<double (double, double, double, double)> p)
     {
         type = ParamType::StressStrainCurve;
         e_value = m;
         predicate = p;
     }
-    TParameter(const TParameter& r)
+    TParameter(const TParameter &r)
     {
         attr = r.attr;
         type = r.type;
@@ -196,7 +196,7 @@ public:
         predicate = r.predicate;
     }
     ~TParameter(void) {}
-    TParameter operator = (const TParameter& r)
+    TParameter operator = (const TParameter &r)
     {
         attr = r.attr;
         type = r.type;
@@ -229,13 +229,13 @@ public:
     {
         return type;
     }
-    vector<double>& getStressStrainCurve(void)
+    matrix<double> &getStressStrainCurve(void)
     {
         return e_value.m_value;
     }
-    double getStressStrainCurve(unsigned i)
+    double getStressStrainCurve(unsigned i, unsigned j)
     {
-        return e_value.m_value[i];
+        return e_value.m_value[i][j];
     }
     bool isFuncPredicate(void)
     {
@@ -286,13 +286,13 @@ public:
 
         push_back(c);
     }
-    void addStressStrainCurve(vector<double> &ssc, string p)
+    void addStressStrainCurve(matrix<double> &ssc, string p)
     {
         TParameter c(ssc, p);
 
         push_back(c);
     }
-    void addStressStrainCurve(vector<double> &ssc, function<double (double, double, double, double)> p)
+    void addStressStrainCurve(matrix<double> &ssc, function<double (double, double, double, double)> p)
     {
         TParameter c(ssc, p);
 

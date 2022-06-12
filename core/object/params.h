@@ -17,9 +17,9 @@ using namespace std;
 class TFEMParams
 {
 private:
-    void getParam(ParamType, vector<double>&, double&, vector<double>&);
+    void getParam(ParamType, vector<double>&, double&, matrix<double>&);
     double getScalarParam(ParamType, vector<double>&);
-    void getVectorParam(vector<double>&, vector<double>&);
+    void getMatrixParam(vector<double>&, matrix<double>&);
     vector<unsigned> getFunIndex(FEType);
 public:
     FEMType fType;                  // Тип задачи (статика, динамика,...)
@@ -186,9 +186,9 @@ public:
         return getScalarParam(ParamType::Damping, cx);
     }
     // Извлечение диаграммы деформирования
-    void getStressStrainCurve(vector<double>& cx, vector<double>& ssc)
+    void getStressStrainCurve(vector<double>& cx, matrix<double>& ssc)
     {
-        getVectorParam(cx, ssc);
+        getMatrixParam(cx, ssc);
     }
     double getMinStress(void);
     bool getPredicateValue(TParameter&, vector<double>&);
