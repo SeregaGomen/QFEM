@@ -450,8 +450,10 @@ void calcNewTank3(void)
 void calcNewTank1(void)
 {
     TFEMObject object;
-    matrix<double> ssc1 = {{1.30E+08, 0.002}, {6.00E+07, 0.004}, {4.00E+07, 0.008}, {1.50E+08, 0.12}};
-    matrix<double> ssc2 = {{2.20E+08, 0.003}, {1.20E+08, 0.006}, {6.40E+07, 0.016}, {1.03E+08, 0.072}};
+//    matrix<double> ssc1 = {{1.30E+08, 0.002}, {6.00E+07, 0.004}, {4.00E+07, 0.008}, {1.50E+08, 0.12}};
+//    matrix<double> ssc2 = {{2.20E+08, 0.003}, {1.20E+08, 0.006}, {6.40E+07, 0.016}, {1.03E+08, 0.072}};
+    matrix<double> ssc1 = {{1.27E+08, 0.002}, {1.57E+08, 0.004}, {1.77E+08, 0.008}, {1.96E+08, 0.02}, {3.14E+08, 0.12}};
+    matrix<double> ssc2 = {{1.96E+08, 0.003}, {2.55E+08, 0.005}, {2.75E+08, 0.006}, {3.14E+08, 0.015}, {3.92E+08, 0.0725}};
     double eps = 0.001,
            E1 = 6.5e+10,
            E2 = 7.3e+10,
@@ -560,7 +562,7 @@ void calcNewTank1(void)
         return not ((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C))) ? 1.0 : 0.0;
     });
     // Шаг по нагрузке
-    object.setLoadStep(10);
+    object.setLoadStep(5);
     // Способ расчета пластичности
     object.setPlasticityMethod(PlasticityMethod::MVS);
 
