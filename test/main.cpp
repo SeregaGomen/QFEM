@@ -122,50 +122,6 @@ void calcBalka(void)
     }
 }
 
-// Тестовый расчет оболочки
-void calcShell(void)
-{
-    // Свойства материала АМг6М
-    TFEMObject object;
-    double z_min = 0.0,
-           z_max = 4.014,
-           eps = 1.0E-10,
-           P = 0.05;
-
-    if (!object.setMeshFile("../../QFEM/mesh/shell-tube-3.trpa"))
-        return;
-    object.setTaskParam(FEMType::StaticProblem);
-
-    object.setEps(1.0E-8);
-    object.setWidth(15);
-    object.setPrecision(5);
-
-    // Упругие характеристики
-    object.addYoungModulus("203200");
-    object.addPoissonRatio("0.27");
-    // Толщина КЭ
-    object.addThickness("0.0369");
-    // Распределенная поверхностная нагрузка
-    // object.addPressureLoad("0.05", "(abs(x**2 + y**2 - 1.99**2) <= 1.0E-3)");
-    object.addPressureLoad([&](double, double, double, double){ return P; });
-
-//    object.addSurfaceLoad(DIR_X, "0.05 * cos(atan2(y, x))", "(abs(x**2 + y**2 - 1.99**2) <= 1.0E-3)");
-//    object.addSurfaceLoad(DIR_Y, "0.05 * sin(atan2(y, x))", "(abs(x**2 + y**2 - 1.99**2) <= 1.0E-3)");
-
-    // object.addSurfaceLoad(DIR_X, [&](double x, double y, double, double){ return P * cos(atan2(y, x)); }, [](double x, double y, double, double){ return (abs(x * x + y * y - 1.99 * 1.99) <= 1.0E-3) ? 1.0 : 0.0; });
-    // object.addSurfaceLoad(DIR_Y, [&](double x, double y, double, double){ return P * sin(atan2(y, x)); }, [](double x, double y, double, double){ return (abs(x * x + y * y - 1.99 * 1.99) <= 1.0E-3) ? 1.0 : 0.0; });
-    // Граничные условия
-    //        object.addBoundaryCondition(DIR_X | DIR_Y | DIR_Z, "0", "z == 0 or z == 4.014");
-    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [&](double, double, double z, double){ return (z == z_min || abs(z - z_max) <= eps) ? 1.0 : 0.0; });
-
-    // Запуск расчета
-    if (object.start())
-    {
-        object.saveResult(object.stdResName());
-        object.printResult(object.stdTxtResName());
-    }
-
-}
 
 // Сравнение с pyfem
 void pyfem_test(void)
@@ -576,16 +532,61 @@ void calcNewTank1(void)
 
 }
 
+// Тестовый расчет оболочки
+void calcShell(void)
+{
+    // Свойства материала АМг6М
+    TFEMObject object;
+    double z_min = 0.0,
+           z_max = 4.014,
+           P = 3.65E+07;
+    matrix<double> ssc = {{1.27E+08, 0.002}, {1.57E+08, 0.004}, {1.77E+08, 0.008}, {1.96E+08, 0.02}, {3.14E+08, 0.12}};
+
+    if (!object.setMeshFile("../../QFEM/mesh/shell-tube-3.trpa"))
+        return;
+
+    object.setNumThread(7);
+    object.setTaskParam(FEMType::StaticProblem);
+
+    // object.setEps(1.0E-8);
+    object.setWidth(15);
+    object.setPrecision(5);
+
+    // Упругие характеристики
+    object.addYoungModulus(6.5e+10);
+    object.addPoissonRatio(0.3);
+    // Толщина КЭ
+    object.addThickness(0.0045);
+    // Распределенная поверхностная нагрузка
+    object.addPressureLoad([&](double, double, double, double){ return P; });
+    // Граничные условия
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [&](double, double, double z, double){ return z == z_min || z == z_max ? 1.0 : 0.0; });
+    // Диаграмма деформирования
+    object.addStressStrainCurve(ssc);
+    // Шаг по нагрузке
+    object.setLoadStep(5);
+    // Способ расчета пластичности
+    object.setPlasticityMethod(PlasticityMethod::MVS);
+
+    // Запуск расчета
+    if (object.start())
+    {
+        object.saveResult(object.stdResName());
+        object.printResult(object.stdTxtResName());
+    }
+
+}
+
 
 int main()
 {
     msg = new TMessenger();
 
-    calcNewTank1();
+    // calcNewTank1();
     // calcNewTank3();
     // calcTank();
     // calcBalka();
-    // calcShell();
+    calcShell();
     // pyfem_test();
     // calcTank3ds();
     // calcTank3s6();
