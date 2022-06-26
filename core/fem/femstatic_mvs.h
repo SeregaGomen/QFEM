@@ -77,74 +77,64 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
         TFEMStatic<SOLVER, FE>::solver.setMatrix(TFEM::mesh);
         // Формирование ГМЖ
         TFEMStatic<SOLVER, FE>::calcGlobalMatrix();
-
         // Учет нагрузки
         TFEMStatic<SOLVER, FE>::setLoad(load);
-
         // Учет краевых условий
         TFEMStatic<SOLVER, FE>::calcBoundaryCondition();
-
         // Решение СЛАУ
-        if (TFEMStatic<SOLVER, FE>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
-        {
-            // Вычисление дополнительных результатов
-            if (iterNo == 0)
-            {
-                TFEMStatic<SOLVER, FE>::genResults(result);
-                // Вычисление интенсивности напряжений
-                maxSi = TFEMStatic<SOLVER, FE>::calcStressIntensity(*TFEM::results, si);
-            }
-            else
-                if (isStopLocalIteration)
-                {
-                    TFEMStatic<SOLVER, FE>::genResults(result, true);
-                    maxSi = TFEMStatic<SOLVER, FE>::calcStressIntensity(*TFEM::results, si);
-                    TFEM::results->setResult(si, "Si");
-                }
-
-            // Вывод рез-тов по каждой функции на экран
-            TFEM::printResultSummary();
-            // Вывод информации об итерации
-            cout << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
-            cout << S_MSG_SI << maxSi << endl;
-            cout << S_MSG_ITERATION << count++ << endl;
-            cout.unsetf(ios::scientific);
-
-            if (iterNo == 0)
-            {
-                if (maxSi > maxSsc)
-                {
-                    // Задана слишком большая первоначальная нагрузка, уменьшаем ее на порядок
-                    coef *= 0.1;
-                    for_each(load.begin(), load.end(), [](double& i) -> double{ return i *= 0.1; });
-                    iterNo--;
-                }
-                else
-                {
-                    if (not isLoaded)
-                    {
-                        // Вычисляем поправочный коэффициент для "пропуска" упругой зоны
-                        coef *= (loadFactor = 0.95 * (maxSsc / maxSi));
-                        for_each(load.begin(), load.end(), [loadFactor](double& i) -> double{ return i *= loadFactor; });
-                        isLoaded = true;
-                        iterNo--;
-                    }
-                    else // Устанавливаем нагрузку в значение "шаг по нагрузке"
-                        for_each(load.begin(), load.end(), [step](double& i) -> double{ return i *= step; });
-                }
-            }
-            if (++iterNo > 0 and isStopLocalIteration)
-            {
-                addCount += 1;
-                isStopLocalIteration = false;
-            }
-        }
-        else
+        if (!TFEMStatic<SOLVER, FE>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
         {
             TFEM::isProcessCalculated = false;
             if (TFEM::isProcessAborted)
                 throw ErrorCode::EAbort;
             return;
+        }
+        if (iterNo == 0)
+        {
+            // Вычисление дополнительных результатов
+            TFEMStatic<SOLVER, FE>::genResults(result);
+            // Вычисление интенсивности напряжений
+            if ((maxSi = TFEMStatic<SOLVER, FE>::calcStressIntensity(*TFEM::results, si)) > maxSsc)
+            {
+                // Задана слишком большая первоначальная нагрузка, уменьшаем ее на порядок
+                coef *= 0.1;
+                for_each(load.begin(), load.end(), [](double& i) -> double{ return i *= 0.1; });
+                iterNo--;
+            }
+            else
+            {
+                if (not isLoaded)
+                {
+                    // Вычисляем поправочный коэффициент для "пропуска" упругой зоны
+                    coef *= (loadFactor = 0.95 * (maxSsc / maxSi));
+                    for_each(load.begin(), load.end(), [loadFactor](double& i) -> double{ return i *= loadFactor; });
+                    isLoaded = true;
+                    iterNo--;
+                }
+                else // Устанавливаем нагрузку в значение "шаг по нагрузке"
+                    for_each(load.begin(), load.end(), [step](double& i) -> double{ return i *= step; });
+            }
+        }
+        else
+            if (isStopLocalIteration)
+            {
+                TFEMStatic<SOLVER, FE>::genResults(result, true);
+                maxSi = TFEMStatic<SOLVER, FE>::calcStressIntensity(*TFEM::results, si);
+                TFEM::results->setResult(si, "Si");
+            }
+
+        // Вывод рез-тов по каждой функции на экран
+        TFEM::printResultSummary();
+        // Вывод информации об итерации
+        cout << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
+        cout << S_MSG_SI << maxSi << endl;
+        cout << S_MSG_ITERATION << count++ << endl;
+        cout.unsetf(ios::scientific);
+
+        if (++iterNo > 0 and isStopLocalIteration)
+        {
+            addCount += 1;
+            isStopLocalIteration = false;
         }
     }
     while (not isStopGlobalIteration);

@@ -434,7 +434,11 @@ void calcNewTank1(void)
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank.trpa"))
     // if (!object.setMeshFile("D:/work/tank-new/tank_1.trpa"))
-    if (!object.setMeshFile("D:/work/tank-new/tank_2.trpa"))
+
+
+
+    // if (!object.setMeshFile("D:/work/tank-new/tank_2.trpa"))
+    if (!object.setMeshFile("D:/work/tank-new/tank_1_4.trpa"))
         return;
     object.setNumThread(7);
     object.setTaskParam(FEMType::StaticProblem);
@@ -472,21 +476,10 @@ void calcNewTank1(void)
     });
 
     // Граничные условия
-    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z,
-                                0.0,
-                                [&](double x, double, double, double) {
-        return abs(x - L - L2) <= eps ? 1.0 : 0.0;
-    });
-//    object.addBoundaryCondition(Direction::Z,
-//                                0.0,
-//                                [&](double, double y, double, double) {
-//        return abs(y) <= eps ? 1.0 : 0.0;
-//    });
-//    object.addBoundaryCondition(Direction::Y,
-//                                0.0,
-//                                [&](double, double, double z, double) {
-//        return abs(z) <= eps ? 1.0 : 0.0;
-//    });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [&](double x, double, double, double) { return abs(x - L - L2) <= eps ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::Y, 0.0, [&](double, double y, double, double) { return abs(y) <= eps ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::Z, 0.0, [&](double, double, double z, double) { return abs(z) <= eps ? 1.0 : 0.0; });
+
     // Распределенная поверхностная нагрузка
     object.addPressureLoad(P,
                            [&](double x, double, double, double) {
@@ -582,11 +575,11 @@ int main()
 {
     msg = new TMessenger();
 
-    // calcNewTank1();
+    calcNewTank1();
     // calcNewTank3();
     // calcTank();
     // calcBalka();
-    calcShell();
+    // calcShell();
     // pyfem_test();
     // calcTank3ds();
     // calcTank3s6();
