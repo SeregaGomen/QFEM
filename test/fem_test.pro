@@ -25,8 +25,8 @@ win32 {
 }
 
 unix {
-    INCLUDEPATH +=../../../intel/mkl/include/
-    LIBS += -L$$PWD/../../../intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+    INCLUDEPATH += /opt/intel/oneapi/mkl/2022.1.0/include/
+    LIBS += -L/opt/intel/oneapi/mkl/2022.1.0/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 }
 
 SOURCES += main.cpp \
