@@ -45,22 +45,24 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
         /* threshold searching */
         for(;;) {
             if(num >= search) search = num;
+            Flag = 1;
             for(i=search; i<nvtxs; i++) {
                 node = perm[i];
                 if(marker[node] < 0) continue;
                 nDeg = degree[node];
                 if(nDeg <= thresh) {
                     search = i;
-                    goto StopSearching;
+                    Flag = 0;
+                    break;
                 }
                 if (nDeg <  MinDeg) MinDeg = nDeg;
             }
+            if (Flag == 0)
+                break;
             thresh = MinDeg;
             MinDeg = nvtxs;
             search = 0;
         }
-StopSearching:
-
         /* Root is pretendent! */
         Root = perm[search];
         marker[Root] = 1;
@@ -84,14 +86,18 @@ StopSearching:
                 }
                 nbrhd[nhdsze++] = node;
                 marker[node] = -1;
-ReachSegment:
-                kstrt = xadj[node];
+                k = xadj[node];
                 kstop = xadj[node+1];
-                for(k=kstrt; k<kstop; k++) {
-                    node = adjncy[k];
+                while (k < kstop) {
+                    node = adjncy[k++];
                     if(node >= nvtxs) {
                         node -= nvtxs;
-                        if(node < nvtxs) goto ReachSegment;
+                        if(node < nvtxs)
+                        {
+                            k = xadj[node];
+                            kstop = xadj[node + 1];
+                            continue;
+                        }
                         break;
                     }
                     if(marker[node]) continue;
@@ -148,14 +154,18 @@ ReachSegment:
                 marker[tmpRoot] = -1;
                 Deg = ovlsze = srchsze = 0;
                 node = tmpRoot;
-MergeSegment:
-                jstrt = xadj[node];
+                j = xadj[node];
                 jstop = xadj[node+1];
-                for(j=jstrt; j<jstop; j++) {
-                    node = adjncy[j];
+                while (j < jstop) {
+                    node = adjncy[j++];
                     if(node >= nvtxs) {
                         node -= nvtxs;
-                        if(node < nvtxs) goto MergeSegment;
+                        if(node < nvtxs)
+                        {
+                            j = xadj[node];
+                            jstop = xadj[node+1];
+                            continue;
+                        }
                         break;
                     }
                     mask = &marker[node];
@@ -228,14 +238,18 @@ MergeSegment:
                 }
                 snbrhd[snhdsze++] = node;
                 marker[node] = -1;
-UpdateSegment:
-                kstrt = xadj[node];
+                k = xadj[node];
                 kstop = xadj[node+1];
-                for(k=kstrt; k<kstop; k++) {
-                    node = adjncy[k];
+                while (k < kstop) {
+                    node = adjncy[k++];
                     if(node >= nvtxs) {
                         node -= nvtxs;
-                        if(node < nvtxs) goto UpdateSegment;
+                        if(node < nvtxs)
+                        {
+                            k = xadj[node];
+                            kstop = xadj[node+1];
+                            continue;
+                        }
                         break;
                     }
                     if(marker[node]) continue;
@@ -684,7 +698,7 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
     int error, i, j, k, n, node, strt, stop, knew, isub, bi, bj, bk, denter, fenter, colsze, nvtxs, blksze;
     const double *anonz;
     char *ps;
-    double *lnonz, *lvals, value, dmin, dmax, *dvals, *dcolptr, *lcolptr, *hcolptr, *fcolptr, *fblkptr, *pl, *ph, *FF, *LL, sval, rd[MAXBLKSZE], HH[MAXBLKSZE * MAXBLKSZE],
+    double *lnonz, value, dmin, dmax, *dcolptr, *lcolptr, *hcolptr, *fcolptr, *fblkptr, *pl, *ph, *FF, *LL, sval, rd[MAXBLKSZE], HH[MAXBLKSZE * MAXBLKSZE],
             DD[MAXBLKSZE * MAXBLKSZE];
     std::vector<int> link, first;
     std::vector<double*> translate;
@@ -692,8 +706,6 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
 
     /* load data from structure */
     nvtxs  = factor.nvtxs;
-    dvals  = factor.dvals;
-    lvals  = factor.lvals;
     blksze = matrix.blksze;
 
     /* check possible HH,DD,rd overflow */
@@ -732,7 +744,7 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
         stop = factor.xlvals[j+1];
 
         /* set entries into factored column */
-        lnonz = &lvals[fenter * strt];
+        lnonz = &factor.lvals[fenter * strt];
         isub = factor.xlinds[j];
         for(i=strt; i<stop; i++) {
             translate[factor.linds[isub++]] = lnonz;
@@ -766,7 +778,7 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
 
             knew = link[k];
             strt = first[k];
-            LL = &lvals[fenter * strt];
+            LL = &factor.lvals[fenter * strt];
 
             /* calculate HH */
             ph = HH;
@@ -884,7 +896,7 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
 
         /* save factored diagonal block */
         fcolptr = DD;
-        dcolptr = &dvals[denter*j];
+        dcolptr = &factor.dvals[denter*j];
         colsze = blksze;
         for(bi=0; bi<blksze; bi++) {
             for(bj=bi; bj<blksze; bj++) {
@@ -920,7 +932,7 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
         }
 
         /* scale subdiagonal */
-        fblkptr = &lvals[fenter * strt];
+        fblkptr = &factor.lvals[fenter * strt];
 
         for(n=strt; n<stop; n++) {
 
@@ -976,10 +988,10 @@ int spFactor(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted
     denter = (blksze * (blksze + 1)) / 2;
     memsze = factor.lspace * blksze * blksze + nvtxs * denter;
     ///////////////////////////
-    factor.vpool.resize(memsze);
+    //factor.vpool.resize(memsze);
     ///////////////////////////
-    factor.dvals = &factor.vpool[0];
-    factor.lvals = &factor.vpool[denter * nvtxs];
+    factor.dvals.resize(denter * nvtxs); // =  &factor.vpool[0];
+    factor.lvals.resize(memsze - denter * nvtxs); // = &factor.vpool[denter * nvtxs];
 
     /* allocate diagonal flags array */
     factor.svals.resize(nvtxs * blksze);
@@ -1017,24 +1029,24 @@ void permrv(double *rhs, const vector<int> &order, int nvtxs, int blksze)
 void gsslvb(BCCS_Factor &factor, double* rght)
 {
     int i, j, k, nvtxs, brow, bcol, colsze, strt, stop, denter, fenter, run, blksze;
-    const double *dvals, *diagj, *curdiag, *nonzk, *lblk;
+    const double *diagj, *curdiag, *nonzk, *lblk;
     double value, *rghtj, *rghtk;
 
     blksze = factor.blksze;
     nvtxs  = factor.nvtxs;
-    dvals  = factor.dvals;
+    // dvals  = factor.dvals;
 
     fenter = blksze * blksze;
     denter = (blksze * (blksze + 1)) / 2;
 
 
     /* === forward substitution === */
-    diagj = dvals;
+    diagj = &factor.dvals[0];
     rghtj = rght;
     for(j=0; j<nvtxs; j++) {
 
         /* dense lover diagonal system */
-        curdiag = diagj;
+        curdiag = &diagj[0];
         colsze = blksze;
         for(run=bcol=0; bcol<blksze; bcol++) {
             value = rghtj[bcol];
@@ -1079,7 +1091,7 @@ void gsslvb(BCCS_Factor &factor, double* rght)
         dtrsd(blksze*nvtxs, factor.svals, rght);
 
     /* === backward substitution === */
-    diagj = &dvals[nvtxs*denter - blksze];
+    diagj = &factor.dvals[nvtxs*denter - blksze];
     for(j=nvtxs-1; j>=0; j--) {
         strt = factor.xlvals[j];
         stop = factor.xlvals[j+1];

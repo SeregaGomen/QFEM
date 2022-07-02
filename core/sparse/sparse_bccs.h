@@ -9,22 +9,22 @@
 /*******************************************************************/
 struct BCCS_Factor
 {
-  int nvtxs = 0;
-  int blksze = 0;
-  int error = 0;
-  int lspace = 0;
-  int hyperbolic = 0;
-  double *dvals = nullptr;
-  double *lvals = nullptr;
-  std::vector<int> linds;
-  std::vector<int> perm;
-  std::vector<int> invp;
-  std::vector<int> xlinds;
-  std::vector<int> xlvals;
-  std::vector<char> svals;
-  std::vector<double> vpool;
-  BCCS_Factor() = default;
-  ~BCCS_Factor() = default;
+    int nvtxs = 0;
+    int blksze = 0;
+    int error = 0;
+    int lspace = 0;
+    int hyperbolic = 0;
+    std::vector<double> dvals;
+    std::vector<double> lvals;
+    std::vector<int> linds;
+    std::vector<int> perm;
+    std::vector<int> invp;
+    std::vector<int> xlinds;
+    std::vector<int> xlvals;
+    std::vector<char> svals;
+    //std::vector<double> vpool;
+    BCCS_Factor() = default;
+    ~BCCS_Factor() = default;
 };
 /*******************************************************************/
 struct BCCS_Matrix

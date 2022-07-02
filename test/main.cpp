@@ -406,8 +406,6 @@ void calcNewTank3(void)
 void calcNewTank1(void)
 {
     TFEMObject object;
-//    matrix<double> ssc1 = {{1.30E+08, 0.002}, {6.00E+07, 0.004}, {4.00E+07, 0.008}, {1.50E+08, 0.12}};
-//    matrix<double> ssc2 = {{2.20E+08, 0.003}, {1.20E+08, 0.006}, {6.40E+07, 0.016}, {1.03E+08, 0.072}};
     matrix<double> ssc1 = {{1.27E+08, 0.002}, {1.57E+08, 0.004}, {1.77E+08, 0.008}, {1.96E+08, 0.02}, {3.14E+08, 0.12}};
     matrix<double> ssc2 = {{1.96E+08, 0.003}, {2.55E+08, 0.005}, {2.75E+08, 0.006}, {3.14E+08, 0.015}, {3.92E+08, 0.0725}};
     double eps = 0.001,
@@ -431,14 +429,14 @@ void calcNewTank1(void)
            P = 142196,
            R = 2.5;
 
-    //if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
+    if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank.trpa"))
     // if (!object.setMeshFile("D:/work/tank-new/tank_1.trpa"))
 
 
 
     // if (!object.setMeshFile("D:/work/tank-new/tank_2.trpa"))
-    if (!object.setMeshFile("D:/work/tank-new/tank_1_4.trpa"))
+    // if (!object.setMeshFile("D:/work/tank-new/tank_1_4.trpa"))
         return;
     object.setNumThread(7);
     object.setTaskParam(FEMType::StaticProblem);
@@ -448,10 +446,7 @@ void calcNewTank1(void)
                            [&](double x, double y, double z, double) {
         return (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)) ? 1.0 : 0.0;
     });
-    object.addYoungModulus(E2,
-                           [&](double x, double y, double z, double) {
-        return not ((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C))) ? 1.0 : 0.0;
-    });
+    object.addYoungModulus(E2);
     object.addPoissonRatio(0.3);
     // Толщина КЭ
     object.addThickness([&](double x, double y, double z, double) {
@@ -506,14 +501,11 @@ void calcNewTank1(void)
                                 [&](double x, double y, double z, double) {
         return (abs(R * R - ((x - C) * (x - C)  + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)) ? 1.0 : 0.0;
     });
-    object.addStressStrainCurve(ssc2,
-                                [&](double x, double y, double z, double) {
-        return not ((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C))) ? 1.0 : 0.0;
-    });
+    object.addStressStrainCurve(ssc2);
     // Шаг по нагрузке
     object.setLoadStep(5);
     // Способ расчета пластичности
-    object.setPlasticityMethod(PlasticityMethod::MVS);
+    //object.setPlasticityMethod(PlasticityMethod::MVS);
 
 
     // Запуск расчета
