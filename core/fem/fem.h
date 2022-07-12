@@ -53,40 +53,37 @@ protected:
     {
         double val;
         matrix<double> x;
-        vector<double> cx;
 
         // Загрузка координат КЭ
         mesh->getCoordFE(i, x);
         fe.setCoord(x);
-        // Получение координат центра КЭ
-        mesh->getCenterFE(i, cx);
         // Загрузка в КЭ модуля упругости
-        if ((val = params.getYoungModule(cx)) == 0.0)
+        if ((val = params.getYoungModule(x)) == 0.0)
             throw ErrorCode::EYoungModulus;
         // Загрузка в КЭ коэффициента Пуассона
         fe.setYoungModulus(val);
-        if ((val = params.getPoissonRatio(cx)) == 0.0 and not mesh->is1D())
+        if ((val = params.getPoissonRatio(x)) == 0.0 and not mesh->is1D())
             throw ErrorCode::EPoissonRatio;
         fe.setPoissonRatio(val);
         // Загрузка толщины элемента
         if (not mesh->is3D())
         {
-            if ((val = params.getThickness(cx)) == 0.0)
+            if ((val = params.getThickness(x)) == 0.0)
                 throw ErrorCode::EThickness;
             fe.setThickness(val);
         }
         // Загрузка температуры
-        fe.setTemperature(params.getTemperature(cx));
+        fe.setTemperature(params.getTemperature(x));
         // Загрузка альфы
-        fe.setAlpha(params.getAlpha(cx));
+        fe.setAlpha(params.getAlpha(x));
         // Загрузка плотности
         if (params.fType == FEMType::DynamicProblem)
         {
-            if ((val = params.getDensity(cx)) == 0.0)
+            if ((val = params.getDensity(x)) == 0.0)
                 throw ErrorCode::EDensity;
             fe.setDensity(val);
             // Загрузка параметра демпфирования
-            if ((val = params.getDamping(cx)) == 0.0)
+            if ((val = params.getDamping(x)) == 0.0)
                 throw ErrorCode::EDamping;
             fe.setDamping(val);
         }

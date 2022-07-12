@@ -83,35 +83,52 @@ string TFEMParams::getName(unsigned i, FEType type)
 //--------------------------------------------------------------------
 // Извлечение значения параметра, соответствующего заданной координате
 //--------------------------------------------------------------------
-double TFEMParams::getScalarParam(ParamType p, vector<double> &cx)
+double TFEMParams::getScalarParam(ParamType p, matrix<double> &x)
 {
     matrix<double> tmp;
     double res = 0;
 
-    getParam(p, cx, res, tmp);
+    getParam(p, x, res, tmp);
     return res;
 }
 //--------------------------------------------------------------------
 //           Извлечение диаграммы деформирования материала
 //--------------------------------------------------------------------
-void TFEMParams::getMatrixParam(vector<double> &cx, matrix<double> &res)
+void TFEMParams::getMatrixParam(matrix<double> &x, matrix<double> &res)
 {
     double tmp;
 
-    getParam(ParamType::StressStrainCurve, cx, tmp, res);
+    getParam(ParamType::StressStrainCurve, x, tmp, res);
 }
 //--------------------------------------------------------------------
-void TFEMParams::getParam(ParamType p, vector<double> &cx, double &d, matrix<double> &m)
+void TFEMParams::getParam(ParamType p, matrix<double> &x, double &d, matrix<double> &m)
 {
+    vector<double> vx(x.size2());
+    bool is_ok;
+
     for (auto it : plist)
         if (it.getType() == p)
         {
-            if (not getPredicateValue(it, cx))
+            is_ok = true;
+
+            for (auto i = 0u; i < x.size1(); i++)
+            {
+                for (auto j = 0u; j < x.size2(); j++)
+                    vx[j] = x[i][j];
+                if (not getPredicateValue(it, vx))
+                {
+                    is_ok = false;
+                    break;
+                }
+
+            }
+            if (not is_ok)
                 continue;
+
             if (p == ParamType::StressStrainCurve)
                 m = it.getStressStrainCurve();
             else
-                d = getExpressionValue(it, cx);
+                d = getExpressionValue(it, vx);
             break;
         }
 }

@@ -409,25 +409,25 @@ void calcNewTank1(void)
     matrix<double> ssc1 = {{1.27E+08, 0.002}, {1.57E+08, 0.004}, {1.77E+08, 0.008}, {1.96E+08, 0.02}, {3.14E+08, 0.12}};
     matrix<double> ssc2 = {{1.96E+08, 0.003}, {2.55E+08, 0.005}, {2.75E+08, 0.006}, {3.14E+08, 0.015}, {3.92E+08, 0.0725}};
     double eps = 0.001,
-           E1 = 6.5e+10,
-           E2 = 7.3e+10,
+           e1 = 6.5e+10,
+           e2 = 7.3e+10,
            // E2 = E1,
-           C = 1.454,
-           CX_BOT = 20.7657,
-           CX_TOP = -8.5497,
+           c = 1.454,
+           cx_bot = 20.7657,
+           cx_top = -8.5497,
            // D = 3.9,
-           FI_B = -0.872665,
-           FI_T = -2.26893,
-           H = 0.06,
-           K2_BOT = 0.0520196,
-           K2_TOP = 0.0520196,
-           L = 12.216,
+           fi_b = -0.872665,
+           fi_t = -2.26893,
+           h = 0.06,
+           k2_bot = 0.0520196,
+           k2_top = 0.0520196,
+           l = 12.216,
            // L1 = 1.767,
-           L2 = 2.122,
-           L3 = 1.654,
-           L4 = 1.09,
-           P = 142196,
-           R = 2.5;
+           l2 = 2.122,
+           l3 = 1.654,
+           l4 = 1.09,
+           p = 142196,
+           r = 2.5;
 
     if (!object.setMeshFile("/home/serg/work/tank-new/tank_1_4.trpa"))
     //if (!object.setMeshFile("/home/serg/work/tank-new/tank.trpa"))
@@ -442,70 +442,70 @@ void calcNewTank1(void)
     object.setTaskParam(FEMType::StaticProblem);
 
     // Упругие характеристики
-    object.addYoungModulus(E1,
-                           [&](double x, double y, double z, double) {
-        return (abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)) ? 1.0 : 0.0;
+    object.addYoungModulus(e1, [&](double x, double y, double z, double) {
+        return (abs(r * r - ((x - c) * (x - c) + y * y + z * z)) <= eps and x <= (r * cos(fi_t) + c)) or (abs(r * r - ((x - l + c) * (x - l + c) + y * y + z * z)) <= eps and x >= (r * cos(fi_b) + l - c)) ? 1.0 : 0.0;
     });
-    object.addYoungModulus(E2);
+    object.addYoungModulus(e2);
     object.addPoissonRatio(0.3);
+
     // Толщина КЭ
-    object.addThickness([&](double x, double y, double z, double) {
-        double ret = 0.016;
-        if (((abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps) and (x <= (R * cos(FI_T) + C))) or ((abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps) and (x >= (R * cos(FI_B) + L - C))))
-            ret = 0.0046;
-        else if (((x >= (R * cos(FI_T) + C)) and (x <= 0)) or ((x >= L) and (x <= (R * cos(FI_B) + L - C))) or ((x >= 4 * L3 - H / 2) and (x <= 4 * L3 + H / 2)))
-            ret = 0.05;
-        else if (((x >= L3 - H / 2.0) and (x <= L3 + H / 2)) or ((x >= 2 * L3 - H / 2) and (x <= 2 * L3 + H / 2)) or ((x >= 5 * L3 - H / 2) and (x <= 5 * L3 + H / 2)) or ((x >= 6 * L3 - H / 2) and (x <= 6 * L3 + H / 2)) or ((x >= 6 * L3 - H / 2 + L4) and (x <= 6 * L3 + H / 2 + L4)))
-            ret = 0.0255;
-        else if ((x >= 3 * L3 - H) and (x <= 3 * L3 + H))
-            ret = 0.04;
-        else if ((x >= 0 and x <= (L3 - H / 2)) or (x >= (L3 + H / 2) and x <= (2 * L3 - H / 2)) or (x >= (2 * L3 + H / 2) and x <= (3 * L3 - H)) or (x >= (4 * L3 + H / 2) and x <= (5 * L3 - H / 2)) or (x >= (5 * L3 + H / 2) and x <= (6 * L3 - H / 2)))
-            ret = 0.0045;
-        else if ((x >= (3 * L3 + H)) and (x <= (4 * L3 - H / 2)))
-            ret = 0.0046;
-        else if ((x >= (6 * L3 + H / 2) and x <= (6 * L3 - H / 2 + L4)) or (x >= (6 * L3 + H / 2 + L4) and x <= L))
-            ret = 0.0052;
-        else if (x < 0)
-            ret = 0.0143;
-        return ret;
+    object.addThickness(0.0046, [&](double x, double y, double z, double) {
+        return ((abs(r * r - ((x - c) * (x - c) + y * y + z * z)) <= eps) && (x <= (r * cos(fi_t) + c))) || ((abs(r * r - ((x - l + c) * (x - l + c) + y * y + z * z)) <= eps) && (x >= (r * cos(fi_b)) + l - c)) ? 1.0 : 0.0;
     });
+    object.addThickness(0.05, [&](double x, double, double, double) {
+        return ((x >= (r * cos(fi_t) + c)) && (x <= 0.)) || ((x >= l) && (x <= (r * cos(fi_b) + l - c))) || ((x >= 4. * l3 - h / 2.) && (x <= 4. * l3 + h / 2.)) ? 1.0 : 0.0;
+    });
+    object.addThickness(0.0255, [&](double x, double, double, double) {
+        return ((x >= l3 - h / 2.0) && (x <= l3 + h / 2.)) || ((x >= 2. * l3 - h / 2.) && (x <= 2. * l3 + h / 2.)) || ((x >= 5. * l3 - h / 2.) && (x <= 5. * l3 + h / 2.)) || ((x >= 6. * l3 - h / 2.) && (x <= 6. * l3 + h / 2.)) || ((x >= 6. * l3 - h / 2. + l4) && (x <= 6. * l3 + h / 2. + l4)) ? 1.0 : 0.0;
+    });
+    object.addThickness(0.04, [&](double x, double, double, double) {
+        return (x >= 3. * l3 - h) && (x <= 3. * l3 + h) ? 1.0 : 0.0;
+    });
+    object.addThickness(0.0045, [&](double x, double, double, double) {
+        return (x >= 0. && x <= (l3 - h / 2.)) || (x >= (l3 + h / 2.) && x <= (2. * l3 - h / 2.)) || (x >= (2. * l3 + h / 2.) && x <= (3. * l3 - h)) || (x >= (4. * l3 + h / 2.) && x <= (5. * l3 - h / 2.)) || (x >= (5. * l3 + h / 2.) && x <= (6. * l3 - h / 2.)) ? 1.0 : 0.0;
+    });
+    object.addThickness(0.0046, [&](double x, double, double, double) {
+        return (x >= (3. * l3 + h)) && (x <= (4. * l3 - h / 2.)) ? 1.0 : 0.0;
+    });
+    object.addThickness(0.0052, [&](double x, double, double, double) {
+        return (x >= (6. * l3 + h / 2.) && x <= (6. * l3 - h / 2. + l4)) || (x >= (6. * l3 + h / 2. + l4) && x <= l) ? 1.0 : 0.0;
+    });
+    object.addThickness(0.0143, [&](double x, double, double, double) {
+        return x < 0. ? 1.0 : 0.0;
+    });
+    object.addThickness(0.016);
+
 
     // Граничные условия
-    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [&](double x, double, double, double) { return abs(x - L - L2) <= eps ? 1.0 : 0.0; });
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, 0.0, [&](double x, double, double, double) { return abs(x - l - l2) <= eps ? 1.0 : 0.0; });
     object.addBoundaryCondition(Direction::Y, 0.0, [&](double, double y, double, double) { return abs(y) <= eps ? 1.0 : 0.0; });
     object.addBoundaryCondition(Direction::Z, 0.0, [&](double, double, double z, double) { return abs(z) <= eps ? 1.0 : 0.0; });
 
     // Распределенная поверхностная нагрузка
-    object.addPressureLoad(P,
-                           [&](double x, double, double, double) {
-        return x >= 0 and x <= L ? 1.0 : 0.0;
+    object.addPressureLoad(p, [&](double x, double, double, double) {
+        return x >= 0 and x <= l ? 1.0 : 0.0;
     });
-    object.addPressureLoad(P,
-                           [&](double x, double y, double z, double) {
-        return abs(R * R - ((x - C) * (x - C) + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C) ? 1.0 : 0.0;
+    object.addPressureLoad(p, [&](double x, double y, double z, double) {
+        return abs(r * r - ((x - c) * (x - c) + y * y + z * z)) <= eps and x <= (r * cos(fi_t) + c) ? 1.0 : 0.0;
     });
-    object.addPressureLoad(P,
-                           [&](double x, double y, double z, double) {
-        return abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C) ? 1.0 : 0.0;
+    object.addPressureLoad(p, [&](double x, double y, double z, double) {
+        return abs(r * r - ((x - l + c) * (x - l + c) + y * y + z * z)) <= eps and x >= (r * cos(fi_b) + l - c) ? 1.0 : 0.0;
     });
-    object.addPressureLoad(P,
-                           [&](double x, double y, double z, double) {
-        return (x>= (R * cos(FI_T) + C) and x <= 0) and abs(y * y + z * z - K2_TOP * (x - CX_TOP) * (x - CX_TOP)) < eps ? 1.0 : 0.0;
+    object.addPressureLoad(p, [&](double x, double y, double z, double) {
+        return (x>= (r * cos(fi_t) + c) and x <= 0) and abs(y * y + z * z - k2_top * (x - cx_top) * (x - cx_top)) < eps ? 1.0 : 0.0;
     });
-    object.addPressureLoad(P,
-                           [&](double x, double y, double z, double) {
-        return (x >= L and x <= (R * cos(FI_B) + L - C)) and abs(y * y + z * z  - K2_BOT * (x - CX_BOT) * (x - CX_BOT)) < eps ? 1.0 : 0.0;
+    object.addPressureLoad(p, [&](double x, double y, double z, double) {
+      return (x >= l and x <= (r * cos(fi_b) + l - c)) and abs(y * y + z * z  - k2_bot * (x - cx_bot) * (x - cx_bot)) < eps ? 1.0 : 0.0;
     });
     // Диаграмма деформирования
-    object.addStressStrainCurve(ssc1,
-                                [&](double x, double y, double z, double) {
-        return (abs(R * R - ((x - C) * (x - C)  + y * y + z * z)) <= eps and x <= (R * cos(FI_T) + C)) or (abs(R * R - ((x - L + C) * (x - L + C) + y * y + z * z)) <= eps and x >= (R * cos(FI_B) + L - C)) ? 1.0 : 0.0;
+    object.addStressStrainCurve(ssc1, [&](double x, double y, double z, double) {
+        return (abs(r * r - ((x - c) * (x - c) + y * y + z * z)) <= eps and x <= (r * cos(fi_t) + c)) or (abs(r * r - ((x - l + c) * (x - l + c) + y * y + z * z)) <= eps and x >= (r * cos(fi_b) + l - c)) ? 1.0 : 0.0;
     });
     object.addStressStrainCurve(ssc2);
     // Шаг по нагрузке
     object.setLoadStep(5);
     // Способ расчета пластичности
-    //object.setPlasticityMethod(PlasticityMethod::MVS);
+    object.setPlasticityMethod(PlasticityMethod::MVS);
 
 
     // Запуск расчета

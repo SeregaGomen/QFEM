@@ -191,10 +191,10 @@ bool TFEMObject::start(void)
     cout << endl << S_MSG_START << endl;
     try
     {
-//        fem = createProblem<TEigenSolver>();
+        fem = createProblem<TEigenSolver>();
 //        fem = createProblem<TCGSolver>();
 //        fem = createProblem<TLZHSolver>();
-        fem = createProblem<TBCCSolver>();
+//        fem = createProblem<TBCCSolver>();
 //        fem = createProblem<TEnvSolver>();
         // Задание количества потоков
         fem->setNumThread(numThread);

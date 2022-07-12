@@ -17,9 +17,9 @@ using namespace std;
 class TFEMParams
 {
 private:
-    void getParam(ParamType, vector<double>&, double&, matrix<double>&);
-    double getScalarParam(ParamType, vector<double>&);
-    void getMatrixParam(vector<double>&, matrix<double>&);
+    void getParam(ParamType, matrix<double>&, double&, matrix<double>&);
+    double getScalarParam(ParamType, matrix<double>&);
+    void getMatrixParam(matrix<double>&, matrix<double>&);
     vector<unsigned> getFunIndex(FEType);
 public:
     FEMType fType;                  // Тип задачи (статика, динамика,...)
@@ -151,44 +151,44 @@ public:
         return stdName;
     }
     // Извлечение модуля Юнга, соответствующего заданной координате
-    double getYoungModule(vector<double>& cx)
+    double getYoungModule(matrix<double> &x)
     {
-        return getScalarParam(ParamType::YoungModulus, cx);
+        return getScalarParam(ParamType::YoungModulus, x);
     }
     // Извлечение коэффициента Пуассона, ...
-    double getPoissonRatio(vector<double>& cx)
+    double getPoissonRatio(matrix<double> &x)
     {
-        return getScalarParam(ParamType::PoissonRatio, cx);
+        return getScalarParam(ParamType::PoissonRatio, x);
     }
     // Извлечение толщины элемента
-    double getThickness(vector<double>& cx)
+    double getThickness(matrix<double> &x)
     {
-        return getScalarParam(ParamType::Thickness, cx);
+        return getScalarParam(ParamType::Thickness, x);
     }
     // Извлечение температуры
-    double getTemperature(vector<double>& cx)
+    double getTemperature(matrix<double> &x)
     {
-        return getScalarParam(ParamType::Temperature, cx);
+        return getScalarParam(ParamType::Temperature, x);
     }
     // Извлечение коэффициента темперратурного расширения
-    double getAlpha(vector<double>& cx)
+    double getAlpha(matrix<double> &x)
     {
-        return getScalarParam(ParamType::Alpha, cx);
+        return getScalarParam(ParamType::Alpha, x);
     }
     // Извлечение плотности
-    double getDensity(vector<double>& cx)
+    double getDensity(matrix<double> &x)
     {
-        return getScalarParam(ParamType::Density, cx);
+        return getScalarParam(ParamType::Density, x);
     }
     // Извлечение параметра демпфирования
-    double getDamping(vector<double>& cx)
+    double getDamping(matrix<double> &x)
     {
-        return getScalarParam(ParamType::Damping, cx);
+        return getScalarParam(ParamType::Damping, x);
     }
     // Извлечение диаграммы деформирования
-    void getStressStrainCurve(vector<double>& cx, matrix<double>& ssc)
+    void getStressStrainCurve(matrix<double> &x, matrix<double>& ssc)
     {
-        getMatrixParam(cx, ssc);
+        getMatrixParam(x, ssc);
     }
     double getMinStress(void);
     bool getPredicateValue(TParameter&, vector<double>&);

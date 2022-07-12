@@ -136,6 +136,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
             addCount += 1;
             isStopLocalIteration = false;
         }
+        //TFEMStatic<SOLVER, FE>::solver.clear();
     }
     while (not isStopGlobalIteration);
 
@@ -174,8 +175,8 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
     double newE,
            feSi = si[TFEM::mesh->getFE(i, 0)];
     unsigned index;
-    vector<double> cx;
-    matrix<double> ssCurve;
+    matrix<double> x,
+                   ssCurve;
 
     TFEM::setupFE(fe, i);
     // -------------- Линейный (упругий) случай ------------------
@@ -183,8 +184,8 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
         return;
 
     // Загружаем диаграмму деформирования, соответствующую текущему КЭ
-    TFEM::mesh->getCenterFE(i, cx);
-    TFEM::params.getStressStrainCurve(cx, ssCurve);
+    TFEM::mesh->getCoordFE(i, x);
+    TFEM::params.getStressStrainCurve(x, ssCurve);
     if (ssCurve.size1() == 0)
         throw ErrorCode::EStressStrainCurve;
 
@@ -216,7 +217,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
         newE = (e0[i] == 0.0) ? fe.getYoungModulus() : e0[i];
 
     fe.setYoungModulus(newE);
-    fe.setPoissonRatio(TFEM::params.getPoissonRatio(cx));
+    fe.setPoissonRatio(TFEM::params.getPoissonRatio(x));
 
     // Проверка на изменение модуля упругости по сравнению с предыдущей итерацией
     if (index not_eq index0[i])
