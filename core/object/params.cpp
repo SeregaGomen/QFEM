@@ -103,33 +103,28 @@ void TFEMParams::getMatrixParam(matrix<double> &x, matrix<double> &res)
 //--------------------------------------------------------------------
 void TFEMParams::getParam(ParamType p, matrix<double> &x, double &d, matrix<double> &m)
 {
-    vector<double> vx(x.size2());
-    bool is_ok;
-
     for (auto it : plist)
         if (it.getType() == p)
         {
-            is_ok = true;
-
-            for (auto i = 0u; i < x.size1(); i++)
+            if (checkElm(x, it))
             {
-                for (auto j = 0u; j < x.size2(); j++)
-                    vx[j] = x[i][j];
-                if (not getPredicateValue(it, vx))
-                {
-                    is_ok = false;
-                    break;
-                }
+                if (p == ParamType::StressStrainCurve)
+                    m = it.getStressStrainCurve();
+                else
+                    d = getExpressionValue(it, ([x]() -> vector<double> {
+                        vector<double> coord(3);
 
+                        for (auto j = 0u; j < x.size2(); j++)
+                        {
+                            double c = 0;
+                            for (auto i = 0u; i < x.size1(); i++)
+                                c += x[i][j];
+                            coord[j] = c / double(x.size1());
+                        }
+                        return coord;
+                    })());
+                break;
             }
-            if (not is_ok)
-                continue;
-
-            if (p == ParamType::StressStrainCurve)
-                m = it.getStressStrainCurve();
-            else
-                d = getExpressionValue(it, vx);
-            break;
         }
 }
 //--------------------------------------------------------------------
@@ -150,7 +145,7 @@ double TFEMParams::getMinStress(void)
 //--------------------------------------------------------------------
 //          Вычисление значения предиката в заданной точке
 //--------------------------------------------------------------------
-bool TFEMParams::getPredicateValue(TParameter& p, vector<double>& cx)
+bool TFEMParams::getPredicateValue(TParameter& p, const vector<double>& cx)
 {
     TParser parser;
 
@@ -185,7 +180,7 @@ bool TFEMParams::getPredicateValue(TParameter& p, double cx, double cy, double c
 //--------------------------------------------------------------------
 //          Вычисление значения выражения в заданной точке
 //--------------------------------------------------------------------
-double TFEMParams::getExpressionValue(TParameter& p, vector<double>& cx)
+double TFEMParams::getExpressionValue(TParameter& p, const vector<double>& cx)
 {
     TParser parser;
 

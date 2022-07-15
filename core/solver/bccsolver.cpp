@@ -10,21 +10,20 @@ extern TMessenger *msg;
 
 bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
 {
-    int error;
     BCCS_Factor factor;
 
     /////////////
     // print("matr.txt");
     ///
 
-    if ((error = spOrder(factor, stiffness, isAborted)))
+    if (spOrder(factor, stiffness, isAborted))
     {
         if (!isAborted)
             throw ErrorCode::EEquationNotSolved;
         return false;
     }
 
-    if ((error = spFactor(factor, stiffness, eps, isAborted)))
+    if (spFactor(factor, stiffness, eps, isAborted))
     {
         if (!isAborted)
             throw ErrorCode::EEquationNotSolved;
@@ -43,9 +42,12 @@ bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
 
 void TBCCSolver::setMatrix(TMesh *mesh, bool isDynamic)
 {
+    stiffness.clear();
     spSetMatrix(stiffness, (const int*)(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
     if (isDynamic)
     {
+        mass.clear();
+        damping.clear();
         spSetMatrix(mass, (const int*)(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
         spSetMatrix(damping, (const int*)(mesh->getDataFE()), int(mesh->getNumFE()), int(mesh->getSizeFE()), int(mesh->getNumVertex()), int(mesh->getFreedom()));
     }

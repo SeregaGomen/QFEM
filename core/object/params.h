@@ -191,8 +191,8 @@ public:
         getMatrixParam(x, ssc);
     }
     double getMinStress(void);
-    bool getPredicateValue(TParameter&, vector<double>&);
-    double getExpressionValue(TParameter&, vector<double>&);
+    bool getPredicateValue(TParameter&, const vector<double>&);
+    double getExpressionValue(TParameter&, const vector<double>&);
     bool getPredicateValue(TParameter&, double, double, double);
     double getExpressionValue(TParameter&, double, double, double, double = 0);
     bool write(ofstream&);
@@ -224,6 +224,19 @@ public:
     void addConcentratedLoad(Direction dir, double v, string p = "")
     {
         plist.addConcentratedLoad(v, p, dir);
+    }
+    bool checkElm(matrix<double>& x, TParameter &p)
+    {
+        vector<double> vx(x.size2());
+
+        for (auto i = 0u; i < x.size1(); i++)
+        {
+            for (auto j = 0u; j < x.size2(); j++)
+                vx[j] = x[i][j];
+            if (not getPredicateValue(p, vx))
+                return false;
+        }
+        return true;
     }
 };
 

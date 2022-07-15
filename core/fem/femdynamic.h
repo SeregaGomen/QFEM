@@ -19,7 +19,7 @@ private:
     void createDynamicMatrix(double, double);
     void createDynamicVector(matrix<double>&, double, double);
 protected:
-    void ansambleLocalMatrix(TFE&, unsigned);
+    void ansambleLocalMatrix(TFE&, unsigned) override;
     void getInitialCondition(void);
     void setBoundaryConstant(unsigned, unsigned, double);
     void setLoadConstant(unsigned, unsigned, double);

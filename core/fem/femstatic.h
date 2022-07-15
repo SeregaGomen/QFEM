@@ -44,8 +44,6 @@ protected:
     void calcPressureLoad(vector<double>&, double = 0);
     virtual void ansambleLocalMatrix(TFE&, unsigned);
     double calcStressIntensity(TResults&, vector<double>&);
-    bool checkBE(unsigned, TParameter&);
-    bool checkFE(unsigned, TParameter&);
 public:
     TFEMStatic(string n, TMesh *m, TResults *r, list<string> *l = nullptr) : TFEM(n, m, r, l)
     {
@@ -177,36 +175,6 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::genResults
     // Запоминаем дату и время расчета
     results->setCurrentSolutionTime();
 }
-//-------------------------------------------------------------------------------
-// Проверка соответствия граничного элемента предикату отбора (всех его вершин)
-//-------------------------------------------------------------------------------
-template <typename SOLVER, typename FE> bool TFEMStatic<SOLVER, FE>::checkBE(unsigned index, TParameter &p)
-{
-    vector<double> coord;
-
-    for (unsigned i = 0; i < mesh->getBaseSizeBE(); i++)
-    {
-        mesh->getCoordVertex(mesh->getBE(index, i), coord);
-        if (not params.getPredicateValue(p, coord))
-            return false;
-    }
-    return true;
-}
-//-------------------------------------------------------------------------------
-// Проверка соответствия конечного элемента предикату отбора (всех его вершин)
-//-------------------------------------------------------------------------------
-template <typename SOLVER, typename FE> bool TFEMStatic<SOLVER, FE>::checkFE(unsigned index, TParameter &p)
-{
-    vector<double> coord;
-
-    for (unsigned i = 0; i < mesh->getBaseSizeFE(); i++)
-    {
-        mesh->getCoordVertex(mesh->getFE(index, i), coord);
-        if (not params.getPredicateValue(p, coord))
-            return false;
-    }
-    return true;
-}
 //-----------------------------------------------------------------------------------------
 //                Осреднение результатов расчета деформаций, напряжений, ...
 //-----------------------------------------------------------------------------------------
@@ -230,7 +198,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcGlobal
     ErrorCode error = ErrorCode::Undefined;
     vector<thread> thr(numThread);
 
-    msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingDynamicMatrix, 1, TFEM::mesh->getNumFE());
+    msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingDynamicMatrix, 1, TFEM::mesh->getNumFE(), 5);
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<SOLVER, FE>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
     for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
@@ -411,6 +379,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
 {
     Direction direct;
     double val;
+    matrix<double> be_coord;
     vector<double> share,
                    coord;
 
@@ -425,20 +394,23 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
                     // Проверка, все ли узлы ГЭ удвлетворяют предикату
-                    if (not checkBE(i, it))
-                        continue;
-                    share = mesh->surfaceLoadShare() * mesh->beVolume(i);
-                    mesh->getCenterBE(i, coord);
-                    coord.push_back(t);
-                    val = params.getExpressionValue(it, coord);
-                    for (unsigned k = 0; k < mesh->getSizeBE(); k++)
+                    mesh->getCoordBE(i, be_coord);
+                    if (params.checkElm(be_coord, it))
                     {
-                        if (contains(direct, Direction::X)) // X
-                            load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
-                        if (contains(direct, Direction::Y)) // Y
-                            load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k];
-                        if (contains(direct, Direction::Z)) // Z или W - для пластины
-                            load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
+                        share = mesh->surfaceLoadShare() * mesh->beVolume(i);
+                        mesh->getCenterBE(i, coord);
+                        coord.push_back(t);
+                        val = params.getExpressionValue(it, coord);
+                        for (unsigned k = 0; k < mesh->getSizeBE(); k++)
+                        {
+                            if (contains(direct, Direction::X)) // X
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
+                            if (contains(direct, Direction::Y)) // Y
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k];
+                            if (contains(direct, Direction::Z)) // Z или W - для пластины
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
+                        }
+
                     }
                 }
         }
@@ -474,6 +446,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcPressu
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressureLoad(vector<double> &load, unsigned begin, unsigned end, double t, ErrorCode &error)
 {
     double val;
+    matrix<double> be_coord;
     vector<double> share,
                    coord,
                    v(3);
@@ -489,31 +462,32 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
                     // Проверка, все ли узлы ГЭ удвлетворяют предикату
-                    if (not checkBE(i, it))
-                        continue;
-                    // Вычисление нагрузки
-                    share = mesh->surfaceLoadShare() * mesh->beVolume(i);
-                    mesh->getCenterBE(i, coord);
-                    coord.push_back(t);
-                    val = params.getExpressionValue(it, coord);
-                    // Вычисление нормали к ГЭ
-                    mesh->normal(i, v);
-
-                    for (unsigned k = 0; k < mesh->getSizeBE(); k++)
+                    mesh->getCoordBE(i, be_coord);
+                    if (params.checkElm(be_coord, it))
                     {
-                        if (not mesh->isPlate())
+                        // Вычисление нагрузки
+                        share = mesh->surfaceLoadShare() * mesh->beVolume(i);
+                        mesh->getCenterBE(i, coord);
+                        coord.push_back(t);
+                        val = params.getExpressionValue(it, coord);
+                        // Вычисление нормали к ГЭ
+                        mesh->normal(i, v);
+                            for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                         {
-                            // X
-                            load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k] * v[0];
-                            // Y
-                            if (mesh->getFreedom() > 1)
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k] * v[1];
-                            // Z или W - для пластины
-                            if (mesh->getFreedom() > 2)
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k] * v[2];
+                            if (not mesh->isPlate())
+                            {
+                                // X
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k] * v[0];
+                                // Y
+                                if (mesh->getFreedom() > 1)
+                                    load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k] * v[1];
+                                // Z или W - для пластины
+                                if (mesh->getFreedom() > 2)
+                                    load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k] * v[2];
+                            }
+                            else
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
                         }
-                        else
-                            load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
                     }
                 }
         }
@@ -550,6 +524,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
 {
     Direction direct;
     double val;
+    matrix<double> fe_coord;
     vector<double> share,
                    coord;
 
@@ -564,20 +539,22 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
                 if (it.getType() == ParamType::VolumeLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
                 {
                     // Проверка, все ли узлы КЭ удовлетворяют предикату
-                    if (not checkFE(i, it))
-                        continue;
-                    share = mesh->volumeLoadShare() * mesh->feVolume(i);
-                    mesh->getCenterFE(i, coord);
-                    coord.push_back(t);
-                    val = params.getExpressionValue(it, coord);
-                    for (unsigned k = 0; k < mesh->getSizeFE(); k++)
+                    mesh->getCoordFE(i, fe_coord);
+                    if (params.checkElm(fe_coord, it))
                     {
-                        if (contains(direct, Direction::X)) // X или W - для пластины
-                            load[mesh->getFE(i, k) * mesh->getFreedom() + 0] += val * share[k];
-                        if (contains(direct, Direction::Y)) // Y
-                            load[mesh->getFE(i, k) * mesh->getFreedom() + 1] += val * share[k];
-                        if (contains(direct, Direction::Z)) // Z
-                            load[mesh->getFE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
+                        share = mesh->volumeLoadShare() * mesh->feVolume(i);
+                        mesh->getCenterFE(i, coord);
+                        coord.push_back(t);
+                        val = params.getExpressionValue(it, coord);
+                        for (unsigned k = 0; k < mesh->getSizeFE(); k++)
+                        {
+                            if (contains(direct, Direction::X)) // X или W - для пластины
+                                load[mesh->getFE(i, k) * mesh->getFreedom() + 0] += val * share[k];
+                            if (contains(direct, Direction::Y)) // Y
+                                load[mesh->getFE(i, k) * mesh->getFreedom() + 1] += val * share[k];
+                            if (contains(direct, Direction::Z)) // Z
+                                load[mesh->getFE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
+                        }
                     }
                 }
         }
@@ -655,7 +632,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcResult
             res[j][i] = u[i * TFEM::mesh->getFreedom() + j];
 
     // Вычисляем стандартные результаты по всем КЭ
-    msg->setProcess(ProcessCode::GeneratingResult, 1, TFEM::mesh->getNumFE());
+    msg->setProcess(ProcessCode::GeneratingResult, 1, TFEM::mesh->getNumFE(), 5);
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<SOLVER, FE>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
