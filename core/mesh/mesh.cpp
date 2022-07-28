@@ -711,72 +711,61 @@ bool TMesh::readVOL(string fname)
     }
 
     // Заголовок
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
     // Количество граничных элементов
     in >> num;
     be.resize(num, 3);
     for (unsigned i = 0; i < num; i++)
     {
-        in >> tmp;
-        in >> tmp;
-        in >> tmp;
-        in >> tmp;
-        in >> tmp;
-        in >> i1;
-        in >> i2;
-        in >> i3;
+        in >> tmp >> tmp >> tmp >> tmp >> tmp >> i1 >> i2 >> i3 >> tmp >> tmp >> tmp;
         be(i, 0) = i1 - 1;
         be(i, 1) = i2 - 1;
         be(i, 2) = i3 - 1;
     }
     // Заголовок
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
     // Количество конечных элементов
     in >> num;
     fe.resize(num, 4);
     for (unsigned i = 0; i < num; i++)
     {
-        in >> tmp;
-        in >> tmp;
-        in >> i1;
-        in >> i2;
-        in >> i3;
-        in >> i4;
+        in >> tmp >> tmp;
+        in >> i1 >> i2 >> i3 >> i4;
         fe(i, 0) = i1 - 1;
         fe(i, 1) = i2 - 1;
         fe(i, 2) = i3 - 1;
         fe(i, 3) = i4 - 1;
     }
     // Заголовок
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
     in >> num;
     for (unsigned i = 0; i < num; i++)
-        in.getline(str,maxLen - 1);
+        in.getline(str, maxLen - 1);
     // Заголовок
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
-    in.getline(str,maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
+    in.getline(str, maxLen - 1);
 
     // Координаты
     in >> num;
-    x.resize(num,3);
+    x.resize(num, 3);
     for (unsigned i = 0; i < num; i++)
         in >> x(i, 0) >> x(i, 1) >> x(i, 2);
 
