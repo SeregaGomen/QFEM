@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iomanip>
 #include "msg/msg.h"
-#include "fe/fe1d.h"
+//#include "fe/fe1d.h"
 #include "mesh.h"
 
 using namespace std;
@@ -710,31 +710,36 @@ bool TMesh::readVOL(string fname)
         return (error = true);
     }
 
+
     // Заголовок
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
+    while (1)
+    {
+        if (in.eof())
+            return (error = true);
+        in.getline(str, maxLen - 1);
+        if (str == string("surfaceelements"))
+            break;
+    }
+
     // Количество граничных элементов
     in >> num;
     be.resize(num, 3);
     for (unsigned i = 0; i < num; i++)
     {
-        in >> tmp >> tmp >> tmp >> tmp >> tmp >> i1 >> i2 >> i3 >> tmp >> tmp >> tmp;
+        in >> tmp >> tmp >> tmp >> tmp >> tmp >> i1 >> i2 >> i3;
         be(i, 0) = i1 - 1;
         be(i, 1) = i2 - 1;
         be(i, 2) = i3 - 1;
     }
     // Заголовок
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
+    while (1)
+    {
+        if (in.eof())
+            return (error = true);
+        in.getline(str, maxLen - 1);
+        if (str == string("volumeelements"))
+            break;
+    }
     // Количество конечных элементов
     in >> num;
     fe.resize(num, 4);
@@ -748,20 +753,14 @@ bool TMesh::readVOL(string fname)
         fe(i, 3) = i4 - 1;
     }
     // Заголовок
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in >> num;
-    for (unsigned i = 0; i < num; i++)
+    while (1)
+    {
+        if (in.eof())
+            return (error = true);
         in.getline(str, maxLen - 1);
-    // Заголовок
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
-    in.getline(str, maxLen - 1);
+        if (str == string("points"))
+            break;
+    }
 
     // Координаты
     in >> num;
