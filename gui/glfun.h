@@ -51,7 +51,7 @@ public slots:
 
 public:
     TGLFunction(TMesh*, vector<double>*, vector<double>*, vector<double>*, vector<double>*, QString, QWidget* = nullptr);
-    ~TGLFunction(void) {}
+    ~TGLFunction(void) = default;
     QString getExpression(void)
     {
         return expression;

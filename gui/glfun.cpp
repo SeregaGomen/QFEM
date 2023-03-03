@@ -9,8 +9,6 @@
 #include <QMessageBox>
 #include <cmath>
 #include "glfun.h"
-#include "fem/fem.h"
-#include "analyse/analyse.h"
 #include "mesh/mesh.h"
 
 /*******************************************************************/
