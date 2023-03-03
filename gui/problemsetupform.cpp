@@ -9,6 +9,7 @@
 #include "problemsetupform.h"
 #include "ui_problemsetupform.h"
 #include "object/object.h"
+#include "parser/parser.h"
 
 TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     QWidget(parent),

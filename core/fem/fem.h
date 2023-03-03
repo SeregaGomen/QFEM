@@ -4,9 +4,7 @@
 #include <iomanip>
 #include <vector>
 #include <map>
-#include "parser/parser.h"
 #include "object/params.h"
-#include "object/plist.h"
 #include "analyse/analyse.h"
 #include "mesh/mesh.h"
 

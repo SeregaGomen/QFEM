@@ -212,7 +212,7 @@ public:
         be.clear();
         meshMap.clear();
     }
-    void getCoordFE(unsigned index, matrix<double>& coord)
+    void getCoordFE(unsigned index, matrix<double> &coord)
     {
         coord.resize(fe.size2(), 3);
 
@@ -220,7 +220,7 @@ public:
             for (unsigned j = 0; j < x.size2(); j++)
                 coord(i, j) = x(fe(index, i), j);
     }
-    void getCenterFE(unsigned index, vector<double>& coord)
+    void getCenterFE(unsigned index, vector<double> &coord)
     {
         double c;
 
@@ -234,7 +234,7 @@ public:
             coord[j] = c / double(getBaseSizeFE());
         }
     }
-    void getCoordBE(unsigned index, matrix<double>& coord)
+    void getCoordBE(unsigned index, matrix<double> &coord)
     {
         coord.resize(be.size2(), 3);
 

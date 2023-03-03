@@ -180,7 +180,7 @@ bool TFEMParams::getPredicateValue(TParameter& p, double cx, double cy, double c
 //--------------------------------------------------------------------
 //          Вычисление значения выражения в заданной точке
 //--------------------------------------------------------------------
-double TFEMParams::getExpressionValue(TParameter& p, const vector<double>& cx)
+double TFEMParams::getExpressionValue(TParameter &p, const vector<double> &cx)
 {
     TParser parser;
 
@@ -245,7 +245,7 @@ bool TFEMParams::write(ofstream& out)
 
     // Краевые условия, нагрузки, etc
     out << plist.size() << endl;
-    for (auto it : plist)
+    for (auto &it : plist)
     {
         out << static_cast<int>(it.getType()) << endl;   // Тип условия
         out << static_cast<unsigned>(it.getDirect()) << endl; // Номер функции: 0 - X, ...
