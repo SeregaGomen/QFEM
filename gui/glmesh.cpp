@@ -6,7 +6,6 @@
 #include <cmath>
 #include "glmesh.h"
 #include "mesh/mesh.h"
-#include "fem/fem.h"
 
 /*******************************************************************/
 TGLMesh::TGLMesh(TMesh* m, QWidget* parent) : QOpenGLWidget(parent)

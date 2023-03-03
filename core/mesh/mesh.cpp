@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iomanip>
 #include "msg/msg.h"
-//#include "fe/fe1d.h"
 #include "mesh.h"
 
 using namespace std;
