@@ -562,12 +562,51 @@ void calcShell(void)
 
 }
 
+// Расчет задачи для И.В. Зиновеева
+void calcZinoveev(void)
+{
+    TFEMObject object;
+    double y_min = 0.0,
+           y_max = 10,
+           h = 1,
+           e0 = 3.86e+10,
+           e1 = 3.31e+3,
+           m0 = 0.2,
+           m1 = 0.3;
+
+    if (!object.setMeshFile("../../QFEM/mesh/body.vol"))
+        return;
+
+    object.setNumThread(4);
+    object.setTaskParam(FEMType::StaticProblem);
+
+    // Упругие характеристики
+    object.addYoungModulus(e0,[&](double, double y, double, double){ return y >= y_max - h ? 1.0 : 0.0; });
+    object.addYoungModulus(e1,[&](double, double y, double, double){ return y < y_max - h ? 1.0 : 0.0; });
+    object.addPoissonRatio(m0,[&](double, double y, double, double){ return y >= y_max - h ? 1.0 : 0.0; });
+    object.addPoissonRatio(m1,[&](double, double y, double, double){ return y < y_max - h ? 1.0 : 0.0; });
+
+    // Распределенная поверхностная нагрузка
+    object.addPressureLoad([&](double x, double, double, double){ return -1.0 / (x * x + 1.0); }, [&](double, double y, double , double){ return y == y_max ? 1.0 : 0.0; });
+
+    // Граничные условия
+    object.addBoundaryCondition(Direction::X | Direction::Y | Direction::Z, [](double, double, double, double){ return 0.0; }, [&](double, double y, double , double){ return y == y_min ? 1.0 : 0.0; });
+
+    // Запуск расчета
+    if (object.start())
+    {
+        object.saveResult(object.stdResName());
+        object.printResult(object.stdTxtResName());
+    }
+
+}
+
 
 int main()
 {
     msg = new TMessenger();
 
-    calcNewTank1();
+    // calcNewTank1();
     // calcNewTank3();
     // calcTank();
     // calcBalka();
@@ -575,6 +614,7 @@ int main()
     // pyfem_test();
     // calcTank3ds();
     // calcTank3s6();
+    calcZinoveev();
 
     delete msg;
     return 0;
