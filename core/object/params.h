@@ -225,20 +225,20 @@ public:
     {
         plist.addConcentratedLoad(v, p, dir);
     }
-//    bool checkElm(matrix<double> &x, TParameter &p)
-//    {
-//        vector<double> vx(x.size2());
-
-//        for (auto i = 0u; i < x.size1(); i++)
-//        {
-//            for (auto j = 0u; j < x.size2(); j++)
-//                vx[j] = x[i][j];
-//            if (not getPredicateValue(p, vx))
-//                return false;
-//        }
-//        return true;
-//    }
     bool checkElm(matrix<double> &x, TParameter &p)
+    {
+        vector<double> vx(x.size2());
+
+        for (auto i = 0u; i < x.size1(); i++)
+        {
+            for (auto j = 0u; j < x.size2(); j++)
+                vx[j] = x[i][j];
+            if (not getPredicateValue(p, vx))
+                return false;
+        }
+        return true;
+    }
+    bool checkElmCenter(matrix<double> &x, TParameter &p)
     {
         vector<double> cx(x.size2());
 

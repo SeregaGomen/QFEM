@@ -443,7 +443,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
     matrix<double> be_coord;
     vector<double> share = mesh->surfaceLoadShare(),
                    coord,
-                   v(3);
+                   normal(3);
 
     try
     {
@@ -464,19 +464,19 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
                         coord.push_back(t);
                         val = params.getExpressionValue(it, coord) * mesh->beVolume(i);
                         // Вычисление нормали к ГЭ
-                        mesh->normal(i, v);
-                            for (unsigned k = 0; k < mesh->getSizeBE(); k++)
+                        mesh->normal(i, normal);
+                        for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                         {
                             if (not mesh->isPlate())
                             {
                                 // X
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k] * v[0];
+                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k] * normal[0];
                                 // Y
                                 if (mesh->getFreedom() > 1)
-                                    load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k] * v[1];
+                                    load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k] * normal[1];
                                 // Z или W - для пластины
                                 if (mesh->getFreedom() > 2)
-                                    load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k] * v[2];
+                                    load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k] * normal[2];
                             }
                             else
                                 load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
@@ -533,7 +533,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
                 {
                     // Проверка, все ли узлы КЭ удовлетворяют предикату
                     mesh->getCoordFE(i, fe_coord);
-                    if (params.checkElm(fe_coord, it))
+                    if (params.checkElmCenter(fe_coord, it))
                     {
                         mesh->getCenterFE(i, coord);
                         coord.push_back(t);
