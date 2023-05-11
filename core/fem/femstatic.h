@@ -5,11 +5,6 @@
 #include <sstream>
 #include <iomanip>
 #include "fem/fem.h"
-#include "fe/fe1d.h"
-#include "fe/fe2d.h"
-#include "fe/fe3d.h"
-#include "fe/fe2dp.h"
-#include "fe/fe3ds.h"
 
 extern TMessenger* msg;
 
@@ -380,7 +375,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
     Direction direct;
     double val;
     matrix<double> be_coord;
-    vector<double> share,
+    vector<double> share = mesh->surfaceLoadShare(),
                    coord;
 
     try
@@ -397,10 +392,9 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
                     mesh->getCoordBE(i, be_coord);
                     if (params.checkElm(be_coord, it))
                     {
-                        share = mesh->surfaceLoadShare() * mesh->beVolume(i);
                         mesh->getCenterBE(i, coord);
                         coord.push_back(t);
-                        val = params.getExpressionValue(it, coord);
+                        val = params.getExpressionValue(it, coord) * mesh->beVolume(i);
                         for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                         {
                             if (contains(direct, Direction::X)) // X
@@ -429,7 +423,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcPressu
     unsigned step = TFEM::mesh->getNumBE() / numThread;
     vector<thread> thr(numThread);
 
-    if (params.plist.findParameter(ParamType::Pressure_load))
+    if (params.plist.findParameter(ParamType::PressureLoad))
     {
         msg->setProcess(ProcessCode::GeneratingPressureLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
@@ -447,7 +441,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
 {
     double val;
     matrix<double> be_coord;
-    vector<double> share,
+    vector<double> share = mesh->surfaceLoadShare(),
                    coord,
                    v(3);
 
@@ -457,7 +451,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
         {
             msg->addProgress();
             for (auto it: params.plist)
-                if (it.getType() == ParamType::Pressure_load)
+                if (it.getType() == ParamType::PressureLoad)
                 {
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
@@ -466,10 +460,9 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
                     if (params.checkElm(be_coord, it))
                     {
                         // Вычисление нагрузки
-                        share = mesh->surfaceLoadShare() * mesh->beVolume(i);
                         mesh->getCenterBE(i, coord);
                         coord.push_back(t);
-                        val = params.getExpressionValue(it, coord);
+                        val = params.getExpressionValue(it, coord) * mesh->beVolume(i);
                         // Вычисление нормали к ГЭ
                         mesh->normal(i, v);
                             for (unsigned k = 0; k < mesh->getSizeBE(); k++)
@@ -525,7 +518,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
     Direction direct;
     double val;
     matrix<double> fe_coord;
-    vector<double> share,
+    vector<double> share = mesh->volumeLoadShare(),
                    coord;
 
     try
@@ -542,10 +535,9 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
                     mesh->getCoordFE(i, fe_coord);
                     if (params.checkElm(fe_coord, it))
                     {
-                        share = mesh->volumeLoadShare() * mesh->feVolume(i);
                         mesh->getCenterFE(i, coord);
                         coord.push_back(t);
-                        val = params.getExpressionValue(it, coord);
+                        val = params.getExpressionValue(it, coord) * mesh->feVolume(i);
                         for (unsigned k = 0; k < mesh->getSizeFE(); k++)
                         {
                             if (contains(direct, Direction::X)) // X или W - для пластины

@@ -1,10 +1,15 @@
+#include "fe/fe1d.h"
+#include "fe/fe2d.h"
+#include "fe/fe3d.h"
+#include "fe/fe2dp.h"
+#include "fe/fe3ds.h"
 #include "object.h"
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
 #include "solver/eigensolver.h"
-#include "solver/bccsolver.h"
-#include "solver/lzhsolver.h"
-#include "solver/envsolver.h"
+//#include "solver/bccsolver.h"
+//#include "solver/lzhsolver.h"
+//#include "solver/envsolver.h"
 
 int langCode = 0; // Код языка (0 - английский, 1 - русский)
 

@@ -37,7 +37,7 @@ enum class ParamType {
     VolumeLoad,          // Объемная нагрузка
     SurfaceLoad,         // Поверхностная ...
     ConcentratedLoad,    // Сосредоточенная ...
-    Pressure_load,       // Нагрузка давлением
+    PressureLoad,        // Нагрузка давлением
     YoungModulus,        // Модуль Юнга
     PoissonRatio,        // Коэффициент Пуассона
     Thickness,           // Толщина элемента
@@ -72,7 +72,7 @@ inline string paramName(ParamType type)
         case ParamType::ConcentratedLoad:
             ret = S_CONCENTRATED_LOAD_PARAMETER;
             break;
-        case ParamType::Pressure_load:
+        case ParamType::PressureLoad:
             ret = S_PRESSURE_LOAD_PARAMETER;
             break;
         case ParamType::YoungModulus:
@@ -488,19 +488,19 @@ public:
     }
     void addPressureLoad(double v, string p)
     {
-        addParameter(ParamType::Pressure_load, v, p);
+        addParameter(ParamType::PressureLoad, v, p);
     }
     void addPressureLoad(string e, string p)
     {
-        addParameter(ParamType::Pressure_load, e, p);
+        addParameter(ParamType::PressureLoad, e, p);
     }
     void addPressureLoad(double v, function<double (double, double, double, double)> p)
     {
-        addParameter(ParamType::Pressure_load, v, p);
+        addParameter(ParamType::PressureLoad, v, p);
     }
     void addPressureLoad(function<double (double, double, double, double)> e, function<double (double, double, double, double)> p)
     {
-        addParameter(ParamType::Pressure_load, e, p);
+        addParameter(ParamType::PressureLoad, e, p);
     }
     unsigned findParameter(ParamType type)
     {

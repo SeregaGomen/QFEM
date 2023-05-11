@@ -722,7 +722,7 @@ bool TMainWindow::checkParams(void)
         return false;
     }
     if (femObject->getParams().plist.findParameter(ParamType::VolumeLoad) == 0 and femObject->getParams().plist.findParameter(ParamType::SurfaceLoad) == 0 and
-        femObject->getParams().plist.findParameter(ParamType::ConcentratedLoad) == 0 and femObject->getParams().plist.findParameter(ParamType::Pressure_load) == 0)
+        femObject->getParams().plist.findParameter(ParamType::ConcentratedLoad) == 0 and femObject->getParams().plist.findParameter(ParamType::PressureLoad) == 0)
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified loads!"));
         return false;
@@ -957,7 +957,7 @@ void TMainWindow::sayParams(QString& webOut)
     sayParam(webOut, tr("Concentrated load"), ParamType::ConcentratedLoad);
 
     // --------------- Давление ---------------
-    sayParam(webOut, tr("Pressure load"), ParamType::Pressure_load, false);
+    sayParam(webOut, tr("Pressure load"), ParamType::PressureLoad, false);
 
     // --------------- Начальные и другие условия, зависящие от времени ---------------
     if (femObject->getParams().fType == FEMType::DynamicProblem)
@@ -1285,7 +1285,7 @@ void TMainWindow::slotSetupImageParams(void)
 
     if (qobject_cast<TGLParameter*>(tabWidget->currentWidget()))
         if (qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::VolumeLoad or qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::SurfaceLoad or
-            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::ConcentratedLoad or qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::Pressure_load or
+            qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::ConcentratedLoad or qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::PressureLoad or
             qobject_cast<TGLParameter*>(tabWidget->currentWidget())->getType() == ParamType::BoundaryCondition)
             type = ImageType::mesh;
     if (qobject_cast<TGLMesh*>(tabWidget->currentWidget()))

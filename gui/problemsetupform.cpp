@@ -135,7 +135,7 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
 
     connect(ui->tbShowLoads, &QToolButton::clicked, ([=](void)
     {
-        ParamType c_param[4] = { ParamType::VolumeLoad, ParamType::SurfaceLoad, ParamType::ConcentratedLoad, ParamType::Pressure_load };
+        ParamType c_param[4] = { ParamType::VolumeLoad, ParamType::SurfaceLoad, ParamType::ConcentratedLoad, ParamType::PressureLoad };
 
         if (getParams()) emit clicked(static_cast<int>(c_param[ui->tabWidgetLoads->currentIndex()]));
     }));
@@ -865,7 +865,7 @@ void TProblemSetupForm::setPressureLoad(void)
     ui->twPV->setColumnWidth(0, 340);
     ui->twPV->setColumnWidth(1, 340);
 
-    setTableValue(ParamType::Pressure_load, ui->twPV, false);
+    setTableValue(ParamType::PressureLoad, ui->twPV, false);
 }
 
 // Инициализация поверхностных нагрузок
@@ -1586,7 +1586,7 @@ void TProblemSetupForm::getConcentratedLoad(void)
 
 void TProblemSetupForm::getPressureLoad(void)
 {
-    getTableValue(ParamType::Pressure_load, ui->twPV, false);
+    getTableValue(ParamType::PressureLoad, ui->twPV, false);
 }
 
 // Извлечение граничных условий

@@ -17,7 +17,7 @@ void TBCProcessor::processVertex(void)
     vertex.clear();
     vertex.resize(int(object->getMesh().getNumVertex()));
 
-    if (paramType == ParamType::Pressure_load or paramType == ParamType::SurfaceLoad)
+    if (paramType == ParamType::PressureLoad or paramType == ParamType::SurfaceLoad)
         f_ptr = std::mem_fn(&TBCProcessor::calcPressureLoad);
     else if (paramType == ParamType::VolumeLoad)
     {
@@ -134,7 +134,7 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, ErrorCode &err
             }
 
             for (auto it: object->getParams().plist)
-                if (it.getType() == ParamType::Pressure_load or it.getType() == ParamType::SurfaceLoad)
+                if (it.getType() == ParamType::PressureLoad or it.getType() == ParamType::SurfaceLoad)
                 {
                     object->getMesh().getCoordBE(i, coord);
                     isTrue = true;
@@ -149,15 +149,15 @@ void TBCProcessor::calcPressureLoad(unsigned begin, unsigned end, ErrorCode &err
                     object->getMesh().getCenterBE(i, c_coord);
                     value = object->getParams().getExpressionValue(it, c_coord);
                     v = {1, 1, 1};
-                    if (it.getType() == ParamType::Pressure_load)
+                    if (it.getType() == ParamType::PressureLoad)
                         object->getMesh().normal(i, v);
                     for (unsigned j = 0; j < object->getMesh().getBaseSizeBE(); j++)
                     {
-                        if (contains(it.getDirect(), Direction::X) or it.getType() == ParamType::Pressure_load) // X
+                        if (contains(it.getDirect(), Direction::X) or it.getType() == ParamType::PressureLoad) // X
                             vertex[int(object->getMesh().getBE(i, j))].setX(vertex[int(object->getMesh().getBE(i, j))].x() + float(value * v[0]));
-                        if (contains(it.getDirect(), Direction::Y) or it.getType() == ParamType::Pressure_load) // Y
+                        if (contains(it.getDirect(), Direction::Y) or it.getType() == ParamType::PressureLoad) // Y
                             vertex[int(object->getMesh().getBE(i, j))].setY(vertex[int(object->getMesh().getBE(i, j))].y() + float(value * v[1]));
-                        if (contains(it.getDirect(), Direction::Z) or it.getType() == ParamType::Pressure_load) // Z или W - для пластины
+                        if (contains(it.getDirect(), Direction::Z) or it.getType() == ParamType::PressureLoad) // Z или W - для пластины
                         {
                             if (object->getMesh().isPlate())
                                 vertex[int(object->getMesh().getBE(i, j))].setZ(vertex[int(object->getMesh().getBE(i, j))].x() + float(value * v[2]));
