@@ -56,7 +56,8 @@ int solvePardiso(int n, int num_procs, int *ia, int *ja, double *a, double *b)
     iparm[2] = num_procs;
     maxfct = 1; /* Maximum number of numerical factorizations. */
     mnum = 1; /* Which factorization to use. */
-    msglvl = 1; /* Print statistical information */
+    //msglvl = 1; /* Print statistical information */
+    msglvl = 0; /* Print statistical information */
     error = 0; /* Initialize error flag */
     /* -------------------------------------------------------------------- */
     /* .. Convert matrix from 0-based C-notation to Fortran 1-based */
