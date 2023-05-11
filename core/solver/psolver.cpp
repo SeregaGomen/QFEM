@@ -43,18 +43,11 @@ int solvePardiso(int n, int num_procs, int *ia, int *ja, double *a, double *b)
     /* or void *pt[64] should be OK on both architectures */
     void *pt[64];
     /* Pardiso control parameters. */
-    int iparm[64];
-    int maxfct, mnum, phase, error, msglvl;
+    int iparm[64], maxfct, mnum, phase, error, msglvl;
     /* Auxiliary variables. */
     int i;
     double ddum; /* Double dummy */
     int idum; /* Integer dummy. */
-
-    if ((x = (double*)malloc(n * sizeof(double))) == NULL)
-    {
-        // Out of memory
-        return 4;
-    }
 
     /* -------------------------------------------------------------------- */
     /* .. Setup Pardiso control parameters. */
@@ -82,43 +75,46 @@ int solvePardiso(int n, int num_procs, int *ia, int *ja, double *a, double *b)
     phase = 11;
     pardiso(pt, &maxfct, &mnum, &mtype, &phase,  &n, a, ia, ja, &idum, &nrhs, iparm, &msglvl, &ddum, &ddum, &error);
     if (error != 0) {
-        printf("\nERROR during symbolic factorization: %d", error);
-        free(x);
+//        printf("\nERROR during symbolic factorization: %d", error);
         return 1;
     }
-    printf("\nReordering completed ... ");
-    printf("\nNumber of nonzeros in factors = %d", iparm[17]);
-    printf("\nNumber of factorization MFLOPS = %d", iparm[18]);
+//    printf("\nReordering completed ... ");
+//    printf("\nNumber of nonzeros in factors = %d", iparm[17]);
+//    printf("\nNumber of factorization MFLOPS = %d", iparm[18]);
     /* -------------------------------------------------------------------- */
     /* .. Numerical factorization. */
     /* -------------------------------------------------------------------- */
     phase = 22;
     pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, a, ia, ja, &idum, &nrhs, iparm, &msglvl, &ddum, &ddum, &error);
     if (error != 0) {
-        printf("\nERROR during numerical factorization: %d", error);
-        free(x);
+//        printf("\nERROR during numerical factorization: %d", error);
         return 2;
     }
-    printf("\nFactorization completed ...\n ");
+//    printf("\nFactorization completed ...\n ");
     /* -------------------------------------------------------------------- */
     /* .. Back substitution and iterative refinement. */
     /* -------------------------------------------------------------------- */
     phase = 33;
     iparm[7] = 1; /* Max numbers of iterative refinement steps. */
     /* Set right hand side to one. */
+    if ((x = (double*)malloc(n * sizeof(double))) == NULL)
+    {
+        // Out of memory
+        return 4;
+    }
     pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, a, ia, ja, &idum, &nrhs, iparm, &msglvl, b, x, &error);
     if (error != 0) {
-        printf("\nERROR during solution: %d", error);
+//        printf("\nERROR during solution: %d", error);
         free(x);
         return 3;
     }
-    printf("\nSolve completed ... ");
-    printf("\nThe solution of the system is: ");
+//    printf("\nSolve completed ... ");
+//    printf("\nThe solution of the system is: ");
     for (i = 0; i < n; i++) {
-        printf("\n x [%d] = % f", i, x[i] );
+//        printf("\n x [%d] = % f", i, x[i] );
         b[i] = x[i];
     }
-    printf ("\n");
+//    printf ("\n");
     free(x);
     /* -------------------------------------------------------------------- */
     /* .. Convert matrix back to 0-based C-notation. */

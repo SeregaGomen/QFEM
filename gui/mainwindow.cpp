@@ -852,7 +852,7 @@ void TMainWindow::showProtocol(QString fileName)
     {
         webOut += "<h2>" + tr("Problem notes:") + "</h2>";
         // Вывод примечаний к расчету
-        for (auto it: femObject->getNotes())
+        for (auto &it: femObject->getNotes())
             webOut += tr(it.c_str()) + "<br>";
     }
 
@@ -899,7 +899,6 @@ void TMainWindow::sayParams(QString& webOut)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
     unsigned num;
-    QString predicate;
 
     // --------------- базовые параметры ---------------
     webOut += "<h2>" + tr("Problem parameters:") + "</h2>";
@@ -965,7 +964,7 @@ void TMainWindow::sayParams(QString& webOut)
         webOut += tr("time parameters - initial time: <b>%1</b>, the final moment: <b>%2</b>, step: <b>%3</b>").arg(femObject->getParams().t0).arg(femObject->getParams().t1).arg(femObject->getParams().th) + "<br>";
         num = 0;
 
-        for (auto it: femObject->getParams().plist)
+        for (auto &it: femObject->getParams().plist)
             if (it.getType() == ParamType::InitialCondition)
             {
                 num++;
@@ -974,7 +973,7 @@ void TMainWindow::sayParams(QString& webOut)
         if (num)
         {
             webOut += "<br>" + tr("initial conditions:") + "<br>";
-            for (auto it: femObject->getParams().plist)
+            for (auto &it: femObject->getParams().plist)
                 if (it.getType() == ParamType::InitialCondition)
                 {
                     if (contains(it.getInitialCondition(), InitialCondition::U))
@@ -1002,7 +1001,7 @@ void TMainWindow::sayParams(QString& webOut)
     if (femObject->getParams().variables.size())
     {
         webOut += "<br>" + tr("Global variables") + "<br>";
-        for (auto it: femObject->getParams().variables)
+        for (auto &it: femObject->getParams().variables)
             webOut += tr("<b>%1</b> = <b>%2</b>").arg(it.first.c_str()).arg(it.second) + "<br>";
     }
     webOut += "</p>";
@@ -1015,7 +1014,7 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, ParamType para
     QString predicate;
     TFEMObject* femObject = femProcessor->getFEMObject();
 
-    for (auto it: femObject->getParams().plist)
+    for (auto &it: femObject->getParams().plist)
         if (it.getType() == param)
         {
             num++;
@@ -1414,7 +1413,7 @@ void TMainWindow::saveParam(QJsonObject &main)
     paramObj.insert("Names", names);
 
     // Вспомагательные параметры (для парсера)
-    for (auto it: params.variables)
+    for (auto &it: params.variables)
         variables.push_back(QString("%1 %2").arg(it.first.c_str()).arg(it.second));
     paramObj.insert("Variables", variables);
 
