@@ -31,6 +31,7 @@ extern int langCode;
 #define S_ERR_ALPHA                     ((langCode) ? "Некорректно задано значение коэффициента температурного расширения" : "Invalid alpha")
 #define S_ERR_DENSITY                   ((langCode) ? "Некорректно задано значение плотности" : "Invalid density")
 #define S_ERR_DAMPING                   ((langCode) ? "Некорректно задано значение параметра демпфирования" : "Invalid damping")
+#define S_ERR_INDEX                     ((langCode) ? "Некорректно задано значение индекса" : "Invalid index")
 
 #define S_MSG_START                     ((langCode) ? "******************************* Старт *******************************" : "******************************* Start *******************************")
 #define S_MSG_STOP                      ((langCode) ? "******************************* Стоп  *******************************" : "******************************* Stop  *******************************")
@@ -104,7 +105,7 @@ using namespace std;
 // ----------------------- Коды ошибок -------------------------------
 enum class ErrorCode { Undefined = 0, EOpenFile, EReadFile, EWriteFile, EFormatFile, EUndefTypeFile, EUndefTypeFE, ESyntax, EBracket, EName, EUndefVariable,
                        ERedefVariable, EIncorrectFE, EEquationNotSolved, EAbort, EAllocMemory, EStressStrainCurve, EEmptyExpression, EYoungModulus,
-                       EPoissonRatio, EThickness, ETemperature, EAlpha, EDensity, EDamping };
+                       EPoissonRatio, EThickness, ETemperature, EAlpha, EDensity, EDamping, EIndex };
 enum class ProcessCode
             {
                 Undefined,
@@ -227,6 +228,8 @@ inline string sayError(ErrorCode code)
             return S_ERR_DENSITY;
         case ErrorCode::EDamping:
             return S_ERR_DAMPING;
+        case ErrorCode::EIndex:
+            return S_ERR_INDEX;
         default:
             break;
     }

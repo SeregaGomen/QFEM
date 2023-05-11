@@ -4,7 +4,6 @@
 #include <string>
 #include "solver.h"
 #include "sparse/sparse_bccs.h"
-#include "util/matrix.h"
 
 using namespace std;
 
@@ -13,7 +12,7 @@ class TMesh;
 //---------------------------------------------------------------
 //  Класс, реализующий решение СЛАУ методом градиентного спуска
 //---------------------------------------------------------------
-class TBCCSolver : public TSolver<BCCS_Matrix, vector<double>>
+class TBCCSolver : public TSolver<TBCCSMatrix, vector<double>>
 {
 public:
     TBCCSolver(void) = default;

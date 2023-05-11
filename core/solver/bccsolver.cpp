@@ -10,7 +10,7 @@ extern TMessenger *msg;
 
 bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
 {
-    BCCS_Factor factor;
+    TBCCSFactor factor;
 
     /////////////
     // print("matr.txt");

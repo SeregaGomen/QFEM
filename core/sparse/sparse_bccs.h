@@ -7,7 +7,7 @@
 #define MAXINDEX     0x40000000
 #define MAXBLKSZE    16
 /*******************************************************************/
-struct BCCS_Factor
+struct TBCCSFactor
 {
     int nvtxs = 0;
     int blksze = 0;
@@ -23,19 +23,19 @@ struct BCCS_Factor
     std::vector<int> xlvals;
     std::vector<char> svals;
     //std::vector<double> vpool;
-    BCCS_Factor() = default;
-    ~BCCS_Factor() = default;
+    TBCCSFactor() = default;
+    ~TBCCSFactor() = default;
 };
 /*******************************************************************/
-struct BCCS_Matrix
+struct TBCCSMatrix
 {
   int nvtxs = 0;
   int blksze = 0;
   std::vector<int> aptrs;
   std::vector<int> ainds;
   std::vector<double> avals;
-  BCCS_Matrix() = default;
-  ~BCCS_Matrix() = default;
+  TBCCSMatrix() = default;
+  ~TBCCSMatrix() = default;
   void clear(void)
   {
       aptrs.clear();
@@ -44,15 +44,15 @@ struct BCCS_Matrix
   }
 };
 /*******************************************************************/
-int spOrder(BCCS_Factor&, BCCS_Matrix&, bool&);
-int spFactor(BCCS_Factor&, BCCS_Matrix&, double, bool&);
-int spSolve(BCCS_Factor&, double*);
-int spSetMatrix(BCCS_Matrix&, const int*, int, int, int, int);
-int spMulMatrix(BCCS_Matrix&, const double*, double*);
-int spMulMatrix(BCCS_Matrix&, double);
-double spGetElem(BCCS_Matrix&, int, int);
-void spSetElem(BCCS_Matrix&, int, int, double);
-void spAddElem(BCCS_Matrix&, int, int, double);
+int spOrder(TBCCSFactor&, TBCCSMatrix&, bool&);
+int spFactor(TBCCSFactor&, TBCCSMatrix&, double, bool&);
+int spSolve(TBCCSFactor&, double*);
+int spSetMatrix(TBCCSMatrix&, const int*, int, int, int, int);
+int spMulMatrix(TBCCSMatrix&, const double*, double*);
+int spMulMatrix(TBCCSMatrix&, double);
+double spGetElem(TBCCSMatrix&, int, int);
+void spSetElem(TBCCSMatrix&, int, int, double);
+void spAddElem(TBCCSMatrix&, int, int, double);
 /*******************************************************************/
 
 #endif /* SPARSE32_H */

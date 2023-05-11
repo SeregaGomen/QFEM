@@ -1,6 +1,6 @@
 #include <math.h>
 #include "lzhsolver.h"
-#include "mesh/mesh.h"
+//#include "mesh/mesh.h"
 #include "msg/msg.h"
 
 

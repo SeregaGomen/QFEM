@@ -1248,6 +1248,22 @@ bool TMesh::readTetgen(string fname)
 // -------------------------------------------------------
 //          Создание списка связей узлов сетки
 // -------------------------------------------------------
+//void TMesh::createMeshMap(void)
+//{
+//    meshMap.resize(x.size1());
+//    msg->setProcess(ProcessCode::AnalysingMesh, 1, int(fe.size1()));
+//    for (unsigned i = 0; i < fe.size1(); msg->addProgress(), i++)
+//        for (unsigned j = 0; j < fe.size2(); j++)
+//            for (unsigned k = 0; k < fe.size2(); k++)
+//                // if (k not_eq j)
+//                    if (find(meshMap[fe(i, j)].begin(), meshMap[fe(i, j)].end(), fe(i, k)) == meshMap[fe(i, j)].end())
+//                        meshMap[fe(i, j)].push_back(fe(i, k));
+
+//    for (unsigned i = 0; i < meshMap.size(); i++)
+//        sort (meshMap[i].begin(), meshMap[i].end(), [](unsigned k, unsigned l) -> bool{ return (k < l); });
+//    msg->stopProcess();
+//}
+// ----------------------------------------------------------------
 void TMesh::createMeshMap(void)
 {
     meshMap.resize(x.size1());
@@ -1255,7 +1271,7 @@ void TMesh::createMeshMap(void)
     for (unsigned i = 0; i < fe.size1(); msg->addProgress(), i++)
         for (unsigned j = 0; j < fe.size2(); j++)
             for (unsigned k = 0; k < fe.size2(); k++)
-                // if (k not_eq j)
+                if (fe[i][k] >= fe[i][j])
                     if (find(meshMap[fe(i, j)].begin(), meshMap[fe(i, j)].end(), fe(i, k)) == meshMap[fe(i, j)].end())
                         meshMap[fe(i, j)].push_back(fe(i, k));
 

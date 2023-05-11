@@ -360,7 +360,7 @@ void dtrsd(int n, const vector<char> &d, double r[])
 
 } /* end dtrsd */
 /*****************************************************************/
-int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, int nvtxs, int blksz)
+int spSetMatrix(TBCCSMatrix &matrix, const int* mesh, int nelmnts, int elmsze, int nvtxs, int blksz)
 {
     int i, j, m, k, n, nedges, node, nnz, len;
     std::vector<int> nptr, mark, nind;
@@ -447,7 +447,7 @@ int spSetMatrix(BCCS_Matrix &matrix, const int* mesh, int nelmnts, int elmsze, i
     return 0;
 }
 /*****************************************************************/
-int spMulMatrix(BCCS_Matrix &matrix, const double* x, double *y)
+int spMulMatrix(TBCCSMatrix &matrix, const double* x, double *y)
 {
     int i, j, bi, bj, strt, stop, node, sqrblk, ilim;
     const double *cx, *a, *ca;
@@ -484,7 +484,7 @@ int spMulMatrix(BCCS_Matrix &matrix, const double* x, double *y)
     return 0;
 }
 /*****************************************************************/
-int spMulMatrix(BCCS_Matrix &matrix, double K)
+int spMulMatrix(TBCCSMatrix &matrix, double K)
 {
     int len = matrix.aptrs[matrix.nvtxs] * matrix.blksze * matrix.blksze,
             i;
@@ -529,7 +529,7 @@ int merge(int *a, int alen, int *b, int blen, int *t)
     return k;
 }
 /********************************************************************/
-static int funInSymbolic(BCCS_Factor &factor, const std::vector<int> &aptrs, const std::vector<int> &ainds)
+static int funInSymbolic(TBCCSFactor &factor, const std::vector<int> &aptrs, const std::vector<int> &ainds)
 {
     int i, j, k, node, lsize, setsze, strt, stop, nvtxs, *mrglnk, *stack, *nodeset, ispace = 0;
     std::vector<int> linds, pool;
@@ -635,7 +635,7 @@ static int funInSymbolic(BCCS_Factor &factor, const std::vector<int> &aptrs, con
     return 0;
 }
 /********************************************************************/
-int spOrder(BCCS_Factor &factor, BCCS_Matrix &matrix, bool &aborted)
+int spOrder(TBCCSFactor &factor, TBCCSMatrix &matrix, bool &aborted)
 {
     int i, j, k, l, nvtxs, error, nedges, strt, stop, maxlnz, ispace;
     std::vector<int> xadj, adjncy, mempool;
@@ -693,7 +693,7 @@ int spOrder(BCCS_Factor &factor, BCCS_Matrix &matrix, bool &aborted)
 /*************************************************************/
 /* GENERAL SPARSE SYMMETRIC SCHEME, CLASSIC FUN-IN ALGORITHM */
 /*************************************************************/
-int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
+int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double eps, bool &aborted)
 {
     int error, i, j, k, n, node, strt, stop, knew, isub, bi, bj, bk, denter, fenter, colsze, nvtxs, blksze;
     const double *anonz;
@@ -963,7 +963,7 @@ int gsfctb(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
     return error;
 }
 /*********************************************************************/
-int spFactor(BCCS_Factor &factor, BCCS_Matrix &matrix, double eps, bool &aborted)
+int spFactor(TBCCSFactor &factor, TBCCSMatrix &matrix, double eps, bool &aborted)
 {
     int       error, nvtxs, blksze, memsze, denter;
 
@@ -1026,7 +1026,7 @@ void permrv(double *rhs, const vector<int> &order, int nvtxs, int blksze)
 /*             GENERAL SPARSE SYMMETRIC SYSTEM                     */
 /*                                                                 */
 /*******************************************************************/
-void gsslvb(BCCS_Factor &factor, double* rght)
+void gsslvb(TBCCSFactor &factor, double* rght)
 {
     int i, j, k, nvtxs, brow, bcol, colsze, strt, stop, denter, fenter, run, blksze;
     const double *diagj, *curdiag, *nonzk, *lblk;
@@ -1132,7 +1132,7 @@ void gsslvb(BCCS_Factor &factor, double* rght)
     }
 }
 /*********************************************************************/
-int spSolve(BCCS_Factor &factor, double *rhs)
+int spSolve(TBCCSFactor &factor, double *rhs)
 {
     msg->setProcess(ProcessCode::SolutionSystemEquation);
     /* direct permutation */
@@ -1145,7 +1145,7 @@ int spSolve(BCCS_Factor &factor, double *rhs)
     return 0;
 }
 /*********************************************************************/
-double spGetElem(BCCS_Matrix &matrix, int i, int j)
+double spGetElem(TBCCSMatrix &matrix, int i, int j)
 {
     int k, strt, stop, col, row, ofst;
 
@@ -1162,7 +1162,7 @@ double spGetElem(BCCS_Matrix &matrix, int i, int j)
     return 0;
 }
 /*********************************************************************/
-void spSetElem(BCCS_Matrix &matrix, int i, int j, double val)
+void spSetElem(TBCCSMatrix &matrix, int i, int j, double val)
 {
     int k, strt, stop, col, row, ofst;
 
@@ -1181,7 +1181,7 @@ void spSetElem(BCCS_Matrix &matrix, int i, int j, double val)
         }
 }
 /*********************************************************************/
-void spAddElem(BCCS_Matrix &matrix, int i, int j, double val)
+void spAddElem(TBCCSMatrix &matrix, int i, int j, double val)
 {
     int k, strt, stop, col, row, ofst;
 

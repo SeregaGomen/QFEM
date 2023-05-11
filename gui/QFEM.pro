@@ -21,10 +21,8 @@ msvc:QMAKE_CXXFLAGS += /permissive-
 #gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
-    #INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
-    #LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
-    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2022.2.0/include/'
-    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2022.2.0/lib/intel64/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2023.1.0/include/'
+    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2023.1.0/lib/intel64/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
 }
 
 unix {
@@ -34,6 +32,8 @@ unix {
 
 
 SOURCES += main.cpp\
+    ../core/solver/psolver.cpp \
+    ../core/sparse/sparse_csr.cpp \
     bcprocessor.cpp \
     glparam.cpp \
     mainwindow.cpp \
@@ -59,6 +59,8 @@ SOURCES += main.cpp\
     ../core/object/params.cpp
 
 HEADERS  += mainwindow.h \
+    ../core/solver/psolver.h \
+    ../core/sparse/sparse_csr.h \
     bcprocessor.h \
     glparam.h \
     problemsetupform.h \

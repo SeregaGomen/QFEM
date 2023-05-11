@@ -106,7 +106,7 @@ void TFEMParams::getParam(ParamType p, matrix<double> &x, double &d, matrix<doub
     for (auto it : plist)
         if (it.getType() == p)
         {
-            if (checkElm(x, it))
+            if (checkElmCenter(x, it))
             {
                 if (p == ParamType::StressStrainCurve)
                     m = it.getStressStrainCurve();
