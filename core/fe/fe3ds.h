@@ -54,6 +54,7 @@ public:
     }
     void calc(matrix<double>& res, vector<double>& u)
     {
+        int index[][2]{{0, 0}, {1, 1}, {2, 2}, {0, 1}, {0, 2}, {1, 2}};
         matrix<double> bm(3, TFE::shape->size * TFE::freedom),
                        bp(3, TFE::shape->size * TFE::freedom),
                        bc(2, TFE::shape->size * TFE::freedom),
@@ -99,18 +100,24 @@ public:
             global_strain = transpose(TransformMatrix) * local_strain * TransformMatrix;
             global_stress = transpose(TransformMatrix) * local_stress * TransformMatrix;
 
-            res(0, i) += global_strain(0, 0);    // Exx
-            res(1, i) += global_strain(1, 1);    // Eyy
-            res(2, i) += global_strain(2, 2);    // Ezz
-            res(3, i) += global_strain(0, 1);    // Exy
-            res(4, i) += global_strain(0, 2);    // Exz
-            res(5, i) += global_strain(1, 2);    // Eyz
-            res(6, i) += global_stress(0, 0);    // Sxx
-            res(7, i) += global_stress(1, 1);    // Syy
-            res(8, i) += global_stress(2, 2);    // Szz
-            res(9, i) += global_stress(0, 1);    // Sxy
-            res(10, i) += global_stress(0, 2);   // Sxz
-            res(11, i) += global_stress(1, 2);   // Syz
+            for (auto j = 0; j < 6; j++)
+            {
+                res(j, i) += global_strain(index[j][0], index[j][1]);
+                res(j+6, i) += global_stress(index[j][0], index[j][1]);
+            }
+
+//            res(0, i) += global_strain(0, 0);    // Exx
+//            res(1, i) += global_strain(1, 1);    // Eyy
+//            res(2, i) += global_strain(2, 2);    // Ezz
+//            res(3, i) += global_strain(0, 1);    // Exy
+//            res(4, i) += global_strain(0, 2);    // Exz
+//            res(5, i) += global_strain(1, 2);    // Eyz
+//            res(6, i) += global_stress(0, 0);    // Sxx
+//            res(7, i) += global_stress(1, 1);    // Syy
+//            res(8, i) += global_stress(2, 2);    // Szz
+//            res(9, i) += global_stress(0, 1);    // Sxy
+//            res(10, i) += global_stress(0, 2);   // Sxz
+//            res(11, i) += global_stress(1, 2);   // Syz
         }
     }
     void generate(bool isStatic = true)
