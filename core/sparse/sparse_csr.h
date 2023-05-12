@@ -16,6 +16,8 @@ struct TCSRMatrix
     void setMatrix(TMesh*);
     void setElem(int, int, double);
     void addElem(int, int, double);
+    void clearRow(int);
+    void clearCol(int);
     double getElem(int, int);
     int findPos(int, int);
 };

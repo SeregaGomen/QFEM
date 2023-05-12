@@ -18,17 +18,20 @@ void TPardisoSolver::setMatrix(TMesh *mesh, bool isDynamic)
 
 void TPardisoSolver::setBoundaryCondition(unsigned index, double value)
 {
-    for (auto i = 0; i < stiffness.size; i++)
-    {
-        if (i != index)
-            if (stiffness.getElem(index, i) != 0.0)
-            {
-                stiffness.setElem(index, i, value);
-                stiffness.setElem(i, index, value);
-            }
-    }
-    load[index] = value * stiffness.getElem(index, index);
-
+//    for (auto i = 0; i < stiffness.size; i++)
+//    {
+//        if (i != index)
+//            if (stiffness.getElem(index, i) != 0.0)
+//            {
+//                stiffness.setElem(index, i, value);
+//                stiffness.setElem(i, index, value);
+//            }
+//    }
+//    load[index] = value * stiffness.getElem(index, index);
+    stiffness.clearRow(index);
+    stiffness.clearCol(index);
+    stiffness.setElem(index, index, 1);
+    load[index] = value;
 }
 
 int solvePardiso(int n, int num_procs, int *ia, int *ja, double *a, double *b)

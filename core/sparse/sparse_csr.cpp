@@ -75,3 +75,20 @@ double TCSRMatrix::getElem(int i, int j)
     }
     return getElem(j, i);
 }
+
+void TCSRMatrix::clearRow(int index)
+{
+    auto pos = findPos(index, index);
+
+    if (pos != -1)
+        for (auto k = 0; k < ia[index+1] - ia[index]; k++)
+            a[pos+k] = 0;
+
+}
+
+void TCSRMatrix::clearCol(int index)
+{
+    for (auto i = 0; i <= index; i++)
+        if (getElem(i, index) != 0)
+            setElem(i, index, 0);
+}
