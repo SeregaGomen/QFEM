@@ -924,7 +924,7 @@ void TMainWindow::sayParams(QString& webOut)
         for (auto it: femObject->getParams().plist)
             if (it.getType() == ParamType::StressStrainCurve)
             {
-                webOut += QString("<br>%1. <b>%2</b>: %3").arg(num++).arg(tr("Predicate")).arg(it.getPredicate().c_str());// + "<br>";
+                webOut += QString("<br>%1. <b>%2</b>: %3").arg(num++).arg(tr("Predicate"), it.getPredicate().c_str());// + "<br>";
                 webOut += QString("<table border=\"1\" cellpadding=\"4\" cellspacing=\"0\"><tr><th>%1</th><th>%2</th><th>%3</th></tr>").arg(tr("N")).arg(tr("Stress")).arg(tr("Deformation"));
                 for (unsigned i = 0; i < it.getStressStrainCurve().size1(); i++)
                     webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>").arg(i + 1).arg(it.getStressStrainCurve(i, 0), int(femObject->getParams().width), 'e', int(femObject->getParams().precision)).arg(it.getStressStrainCurve(i, 1), int(femObject->getParams().width), 'e', int(femObject->getParams().precision));
@@ -977,23 +977,23 @@ void TMainWindow::sayParams(QString& webOut)
                 if (it.getType() == ParamType::InitialCondition)
                 {
                     if (contains(it.getInitialCondition(), InitialCondition::U))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[4].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[4].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::V))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[5].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[5].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::W))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[6].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[6].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Ut))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[22].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[22].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Vt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[23].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[23].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Wt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[24].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[24].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Utt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[25].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[25].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Vtt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[26].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[26].c_str(), it.getExpression().c_str()) + "<br>";
                     if (contains(it.getInitialCondition(), InitialCondition::Wtt))
-                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[27].c_str()).arg(it.getExpression().c_str()) + "<br>";
+                        webOut += tr("function: <b>%1</b>, value: <b>%2</b>").arg(femObject->getParams().names[27].c_str(), it.getExpression().c_str()) + "<br>";
                 }
         }
     }
@@ -1034,11 +1034,12 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, ParamType para
                 webOut += QString("<th>%1</th>").arg(femObject->getParams().names[2].c_str());
             webOut += "</tr>";
         }
-        for (auto it: femObject->getParams().plist)
+        for (auto &it: femObject->getParams().plist)
         {
             if (it.getType() not_eq param)
                 continue;
-            predicate = QString(it.getPredicate().c_str()).replace(QString("<="), QString("&lt;=")).replace(QString(">="), QString("&gt;="));
+            predicate = QString(it.getPredicate().c_str()).replace(QString("<"), QString("&lt;")).replace(QString(">"), QString("&gt;"));
+            //predicate = QString(it.getPredicate().c_str()).replace(QString("<="), QString("&lt;=")).replace(QString(">="), QString("&gt;=")).replace(QString("<"), QString("&lt;")).replace(QString(">"), QString("&gt;"));
             webOut += QString("<tr><td>%1</td><td>%2</td><td>%3</td>").arg(num++).arg(it.getExpression().c_str()).arg(predicate);
             if (isDirect)
             {
