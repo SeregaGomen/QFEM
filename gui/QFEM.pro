@@ -13,8 +13,9 @@ DEFINES += BOOST_ALL_NO_LIB
 INCLUDEPATH += ../core \
                ../../../eigen
 
-msvc:LIBS += -lOpenGL32
-msvc:QMAKE_CXXFLAGS += /permissive-
+LIBS += -lopengl32
+#msvc:LIBS += -lOpenGL32
+#msvc:QMAKE_CXXFLAGS += /permissive-
 
 #msvc:QMAKE_CXXFLAGS+= /openmp
 #gcc:QMAKE_CXXFLAGS+= -fopenmp
@@ -27,7 +28,7 @@ win32 {
 
 unix {
     INCLUDEPATH += /opt/intel/oneapi/mkl/2022.1.0/include/
-    LIBS += -L/opt/intel/oneapi/mkl/2022.1.0/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+    LIBS += -L/opt/intel/oneapi/mkl/2023.1.0/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 }
 
 

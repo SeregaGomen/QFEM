@@ -6,8 +6,8 @@
 #include "object.h"
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
-#include "solver/psolver.h"
-//#include "solver/eigensolver.h"
+//#include "solver/psolver.h"
+#include "solver/eigensolver.h"
 //#include "solver/bccsolver.h"
 //#include "solver/lzhsolver.h"
 //#include "solver/envsolver.h"
@@ -197,8 +197,8 @@ bool TFEMObject::start(void)
     cout << endl << S_MSG_START << endl;
     try
     {
-        fem = createProblem<TPardisoSolver>();
-//        fem = createProblem<TEigenSolver>();
+//        fem = createProblem<TPardisoSolver>();
+        fem = createProblem<TEigenSolver>();
 //        fem = createProblem<TCGSolver>();
 //        fem = createProblem<TLZHSolver>();
 //        fem = createProblem<TBCCSolver>();
