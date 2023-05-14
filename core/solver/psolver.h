@@ -13,51 +13,24 @@ class TMesh;
 //-----------------------------------------------------------------------
 class TPardisoSolver : public TSolver<TCSRMatrix, vector<double>>
 {
+protected:
+    bool solve(vector<double>&, double, bool&);
 public:
     TPardisoSolver() = default;
     ~TPardisoSolver() = default;
     void setMatrix(TMesh*, bool = false);
-    void setBoundaryCondition(unsigned, double);
-    void setStiffness(double value, unsigned i, unsigned j)
+    void setElement(TCSRMatrix &m, unsigned i, unsigned j, double value)
     {
-        stiffness.setElem(i, j, value);
+        m.setElem(i, j, value);
     }
-    void setDamping(double value, unsigned i, unsigned j)
+    void addElement(TCSRMatrix &m, unsigned i, unsigned j, double value)
     {
-        damping.setElem(i, j, value);
+        m.addElem(i, j, value);
     }
-    void setMass(double value, unsigned i, unsigned j)
+    double getElement(TCSRMatrix &m, unsigned i, unsigned j)
     {
-        mass.setElem(i, j, value);
+        return m.getElem(i, j);
     }
-    void addStiffness(double value, unsigned i, unsigned j)
-    {
-        lock_guard<mutex> guard(mtx);
-        stiffness.addElem(i, j, value);
-    }
-    void addMass(double value, unsigned i, unsigned j)
-    {
-        lock_guard<mutex> guard(mtx);
-        mass.addElem(i, j, value);
-    }
-    void addDamping(double value, unsigned i, unsigned j)
-    {
-        lock_guard<mutex> guard(mtx);
-        damping.addElem(i, j, value);
-    }
-    double getStiffness(unsigned i, unsigned j)
-    {
-        return stiffness.getElem(i, j);
-    }
-    double getMass(unsigned i, unsigned j)
-    {
-        return mass.getElem(i, j);
-    }
-    double getDamping(unsigned i, unsigned j)
-    {
-        return damping.getElem(i, j);
-    }
-    bool solve(vector<double>&, double, bool&);
 };
 
 #endif // TPARDISOSOLVER_H

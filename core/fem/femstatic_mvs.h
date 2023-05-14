@@ -82,7 +82,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
         // Учет краевых условий
         TFEMStatic<SOLVER, FE>::calcBoundaryCondition();
         // Решение СЛАУ
-        if (!TFEMStatic<SOLVER, FE>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
+        if (!TFEMStatic<SOLVER, FE>::solver.solution(result, TFEM::params.eps, TFEM::isProcessAborted))
         {
             TFEM::isProcessCalculated = false;
             if (TFEM::isProcessAborted)

@@ -48,11 +48,7 @@ SOURCES += main.cpp\
     helpdialog.cpp \
     femprocessor.cpp \
     glmesh.cpp \
-    ../core/solver/envsolver.cpp \
-    ../core/sparse/sparse_env.cpp \
-    ../core/solver/bccsolver.cpp \
     ../core/solver/lzhsolver.cpp \
-    ../core/sparse/sparse_bccs.cpp \
     ../core/solver/eigensolver.cpp \
     ../core/mesh/mesh.cpp \
     ../core/parser/parser.cpp \
@@ -78,11 +74,7 @@ HEADERS  += mainwindow.h \
     femprocessor.h \
     terminal.h \
     glmesh.h \
-    ../core/solver/envsolver.h \
-    ../core/sparse/sparse_env.h \
-    ../core/solver/bccsolver.h \
     ../core/solver/lzhsolver.h \
-    ../core/sparse/sparse_bccs.h \
     ../core/parser/defs.h \
     ../core/solver/eigensolver.h \
     ../core/solver/solver.h \

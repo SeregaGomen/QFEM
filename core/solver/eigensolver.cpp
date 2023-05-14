@@ -13,13 +13,7 @@ bool TEigenSolver::solve(vector<double> &r, double, bool&)
 //    SimplicialLLT<SparseMatrix<double>> solver;
 //    ConjugateGradient<SparseMatrix<double>, Eigen::Upper> solver;
 //    BiCGSTAB<SparseMatrix<double>> solver;
-    VectorXd x,
-             right = load;
-
-//    cerr << globalStiffnessMatrix.nonZeros() << endl;
-    /////////////
-    // print("matr1.txt");
-    ///
+    VectorXd x;
 
     msg->setProcess(ProcessCode::PreparingSystemEquation);
     solver.compute(stiffness);
@@ -28,7 +22,7 @@ bool TEigenSolver::solve(vector<double> &r, double, bool&)
         throw ErrorCode::EEquationNotSolved;
 
     msg->setProcess(ProcessCode::SolutionSystemEquation);
-    x = solver.solve(right);
+    x = solver.solve(load);
     msg->stop();
 
     if (solver.info() not_eq Success)
@@ -36,9 +30,6 @@ bool TEigenSolver::solve(vector<double> &r, double, bool&)
 
     r.resize(stiffness.rows());
     copy(&x[0], x.data() + x.cols() * x.rows(), r.begin());
-//    for (unsigned i = 0; i < r.size(); i++)
-//        r[i] = x(i);
-
     return true;
 }
 
@@ -46,6 +37,7 @@ void TEigenSolver::setMatrix(TMesh *mesh, bool isDynamic)
 {
     unsigned size = mesh->getNumVertex(),
              freedom = mesh->getFreedom();
+    VectorXi memMap;
 
     // Резервируем объем необходимой памяти
     memMap.resize(size * freedom);
@@ -68,19 +60,5 @@ void TEigenSolver::setMatrix(TMesh *mesh, bool isDynamic)
     load.resize(size * freedom);
     load.setZero();
     memMap.resize(0);
-}
-
-void TEigenSolver::setBoundaryCondition(unsigned index, double value)
-{
-    for (Eigen::SparseMatrix<double>::InnerIterator i(stiffness, index); i; ++i)
-    {
-        if (i.row() not_eq i.col())
-        {
-            stiffness.coeffRef(i.row(), i.col()) = value;
-            stiffness.coeffRef(i.col(), i.row()) = value;
-        }
-    }
-    load[index] = value * stiffness.coeffRef(index, index);
-//    stiffnessMatrix.coeffRef(index, index) *= 1.0E+8;
-//    loadVector[index] *= 1.0E+8 * value;
+    boundary_conditions.resize(mesh->getNumVertex() * mesh->getFreedom(), {false, 0});
 }

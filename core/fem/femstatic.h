@@ -68,10 +68,9 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
     TFEM::begin();
     // Предварительное вычисление компонент нагрузки
     calcLoad(load);
-//    calcConcentratedLoad(load);
-//    calcSurfaceLoad(load);
-//    calcPressureLoad(load);
-//    calcVolumeLoad(load);
+
+    // Учет краевых условий
+    calcBoundaryCondition();
 
     // Формирование ГМЖ
     calcGlobalMatrix();
@@ -79,37 +78,11 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
     // Учет нагрузки
     setLoad(load);
 
-    // Учет краевых условий
-    calcBoundaryCondition();
-
-    //////////////////
-//    auto size = load.size();
-//    double val;
-//    ofstream outf("matr.res");
-
-//    outf << size << 'x' << size + 1 << endl;
-//    outf.setf( std::ios::fixed, std:: ios::floatfield );
-//    for (auto i = 0u; i < size; i++)
-//    {
-//        for (auto j = 0; j < size; j++)
-//        {
-//            val = solver.getStiffness(i, j);
-//            outf.precision(10);
-//            outf.width(20);
-//            outf << val << ' ';
-//        }
-//        outf.precision(10);
-//        outf.width(20);
-//        outf << solver.getLoad(i) << endl;
-//    }
-//    outf.close();
-    //////////////////
-
 //    solver.saveStiffnessMatrix("matrix.dat");
 //    solver.loadStiffnessMatrix("matrix.dat");
 
     // Решение СЛАУ
-    if (solver.solve(res, params.eps, isProcessAborted))
+    if (solver.solution(res, params.eps, isProcessAborted))
         genResults(res); // Вычисление дополнительных результатов
     else
         throw ErrorCode::EEquationNotSolved;

@@ -74,7 +74,7 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::startProce
         createDynamicVector();
         // Учет граничных условий
         TFEMStatic<SOLVER, FE>::calcBoundaryCondition();
-        if (TFEMStatic<SOLVER, FE>::solver.solve(result, TFEM::params.eps, TFEM::isProcessAborted))
+        if (TFEMStatic<SOLVER, FE>::solver.solution(result, TFEM::params.eps, TFEM::isProcessAborted))
             genResults(result); // Вычисление результатов
         if (TFEM::isProcessAborted)
             throw ErrorCode::EAbort;
