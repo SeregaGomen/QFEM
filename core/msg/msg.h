@@ -60,7 +60,7 @@ extern int langCode;
 #define S_MSG_NUM_FE                    ((langCode) ? "Количество конечных элементов: " : "Number of finite elements: ")
 #define S_MSG_FE_STATIC_PROCESS         ((langCode) ? "Формирование глобальной матрицы жесткости" : "Building a global stiffness matrix")
 #define S_MSG_FE_DYNAMIC_PROCESS        ((langCode) ? "Формирование глобальных матриц" : "Building of the global matrix")
-#define S_MSG_BOUNDARY_PROCESS          ((langCode) ? "Учет краевых условий" : "Using of boundary conditions")
+#define S_MSG_BOUNDARY_PROCESS          ((langCode) ? "Вычисление граничных условий" : "Calculation of boundary conditions")
 #define S_MSG_TIMER                     ((langCode) ? "Выполнено за: " : "Done in: ")
 #define S_MSG_LEAD_TIME                 ((langCode) ? "Время выполнения: " : "Lead time: ")
 #define S_MSG_SEC                       ((langCode) ? " сек." : " sec.")
@@ -110,7 +110,7 @@ enum class ProcessCode
             {
                 Undefined,
                 GeneratingStaticMatrix,
-                UsingBoundaryCondition,
+                CalcBoundaryCondition,
                 UsingLoad,
                 PreparingSystemEquation,
                 FactorizationSystemEquation,
@@ -136,7 +136,7 @@ inline string sayProcess(ProcessCode code)
     {
         case ProcessCode::GeneratingStaticMatrix:
             return S_MSG_FE_STATIC_PROCESS;
-        case ProcessCode::UsingBoundaryCondition:
+        case ProcessCode::CalcBoundaryCondition:
             return S_MSG_BOUNDARY_PROCESS;
         case ProcessCode::UsingLoad:
             return S_MSG_CREATE_LOAD;

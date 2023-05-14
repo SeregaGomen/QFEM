@@ -6,9 +6,9 @@
 #include "object.h"
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
-//#include "solver/psolver.h"
+#include "solver/psolver.h"
 //#include "solver/eigensolver.h"
-#include "solver/lzhsolver.h"
+//#include "solver/lzhsolver.h"
 
 int langCode = 0; // Код языка (0 - английский, 1 - русский)
 
@@ -195,10 +195,9 @@ bool TFEMObject::start(void)
     cout << endl << S_MSG_START << endl;
     try
     {
-//        fem = createProblem<TPardisoSolver>();
+        fem = createProblem<TPardisoSolver>();
 //        fem = createProblem<TEigenSolver>();
-//        fem = createProblem<TCGSolver>();
-        fem = createProblem<TLZHSolver>();
+//        fem = createProblem<TLZHSolver>();
         // Задание количества потоков
         fem->setNumThread(numThread);
         // Задание параметров расчета

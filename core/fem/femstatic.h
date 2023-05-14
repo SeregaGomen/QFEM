@@ -69,7 +69,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
     // Предварительное вычисление компонент нагрузки
     calcLoad(load);
 
-    // Учет краевых условий
+    // Вычисление граничных условий
     calcBoundaryCondition();
 
     // Формирование ГМЖ
@@ -77,9 +77,6 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
 
     // Учет нагрузки
     setLoad(load);
-
-//    solver.saveStiffnessMatrix("matrix.dat");
-//    solver.loadStiffnessMatrix("matrix.dat");
 
     // Решение СЛАУ
     if (solver.solution(res, params.eps, isProcessAborted))
@@ -231,7 +228,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcBounda
 
     if (params.plist.findParameter(ParamType::BoundaryCondition))
     {
-        msg->setProcess(ProcessCode::UsingBoundaryCondition, 1, TFEM::mesh->getNumVertex());
+        msg->setProcess(ProcessCode::CalcBoundaryCondition, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<SOLVER, FE>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
