@@ -372,7 +372,7 @@ void TMainWindow::setupRecentActions(void)
 
 void TMainWindow::slotOpenDocument(void)
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh *.ele *.face *.node);; QFEM result files (*.qres *.res)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM problem files (*.qfpf);; Mesh files (*.trp *.trpa *.vol *.mesh *.msh *.ele *.face *.node);; QFEM result files (*.qres *.res)"));
 
     if (not fileName.isEmpty())
         loadFile(fileName);
@@ -383,7 +383,7 @@ void TMainWindow::loadFile(QString fileName)
     bool isOk = false;
 
     slotCloseTab(0);
-    if (QFileInfo(fileName).completeSuffix().toUpper() == "TRP" or QFileInfo(fileName).completeSuffix().toUpper() == "TRPA" or QFileInfo(fileName).completeSuffix().toUpper() == "VOL" or QFileInfo(fileName).completeSuffix().toUpper() == "MESH" or (QFileInfo(fileName).completeSuffix().toUpper() == "1.ELE" or QFileInfo(fileName).completeSuffix().toUpper() == "1.NODE" or QFileInfo(fileName).completeSuffix().toUpper() == "1.FACE"))
+    if (QFileInfo(fileName).completeSuffix().toUpper() == "TRP" or QFileInfo(fileName).completeSuffix().toUpper() == "TRPA" or QFileInfo(fileName).completeSuffix().toUpper() == "VOL" or QFileInfo(fileName).completeSuffix().toUpper() == "MSH" or QFileInfo(fileName).completeSuffix().toUpper() == "MESH" or (QFileInfo(fileName).completeSuffix().toUpper() == "1.ELE" or QFileInfo(fileName).completeSuffix().toUpper() == "1.NODE" or QFileInfo(fileName).completeSuffix().toUpper() == "1.FACE"))
         isOk = loadMesh(fileName);
     else if (QFileInfo(fileName).completeSuffix().toUpper() == "QRES")
         isOk = loadQRES(fileName);

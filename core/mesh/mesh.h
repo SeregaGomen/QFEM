@@ -35,6 +35,7 @@ private:
     bool readTRP(string);
     bool readVOL(string);
     bool readMESH(string);
+    bool readMSH(string);
     bool readTRPA(string);
     bool readTetgen(string);
     bool writeTRP(string);

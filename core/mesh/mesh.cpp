@@ -35,6 +35,8 @@ bool TMesh::read(string fname)
         error = readVOL(fname);
     else if (ext == "MESH")
         error = readMESH(fname);
+    else if (ext == "MSH")
+        error = readMSH(fname);
     else if (ext == "NODE" or ext == "ELE" or ext == "FACE")
         error = readTetgen(fname);
     else
@@ -876,6 +878,175 @@ bool TMesh::readMESH(string fname)
     }
     in.close();
     feType = FEType::fe2d3;
+    if (in.fail())
+    {
+        cerr << sayError(ErrorCode::EReadFile) << endl;
+        return (error = true);
+    }
+    cout << *this << endl;
+    return false;
+}
+// --------------------------------------------------------------
+inline vector<string> split(const string &s) {
+    vector<string> result;
+    istringstream iss(s);
+
+    for (string w; iss >> w;)
+        result.push_back(w);
+    return result;
+}
+// --------------- Чтение MSH-файла (GMSH) ----------------------
+bool TMesh::readMSH(string fname)
+{
+    string text;
+    char str[1001];
+    int ivalue[4],
+        numEntities,
+        num,
+        minTag,
+        dim,
+        elmType;
+    //double fvalue[3];
+    bool is2d = true;
+    vector<double> fvalue = {0.0, 0.0, 0.0};
+    vector<vector<double>> tx;
+    vector<vector<int>> tfe,
+                        tbe;
+    ifstream in(fname.c_str(), ios::in);
+
+    clear();
+    if (not in.is_open())
+    {
+        cerr << sayError(ErrorCode::EOpenFile) << endl;
+        return (error = true);
+    }
+
+    in >> text;
+    if (text != "$MeshFormat")
+    {
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        in.close();
+        return (error = true);
+    }
+    while (1)
+    {
+        if (in.eof())
+        {
+            in.close();
+            return (error = true);
+        }
+        in >> text;
+        if (text == "$Nodes")
+            break;
+    }
+    in >> numEntities >> num >> ivalue[2] >> ivalue[3];
+    tx.reserve(num);
+    for (int i = 0; i < numEntities; i++)
+    {
+        in >> ivalue[0] >> ivalue[1] >> ivalue[2] >> num;
+        // Ignoring tags
+        for (int j = 0; j < num; j++)
+            in >> ivalue[0];
+        for (int j = 0; j < num; j++)
+        {
+            in >> fvalue[0] >> fvalue[1] >> fvalue[2];
+            if (fvalue[2] > 1.0e-6)
+                is2d = false;
+            tx.push_back(fvalue);
+        }
+    }
+    in >> text;
+    if (text != "$EndNodes")
+    {
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        in.close();
+        return (error = true);
+    }
+    in >> text;
+    if (text != "$Elements")
+    {
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        in.close();
+        return (error = true);
+    }
+    in >> numEntities >> num >> minTag >> ivalue[3];
+    tfe.reserve(num);
+    tbe.reserve(num);
+    for (int i = 0; i < numEntities; i++)
+    {
+        in >> dim >> elmType >> ivalue[2] >> num;
+        for (int j = 0; j < num; j++)
+        {
+            //in >> text;
+            in.getline(str, 1000);
+            if (dim == 0 || (dim == 1 && is2d == false))
+                continue;
+            // Reading current element
+            vector<string> data = split(str);
+            vector<int> elm(data.size() - 1);
+            for (int k = 1; k < data.size(); k++)
+                elm[k - 1] = stoi(data[k]) - minTag;
+            switch (elmType)
+            {
+                case 1: // 2-node line
+                    if (is2d == true)
+                        tbe.push_back(elm); // Boundary element
+                    break;
+                case 2: // 3-node triangle
+                    if (is2d == true)
+                        tfe.push_back(elm); // Finite element
+                    else
+                        tbe.push_back(elm); // Boundary element
+                    break;
+                case 4: // 4-node tetrahedron
+                    if (is2d == false)
+                        tfe.push_back(elm); // Finite element
+                    else
+                    {
+                        cerr << sayError(ErrorCode::EFormatFile) << endl;
+                        in.close();
+                        return (error = true);
+                    }
+                    break;
+                default:
+                    cerr << sayError(ErrorCode::EFormatFile) << endl;
+                    in.close();
+                    return (error = true);
+            }
+        }
+    }
+    in >> text;
+    if (text != "$EndElements")
+    {
+        cerr << sayError(ErrorCode::EFormatFile) << endl;
+        in.close();
+        return (error = true);
+    }
+    if (is2d == true)
+        feType = FEType::fe2d3;
+    else
+    {
+        feType = FEType::fe3d4;
+        if (tfe.size() == 0)
+        {
+            // Shell finite element
+            tfe = tbe;
+            //m.BE = m.BE[:0:0]
+            feType = FEType::fe3d3s;
+        }
+    }
+    x.resize(tx.size(), is2d ? 2 : 3);
+    for (auto i = 0u; i < x.size1(); i++)
+        for (auto j = 0u; j < x.size2(); j++)
+            x[i][j] = tx[i][j];
+    fe.resize(tfe.size(), tfe[0].size());
+    for (auto i = 0u; i < fe.size1(); i++)
+        for (int j = 0; j < fe.size2(); j++)
+            fe[i][j] = tfe[i][j];
+    for (auto i = 0u; i < be.size1(); i++)
+        for (auto j = 0u; j < be.size2(); j++)
+            be[i][j] = tbe[i][j];
+    in.close();
     if (in.fail())
     {
         cerr << sayError(ErrorCode::EReadFile) << endl;
