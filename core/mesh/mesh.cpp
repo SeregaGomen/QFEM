@@ -1,7 +1,7 @@
 #include <string>
 #include <climits>
 #include <algorithm>
-#include <iomanip>
+//#include <iomanip>
 #include "msg/msg.h"
 #include "mesh.h"
 
@@ -899,7 +899,6 @@ inline vector<string> split(const string &s) {
 bool TMesh::readMSH(string fname)
 {
     string text;
-    char str[1001];
     int ivalue[4],
         numEntities,
         num,
@@ -974,15 +973,15 @@ bool TMesh::readMSH(string fname)
     tbe.reserve(num);
     for (int i = 0; i < numEntities; i++)
     {
-        in >> dim >> elmType >> ivalue[2] >> num;
+        in >> dim >> ivalue[1] >> elmType >> num;
+        getline(in, text);
         for (int j = 0; j < num; j++)
         {
-            //in >> text;
-            in.getline(str, 1000);
+            getline(in, text);
             if (dim == 0 || (dim == 1 && is2d == false))
                 continue;
             // Reading current element
-            vector<string> data = split(str);
+            vector<string> data = split(text);
             vector<int> elm(data.size() - 1);
             for (int k = 1; k < data.size(); k++)
                 elm[k - 1] = stoi(data[k]) - minTag;
@@ -1035,14 +1034,15 @@ bool TMesh::readMSH(string fname)
             feType = FEType::fe3d3s;
         }
     }
-    x.resize(tx.size(), is2d ? 2 : 3);
+    x.resize((unsigned int)tx.size(), is2d ? 2 : 3);
     for (auto i = 0u; i < x.size1(); i++)
         for (auto j = 0u; j < x.size2(); j++)
             x[i][j] = tx[i][j];
-    fe.resize(tfe.size(), tfe[0].size());
+    fe.resize((unsigned int)tfe.size(), (unsigned int)tfe[0].size());
     for (auto i = 0u; i < fe.size1(); i++)
-        for (int j = 0; j < fe.size2(); j++)
+        for (auto j = 0u; j < fe.size2(); j++)
             fe[i][j] = tfe[i][j];
+    be.resize((unsigned int)tbe.size(), (unsigned int)tbe[0].size());
     for (auto i = 0u; i < be.size1(); i++)
         for (auto j = 0u; j < be.size2(); j++)
             be[i][j] = tbe[i][j];
