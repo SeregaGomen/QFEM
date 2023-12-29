@@ -2,9 +2,9 @@
 #define SOLVER_H
 
 #include <mutex>
-#include <string>
-//#include <fstream>
-#include "util/matrix.h"
+#include <vector>
+#include <fstream>
+//#include "util/matrix.h"
 
 using namespace std;
 
@@ -125,6 +125,30 @@ public:
 //            }
 //            outf.close();
 //        }
+
+
+
+/*
+        {
+            auto size = load.size();
+            double val;
+            ofstream outf("matrix.dat");
+
+            outf << size << endl;
+            for (auto i = 0u; i < size; i++)
+                outf << load[i] << '\n';
+            for (auto i = 0u; i < size; i++)
+            {
+                for (auto j = i; j < size; j++)
+                {
+                    val = getStiffness(i, j);
+                    if (val != 0.0)
+                        outf << i << ' ' << j << ' ' << val << '\n';
+                }
+            }
+            outf.close();
+        }
+*/
         //////////////////
         return solve(rhs, eps, is_canceled);
     }
