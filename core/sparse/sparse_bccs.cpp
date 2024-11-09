@@ -17,17 +17,19 @@ extern TMessenger *msg;
 /*   FUNCTION: genqmd                                               */
 /*                                                                  */
 /********************************************************************/
-int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjncy, vector<int> &perm, vector<int> &invp, int *degree, int *marker, int *reach, int *nbrhd, int *qsize,
-            int *qlink, int *qhead, int *maxnonz, int *maxsub)
+int genqmd(const int nvtxs, const vector<int> &xadj, vector<int> &adjncy, vector<int> &perm, vector<int> &invp)
 {
-    int     MinDeg, thresh, Deg, nDeg,
-            nxnode, search, num, ip, np, counter, Flag, SetPower,
-            i, j, k, node, nabor, Root, tmpRoot, jstrt, jstop,
-            kstrt, kstop, rchsze, nhdsze, srchsze, snhdsze, ovlsze,
-            *sreach, *snbrhd, *ovrlp, mrgsze, lnode, head, *mask;
+    int MinDeg, thresh, Deg, nDeg,
+        nxnode, search, num, ip, np, counter, Flag, SetPower,
+        i, j, k, node, nabor, Root, tmpRoot, jstrt, jstop,
+        kstrt, kstop, rchsze, nhdsze, srchsze, snhdsze, ovlsze,
+        mrgsze, lnode, head;
+
+    vector<int> degree(7 * nvtxs), marker(7 * nvtxs), reach(7 * nvtxs), nbrhd(7 * nvtxs), qsize(7 * nvtxs), qlink(7 * nvtxs), qhead(7 * nvtxs);
+
 
     /* initialisation */
-    *maxnonz = *maxsub = num = search = 0;
+    num = search = 0;
     MinDeg = nvtxs;
     for(i=0; i<nvtxs; i++) {
         perm[i] = invp[i] = qhead[i] = i;
@@ -67,7 +69,6 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
         Root = perm[search];
         marker[Root] = 1;
         Deg = degree[Root];
-        *maxsub += Deg;
 
         /* calc reachable power (SetPower) */
         SetPower = rchsze = nhdsze = 0;
@@ -117,7 +118,6 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
             perm[num] = nxnode;
             invp[nxnode] = num;
             degree[nxnode] = -1;
-            *maxnonz += Deg;
             Deg--;
             num++;
         }
@@ -127,8 +127,7 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
             marker[Root] = 0;
             continue; /* main loop */
         }
-        sreach = &reach[rchsze];
-        snbrhd = &nbrhd[nhdsze];
+        //snbrhd = &nbrhd[nhdsze];
         counter = 0;
 
         /* find merged roots */
@@ -140,17 +139,16 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
                 nabor = adjncy[j];
                 if(degree[nabor] >= 0) continue;
                 if(marker[nabor]) continue;
-                snbrhd[snhdsze++] = nabor;
+                nbrhd[nhdsze + snhdsze++] = nabor;
                 marker[nabor] = -1;
             } /* next j */
         } /* next i */
         if(snhdsze) {
             for(i=0; i<snhdsze; i++) {
-                marker[snbrhd[i]] = 0;
+                marker[nbrhd[nhdsze + i]] = 0;
             }
-            ovrlp = &snbrhd[snhdsze]; /* overlapped */
             for(i=0; i<snhdsze; i++) {
-                tmpRoot = snbrhd[i];
+                tmpRoot = nbrhd[nhdsze + i];
                 marker[tmpRoot] = -1;
                 Deg = ovlsze = srchsze = 0;
                 node = tmpRoot;
@@ -168,22 +166,21 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
                         }
                         break;
                     }
-                    mask = &marker[node];
-                    if(*mask < 0) continue;
-                    if(*mask > 0) {
-                        if(*mask > 1) continue;
-                        *mask = 2; /* marker for overlapped */
-                        ovrlp[ovlsze++] = node;
+                    if (marker[node] < 0) continue;
+                    if (marker[node] > 0) {
+                        if (marker[node] > 1) continue;
+                        marker[node] = 2; /* marker for overlapped */
+                        nbrhd[nhdsze + snhdsze + ovlsze++] = node;
                         continue;
                     }
-                    *mask = -2;
-                    sreach[srchsze++] = node;
+                    marker[node] = -2;
+                    reach[rchsze + srchsze++] = node;
                     Deg += qsize[node];
                 } /* next j */
 
                 head = nvtxs;
                 for(mrgsze=j=0; j<ovlsze; j++) {
-                    node = ovrlp[j];
+                    node = nbrhd[nhdsze + snhdsze + j];
                     kstrt = xadj[node];
                     kstop = xadj[node+1];
                     Flag = 0;
@@ -213,16 +210,15 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
                 marker[tmpRoot] = 0;
                 if(srchsze)
                     for(j=0; j<srchsze; j++)
-                        marker[sreach[j]] = 0;
+                        marker[reach[rchsze + j]] = 0;
             } /* next i */
         } /* if(snhdsze) */
 
         /* update root degree */
         for(i=0; i<rchsze; i++) {
             tmpRoot = reach[i];
-            mask = &marker[tmpRoot];
-            if(*mask > 1 || *mask < 0) continue;
-            *mask = 2;
+            if(marker[tmpRoot] > 1 || marker[tmpRoot] < 0) continue;
+            marker[tmpRoot] = 2;
             Deg = srchsze = snhdsze = 0;
             jstrt = xadj[tmpRoot];
             jstop = xadj[tmpRoot+1];
@@ -231,12 +227,12 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
                 assert(node < nvtxs);
                 if(marker[node]) continue;
                 if(degree[node] >= 0) {
-                    sreach[srchsze++] = node;
+                    reach[rchsze + srchsze++] = node;
                     Deg += qsize[node];
                     marker[node] = 1;
                     continue;
                 }
-                snbrhd[snhdsze++] = node;
+                nbrhd[nhdsze + snhdsze++] = node;
                 marker[node] = -1;
                 k = xadj[node];
                 kstop = xadj[node+1];
@@ -253,7 +249,7 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
                         break;
                     }
                     if(marker[node]) continue;
-                    sreach[srchsze++] = node;
+                    reach[rchsze + srchsze++] = node;
                     Deg += qsize[node];
                     marker[node] = 1;
                 } /* next k */
@@ -263,10 +259,10 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
             counter++;
             if(srchsze)
                 for(j=0; j<srchsze; j++)
-                    marker[sreach[j]] = 0;
+                    marker[reach[rchsze + j]] = 0;
             if(snhdsze)
                 for(j=0; j<snhdsze; j++)
-                    marker[snbrhd[j]] = 0;
+                    marker[nbrhd[nhdsze + j]] = 0;
         } /* next i */
 
         assert(counter == rchsze);
@@ -332,38 +328,11 @@ int genqmd(const int nvtxs, const std::vector<int> &xadj, std::vector<int> &adjn
 
     return 0;
 }
-/*********************************/
-/* solver for LDL' factorization */
-/* diagonal system               */
-/*********************************/
-void dtrsd(int n, const vector<char> &d, double r[])
-{
-    int          i, ilim;
-    double        *cr;
-    const char  *cd;
-
-    ilim = n - 8;
-    for(cd=&d[0], cr=r, i=0; i<=ilim; i+=8, cr+=8, cd+=8) {
-        cr[0] *= (double) cd[0];
-        cr[1] *= (double) cd[1];
-        cr[2] *= (double) cd[2];
-        cr[3] *= (double) cd[3];
-        cr[4] *= (double) cd[4];
-        cr[5] *= (double) cd[5];
-        cr[6] *= (double) cd[6];
-        cr[7] *= (double) cd[7];
-    }
-
-    for( ; i<n; i++) {
-        r[i] *= (double) d[i];
-    }
-
-} /* end dtrsd */
 /*****************************************************************/
 int spSetMatrix(TBCCSMatrix &matrix, const int* mesh, int nelmnts, int elmsze, int nvtxs, int blksz)
 {
     int i, j, m, k, n, nedges, node, nnz, len;
-    std::vector<int> nptr, mark, nind;
+    vector<int> nptr, mark, nind;
 
     matrix.nvtxs = nvtxs;
 
@@ -447,19 +416,19 @@ int spSetMatrix(TBCCSMatrix &matrix, const int* mesh, int nelmnts, int elmsze, i
     return 0;
 }
 /*****************************************************************/
-int spMulMatrix(TBCCSMatrix &matrix, const double* x, double *y)
+int spMulMatrix(TBCCSMatrix &matrix, const vector<double> &x, vector<double> &y)
 {
     int i, j, bi, bj, strt, stop, node, sqrblk, ilim;
     const double *cx, *a, *ca;
     double *cy, *cv;
 
     sqrblk = matrix.blksze * matrix.blksze;
-    for (ilim = matrix.nvtxs * matrix.blksze - 8, cv = y, i = 0; i <= ilim; i += 8, cv += 8)
+    for (ilim = matrix.nvtxs * matrix.blksze - 8, cv = y.data(), i = 0; i <= ilim; i += 8, cv += 8)
         cv[0] = cv[1] = cv[2] = cv[3] = cv[4] = cv[5] = cv[6] = cv[7] = 0;
     for(; i < matrix.nvtxs * matrix.blksze; i++)
         y[i] = 0;
 
-    cx = x;
+    cx = x.data();
 
     for (i = 0; i < matrix.nvtxs; i++, cx += matrix.blksze)
     {
@@ -486,28 +455,27 @@ int spMulMatrix(TBCCSMatrix &matrix, const double* x, double *y)
 /*****************************************************************/
 int spMulMatrix(TBCCSMatrix &matrix, double K)
 {
-    int len = matrix.aptrs[matrix.nvtxs] * matrix.blksze * matrix.blksze,
-            i;
+    int len = matrix.aptrs[matrix.nvtxs] * matrix.blksze * matrix.blksze;
 
-    for (i = 0; i < len; i++)
+    for (auto i = 0; i < len; i++)
         matrix.avals[i] *= K;
     return 0;
 }
 /***********************************************************************/
-int merge(int *a, int alen, int *b, int blen, int *t)
+int merge(vector<int> &a, int alen, vector<int> &b, int offset, int blen, vector<int> &t)
 {
     int   i, j, k;
 
     i=j=k=0;
 
     while( (i < alen) && (j < blen) ) {
-        if(a[i] < b[j]) {
+        if(a[i] < b[offset + j]) {
             t[k] = a[i++];
-        } else if(a[i] == b[j]) {
+        } else if(a[i] == b[offset + j]) {
             t[k] = a[i++];
             j++;
         } else {
-            t[k] = b[j++];
+            t[k] = b[offset + j++];
         }
         k++;
     }
@@ -517,32 +485,24 @@ int merge(int *a, int alen, int *b, int blen, int *t)
     }
 
     while(j < blen) {
-        t[k++] = b[j++];
+        t[k++] = b[offset + j++];
     }
-
-#ifndef NDEBUG
-    for(i=1; i<k; i++) {
-        assert(t[i-1] < t[i]);
-    }
-#endif
-
     return k;
 }
 /********************************************************************/
-static int funInSymbolic(TBCCSFactor &factor, const std::vector<int> &aptrs, const std::vector<int> &ainds)
+static int funInSymbolic(TBCCSFactor &factor, const vector<int> &aptrs, const vector<int> &ainds)
 {
-    int i, j, k, node, lsize, setsze, strt, stop, nvtxs, *mrglnk, *stack, *nodeset, ispace = 0;
-    std::vector<int> linds, pool;
+    int i, j, k, node, lsize, setsze, strt, stop, nvtxs, ispace = 0;
+    vector<int> linds, mrglnk, stack, nodeset;
 
     nvtxs = factor.nvtxs;
     factor.xlvals.resize(nvtxs + 1);
     factor.xlinds.resize(nvtxs);
 
     /* allocate work memory */
-    pool.resize(3 * nvtxs);
-    mrglnk  = &pool[0];
-    stack   = &pool[0] + nvtxs;
-    nodeset = &pool[0] + 2 * nvtxs;
+    mrglnk.resize(nvtxs);
+    stack.resize(nvtxs);
+    nodeset.resize(nvtxs);
 
     /* allocate initial buffer for compressed row indices */
     lsize = 20 * nvtxs;
@@ -578,14 +538,14 @@ static int funInSymbolic(TBCCSFactor &factor, const std::vector<int> &aptrs, con
             nodeset[setsze++] = node;
         }
         //     iqsort(setsze, nodeset);
-        qsort(nodeset, size_t(setsze), size_t(sizeof(int)), [](const void *x1, const void *x2) { return *(const int*)x1 - *(const int*)x2; });
+        qsort(nodeset.data(), size_t(setsze), size_t(sizeof(int)), [](const void *x1, const void *x2) { return *(const int*)x1 - *(const int*)x2; });
 
         /* inspect kids list and consolidate L(*,k) */
         for(i=mrglnk[k]; i<nvtxs; i=mrglnk[i]) {
             /* i must be kid of k */
             assert(linds[factor.xlinds[i]] == k);
             /* merge two sets */
-            setsze = merge(nodeset, setsze, &linds[factor.xlinds[i]+1], factor.xlvals[i+1] - factor.xlvals[i] - 1, stack);
+            setsze = merge(nodeset, setsze, linds, factor.xlinds[i]+1, factor.xlvals[i+1] - factor.xlvals[i] - 1, stack);
             /* now set is in stack */
             swap(stack, nodeset);
             /* now set is in nodeset */
@@ -593,7 +553,7 @@ static int funInSymbolic(TBCCSFactor &factor, const std::vector<int> &aptrs, con
 
         /* may be compression? */
         if(k > 0 && linds[factor.xlinds[k-1]] == k &&
-                setsze == (factor.xlvals[k] - factor.xlvals[k-1]-1))
+            setsze == (factor.xlvals[k] - factor.xlvals[k-1]-1))
         {
             /* it's indistinguishable node */
             factor.xlinds[k] = factor.xlinds[k-1] + 1;
@@ -637,8 +597,8 @@ static int funInSymbolic(TBCCSFactor &factor, const std::vector<int> &aptrs, con
 /********************************************************************/
 int spOrder(TBCCSFactor &factor, TBCCSMatrix &matrix, bool &aborted)
 {
-    int i, j, k, l, nvtxs, error, nedges, strt, stop, maxlnz, ispace;
-    std::vector<int> xadj, adjncy, mempool;
+    int i, j, k, l, nvtxs, error, nedges, strt, stop;
+    vector<int> xadj, adjncy;
 
     nvtxs = matrix.nvtxs;
 
@@ -679,8 +639,7 @@ int spOrder(TBCCSFactor &factor, TBCCSMatrix &matrix, bool &aborted)
     factor.invp.resize(nvtxs);
 
 
-    mempool.resize(7 * nvtxs);
-    error = genqmd(nvtxs, xadj, adjncy, factor.perm, factor.invp, &mempool[0*nvtxs], &mempool[1*nvtxs], &mempool[2*nvtxs], &mempool[3*nvtxs], &mempool[4*nvtxs], &mempool[5*nvtxs], &mempool[6*nvtxs], &maxlnz, &ispace);
+    error = genqmd(nvtxs, xadj, adjncy, factor.perm, factor.invp);
 
     if (error != 0)
         return error;
@@ -695,13 +654,11 @@ int spOrder(TBCCSFactor &factor, TBCCSMatrix &matrix, bool &aborted)
 /*************************************************************/
 int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
 {
-    int error, i, j, k, n, node, strt, stop, knew, isub, bi, bj, bk, denter, fenter, colsze, blksze = matrix.blksze;
-    const double *anonz;
-    signed char *ps;
-    double *lnonz, value, dmin, dmax, *dcolptr, *lcolptr, *hcolptr, *fcolptr, *fblkptr, *pl, *ph, *FF, *LL,
-        sval, rd[MAXBLKSZE], HH[MAXBLKSZE * MAXBLKSZE], DD[MAXBLKSZE * MAXBLKSZE];
+    int error, i, j, k, n, node, strt, stop, knew, isub, bi, bj, bk, denter, fenter, colsze, blksze = matrix.blksze, offset, offset1, offset2, offset3;
+    double value, dmin, dmax, *FF, *LL, sval;
     vector<double*> translate(matrix.nvtxs);
     vector<int> first(matrix.nvtxs), link(matrix.nvtxs, matrix.nvtxs);
+    vector<double> DD(MAXBLKSZE * MAXBLKSZE), rd(MAXBLKSZE), HH(MAXBLKSZE * MAXBLKSZE);
 
     /* check possible HH,DD,rd overflow */
     assert(blksze < MAXBLKSZE);
@@ -730,34 +687,30 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
         stop = factor.xlvals[j + 1];
 
         /* set entries into factored column */
-        lnonz = &factor.lvals.data()[fenter * strt];
         isub = factor.xlinds[j];
-        for (i = strt; i < stop; i++)
+        for (i = strt, offset = fenter * strt; i < stop; i++, offset += fenter)
         {
-            translate[factor.linds[isub++]] = lnonz;
+            translate[factor.linds[isub++]] = &factor.lvals[offset];
             for (k = 0; k < fenter; k++)
-                lnonz[k] = 0.0;
-            lnonz += fenter;
+                factor.lvals[offset + k] = 0.0;
         }
 
         /* form A structure */
         node = factor.perm[j];
         strt = matrix.aptrs[node];
         stop = matrix.aptrs[node+1];
-        anonz = &matrix.avals[fenter * strt];
 
-        for (i = strt; i < stop; i++, anonz += fenter)
+        for (i = strt, offset = fenter * strt; i < stop; i++, offset += fenter)
         {
             node = factor.invp[matrix.ainds[i]];
             if (node < j)
                 continue;
-            if (node == j)
-                lnonz = DD;
-            else
-                lnonz = translate[node];
 
             for (k = 0; k < fenter; k++)
-                lnonz[k] = anonz[k];
+                if (node == j)
+                    DD[k] = matrix.avals[offset + k];
+                else
+                    translate[node][k] = matrix.avals[offset + k];
         }
 
         /* merge with previous columns */
@@ -768,33 +721,22 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
             LL = &factor.lvals[fenter * strt];
 
             /* calculate HH */
-            ph = HH;
-            pl = LL;
-            ps = (signed char*)&factor.svals[blksze * k];
-            for (bi = 0; bi < blksze; bi++)
+            for (bi = 0, offset = 0; bi < blksze; bi++, offset += blksze)
             {
-                value = double(ps[bi]);
+                value = double(factor.svals[blksze * k + bi]);
                 for (bj = 0; bj < blksze; bj++)
-                    ph[bj] = pl[bj] * value;
-                ph += blksze;
-                pl += blksze;
+                    HH[offset + bj] = LL[offset + bj] * value;
             }
 
             /* DD -= LL * HH */
-            dcolptr = DD;
-            for (bi = 0; bi < blksze; bi++)
+            for (bi = 0, offset = 0; bi < blksze; bi++, offset += blksze)
             {
-                ph = HH;
-                pl = LL;
-                for(bj = 0; bj < blksze; bj++)
+                for(bj = 0, offset1 = 0; bj < blksze; bj++, offset1 += blksze)
                 {
-                    value = ph[bi];
+                    value = HH[offset1 + bi];
                     for (bk = bi; bk < blksze; bk++)
-                        dcolptr[bk] -= pl[bk] * value;
-                    ph += blksze;
-                    pl += blksze;
+                        DD[offset + bk] -= LL[offset1 + bk] * value;
                 }
-                dcolptr += blksze;
             }
 
             strt++;
@@ -819,15 +761,13 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
                 /* FF -= LL * HH */
                 for (bi = 0; bi < blksze; bi++)
                 {
-                    ph = HH;
-                    pl = LL;
-                    for (bj = 0; bj < blksze; bj++)
+                    // ph = HH;
+                    // pl = LL;
+                    for (bj = 0, offset1 = 0; bj < blksze; bj++, offset1 += blksze)
                     {
-                        value = ph[bi];
+                        value = HH[offset1 + bi];
                         for (bk = 0; bk < blksze; bk++)
-                            FF[bk] -= pl[bk] * value;
-                        ph += blksze;
-                        pl += blksze;
+                            FF[bk] -= LL[offset1 + bk] * value;
                     }
                     FF += blksze;
                 }
@@ -837,35 +777,31 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
 
         } /* next merged columns */
 
-        ps = (signed char*)&factor.svals[blksze*j];
 
         /* diagonal block factorization */
-        fcolptr = DD;
-        for (bi = 0; bi < blksze; bi++)
+        for (bi = 0, offset = 0; bi < blksze; bi++, offset += blksze)
         {
             /* accumulating */
-            lcolptr = DD;
-            for (bj = 0; bj < bi; bj++)
+            for (bj = 0, offset1 = 0; bj < bi; bj++, offset1 += blksze)
             {
-                value = lcolptr[bi] * double(ps[bj]);
+                value = DD[offset1 + bi] * double(factor.svals[blksze*j + bj]);
                 for (bk = bi; bk<blksze; bk++)
-                    fcolptr[bk] -= lcolptr[bk] * value;
-                lcolptr += blksze;
+                    DD[offset + bk] -= DD[offset1 + bk] * value;
             }
-            value = fcolptr[bi];
+            value = DD[offset + bi];
 
             /* check indefinity */
             if (value < 0.0)
             {
                 value = -value;
-                factor.hyperbolic++;
+                //matrix.hyperbolic++;
                 sval = -1.0;
-                ps[bi] = -1;
+                factor.svals[blksze*j + bi] = -1;
             }
             else
             {
                 sval = 1.0;
-                ps[bi] = 1;
+                factor.svals[blksze*j + bi] = 1;
             }
 
             /* test diagonal value */
@@ -879,27 +815,24 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
             }
 
             value = sqrt(value);
-            fcolptr[bi] = value;
+            DD[offset + bi] = value;
             value = sval / value;
             rd[bi] = value;
 
             /* scale subdiagonal */
             for (bk = bi + 1; bk < blksze; bk++)
-                fcolptr[bk] *= value;
-            fcolptr += blksze;
+                DD[offset + bk] *= value;
         }
 
         /* save factored diagonal block */
-        fcolptr = DD;
-        dcolptr = &factor.dvals[denter*j];
+        //fcolptr = DD;
         colsze = blksze;
-        for (bi = 0; bi < blksze; bi++)
+        for (bi = 0, offset = denter*j, offset1 = 0; bi < blksze; bi++, offset += colsze, offset1 += blksze)
         {
             for (bj = bi; bj < blksze; bj++)
-                dcolptr[bj] = fcolptr[bj];
+                factor.dvals[offset + bj] = DD[offset1 + bj];
             colsze--;
-            dcolptr += colsze;
-            fcolptr += blksze;
+            //fcolptr += blksze;
         }
 
         /* do we must factor subdiagonal? */
@@ -916,41 +849,28 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
         link[isub] = j;
 
         /* calculate HH */
-        hcolptr = HH;
-        dcolptr = DD;
-        for (bi = 0; bi < blksze; bi++)
+        for (bi = 0, offset = 0, offset1 = 0; bi < blksze; bi++, offset += blksze, offset1 += blksze)
         {
-            value = double(ps[bi]);
+            value = double(factor.svals[blksze*j + bi]);
             for (bj = bi + 1; bj < blksze; bj++)
-                hcolptr[bj] = dcolptr[bj] * value;
-            hcolptr += blksze;
-            dcolptr += blksze;
+                HH[offset1 + bj] = DD[offset + bj] * value;
         }
 
         /* scale subdiagonal */
-        fblkptr = &factor.lvals.data()[fenter * strt];
-
-        for (n = strt; n < stop; n++)
+        for (n = strt, offset = fenter * strt; n < stop; n++, offset += fenter)
         {
-            fcolptr = fblkptr;
-            for (bi = 0; bi<blksze; bi++)
+            for (bi = 0, offset1 = offset; bi<blksze; bi++, offset1 += blksze)
             {
-                lcolptr = fblkptr;
-                hcolptr = HH;
-                for (bj = 0; bj < bi; bj++)
+                for (bj = 0, offset2 = 0, offset3 = 0; bj < bi; bj++, offset2 += blksze, offset3 += blksze)
                 {
-                    value = hcolptr[bi];
+                    value = HH[offset2 + bi];
                     for (bk = 0; bk < blksze; bk++)
-                        fcolptr[bk] -= lcolptr[bk] * value;
-                    hcolptr += blksze;
-                    lcolptr += blksze;
+                        factor.lvals[offset1 + bk] -= factor.lvals[offset + offset3 + bk] * value;
                 }
                 value = rd[bi];
                 for (bk = 0; bk < blksze; bk++)
-                    fcolptr[bk] *= value;
-                fcolptr += blksze;
+                    factor.lvals[offset1 + bk] *= value;
             }
-            fblkptr += fenter;
         }
 
     } /* next factored columns */
@@ -961,24 +881,21 @@ int gsfctb(TBCCSFactor &factor, TBCCSMatrix &matrix, double tol, bool &aborted)
 /*********************************************************************/
 int spFactor(TBCCSFactor &factor, TBCCSMatrix &matrix, double eps, bool &aborted)
 {
-    int       error, nvtxs, blksze, memsze, denter;
+    int nvtxs, blksze, memsze, denter;
 
     /* test arguments */
     if((matrix.aptrs.size() == 0) ||
-       (matrix.ainds.size() == 0) ||
-       (matrix.avals.size() == 0) ||
-       (matrix.blksze <= 0) ||
-       (matrix.blksze >= MAXBLKSZE) ||
-       (matrix.nvtxs != factor.nvtxs) ||
-       (factor.error != 0) )
+        (matrix.ainds.size() == 0) ||
+        (matrix.avals.size() == 0) ||
+        (matrix.blksze <= 0) ||
+        (matrix.blksze >= MAXBLKSZE) ||
+        (matrix.nvtxs != factor.nvtxs) ||
+        (factor.error != 0) )
         return 1;
 
     /* load data from structure */
     nvtxs  = matrix.nvtxs;
     factor.blksze = blksze = matrix.blksze;
-
-    /* clear hyperbolic counter */
-    factor.hyperbolic = 0;
 
     /* allocate main lvals array */
     denter = (blksze * (blksze + 1)) / 2;
@@ -992,17 +909,16 @@ int spFactor(TBCCSFactor &factor, TBCCSMatrix &matrix, double eps, bool &aborted
     /* allocate diagonal flags array */
     factor.svals.resize(nvtxs * blksze);
 
-    error = gsfctb(factor, matrix, eps, aborted);
+    factor.error = gsfctb(factor, matrix, eps, aborted);
 
-    return factor.error = error;
+    return factor.error;
 }
 /********************************************************************/
-void permrv(double *rhs, const vector<int> &order, int nvtxs, int blksze)
+void permrv(vector<double> &rhs, const vector<int> &order, int nvtxs, int blksze)
 {
-    int i, j, node;
-    double  *ptri, *ptrn;
+    int node;
 
-    for(i=0; i<nvtxs; i++)
+    for(auto i = 0; i < nvtxs; i++)
     {
         node = order[i];
         if(node == i)
@@ -1010,10 +926,8 @@ void permrv(double *rhs, const vector<int> &order, int nvtxs, int blksze)
         while(node < i)
             node = order[node];
 
-        ptri = &rhs[blksze*i];
-        ptrn = &rhs[blksze*node];
-        for(j=0; j<blksze; j++)
-            swap(ptrn[j], ptri[j]);
+        for (auto j = 0; j < blksze; j++)
+            swap(rhs[blksze*node + j], rhs[blksze*i + j]);
     }
 
 } /* end permrv */
@@ -1022,113 +936,84 @@ void permrv(double *rhs, const vector<int> &order, int nvtxs, int blksze)
 /*             GENERAL SPARSE SYMMETRIC SYSTEM                     */
 /*                                                                 */
 /*******************************************************************/
-void gsslvb(TBCCSFactor &factor, double* rght)
+void gsslvb(TBCCSFactor &factor, vector<double> &rght)
 {
-    int i, j, k, nvtxs, brow, bcol, colsze, strt, stop, denter, fenter, run, blksze;
-    const double *diagj, *curdiag, *nonzk, *lblk;
-    double value, *rghtj, *rghtk;
+    int i, j, k, brow, bcol, colsze, strt, stop, denter, fenter, run, offset, offset1, offset2;
+    double value;
 
-    blksze = factor.blksze;
-    nvtxs  = factor.nvtxs;
-    // dvals  = factor.dvals;
 
-    fenter = blksze * blksze;
-    denter = (blksze * (blksze + 1)) / 2;
+    fenter = factor.blksze * factor.blksze;
+    denter = (factor.blksze * (factor.blksze + 1)) / 2;
 
 
     /* === forward substitution === */
-    diagj = &factor.dvals[0];
-    rghtj = rght;
-    for(j=0; j<nvtxs; j++) {
+    for (j=offset=0; j<factor.nvtxs; j++, offset +=denter) {
 
         /* dense lover diagonal system */
-        curdiag = &diagj[0];
-        colsze = blksze;
-        for(run=bcol=0; bcol<blksze; bcol++) {
-            value = rghtj[bcol];
-            if(value != 0.0) {
-                rghtj[bcol] = value = (value / curdiag[bcol]);
+        colsze = factor.blksze;
+        for (run=bcol=offset1 = 0; bcol<factor.blksze; bcol++, offset1 += colsze) {
+            value = rght[bcol + j * factor.blksze];
+            if (value != 0.0) {
+                rght[bcol + j * factor.blksze] = value = (value / factor.dvals[offset + offset1 + bcol]);
                 run = 1;
-                for(brow=bcol+1; brow<blksze; brow++) {
-                    rghtj[brow] -= curdiag[brow] * value;
+                for (brow=bcol+1; brow<factor.blksze; brow++) {
+                    rght[brow + j * factor.blksze] -= factor.dvals[offset + offset1 + brow] * value;
                 }
             }
             colsze--;
-            curdiag += colsze;
         }
 
-        if(run) {
+        if (run) {
             strt = factor.xlvals[j];
             stop = factor.xlvals[j+1];
-            if(strt < stop) {
-                nonzk = &factor.lvals[fenter*strt];
+            if (strt < stop) {
                 i = factor.xlinds[j];
-                for(k=strt; k<stop; k++) {
-                    lblk = nonzk;
-                    rghtk = &rght[blksze * factor.linds[i++]];
-                    for(bcol=0; bcol<blksze; bcol++) {
-                        value = rghtj[bcol];
-                        for(brow=0; brow<blksze; brow++) {
-                            rghtk[brow] -= lblk[brow] * value;
+                for (k=strt, offset1 = fenter*strt; k<stop; k++, offset1 += fenter) {
+                    for (bcol=0, offset2 = offset1; bcol<factor.blksze; bcol++, offset2 += factor.blksze) {
+                        value = rght[bcol + j * factor.blksze];
+                        for (brow=0; brow<factor.blksze; brow++) {
+                            rght[brow + factor.blksze * factor.linds[i]] -= factor.lvals[offset2 + brow] * value;
                         }
-                        lblk += blksze;
                     }
-                    nonzk += fenter;
+                    i++;
                 }
             }
         }
-
-        diagj += denter;
-        rghtj += blksze;
     }
 
-    /* === diagonal substitution === */
-    if(factor.hyperbolic > 0)
-        dtrsd(blksze*nvtxs, factor.svals, rght);
-
     /* === backward substitution === */
-    diagj = &factor.dvals[nvtxs*denter - blksze];
-    for(j=nvtxs-1; j>=0; j--) {
+    for (j=factor.nvtxs-1, offset = factor.nvtxs*denter - factor.blksze; j>=0; j--, offset -= denter) {
         strt = factor.xlvals[j];
         stop = factor.xlvals[j+1];
-        rghtj = &rght[j*blksze];
 
-        if(strt < stop) {
+        if (strt < stop) {
             i = factor.xlinds[j];
-            nonzk = &factor.lvals[fenter*strt];
-            for(k=strt; k<stop; k++) {
-                lblk = nonzk;
-                rghtk = &rght[blksze * factor.linds[i++]];
-                for(brow=0; brow<blksze; brow++) {
+            for (k=strt, offset1 = fenter*strt; k<stop; k++, offset1 += fenter) {
+                for (brow=0, offset2 = offset1; brow<factor.blksze; brow++, offset2 += factor.blksze) {
                     value = 0.0;
-                    for(bcol=0; bcol<blksze; bcol++) {
-                        value += lblk[bcol] * rghtk[bcol];
+                    for (bcol=0; bcol<factor.blksze; bcol++) {
+                        value += factor.lvals[offset2 + bcol] * rght[bcol + factor.blksze * factor.linds[i]];
                     }
-                    rghtj[brow] -= value;
-                    lblk += blksze;
+                    rght[brow + j*factor.blksze] -= value;
                 }
-                nonzk += fenter;
+                i++;
             }
         }
 
         /* dense upper diagonal system */
-        curdiag = diagj;
         colsze = 0;
-        for(brow=blksze-1; brow>=0; brow--) {
+        for (brow=factor.blksze-1, offset1 = 0; brow>=0; brow--, offset1 -= colsze) {
             value = 0.0;
-            for(bcol=brow+1; bcol<blksze; bcol++) {
-                value += rghtj[bcol] * curdiag[bcol];
+            for(bcol=brow+1; bcol<factor.blksze; bcol++) {
+                value += rght[bcol + j*factor.blksze] * factor.dvals[offset + offset1 + bcol];
             }
-            rghtj[brow] = (rghtj[brow] - value) / curdiag[brow];
+            rght[brow + j*factor.blksze] = (rght[brow + j*factor.blksze] - value) /  factor.dvals[offset + offset1 + brow];
             colsze++;
-            curdiag -= colsze;
         }
-
-        diagj -= denter;
     }
 }
 /*********************************************************************/
-int spSolve(TBCCSFactor &factor, double *rhs)
+int spSolve(TBCCSFactor &factor, vector<double> &rhs)
 {
     msg->setProcess(ProcessCode::SolutionSystemEquation);
     /* direct permutation */

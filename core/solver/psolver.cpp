@@ -1,4 +1,3 @@
-#include <cmath>
 #include <mkl_pardiso.h>
 #include "psolver.h"
 #include "mesh/mesh.h"

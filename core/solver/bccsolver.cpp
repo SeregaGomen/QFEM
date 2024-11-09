@@ -1,5 +1,3 @@
-#include <cstring>
-#include <string>
 #include "bccsolver.h"
 #include "msg/msg.h"
 #include "mesh/mesh.h"
@@ -8,13 +6,11 @@ using namespace std;
 
 extern TMessenger *msg;
 
+
 bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
 {
     TBCCSFactor factor;
 
-    /////////////
-    // print("matr.txt");
-    ///
 
     if (spOrder(factor, stiffness, isAborted))
     {
@@ -29,7 +25,8 @@ bool TBCCSolver::solve(vector<double>& result,double eps,bool& isAborted)
             throw ErrorCode::EEquationNotSolved;
         return false;
     }
-    spSolve(factor, load.data());
+
+    spSolve(factor, load);
     if (isAborted)
         return false;
     result = load;

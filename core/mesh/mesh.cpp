@@ -1015,6 +1015,9 @@ bool TMesh::readMSH(string fname)
         }
     }
     in >> text;
+
+    is2d = false;
+
     if (text != "$EndElements")
     {
         cerr << sayError(ErrorCode::EFormatFile) << endl;
