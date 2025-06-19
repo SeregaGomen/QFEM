@@ -1,0 +1,208 @@
+{
+    "Header": {
+        "DateTime": "2019-12-07T07:44:16.644",
+        "Object": "tank3ds",
+        "Title": "QFEM problem file"
+    },
+    "Mesh": {
+        "File": "D:/Work/Qt/QFEM/QFEM/mesh/tank-new/gmsh/shell/tank3ds.trpa"
+    },
+    "Parameters": {
+        "Accuracy": "1e-10",
+        "BoundaryConditions": [
+            {
+                "Direct": "0",
+                "Expression": "6.5E+10",
+                "Predicate": "",
+                "Type": "7"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.3",
+                "Predicate": "",
+                "Type": "8"
+            },
+            {
+                "Direct": "0",
+                "Expression": "0.0028",
+                "Predicate": "",
+                "Type": "9"
+            },
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "8",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "64",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "2",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "16",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "128",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "4",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "32",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "256",
+                "Expression": "0",
+                "Predicate": "",
+                "Type": "1"
+            },
+            {
+                "Direct": "1",
+                "Expression": "p*cos(atan2(y,x))",
+                "Predicate": "(z <= 0 and z >= -l)",
+                "Type": "4"
+            },
+            {
+                "Direct": "2",
+                "Expression": "p*sin(atan2(y,x))",
+                "Predicate": "(z <= 0 and z >= -l) ",
+                "Type": "4"
+            },
+            {
+                "Direct": "1",
+                "Expression": "p*cos(atan2(y,x))*sin(atan2((x ** 2+y ** 2) ** 0.5,(z -c0)))",
+                "Predicate": "abs(x ** 2 + y ** 2 + (z - c0) ** 2 - r ** 2) <= eps",
+                "Type": "4"
+            },
+            {
+                "Direct": "2",
+                "Expression": "p*sin(atan2(y,x))*sin(atan2((x ** 2+y ** 2) ** 0.5,(z - c0)))",
+                "Predicate": "abs(x ** 2 + y ** 2 + (z - c0) ** 2 - r ** 2) <= eps",
+                "Type": "4"
+            },
+            {
+                "Direct": "4",
+                "Expression": "p*cos(atan2((x ** 2+y ** 2) ** 0.5,(z - c0)))",
+                "Predicate": "abs(x ** 2 + y ** 2 + (z - c0) ** 2 - r ** 2) <= eps",
+                "Type": "4"
+            },
+            {
+                "Direct": "1",
+                "Expression": "p*cos(atan2(y,x))*sin(atan2((x ** 2+y ** 2) ** 0.5,(z -c1)))",
+                "Predicate": "abs(x ** 2 + y ** 2 + (z - c1) ** 2 - r ** 2) <= eps",
+                "Type": "4"
+            },
+            {
+                "Direct": "2",
+                "Expression": "p*sin(atan2(y,x))*sin(atan2((x ** 2+y ** 2) ** 0.5,(z - c1)))",
+                "Predicate": "abs(x ** 2 + y ** 2 + (z - c1) ** 2 - r ** 2) <= eps",
+                "Type": "4"
+            },
+            {
+                "Direct": "4",
+                "Expression": "p*cos(atan2((x ** 2+y ** 2) ** 0.5,(z - c1)))",
+                "Predicate": "abs(x ** 2 + y ** 2 + (z - c1) ** 2 - r ** 2) <= eps",
+                "Type": "4"
+            },
+            {
+                "Direct": "1",
+                "Expression": "0",
+                "Predicate": "abs(x) <= eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "2",
+                "Expression": "0",
+                "Predicate": "abs(y) <= eps",
+                "Type": "2"
+            },
+            {
+                "Direct": "7",
+                "Expression": "0",
+                "Predicate": "abs(z + h) <= eps",
+                "Type": "2"
+            }
+        ],
+        "DynamicParameters": {
+            "T0": "0",
+            "T1": "0",
+            "TH": "0",
+            "WilsonTheta": "1.37"
+        },
+        "Names": [
+            "x",
+            "y",
+            "z",
+            "t",
+            "U",
+            "V",
+            "W",
+            "Tx",
+            "Ty",
+            "Tz",
+            "Exx",
+            "Eyy",
+            "Ezz",
+            "Exy",
+            "Exz",
+            "Eyz",
+            "Sxx",
+            "Syy",
+            "Szz",
+            "Sxy",
+            "Sxz",
+            "Syz",
+            "Ut",
+            "Vt",
+            "Wt",
+            "Utt",
+            "Vtt",
+            "Wtt"
+        ],
+        "Nonlinearity": {
+            "CalculationMethod": 0,
+            "LoadStep": "0.05"
+        },
+        "OutputParameters": {
+            "Precision": "5",
+            "Width": "12"
+        },
+        "ProblemType": "Static",
+        "Variables": [
+            "c0 -1.565",
+            "c1 -15.126",
+            "d 3.9",
+            "eps 0.01",
+            "h 17.626",
+            "l 16.691",
+            "p 1000",
+            "r 2.5"
+        ]
+    }
+}
