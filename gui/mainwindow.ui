@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TMainWindow</class>
+ <widget class="QMainWindow" name="TMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>617</width>
+    <height>389</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>QFEM</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="QFEM.qrc">
+    <normaloff>:/images/main16.png</normaloff>:/images/main16.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>617</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionClose"/>
+    <addaction name="separator"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;?</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuSetup">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionTerminal"/>
+    <addaction name="separator"/>
+    <addaction name="actionAppSetup"/>
+   </widget>
+   <widget class="QMenu" name="menuObject">
+    <property name="title">
+     <string>&amp;Object</string>
+    </property>
+    <widget class="QMenu" name="menuImage">
+     <property name="title">
+      <string>&amp;Image</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="actionRotate"/>
+     <addaction name="actionScale"/>
+     <addaction name="actionTranslate"/>
+     <addaction name="separator"/>
+     <addaction name="actionRestore"/>
+    </widget>
+    <addaction name="menuImage"/>
+    <addaction name="separator"/>
+    <addaction name="actionStart"/>
+    <addaction name="actionStop"/>
+    <addaction name="actionSaveResults"/>
+    <addaction name="actionAnalyse"/>
+    <addaction name="actionAddExpression"/>
+    <addaction name="separator"/>
+    <addaction name="actionObjectParameters"/>
+    <addaction name="actionSetupImage"/>
+    <addaction name="separator"/>
+    <addaction name="actionInfo"/>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionCopy"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menuObject"/>
+   <addaction name="menuSetup"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="separator"/>
+   <addaction name="actionCopy"/>
+   <addaction name="separator"/>
+   <addaction name="actionTerminal"/>
+   <addaction name="actionAppSetup"/>
+   <addaction name="separator"/>
+   <addaction name="actionObjectParameters"/>
+   <addaction name="actionSetupImage"/>
+   <addaction name="separator"/>
+   <addaction name="actionStart"/>
+   <addaction name="actionStop"/>
+   <addaction name="actionAnalyse"/>
+   <addaction name="separator"/>
+   <addaction name="actionRotate"/>
+   <addaction name="actionScale"/>
+   <addaction name="actionTranslate"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="statusTip">
+    <string>Opening an existing document</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="statusTip">
+    <string>Closes the current document</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="statusTip">
+    <string>Closes the current document</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/about-icon.png</normaloff>:/images/about-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+   <property name="toolTip">
+    <string>About QFEM</string>
+   </property>
+   <property name="statusTip">
+    <string>About the program</string>
+   </property>
+  </action>
+  <action name="actionTerminal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/terminal.png</normaloff>:/images/terminal.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Terminal</string>
+   </property>
+   <property name="statusTip">
+    <string>Enable/Disable the Terminal</string>
+   </property>
+  </action>
+  <action name="actionRotate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/rotate-icon.png</normaloff>:/images/rotate-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Rotate</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotate</string>
+   </property>
+   <property name="statusTip">
+    <string>Enable rotation of an object</string>
+   </property>
+  </action>
+  <action name="actionTranslate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/move-icon.png</normaloff>:/images/move-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Translate</string>
+   </property>
+   <property name="toolTip">
+    <string>Translate</string>
+   </property>
+   <property name="statusTip">
+    <string>Enable the translate of the object</string>
+   </property>
+  </action>
+  <action name="actionScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/scale.png</normaloff>:/images/scale.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Scale</string>
+   </property>
+   <property name="iconText">
+    <string>Scale</string>
+   </property>
+   <property name="toolTip">
+    <string>Scale</string>
+   </property>
+   <property name="statusTip">
+    <string>Enable the scale of the object</string>
+   </property>
+  </action>
+  <action name="actionObjectParameters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/configure.png</normaloff>:/images/configure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Сo&amp;mputation parameters...</string>
+   </property>
+   <property name="iconText">
+    <string>Сomputation parameters</string>
+   </property>
+   <property name="toolTip">
+    <string>The calculation parameters (elastic characteristics, boundary conditions, ...)</string>
+   </property>
+   <property name="statusTip">
+    <string>The calculation parameters (elastic characteristics, boundary conditions, ...)</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/start-icon.png</normaloff>:/images/start-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Start</string>
+   </property>
+   <property name="toolTip">
+    <string>Start calculation problem</string>
+   </property>
+   <property name="statusTip">
+    <string>Start calculation problem</string>
+   </property>
+  </action>
+  <action name="actionRestore">
+   <property name="text">
+    <string>&amp;Restore</string>
+   </property>
+   <property name="iconText">
+    <string>Restore</string>
+   </property>
+   <property name="toolTip">
+    <string>Restore</string>
+   </property>
+   <property name="statusTip">
+    <string>To restore the initial image settings</string>
+   </property>
+  </action>
+  <action name="actionAnalyse">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/kformula.png</normaloff>:/images/kformula.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Analyse...</string>
+   </property>
+   <property name="toolTip">
+    <string>Analyse</string>
+   </property>
+   <property name="statusTip">
+    <string>Select the function for the visualization</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save As</string>
+   </property>
+   <property name="statusTip">
+    <string>Save the current file with a new name</string>
+   </property>
+  </action>
+  <action name="actionSetupImage">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/imagesetup.png</normaloff>:/images/imagesetup.png</iconset>
+   </property>
+   <property name="text">
+    <string>Imaging &amp;parameters...</string>
+   </property>
+   <property name="toolTip">
+    <string>Imaging parameters</string>
+   </property>
+   <property name="statusTip">
+    <string>Setting visualization</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="text">
+    <string>In&amp;fo...</string>
+   </property>
+   <property name="toolTip">
+    <string>About object (dimension, mesh, ...)</string>
+   </property>
+   <property name="statusTip">
+    <string>About object (dimension, mesh, ...)</string>
+   </property>
+  </action>
+  <action name="actionAddExpression">
+   <property name="text">
+    <string>Add &amp;expression...</string>
+   </property>
+   <property name="toolTip">
+    <string>Add expression</string>
+   </property>
+   <property name="statusTip">
+    <string>Add a new expression for the analysis</string>
+   </property>
+  </action>
+  <action name="actionAppSetup">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/setup-icon.png</normaloff>:/images/setup-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Setup...</string>
+   </property>
+   <property name="toolTip">
+    <string>Setting the parameters of the program</string>
+   </property>
+   <property name="statusTip">
+    <string>Setting the parameters of the program</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/stop-icon.png</normaloff>:/images/stop-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>S&amp;top</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop current calculation process</string>
+   </property>
+   <property name="statusTip">
+    <string>Stop current calculation process</string>
+   </property>
+  </action>
+  <action name="actionSaveResults">
+   <property name="text">
+    <string>Save &amp;results...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save calculation results</string>
+   </property>
+   <property name="statusTip">
+    <string>Save calculation results</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>&amp;Help...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Help Browser with Documentation</string>
+   </property>
+   <property name="statusTip">
+    <string>Open Help Browser with Documentation</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy current data to Clipboard</string>
+   </property>
+   <property name="statusTip">
+    <string>Copy current data to Clipboard</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="QFEM.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotOpenDocument()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClose</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotCloseDocument()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTerminal</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotSetTerminal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionObjectParameters</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotSetupTaskParams()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStart</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotStartProcess()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAnalyse</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotAnalyseFunction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSaveAs</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotSaveAsDocument()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSetupImage</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotSetupImageParams()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionInfo</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotShowGabarites()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAddExpression</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotAddFunction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAppSetup</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotAppSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStop</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotStopProcess()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSaveResults</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotSaveResults()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotAboutProgramm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHelp</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotHelpProgramm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCopy</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotDataCopy()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slotOpenDocument()</slot>
+  <slot>slotCloseDocument()</slot>
+  <slot>slotSetTerminal()</slot>
+  <slot>slotSetRotate()</slot>
+  <slot>slotSetScale()</slot>
+  <slot>slotSetTranslate()</slot>
+  <slot>slotRestoreImage()</slot>
+  <slot>slotSetupTaskParams()</slot>
+  <slot>slotStartProcess()</slot>
+  <slot>slotAnalyseFunction()</slot>
+  <slot>slotSaveAsDocument()</slot>
+  <slot>slotSetupImageParams()</slot>
+  <slot>slotShowGabarites()</slot>
+  <slot>slotAddFunction()</slot>
+  <slot>slotAppSettings()</slot>
+  <slot>slotStopProcess()</slot>
+  <slot>slotSaveResults()</slot>
+  <slot>slotAboutProgramm()</slot>
+  <slot>slotHelpProgramm()</slot>
+  <slot>slotDataCopy()</slot>
+ </slots>
+</ui>
