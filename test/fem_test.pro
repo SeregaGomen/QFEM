@@ -34,8 +34,10 @@ SOURCES += main.cpp \
     ../core/object/params.cpp \
     ../core/parser/parser.cpp \
     ../core/solver/bccsolver.cpp \
+    ../core/solver/psolver.cpp \
     ../core/solver/eigensolver.cpp \
     ../core/sparse/sparse_bccs.cpp \
+    ../core/sparse/sparse_csr.cpp \
 
 HEADERS += \
     ../core/analyse/analyse.h \
@@ -62,5 +64,7 @@ HEADERS += \
     ../core/solver/solver.h \
     ../core/solver/eigensolver.h \
     ../core/sparse/sparse_bccs.h \
+    ../core/sparse/sparse_csr.h \
+    ../core/solver/psolver.h \
     ../core/util/list.h \
     ../core/util/matrix.h
