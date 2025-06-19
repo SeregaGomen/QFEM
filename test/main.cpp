@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 #include <cmath>
 #include "object/object.h"
 
@@ -574,7 +574,7 @@ void calcZinoveev(void)
            m0 = 0.2,
            m1 = 0.3;
 
-    if (!object.setMeshFile("../../QFEM/mesh/body.vol"))
+    if (!object.setMeshFile("../../../mesh/body.vol"))
         return;
 
     object.setNumThread(4);

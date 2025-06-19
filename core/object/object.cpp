@@ -6,8 +6,8 @@
 #include "object.h"
 #include "fem/femstatic_mvs.h"
 #include "fem/femdynamic.h"
-#include "solver/psolver.h"
-//#include "solver/bccsolver.h"
+//#include "solver/psolver.h"
+#include "solver/bccsolver.h"
 //#include "solver/eigensolver.h"
 //#include "solver/lzhsolver.h"
 
@@ -196,8 +196,8 @@ bool TFEMObject::start(void)
     cout << endl << S_MSG_START << endl;
     try
     {
-        fem = createProblem<TPardisoSolver>();
-//        fem = createProblem<TBCCSolver>();
+//        fem = createProblem<TPardisoSolver>();
+        fem = createProblem<TBCCSolver>();
 //        fem = createProblem<TEigenSolver>();
 //        fem = createProblem<TLZHSolver>();
         // Задание количества потоков

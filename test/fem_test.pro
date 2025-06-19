@@ -12,21 +12,20 @@ msvc:QMAKE_CXXFLAGS += /permissive-
 
 
 INCLUDEPATH += ../core \
-               ../../../eigen \
-               ../../../boost
+               ../../../eigen
 
 #msvc:QMAKE_CXXFLAGS+= /openmp
 #gcc:QMAKE_CXXFLAGS+= -fopenmp
 #gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
-    INCLUDEPATH += ../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/include/
-    LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2019.5.281/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+    INCLUDEPATH += ../../../intel/compilers_and_libraries_2025.1/windows/mkl/include/
+    LIBS += -L$$PWD/../../../intel/compilers_and_libraries_2025.1/windows/mkl/lib/intel64_win/ -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
 }
 
 unix {
-    INCLUDEPATH += /opt/intel/oneapi/mkl/2022.1.0/include/
-    LIBS += -L/opt/intel/oneapi/mkl/2022.1.0/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+    INCLUDEPATH += /opt/intel/oneapi/mkl/2025.1/include/
+    LIBS += -L/opt/intel/oneapi/mkl/2025.1/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 }
 
 SOURCES += main.cpp \
@@ -36,10 +35,7 @@ SOURCES += main.cpp \
     ../core/parser/parser.cpp \
     ../core/solver/bccsolver.cpp \
     ../core/solver/eigensolver.cpp \
-    ../core/solver/envsolver.cpp \
     ../core/sparse/sparse_bccs.cpp \
-    ../core/sparse/sparse_env.cpp
-
 
 HEADERS += \
     ../core/analyse/analyse.h \
@@ -63,10 +59,8 @@ HEADERS += \
     ../core/parser/node.h \
     ../core/parser/parser.h \
     ../core/solver/bccsolver.h \
-    ../core/solver/envsolver.h \
     ../core/solver/solver.h \
     ../core/solver/eigensolver.h \
     ../core/sparse/sparse_bccs.h \
-    ../core/sparse/sparse_env.h \
     ../core/util/list.h \
     ../core/util/matrix.h
