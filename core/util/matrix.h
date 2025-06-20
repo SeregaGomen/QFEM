@@ -116,7 +116,7 @@ public:
     void operator += (const matrix &r)
     {
 #ifdef DEBUG
-        assert(rows == r.rows and cols == r.cols);
+        assert(rows == r.rows && cols == r.cols);
 #endif
         buffer += r.buffer;
     }
@@ -209,7 +209,7 @@ template <typename T> matrix<T> operator + (const matrix<T> &left, const matrix<
     matrix<T> res{left};
 
 #ifdef DEBUG
-    assert(left.size1() == right.size1() and left.size2() == right.size2());
+    assert(left.size1() == right.size1() && left.size2() == right.size2());
 #endif
     for (unsigned row = 0; row < left.size1(); row++)
         for (unsigned col = 0; col < left.size2(); col++)
@@ -236,7 +236,7 @@ template <typename T> matrix<T> operator * (const matrix<T> &left, const vector<
     matrix<T> res;
 
 #ifdef DEBUG
-    assert((left.size2() == right.size()) or (left.size2() == 1 and left.size1() == right.size()));
+    assert((left.size2() == right.size()) or (left.size2() == 1 && left.size1() == right.size()));
 #endif
     if (left.size2() == right.size())
     {
@@ -245,7 +245,7 @@ template <typename T> matrix<T> operator * (const matrix<T> &left, const vector<
             for (unsigned inner = 0; inner < left.size2(); inner++)
                 res[row][0] += left[row][inner] * right[inner];
     }
-    else if (left.size2() == 1 and left.size1() == right.size())
+    else if (left.size2() == 1 && left.size1() == right.size())
     {
         res.resize(left.size1(), left.size1());
         for (unsigned row = 0; row < left.size1(); row++)
@@ -302,7 +302,7 @@ template <typename T> matrix<T> transpose(const matrix<T> &m)
 template <typename T> T det(const matrix<T> &m)
 {
 #ifdef DEBUG
-    assert(m.size1() == m.size2() and m.size1() < 4);
+    assert(m.size1() == m.size2() && m.size1() < 4);
 #endif
     return m.size1() == 1 ? m[0][0] : m.size1() == 2 ? det2x2(m) : det3x3(m);
 }
@@ -324,7 +324,7 @@ template <typename T> matrix<T> inv(const matrix<T> &m)
     matrix<T> res(m.size1(), m.size2());
 
 #ifdef DEBUG
-    assert(m.size1() == m.size2() and m.size1() < 4);
+    assert(m.size1() == m.size2() && m.size1() < 4);
 #endif
     if (m.size1() == 1)
         res(0, 0) = 1.0 / m(0, 0);

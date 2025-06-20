@@ -28,7 +28,7 @@ bool TFEMObject::setMeshFile(string n)
     cout << endl << S_MSG_MESH_NAME << n << endl;
     fileName = n;
     objName = n.substr(n.find_last_of("/\\") + 1,n.find_last_of(".") - n.find_last_of("/\\") - 1);
-    return not mesh.read(fileName);
+    return !mesh.read(fileName);
 }
 //---------------------------------------------------------
 template<typename SOLVER> TFEM *TFEMObject::createProblem(void)
@@ -264,13 +264,13 @@ bool TFEMObject::saveResult(string fname)
 
     // Запись примечаний к расчету
     out << notes.size() << endl;
-    for (auto it : notes)
+    for (auto &it : notes)
         out << it << endl;
 
     ret = out.fail();
     out.close();
     msg->stop();
-    return not ret;
+    return !ret;
 }
 //-------------------------------------------------------------
 bool TFEMObject::loadResult(string fname)
@@ -287,7 +287,7 @@ bool TFEMObject::loadResult(string fname)
     msg->setProcess(ProcessCode::ReadingResult);
     // Считывание заголовка
     getline(in, str);
-    if (str not_eq "Core QFEM results file" and str not_eq "FEM Solver Results File")
+    if (str != "Core QFEM results file" && str != "FEM Solver Results File")
     {
         msg->stop();
         in.close();
@@ -395,7 +395,7 @@ void TFEMObject::printResult(string fname)
         for (unsigned i = index; i < index + size; i++)
         {
             name = results[i].getName();
-            if (name.find("(") not_eq string::npos)
+            if (name.find("(") != string::npos)
                 name = name.substr(0, name.find("("));
             out << setw(int(lenStr)) << name.substr(name.find(">") + 1) << " | ";
         }
@@ -466,7 +466,7 @@ void TFEMObject::printResult(string fname)
         for (unsigned i = index; i < index + size; i++)
         {
             name = results[i].getName();
-            if (name.find("(") not_eq string::npos)
+            if (name.find("(") != string::npos)
                 name = name.substr(0, name.find("("));
             out << setw(int(lenStr)) << name.substr(name.find(">") + 1) << " | ";
         }

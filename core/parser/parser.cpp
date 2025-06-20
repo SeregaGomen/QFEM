@@ -10,7 +10,7 @@ void TParser::set_expression(string prog)
 {
     // Удаляем пробелы в начале и конце строки
     prog.erase(0, prog.find_first_not_of(" \t\n\r\f\v")).erase(prog.find_last_not_of(" \t\n\r\f\v") + 1);
-    if (not prog.length())
+    if (!prog.length())
         throw (error_code = ErrorCode::EEmptyExpression);
 
     expression = const_cast<char*>(prog.c_str());
@@ -38,13 +38,13 @@ TokenType TParser::get_token(void)
     tok = Token::Indefined;
     if (*expression == 0)
         return (token_type = TokenType::Finished);
-    while (*expression == ' ' or *expression == '\t')
+    while (*expression == ' ' || *expression == '\t')
         expression++;
     if (strchr(" +-*/()=.,><",*expression))
     {
         token = *expression++;
         // Проверка на наличие двойного разделителя
-        if (*expression and strchr("=><*",*expression))
+        if (*expression && strchr("=><*",*expression))
             if (is_find(opeartionList, token + *expression, tok))
                 token += *expression++;
         return (token_type = TokenType::Delimiter);
@@ -59,10 +59,10 @@ TokenType TParser::get_token(void)
             while (isdigit(*expression))
                 token += *expression++;
         }
-        if (*expression == 'E' or *expression == 'e')
+        if (*expression == 'E' || *expression == 'e')
         {
             token += *expression++;
-            if (*expression not_eq '+' and *expression not_eq '-' )
+            if (*expression != '+' && *expression != '-' )
                 error(ErrorCode::ESyntax);
             token += *expression++;
             while (isdigit(*expression))
@@ -70,7 +70,7 @@ TokenType TParser::get_token(void)
         }
         return (token_type = TokenType::Numeric);
     }
-    if (isalpha(*expression) or *expression == '_')
+    if (isalpha(*expression) || *expression == '_')
     {
         while (not is_delim(*expression))
             token += *expression++;
@@ -89,20 +89,20 @@ TokenType TParser::get_token(void)
 /********************************************************************/
 bool TParser::is_delim(char chr)
 {
-    return (strchr(" +-*/()=.,><\t\n", chr) or chr == 0) ? true : false;
+    return (strchr(" +-*/()=.,><\t\n", chr) || chr == 0) ? true : false;
 }
 /********************************************************************/
 bool TParser::is_name(string token)
 {
     unsigned i;
 
-    if (not isalpha(token[0]) and token[0] not_eq '_')
+    if (!isalpha(token[0]) && token[0] != '_')
         return false;
     for (i = 1; i < token.length() + 1; i++)
-        if (token[i] == ' ' or token[i] == 0)
+        if (token[i] == ' ' || token[i] == 0)
             break;
         else
-            if (not (isalpha(token[0]) or isdigit(token[0]) or token[0] == '_')) return false;
+            if (!(isalpha(token[0]) || isdigit(token[0]) || token[0] == '_')) return false;
     token[i] = 0;
     return true;
 }
@@ -134,7 +134,7 @@ void TParser::error(ErrorCode error)
 void TParser::get_exp(TNode& code)
 {
     get_token();
-    if (not token.length())
+    if (!token.length())
         error(ErrorCode::ESyntax);
     token_or(code);
 }
@@ -144,7 +144,7 @@ void TParser::token_or(TNode& code)
     TNode hold;
 
     token_and(code);
-    while (token_type not_eq TokenType::Finished and tok == Token::Or)
+    while (token_type != TokenType::Finished && tok == Token::Or)
     {
         get_token();
         token_and(hold);
@@ -157,7 +157,7 @@ void TParser::token_and(TNode& code)
     TNode hold;
 
     token_not(code);
-    while (token_type not_eq TokenType::Finished and tok == Token::And)
+    while (token_type != TokenType::Finished && tok == Token::And)
     {
         get_token();
         token_not(hold);
@@ -169,7 +169,7 @@ void TParser::token_not(TNode& code)
 {
     Token op = tok;
 
-    if (token_type == TokenType::Delimiter and op == Token::Not)
+    if (token_type == TokenType::Delimiter && op == Token::Not)
         get_token();
 
     token_eq(code);
@@ -184,7 +184,7 @@ void TParser::token_eq(TNode& code)
     string pm;
 
     token_add(code);
-    while (token_type not_eq TokenType::Finished and ((pm = token) == ">" or pm == "<" or pm == ">=" or pm == "<=" or pm == "<>" or pm == "=="))
+    while (token_type != TokenType::Finished && ((pm = token) == ">" || pm == "<" || pm == ">=" || pm == "<=" || pm == "<>" || pm == "=="))
     {
         get_token();
         token_add(hold);
@@ -200,7 +200,7 @@ void TParser::token_add(TNode& code)
     string pm;
 
     token_mul(code);
-    while (token_type not_eq TokenType::Finished and ((pm = token) == "+" or pm == "-"))
+    while (token_type != TokenType::Finished && ((pm = token) == "+" || pm == "-"))
     {
         get_token();
         token_mul(hold);
@@ -215,7 +215,7 @@ void TParser::token_mul(TNode& code)
     char pm;
 
     token_pow(code);
-    while (token_type not_eq TokenType::Finished and ((pm = token[0]) == '*' or pm == '/'))
+    while (token_type != TokenType::Finished && ((pm = token[0]) == '*' || pm == '/'))
     {
         get_token();
         token_pow(hold);
@@ -228,7 +228,7 @@ void TParser::token_pow(TNode& code)
     TNode hold;
 
     token_un(code);
-    if (token_type not_eq TokenType::Finished and token == "**")
+    if (token_type != TokenType::Finished && token == "**")
     {
         get_token();
         token_bracket(hold);
@@ -240,7 +240,7 @@ void TParser::token_un(TNode& code)
 {
     Token op = Token::Indefined;
 
-    if ((token_type == TokenType::Delimiter) and (token[0] == '+' or token[0] == '-'))
+    if ((token_type == TokenType::Delimiter) && (token[0] == '+' || token[0] == '-'))
     {
         if (token[0] == '+')
             op = Token::Plus;
@@ -249,7 +249,7 @@ void TParser::token_un(TNode& code)
         get_token();
     }
     token_bracket(code);
-    if (op not_eq Token::Indefined)
+    if (op != Token::Indefined)
         code = TNode(op, make_shared<TNode>(code));
 }
 /********************************************************************/
@@ -288,11 +288,11 @@ void TParser::token_prim(TNode& code)
 /********************************************************************/
 void TParser::token_bracket(TNode& code)
 {
-    if (token[0] == '(' and token_type == TokenType::Delimiter)
+    if (token[0] == '(' && token_type == TokenType::Delimiter)
     {
         get_token();
         token_or(code);
-        if(token[0] not_eq ')')
+        if(token[0] != ')')
             error(ErrorCode::EBracket);
         get_token();
     }
@@ -308,14 +308,14 @@ void TParser::token_func(TNode& code)
     if (token_type == TokenType::Function)
     {
         get_token();
-        if (not token.length() or token[0] not_eq '(')
+        if (!token.length() || token[0] != '(')
             error(ErrorCode::ESyntax);
         get_token();
 
         token_add(code);
         if (fun_tok == Token::Atan2)
         {
-            if (token[0] not_eq ',')
+            if (token[0] != ',')
                 error(ErrorCode::ESyntax);
             get_token();
             token_add(hold);
@@ -323,7 +323,7 @@ void TParser::token_func(TNode& code)
         }
         else
             code = TNode(fun_tok, make_shared<TNode>(code));
-        if (token[0] not_eq ')')
+        if (token[0] != ')')
             error(ErrorCode::ESyntax);
         get_token();
     }
@@ -336,7 +336,7 @@ void TParser::set_variable(string name, double value)
 /********************************************************************/
 void TParser::set_variables(map<string, double>& m)
 {
-    for (auto it : m)
+    for (auto &it : m)
         variables[it.first] = it.second;
 }
 /********************************************************************/

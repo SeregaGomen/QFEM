@@ -35,7 +35,7 @@ public:
     virtual double getElement(MATRIX&, unsigned, unsigned) = 0;
     void setStiffness(double value, unsigned i, unsigned j)
     {
-        if (boundary_conditions[i].used == false and boundary_conditions[j].used == false)
+        if (boundary_conditions[i].used == false && boundary_conditions[j].used == false)
         {
             lock_guard<mutex> guard(mtx);
             setElement(stiffness, i, j, value);
@@ -43,7 +43,7 @@ public:
     }
     void addStiffness(double value, unsigned i, unsigned j)
     {
-        if (boundary_conditions[i].used == false and boundary_conditions[j].used == false)
+        if (boundary_conditions[i].used == false && boundary_conditions[j].used == false)
         {
             lock_guard<mutex> guard(mtx);
             addElement(stiffness, i, j, value);
@@ -51,7 +51,7 @@ public:
     }
     void setMass(double value, unsigned i, unsigned j)
     {
-        if (boundary_conditions[i].used == false and boundary_conditions[j].used == false)
+        if (boundary_conditions[i].used == false && boundary_conditions[j].used == false)
         {
             lock_guard<mutex> guard(mtx);
             setElement(mass, i, j, value);
@@ -59,7 +59,7 @@ public:
     }
     void addMass(double value, unsigned i, unsigned j)
     {
-        if (boundary_conditions[i].used == false and boundary_conditions[j].used == false)
+        if (boundary_conditions[i].used == false && boundary_conditions[j].used == false)
         {
             lock_guard<mutex> guard(mtx);
             addElement(mass, i, j, value);
@@ -67,7 +67,7 @@ public:
     }
     void setDamping(double value, unsigned i, unsigned j)
     {
-        if (boundary_conditions[i].used == false and boundary_conditions[j].used == false)
+        if (boundary_conditions[i].used == false && boundary_conditions[j].used == false)
         {
             lock_guard<mutex> guard(mtx);
             setElement(damping, i, j, value);
@@ -75,7 +75,7 @@ public:
     }
     void addDamping(double value, unsigned i, unsigned j)
     {
-        if (boundary_conditions[i].used == false and boundary_conditions[j].used == false)
+        if (boundary_conditions[i].used == false && boundary_conditions[j].used == false)
         {
             lock_guard<mutex> guard(mtx);
             addElement(damping, i, j, value);

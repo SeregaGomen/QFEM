@@ -324,7 +324,7 @@ void TFunctionView::addTriangle(const QVector<QVector4D> &tri, QVector<GLfloat> 
 
 double TFunctionView::x(unsigned i, unsigned j)
 {
-    return TMeshView::x(i, j) + (delta[j] == nullptr ? 0 : params->ratio*radius*((*delta[j])[i]/maxTransformRatio));
+    return TMeshView::x(i, j) + (j < delta.size() ? (delta[j] == nullptr ? 0 : params->ratio*radius*((*delta[j])[i]/maxTransformRatio)) : 0);
 }
 
 

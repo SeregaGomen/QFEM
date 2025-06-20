@@ -60,11 +60,11 @@ public:
         case Token::Ge:
             return (left->value() >= right->value()) ? 1 : 0;
         case Token::And:
-            return left->value() and right->value();
+            return left->value() && right->value();
         case Token::Or:
-            return left->value() or right->value();
+            return left->value() || right->value();
         case Token::Not:
-            return not right->value();
+            return !right->value();
         case Token::Abs:
             return fabs(right->value());
         case Token::Sin:

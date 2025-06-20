@@ -37,7 +37,7 @@ bool TMesh::read(string fname)
         error = readMESH(fname);
     else if (ext == "MSH")
         error = readMSH(fname);
-    else if (ext == "NODE" or ext == "ELE" or ext == "FACE")
+    else if (ext == "NODE" || ext == "ELE" || ext == "FACE")
         error = readTetgen(fname);
     else
     {
@@ -339,7 +339,7 @@ bool TMesh::readTRP(string fname)
     // Cчитываем сигнатуру
     in.read(signature, 6*sizeof(char));
     signature[6] = 0;
-    if (string(signature) not_eq "NTRout")
+    if (string(signature) != "NTRout")
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -441,7 +441,7 @@ bool TMesh::readTRPA(string fname)
     }
 
     in >> temp;
-    if (in.fail() or temp == 0 or feDim < 1 or feDim > 3)
+    if (in.fail() || temp == 0 || feDim < 1 || feDim > 3)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -461,7 +461,7 @@ bool TMesh::readTRPA(string fname)
         }
     }
     in >> temp;
-    if (in.fail() or temp == 0)
+    if (in.fail() || temp == 0)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -480,15 +480,15 @@ bool TMesh::readTRPA(string fname)
             }
         }
     in >> temp;
-    if (in.fail() or (temp == 0 and (feType == FEType::fe2d3 or feType == FEType::fe2d4 or feType == FEType::fe3d4 or feType == FEType::fe3d8)))
+    if (in.fail() || (temp == 0 && (feType == FEType::fe2d3 || feType == FEType::fe2d4 || feType == FEType::fe3d4 || feType == FEType::fe3d8)))
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
         return (error = true);
     }
-    if (isPlate() or isShell())
+    if (isPlate() || isShell())
         be = fe;
-    else // if (feDim not_eq 1)
+    else // if (feDim != 1)
     {
         be.resize(temp, surfaceSize);
         for (unsigned i = 0; i < temp; i++)
@@ -602,7 +602,7 @@ bool TMesh::write(ofstream& out)
             out << fe(i, j) << ' ';
         out << endl;
     }
-    if (isPlate() or isShell())
+    if (isPlate() || isShell())
         out << 0 << endl;
     else
     {
@@ -663,7 +663,7 @@ bool TMesh::read(ifstream& in)
         cerr << sayError(ErrorCode::EReadFile) << endl;
         return (error = true);
     }
-    if (isPlate() or isShell())
+    if (isPlate() || isShell())
     {
         in >> val;
         be = fe;
@@ -839,13 +839,13 @@ bool TMesh::readMESH(string fname)
         }
         else
         {
-            if (fe(v3, 0) == v1 or fe(v3, 1) == v1)
+            if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
                 v1 = UINT_MAX;
-            if (fe(v3, 0) == v2 or fe(v3, 1) == v2)
+            if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
                 v2 = UINT_MAX;
-            if (v1 not_eq UINT_MAX)
+            if (v1 != UINT_MAX)
                 fe(v3, 2) = v1;
-            if (v2 not_eq UINT_MAX)
+            if (v2 != UINT_MAX)
                 fe(v3, 2) = v2;
         }
     }
@@ -866,13 +866,13 @@ bool TMesh::readMESH(string fname)
         }
         else
         {
-            if (fe(v3, 0) == v1 or fe(v3, 1) == v1)
+            if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
                 v1 = UINT_MAX;
-            if (fe(v3, 0) == v2 or fe(v3, 1) == v2)
+            if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
                 v2 = UINT_MAX;
-            if (v1 not_eq UINT_MAX)
+            if (v1 != UINT_MAX)
                 fe(v3, 2) = v1;
-            if (v2 not_eq UINT_MAX)
+            if (v2 != UINT_MAX)
                 fe(v3, 2) = v2;
         }
     }
@@ -1325,7 +1325,7 @@ bool TMesh::readTetgen(string fname)
         return (error = true);
     }
     in >> num >> tmp >> tmp >> tmp;
-    if (in.fail() or num == 0)
+    if (in.fail() || num == 0)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -1354,7 +1354,7 @@ bool TMesh::readTetgen(string fname)
     }
 
     in >> num >> tmp >> tmp;
-    if (in.fail() or num == 0)
+    if (in.fail() || num == 0)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -1383,7 +1383,7 @@ bool TMesh::readTetgen(string fname)
         return (error = true);
     }
     in >> num >> tmp;
-    if (in.fail() or num == 0)
+    if (in.fail() || num == 0)
     {
         in.close();
         cerr << sayError(ErrorCode::EFormatFile) << endl;
@@ -1416,7 +1416,7 @@ bool TMesh::readTetgen(string fname)
 //    for (unsigned i = 0; i < fe.size1(); msg->addProgress(), i++)
 //        for (unsigned j = 0; j < fe.size2(); j++)
 //            for (unsigned k = 0; k < fe.size2(); k++)
-//                // if (k not_eq j)
+//                // if (k != j)
 //                    if (find(meshMap[fe(i, j)].begin(), meshMap[fe(i, j)].end(), fe(i, k)) == meshMap[fe(i, j)].end())
 //                        meshMap[fe(i, j)].push_back(fe(i, k));
 

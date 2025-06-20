@@ -63,7 +63,7 @@ public:
             // Вычисление локальной матрицы жесткости
             K += (((transpose(b) * e) * b) * shape->w[i] * thickness * abs(jacobian));
             // Вычисление температурной нагрузки
-            if (temperature not_eq 0.0 and alpha not_eq 0.0)
+            if (temperature != 0.0 && alpha != 0.0)
                 load += (transpose(b) * e * temperature * alpha * shape->w[i] * abs(jacobian));
             if (not isStatic)
             {

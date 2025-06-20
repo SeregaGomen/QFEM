@@ -110,7 +110,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::ansambleLoc
         for (unsigned k = l; k < size; k++)
         {
             solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            if (l not_eq k)
+            if (l != k)
                 solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
         }
         solver.addLoad(fe.getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);
@@ -185,7 +185,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcGlobal
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<SOLVER, FE>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
     for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
-    if (error not_eq ErrorCode::Undefined)
+    if (error != ErrorCode::Undefined)
         throw error;
     msg->stopProcess();
 }
@@ -231,7 +231,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcBounda
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<SOLVER, FE>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error not_eq ErrorCode::Undefined)
+        if (error != ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -252,7 +252,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getBoundar
         {
             msg->addProgress();
             for (auto it: params.plist)
-                if (it.getType() == ParamType::BoundaryCondition and ((direct = it.getDirect()) not_eq Direction::Undefined))
+                if (it.getType() == ParamType::BoundaryCondition && ((direct = it.getDirect()) != Direction::Undefined))
                 {
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
@@ -291,7 +291,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcConcen
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<SOLVER, FE>::getConcentratedLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error not_eq ErrorCode::Undefined)
+        if (error != ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -311,7 +311,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getConcent
         {
             msg->addProgress();
             for (auto it : params.plist)
-                if (it.getType() == ParamType::ConcentratedLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
+                if (it.getType() == ParamType::ConcentratedLoad && ((direct = it.getDirect()) != Direction::Undefined))
                 {
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
@@ -350,7 +350,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcSurfac
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<SOLVER, FE>::getSurfaceLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error not_eq ErrorCode::Undefined)
+        if (error != ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -372,7 +372,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
         {
             msg->addProgress();
             for (auto it:  params.plist)
-                if (it.getType() == ParamType::SurfaceLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
+                if (it.getType() == ParamType::SurfaceLoad && ((direct = it.getDirect()) != Direction::Undefined))
                 {
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
@@ -417,7 +417,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcPressu
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<SOLVER, FE>::getPressureLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error not_eq ErrorCode::Undefined)
+        if (error != ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -493,7 +493,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcVolume
         for (int i = 0; i < numThread; i++)
             thr[i] = thread(&TFEMStatic<SOLVER, FE>::getVolumeLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-        if (error not_eq ErrorCode::Undefined)
+        if (error != ErrorCode::Undefined)
             throw error;
         msg->stopProcess();
     }
@@ -517,7 +517,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
             if (isProcessAborted)
                 throw ErrorCode::EAbort;
             for (auto it: params.plist)
-                if (it.getType() == ParamType::VolumeLoad and ((direct = it.getDirect()) not_eq Direction::Undefined))
+                if (it.getType() == ParamType::VolumeLoad && ((direct = it.getDirect()) != Direction::Undefined))
                 {
                     // Проверка, все ли узлы КЭ удовлетворяют предикату
                     mesh->getCoordFE(i, fe_coord);
@@ -616,7 +616,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcResult
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<SOLVER, FE>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    if (error not_eq ErrorCode::Undefined)
+    if (error != ErrorCode::Undefined)
         throw error;
     // Осредняем результаты
     avgResults(res, counter);
@@ -676,7 +676,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::setLoad(ve
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<SOLVER, FE>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
-    if (error not_eq ErrorCode::Undefined)
+    if (error != ErrorCode::Undefined)
         throw error;
     msg->stopProcess();
 }

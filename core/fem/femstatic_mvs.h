@@ -210,7 +210,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
         isStopGlobalIteration = true;
     }
 
-    if (index not_eq index0[i])
+    if (index != index0[i])
         //newE = fabs((ssCurve[index][0] - ssCurve[index0[i]][0]) / (ssCurve[index][1] - ssCurve[index0[i]][1]));
         newE = fabs(ssCurve[index][0] / ssCurve[index][1] - ssCurve[index0[i]][0] / ssCurve[index0[i]][1]);
     else
@@ -220,7 +220,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
     fe.setPoissonRatio(TFEM::params.getPoissonRatio(x));
 
     // Проверка на изменение модуля упругости по сравнению с предыдущей итерацией
-    if (index not_eq index0[i])
+    if (index != index0[i])
         isStopLocalIteration = false;
 
     // Запоминаем рассчитанное значение модуля упругости и индекс

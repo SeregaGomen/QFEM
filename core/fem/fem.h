@@ -58,7 +58,7 @@ protected:
             throw ErrorCode::EYoungModulus;
         // Загрузка в КЭ коэффициента Пуассона
         fe.setYoungModulus(val);
-        if ((val = params.getPoissonRatio(x)) == 0.0 and not mesh->is1D())
+        if ((val = params.getPoissonRatio(x)) == 0.0 && !mesh->is1D())
             throw ErrorCode::EPoissonRatio;
         fe.setPoissonRatio(val);
         // Загрузка толщины элемента
