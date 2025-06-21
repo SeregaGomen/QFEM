@@ -121,6 +121,7 @@ private:
     void saveResults(QJsonObject&);
     void saveNotes(QJsonObject&);
     void loadMesh(const QJsonObject&);
+    // Чтение параметров из JSON-объекта
     void loadParam(const QJsonObject&);
     void loadResults(const QJsonArray&);
     void loadNotes(const QJsonArray&);
