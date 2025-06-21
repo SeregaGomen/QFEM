@@ -1017,21 +1017,10 @@ bool TMainWindow::saveQFPF(QString fileName)
 {
     QDateTime dt;
     QFile file;
-    QString val;
     QJsonDocument doc;
     QJsonObject main,
                 header,
-                mesh,
-                params,
-                out,
-                time,
-                thermal,
-                nonlin,
-                geometrical,
-                physical;
-    QJsonArray names,
-               lbc,
-               variables;
+                mesh;
     TFEMObject* femObject = femProcessor->getFEMObject();
 
     // ------------- Заголовок -----------------
@@ -1071,8 +1060,7 @@ bool TMainWindow::loadQFPF(QString fileName)
     QFile file;
     QJsonDocument doc;
     QJsonObject obj;
-    QJsonArray bc,
-               arr;
+    QJsonArray bc;
     TFEMParams& params = femProcessor->getFEMObject()->getParams();
     int dir;
     string expr,
@@ -1307,10 +1295,7 @@ void TMainWindow::saveParam(QJsonObject &main)
     QJsonObject paramObj,
                 out,
                 time,
-                thermal,
-                nonlin,
-                geometrical,
-                physical;
+                nonlin;
     QJsonArray names,
                lbc,
                variables;
@@ -1513,7 +1498,6 @@ void TMainWindow::loadMesh(const QJsonObject &meshObj)
     mesh.setMesh(FEType(fe_type), x, fe, be);
 }
 
-// Чтение параметров из JSON-объекта
 void TMainWindow::loadParam(const QJsonObject &paramObj)
 {
     QJsonArray lbc = paramObj["BoundaryConditions"].toArray(),
@@ -1562,14 +1546,14 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
 
     // Названия
     params.names.clear();
-    for (auto value: nm)
-        params.names.push_back(value.toString().toStdString());
+    for (auto i = 0; i < nm.size(); i++)
+        params.names.push_back(nm[i].toString().toStdString());
 
     // Вспомагательные параметры (для парсера)
     params.variables.clear();
-    for (auto value: var)
+    for (auto i = 0; i < var.size(); i++)
     {
-        QStringList sl = value.toString().split(" ");
+        QStringList sl = var[i].toString().split(" ");
 
         params.variables.insert(pair<string, double>(sl[0].toStdString(), sl[1].toDouble()));
     }
@@ -1591,8 +1575,8 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
         name = value["Function"].toString();
         t = value["Time"].toDouble();
         arr = value["Values"].toArray();
-        for (auto v: arr)
-            res.push_back(v.toDouble());
+        for (auto i = 0; i < arr.size(); i++)
+            res.push_back(arr[i].toDouble());
         result.setResult(res, name.toStdString(), t);
     }
 }
@@ -1600,8 +1584,7 @@ void TMainWindow::loadResults(const QJsonArray &resultArr)
 // Чтение примечаний из JSON-объекта
 void TMainWindow::loadNotes(const QJsonArray &notesArr)
 {
-    QString str;
-    list<string> &notes = femProcessor->getFEMObject()->getNotes();
+    auto &notes = femProcessor->getFEMObject()->getNotes();
 
     notes.clear();
     for (auto value: notesArr)

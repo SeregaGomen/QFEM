@@ -74,7 +74,8 @@ void TMeshView::resizeGL(int w, int h)
 {
     glViewport(0, 0, w, h);
     projection.setToIdentity();
-    projection.perspective(45.0f, float(w)/h, 0.1f, 100.0f);
+    //projection.perspective(45.0f, float(w)/h, 0.1f, 100.0f);
+    projection.perspective(45.0f, float(w)/h, 0.1f, 10.0f*radius);
 }
 
 
@@ -349,6 +350,8 @@ void TMeshView::initObject()
 
     vbo[0].release();
     vao[0].release();
+
+    //qDebug() << glGetError();
 }
 
 void TMeshView::initMesh()
