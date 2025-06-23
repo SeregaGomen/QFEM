@@ -33,6 +33,7 @@
 
 #include "meshview.h"
 #include "funcview.h"
+#include "imageparams.h"
 
 TMessenger* msg;
 static int langNo;
@@ -136,6 +137,14 @@ void TMainWindow::init(void)
 
     connect(tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseTab(int)));
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(slotChangeTab(int)));
+
+    connect(ui->actionRotate, SIGNAL(triggered(bool)), this, SLOT(slotSetRotate()));
+
+
+
+    connect(iDlg, SIGNAL(sendAutoRotateState(bool)), this, SLOT(slotSetRotate(bool)));
+
+
 
 
     checkMenuState();
@@ -1871,3 +1880,15 @@ void TMainWindow::slotShowParam(int type)
     }
 
 }
+
+void TMainWindow::slotSetRotate(void)
+{
+    qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isAutoRotate = !qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isAutoRotate;
+    ui->actionRotate->setChecked(qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isAutoRotate);
+}
+
+void TMainWindow::slotSetRotate(bool isRotate)
+{
+    ui->actionRotate->setChecked(isRotate);
+}
+

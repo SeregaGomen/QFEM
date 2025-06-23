@@ -77,13 +77,13 @@ void TSetupImageDialog::slotIsAutoRotate(void)
         ui->hsAngleZ->setValue(params->angle[2]);
     }
     else
-    {
         ui->gbRotate->setVisible(false);
-    }
-    ui->hsAngleX->setEnabled(!params->isAutoRotate);
-    ui->hsAngleY->setEnabled(!params->isAutoRotate);
-    ui->hsAngleZ->setEnabled(!params->isAutoRotate);
+    // ui->hsAngleX->setEnabled(!params->isAutoRotate);
+    // ui->hsAngleY->setEnabled(!params->isAutoRotate);
+    // ui->hsAngleZ->setEnabled(!params->isAutoRotate);
     glWidget->update();
+
+    emit sendAutoRotateState(params->isAutoRotate);
 }
 
 void TSetupImageDialog::slotIsLight(void)
@@ -186,9 +186,16 @@ void TSetupImageDialog::setup(ImageType type)
     else
     {
         ui->gbRotate->setVisible(true);
-        ui->labelAngleX->setText(QString::number(ui->hsAngleX->value()));
-        ui->labelAngleY->setText(QString::number(ui->hsAngleY->value()));
-        ui->labelAngleZ->setText(QString::number(ui->hsAngleZ->value()));
+        // ui->labelAngleX->setText(QString::number(ui->hsAngleX->value()));
+        // ui->labelAngleY->setText(QString::number(ui->hsAngleY->value()));
+        // ui->labelAngleZ->setText(QString::number(ui->hsAngleZ->value()));
+        ui->labelAngleX->setText(QString::number(params->angle[0]));
+        ui->labelAngleY->setText(QString::number(params->angle[1]));
+        ui->labelAngleZ->setText(QString::number(params->angle[2]));
+
+        ui->hsAngleX->setValue(params->angle[0]);
+        ui->hsAngleY->setValue(params->angle[1]);
+        ui->hsAngleZ->setValue(params->angle[2]);
     }
 
 

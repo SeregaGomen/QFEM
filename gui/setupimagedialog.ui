@@ -707,7 +707,7 @@
     </widget>
     <widget class="QSlider" name="hsAngleX">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -754,7 +754,7 @@
     </widget>
     <widget class="QSlider" name="hsAngleZ">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -788,7 +788,7 @@
     </widget>
     <widget class="QSlider" name="hsAngleY">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>

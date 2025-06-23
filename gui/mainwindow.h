@@ -62,6 +62,10 @@ private slots:
     void slotErorrMsg(QString);
     void slotMsg(QString);
     void slotShowParam(int);
+    void slotSetRotate(void);
+
+    void slotSetRotate(bool);
+
 
 private:
     QThread* thread;

@@ -193,15 +193,18 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="QFEM.qrc">
      <normaloff>:/images/rotate-icon.png</normaloff>:/images/rotate-icon.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Rotate</string>
+    <string>&amp;Auto rotate</string>
    </property>
    <property name="toolTip">
-    <string>Rotate</string>
+    <string>Auto rotate</string>
    </property>
    <property name="statusTip">
     <string>Enable rotation of an object</string>

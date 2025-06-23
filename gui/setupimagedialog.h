@@ -68,6 +68,9 @@ private slots:
     void slotIsGrayscale(void);
     void slotIsColor(void);
 
+signals:
+    void sendAutoRotateState(bool);
+
 private:
     QColor bkgColor;
     Ui::TSetupImageDialog *ui;
