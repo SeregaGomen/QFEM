@@ -5,8 +5,8 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QLibraryInfo>
-//#include <QtCore>
-#include <QtGui>
+#include <QSettings>
+#include <QCloseEvent>
 #include <QDockWidget>
 #include <QProgressBar>
 #include <QFileDialog>
@@ -1534,12 +1534,12 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
 
     // Краевые условия и прочие параметры
     params.plist.clear();
-    for (auto value: lbc)
+    for (auto i = 0; i < lbc.size(); i++)
     {
-        ParamType type = static_cast<ParamType>(static_cast<QJsonValue>(value)["Type"].toInt());
-        int direct = static_cast<QJsonValue>(value)["Direct"].toInt();
-        QString predicate = static_cast<QJsonValue>(value)["Predicate"].toString(),
-                expression = static_cast<QJsonValue>(value)["Expression"].toString();
+        ParamType type = static_cast<ParamType>(static_cast<QJsonValue>(lbc[i])["Type"].toInt());
+        int direct = static_cast<QJsonValue>(lbc[i])["Direct"].toInt();
+        QString predicate = static_cast<QJsonValue>(lbc[i])["Predicate"].toString(),
+                expression = static_cast<QJsonValue>(lbc[i])["Expression"].toString();
         matrix<double> ssc;
 
         if (type == ParamType::StressStrainCurve)
