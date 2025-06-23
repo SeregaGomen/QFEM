@@ -29,6 +29,7 @@ public:
     {
         return m.coeff(i, j);
     }
+    void print(string);
 };
 
 #endif // EIGENSOLVER_H

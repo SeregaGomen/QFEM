@@ -75,91 +75,24 @@ public:
         nx = transpose((TransformMatrix * transpose(px)));
         TFE::shape->create(nx);
     }
-//     void calc(matrix<double>& res, vector<double>& u)
-//     {
-//         int index[][2]{{0, 0}, {1, 1}, {2, 2}, {0, 1}, {0, 2}, {1, 2}};
-//         matrix<double> bm(3, TFE::shape->size * TFE::freedom),
-//                        bp(3, TFE::shape->size * TFE::freedom),
-//                        bc(2, TFE::shape->size * TFE::freedom),
-//                        m = prepareTransformMatrix(), // Подготовка матрицы преобразования
-//                        global_strain,
-//                        global_stress,
-//                        strainm,
-//                        strainp,
-//                        stressm,
-//                        stressp,
-//                        strainc,
-//                        stressc,
-//                        lu,
-//                        local_strain(3, 3),
-//                        local_stress(3, 3);
-
-//         // Преобразование перемещений
-//         lu = m * u;
-
-//         for (unsigned i = 0; i < TFE::shape->size; i++)
-//         {
-//             for (unsigned j = 0; j < TFE::shape->size; j++)
-//             {
-//                 bm(0, TFE::freedom * j + 0) = bm(2, TFE::freedom * j + 1) = bp(2, TFE::freedom * j + 4) = bp(0, TFE::freedom * j + 3) = bc(0, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape_dx(i, j);
-//                 bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 0) = bp(1, TFE::freedom * j + 4) = bp(2, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape_dy(i, j);
-//                 bc(0, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 4) = (i == j) ? 1.0 : 0.0;
-//             }
-//             strainm = bm * lu;
-//             strainp = bp * lu;
-//             strainc = bc * lu;
-//             stressm = TFE2D<T>::elastic_matrix() * strainm;
-//             stressp = TFE2D<T>::elastic_matrix() * strainp * TFE::thickness * 0.5;
-//             stressc = TFE2DP<T>::extra_elastic_matrix() * strainc;
-
-//             local_strain(0, 0) = strainm(0, 0) + strainp(0, 0);  local_strain(0, 1) = strainm(0, 2) + strainp(0, 2);  local_strain(0, 2) = strainc(0, 0);
-//             local_strain(1, 0) = strainm(0, 2) + strainp(0, 2);  local_strain(1, 1) = strainm(0, 1) + strainp(0, 1);  local_strain(1, 2) = strainc(0, 1);
-//             local_strain(2, 0) = strainc(0, 0); local_strain(2, 1) = strainc(0, 1); local_strain(2, 2) = 0.0;
-
-//             local_stress(0, 0) = stressm(0, 0) + stressp(0, 0);  local_stress(0, 1) = stressm(0, 2) + stressp(0, 2);  local_stress(0, 2) = stressc(0, 0);
-//             local_stress(1, 0) = stressm(0, 2) + stressp(0, 2);  local_stress(1, 1) = stressm(0, 1) + stressp(0, 1);  local_stress(1, 2) = stressc(0, 1);
-//             local_stress(2, 0) = stressc(0, 0); local_stress(2, 1) = stressc(0, 1); local_stress(2, 2) = 0.0;
-
-//             global_strain = transpose(TransformMatrix) * local_strain * TransformMatrix;
-//             global_stress = transpose(TransformMatrix) * local_stress * TransformMatrix;
-
-//             for (auto j = 0; j < 6; j++)
-//             {
-//                 res(j, i) += global_strain(index[j][0], index[j][1]);
-//                 res(j+6, i) += global_stress(index[j][0], index[j][1]);
-//             }
-
-// //            res(0, i) += global_strain(0, 0);    // Exx
-// //            res(1, i) += global_strain(1, 1);    // Eyy
-// //            res(2, i) += global_strain(2, 2);    // Ezz
-// //            res(3, i) += global_strain(0, 1);    // Exy
-// //            res(4, i) += global_strain(0, 2);    // Exz
-// //            res(5, i) += global_strain(1, 2);    // Eyz
-// //            res(6, i) += global_stress(0, 0);    // Sxx
-// //            res(7, i) += global_stress(1, 1);    // Syy
-// //            res(8, i) += global_stress(2, 2);    // Szz
-// //            res(9, i) += global_stress(0, 1);    // Sxy
-// //            res(10, i) += global_stress(0, 2);   // Sxz
-// //            res(11, i) += global_stress(1, 2);   // Syz
-//         }
-//     }
     void calc(matrix<double>& res, vector<double>& u)
     {
+        int index[][2]{{0, 0}, {1, 1}, {2, 2}, {0, 1}, {0, 2}, {1, 2}};
         matrix<double> bm(3, TFE::shape->size * TFE::freedom),
-            bp(3, TFE::shape->size * TFE::freedom),
-            bc(2, TFE::shape->size * TFE::freedom),
-            m = prepareTransformMatrix(), // Подготовка матрицы преобразования
-            global_strain,
-            global_stress,
-            strainm,
-            strainp,
-            stressm,
-            stressp,
-            strainc,
-            stressc,
-            lu,
-            local_strain(3, 3),
-            local_stress(3, 3);
+                       bp(3, TFE::shape->size * TFE::freedom),
+                       bc(2, TFE::shape->size * TFE::freedom),
+                       m = prepareTransformMatrix(), // Подготовка матрицы преобразования
+                       global_strain,
+                       global_stress,
+                       strainm,
+                       strainp,
+                       stressm,
+                       stressp,
+                       strainc,
+                       stressc,
+                       lu,
+                       local_strain(3, 3),
+                       local_stress(3, 3);
 
         // Преобразование перемещений
         lu = m * u;
@@ -190,20 +123,87 @@ public:
             global_strain = transpose(TransformMatrix) * local_strain * TransformMatrix;
             global_stress = transpose(TransformMatrix) * local_stress * TransformMatrix;
 
-            res(0, i) += global_strain(0, 0);    // Exx
-            res(1, i) += global_strain(1, 1);    // Eyy
-            res(2, i) += global_strain(2, 2);    // Ezz
-            res(3, i) += global_strain(0, 1);    // Exy
-            res(4, i) += global_strain(0, 2);    // Exz
-            res(5, i) += global_strain(1, 2);    // Eyz
-            res(6, i) += global_stress(0, 0);    // Sxx
-            res(7, i) += global_stress(1, 1);    // Syy
-            res(8, i) += global_stress(2, 2);    // Szz
-            res(9, i) += global_stress(0, 1);    // Sxy
-            res(10, i) += global_stress(0, 2);   // Sxz
-            res(11, i) += global_stress(1, 2);   // Syz
+            for (auto j = 0; j < 6; j++)
+            {
+                res(j, i) += global_strain(index[j][0], index[j][1]);
+                res(j+6, i) += global_stress(index[j][0], index[j][1]);
+            }
+
+//            res(0, i) += global_strain(0, 0);    // Exx
+//            res(1, i) += global_strain(1, 1);    // Eyy
+//            res(2, i) += global_strain(2, 2);    // Ezz
+//            res(3, i) += global_strain(0, 1);    // Exy
+//            res(4, i) += global_strain(0, 2);    // Exz
+//            res(5, i) += global_strain(1, 2);    // Eyz
+//            res(6, i) += global_stress(0, 0);    // Sxx
+//            res(7, i) += global_stress(1, 1);    // Syy
+//            res(8, i) += global_stress(2, 2);    // Szz
+//            res(9, i) += global_stress(0, 1);    // Sxy
+//            res(10, i) += global_stress(0, 2);   // Sxz
+//            res(11, i) += global_stress(1, 2);   // Syz
         }
     }
+    // void calc(matrix<double>& res, vector<double>& u)
+    // {
+    //     matrix<double> bm(3, TFE::shape->size * TFE::freedom),
+    //         bp(3, TFE::shape->size * TFE::freedom),
+    //         bc(2, TFE::shape->size * TFE::freedom),
+    //         m = prepareTransformMatrix(), // Подготовка матрицы преобразования
+    //         global_strain,
+    //         global_stress,
+    //         strainm,
+    //         strainp,
+    //         stressm,
+    //         stressp,
+    //         strainc,
+    //         stressc,
+    //         lu,
+    //         local_strain(3, 3),
+    //         local_stress(3, 3);
+
+    //     // Преобразование перемещений
+    //     lu = m * u;
+
+    //     for (unsigned i = 0; i < TFE::shape->size; i++)
+    //     {
+    //         for (unsigned j = 0; j < TFE::shape->size; j++)
+    //         {
+    //             bm(0, TFE::freedom * j + 0) = bm(2, TFE::freedom * j + 1) = bp(2, TFE::freedom * j + 4) = bp(0, TFE::freedom * j + 3) = bc(0, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape_dx(i, j);
+    //             bm(1, TFE::freedom * j + 1) = bm(2, TFE::freedom * j + 0) = bp(1, TFE::freedom * j + 4) = bp(2, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 2) = dynamic_cast<T*>(TFE::shape)->shape_dy(i, j);
+    //             bc(0, TFE::freedom * j + 3) = bc(1, TFE::freedom * j + 4) = (i == j) ? 1.0 : 0.0;
+    //         }
+    //         strainm = bm * lu;
+    //         strainp = bp * lu;
+    //         strainc = bc * lu;
+    //         stressm = TFE2D<T>::elastic_matrix() * strainm;
+    //         stressp = TFE2D<T>::elastic_matrix() * strainp * TFE::thickness * 0.5;
+    //         stressc = TFE2DP<T>::extra_elastic_matrix() * strainc;
+
+    //         local_strain(0, 0) = strainm(0, 0) + strainp(0, 0);  local_strain(0, 1) = strainm(0, 2) + strainp(0, 2);  local_strain(0, 2) = strainc(0, 0);
+    //         local_strain(1, 0) = strainm(0, 2) + strainp(0, 2);  local_strain(1, 1) = strainm(0, 1) + strainp(0, 1);  local_strain(1, 2) = strainc(0, 1);
+    //         local_strain(2, 0) = strainc(0, 0); local_strain(2, 1) = strainc(0, 1); local_strain(2, 2) = 0.0;
+
+    //         local_stress(0, 0) = stressm(0, 0) + stressp(0, 0);  local_stress(0, 1) = stressm(0, 2) + stressp(0, 2);  local_stress(0, 2) = stressc(0, 0);
+    //         local_stress(1, 0) = stressm(0, 2) + stressp(0, 2);  local_stress(1, 1) = stressm(0, 1) + stressp(0, 1);  local_stress(1, 2) = stressc(0, 1);
+    //         local_stress(2, 0) = stressc(0, 0); local_stress(2, 1) = stressc(0, 1); local_stress(2, 2) = 0.0;
+
+    //         global_strain = transpose(TransformMatrix) * local_strain * TransformMatrix;
+    //         global_stress = transpose(TransformMatrix) * local_stress * TransformMatrix;
+
+    //         res(0, i) += global_strain(0, 0);    // Exx
+    //         res(1, i) += global_strain(1, 1);    // Eyy
+    //         res(2, i) += global_strain(2, 2);    // Ezz
+    //         res(3, i) += global_strain(0, 1);    // Exy
+    //         res(4, i) += global_strain(0, 2);    // Exz
+    //         res(5, i) += global_strain(1, 2);    // Eyz
+    //         res(6, i) += global_stress(0, 0);    // Sxx
+    //         res(7, i) += global_stress(1, 1);    // Syy
+    //         res(8, i) += global_stress(2, 2);    // Szz
+    //         res(9, i) += global_stress(0, 1);    // Sxy
+    //         res(10, i) += global_stress(0, 2);   // Sxz
+    //         res(11, i) += global_stress(1, 2);   // Syz
+    //     }
+    // }
     void generate(bool isStatic = true)
     {
         double jacobian,

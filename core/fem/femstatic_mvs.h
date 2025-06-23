@@ -75,12 +75,12 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
     {
         isStopLocalIteration = true;
         TFEMStatic<SOLVER, FE>::solver.setMatrix(TFEM::mesh);
+        // Рассчет  краевых условий
+        TFEMStatic<SOLVER, FE>::calcBoundaryCondition();
         // Формирование ГМЖ
         TFEMStatic<SOLVER, FE>::calcGlobalMatrix();
         // Учет нагрузки
         TFEMStatic<SOLVER, FE>::setLoad(load);
-        // Учет краевых условий
-        TFEMStatic<SOLVER, FE>::calcBoundaryCondition();
         // Решение СЛАУ
         if (!TFEMStatic<SOLVER, FE>::solver.solution(result, TFEM::params.eps, TFEM::isProcessAborted))
         {
