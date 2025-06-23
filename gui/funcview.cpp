@@ -327,5 +327,4 @@ double TFunctionView::x(unsigned i, unsigned j)
     return TMeshView::x(i, j) + (j < delta.size() ? (delta[j] == nullptr ? 0 : params->ratio*radius*((*delta[j])[i]/maxTransformRatio)) : 0);
 }
 
-
 // Si=((Sxx - Syy) ** 2 + (Sxx - Szz) ** 2 + (Syy - Szz) ** 2 + 6 * (Sxy ** 2 + Sxz ** 2 + Syz ** 2)) ** 0.5 / 1.41
