@@ -316,10 +316,14 @@ void TMainWindow::setupRecentActions(void)
 
 void TMainWindow::slotOpenDocument(void)
 {
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->stopTimer();
     QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM problem files (*.qfpf);;Mesh files (*.trp *.trpa *.vol *.mesh *.msh *.ele *.face *.node);;QFEM result files (*.qres *.res);;All files(*)"));
-
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->startTimer();
     if (not fileName.isEmpty())
         loadFile(fileName);
+
 }
 
 void TMainWindow::loadFile(QString fileName)
@@ -434,9 +438,12 @@ void TMainWindow::closeEvent(QCloseEvent *event)
 
 void TMainWindow::slotSaveAsDocument(void)
 {
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->stopTimer();
     QString fileName = QString(QFileInfo(curFile).absolutePath() + "/" +  QFileInfo(curFile).baseName() + ".qfpf"),
             fullFileName = QFileDialog::getSaveFileName(this,tr("Saving the document"),fileName,tr("QFEM Problem files (*.qfpf)"));
-
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->startTimer();
     if (not fullFileName.isEmpty())
         saveDocument(fullFileName);
 }
@@ -1768,10 +1775,12 @@ void TMainWindow::slotAppSettings(void)
 
 void TMainWindow::slotSaveResults(void)
 {
-//    QString fileName = QFileDialog::getSaveFileName(this, tr("Saving results"), QString(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("qres").toLower()), tr("QFEM result files (*.qres)"));
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->stopTimer();
     QString fileName = QFileDialog::getSaveFileName(this, tr("Saving results"), QString(QFileInfo(curFile).absolutePath() + "/" + QFileInfo(curFile).baseName() + "." + QString("qres").toLower()), tr("QFEM result files (*.qres);; QFEM report files (*.txt)"));
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->startTimer();
     QFileInfo info(fileName);
-
     if (not fileName.isEmpty())
     {
         if (info.suffix().toUpper() == "TXT")
@@ -1784,14 +1793,12 @@ void TMainWindow::slotSaveResults(void)
 void TMainWindow::slotAboutProgramm(void)
 {
     THelpDialog* hdlg = new THelpDialog(0,this);
-
     hdlg->exec();
 }
 
 void TMainWindow::slotHelpProgramm(void)
 {
     THelpDialog* hdlg = new THelpDialog(1,this);
-
     hdlg->exec();
 }
 

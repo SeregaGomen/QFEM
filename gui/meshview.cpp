@@ -519,3 +519,13 @@ void TMeshView::saveImage(const QString &fileName)
     QApplication::restoreOverrideCursor();
 
 }
+
+void TMeshView::startTimer()
+{
+    timer->start();
+}
+
+void TMeshView::stopTimer()
+{
+    timer->stop();
+}

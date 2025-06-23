@@ -30,6 +30,8 @@ public:
         paintGL();
     }
     void redraw();
+    void startTimer();
+    void stopTimer();
 
 protected slots:
     void slotRotate();
