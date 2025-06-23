@@ -2,7 +2,7 @@
 #define MESHVIEW_H
 
 #include <QObject>
-
+#include <QMenu>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
@@ -33,6 +33,7 @@ public:
 
 protected slots:
     void slotRotate();
+    void slotShowContextMenu(const QPoint&);
 
 protected:
     bool isMouseDown{false};
@@ -70,13 +71,16 @@ protected:
     virtual double x(unsigned, unsigned);
 
 private:
+    QMenu menu;
+    QAction* actionSaveImage;
     QTimer *timer;
     QMatrix4x4 projection;
     QMatrix4x4 view;
     QMatrix4x4 model;
 
 
-    QVector3D worldToScreen(const QVector3D&, const QMatrix4x4&, const QMatrix4x4&, const QMatrix4x4&, const QVector4D&);
+    void saveImage(const QString&);
+        QVector3D worldToScreen(const QVector3D&, const QMatrix4x4&, const QMatrix4x4&, const QMatrix4x4&, const QVector4D&);
 };
 
 #endif // MESHVIEW_H

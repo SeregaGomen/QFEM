@@ -1,4 +1,6 @@
 #include <QApplication>
+#include <QFileDialog>
+#include <QAbstractScrollArea>
 #include <QOpenGLShader>
 #include <QPainter>
 #include <QTimer>
@@ -17,12 +19,19 @@ TMeshView::TMeshView(TMesh* mesh, QWidget *parent) : QOpenGLWidget(parent), mesh
 
     setAutoFillBackground(false);
 
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    actionSaveImage = new QAction(tr("&Save image..."), this);
+    menu.addAction(actionSaveImage);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotShowContextMenu(QPoint)));
+
+
     for (auto i = 0; i < 3; i++)
         vbo[i] = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&TMeshView::slotRotate));
     timer->start(16);  // ~60 FPS
     params->init();
+
 }
 
 TMeshView::~TMeshView()
@@ -469,4 +478,44 @@ void TMeshView::mouseMoveEvent(QMouseEvent *event)
         update();
     }
     lastPos = event->pos();
+}
+
+void TMeshView::slotShowContextMenu(const QPoint &pos)
+{
+    QPoint globalPos;
+    QAction *selectedItem;
+    QString fileName;
+
+    if (sender()->inherits("QAbstractScrollArea"))
+        globalPos = (reinterpret_cast<QAbstractScrollArea*>(sender()))->viewport()->mapToGlobal(pos);
+    else
+        globalPos = (reinterpret_cast<QWidget*>(sender()))->mapToGlobal(pos);
+
+    if ((selectedItem = menu.exec(globalPos)))
+    {
+        if (selectedItem == actionSaveImage)
+        {
+            if (params->isAutoRotate)
+                timer->stop();
+            fileName = QFileDialog::getSaveFileName(this, tr("Saving the image"), fileName, tr("Image files (*.png)"));
+            if (not fileName.isEmpty())
+            {
+                QFileInfo info(fileName);
+                if (info.suffix().isEmpty())
+                    fileName += ".png";
+                saveImage(fileName);
+            }
+            if (params->isAutoRotate)
+                timer->start();
+        }
+    }
+}
+
+void TMeshView::saveImage(const QString &fileName)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QImage image = this->grabFramebuffer();
+    image.save(fileName);
+    QApplication::restoreOverrideCursor();
+
 }
