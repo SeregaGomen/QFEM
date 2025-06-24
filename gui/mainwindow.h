@@ -52,6 +52,9 @@ public slots:
     void slotAboutProgramm(void);
     void slotHelpProgramm(void);
     void slotDataCopy(void);
+    void slotShowSurface(void);
+    void slotShowMesh(void);
+    void slotShowSurfaceAndMesh(void);
 
 
 protected:

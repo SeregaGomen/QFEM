@@ -39,5 +39,8 @@
         <file>images/move-icon.png</file>
         <file>images/about-icon.png</file>
         <file>images/view.png</file>
+        <file>images/cube_molecule.png</file>
+        <file>images/object_cube.png</file>
+        <file>images/cube_molecule2.png</file>
     </qresource>
 </RCC>

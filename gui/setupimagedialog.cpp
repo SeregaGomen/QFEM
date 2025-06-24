@@ -97,6 +97,8 @@ void TSetupImageDialog::slotIsMesh(void)
     params->isSurface = false;
     params->isMesh = true;
     glWidget->update();
+
+    emit sendShowMesh();
 }
 
 void TSetupImageDialog::slotIsSurface(void)
@@ -104,12 +106,16 @@ void TSetupImageDialog::slotIsSurface(void)
     params->isSurface = true;
     params->isMesh = false;
     glWidget->update();
+
+    emit sendShowSurface();
 }
 
 void TSetupImageDialog::slotIsSurfaceMesh(void)
 {
     params->isSurface = params->isMesh = true;
     glWidget->update();
+
+    emit sendShowSurfaceAndMesh();
 }
 
 void TSetupImageDialog::slotIsAxis(void)

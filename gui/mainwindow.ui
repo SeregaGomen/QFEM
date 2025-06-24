@@ -64,8 +64,9 @@
      </property>
      <addaction name="separator"/>
      <addaction name="actionRotate"/>
-     <addaction name="actionScale"/>
-     <addaction name="actionTranslate"/>
+     <addaction name="actionSurface"/>
+     <addaction name="actionMesh"/>
+     <addaction name="actionSurfaceAndMesh"/>
      <addaction name="separator"/>
      <addaction name="actionRestore"/>
     </widget>
@@ -116,8 +117,9 @@
    <addaction name="actionAnalyse"/>
    <addaction name="separator"/>
    <addaction name="actionRotate"/>
-   <addaction name="actionScale"/>
-   <addaction name="actionTranslate"/>
+   <addaction name="actionSurface"/>
+   <addaction name="actionMesh"/>
+   <addaction name="actionSurfaceAndMesh"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -210,40 +212,43 @@
     <string>Enable rotation of an object</string>
    </property>
   </action>
-  <action name="actionTranslate">
+  <action name="actionSurface">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="QFEM.qrc">
-     <normaloff>:/images/move-icon.png</normaloff>:/images/move-icon.png</iconset>
+     <normaloff>:/images/object_cube.png</normaloff>:/images/object_cube.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Translate</string>
+    <string>&amp;Object</string>
    </property>
    <property name="toolTip">
-    <string>Translate</string>
+    <string>Show only object surface</string>
    </property>
    <property name="statusTip">
     <string>Enable the translate of the object</string>
    </property>
   </action>
-  <action name="actionScale">
+  <action name="actionMesh">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="QFEM.qrc">
-     <normaloff>:/images/scale.png</normaloff>:/images/scale.png</iconset>
+     <normaloff>:/images/cube_molecule.png</normaloff>:/images/cube_molecule.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Scale</string>
+    <string>&amp;Mesh</string>
    </property>
    <property name="iconText">
     <string>Scale</string>
    </property>
    <property name="toolTip">
-    <string>Scale</string>
+    <string>Show only surface mesh</string>
    </property>
    <property name="statusTip">
     <string>Enable the scale of the object</string>
@@ -430,6 +435,24 @@
    </property>
    <property name="statusTip">
     <string>Copy current data to Clipboard</string>
+   </property>
+  </action>
+  <action name="actionSurfaceAndMesh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="QFEM.qrc">
+     <normaloff>:/images/cube_molecule2.png</normaloff>:/images/cube_molecule2.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Surface and Mesh</string>
+   </property>
+   <property name="toolTip">
+    <string>Show surface and mesh</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
@@ -710,6 +733,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSurface</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotShowSurface()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMesh</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotShowMesh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSurfaceAndMesh</sender>
+   <signal>triggered()</signal>
+   <receiver>TMainWindow</receiver>
+   <slot>slotShowSurfaceAndMesh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slotOpenDocument()</slot>
@@ -732,5 +803,8 @@
   <slot>slotAboutProgramm()</slot>
   <slot>slotHelpProgramm()</slot>
   <slot>slotDataCopy()</slot>
+  <slot>slotShowSurface()</slot>
+  <slot>slotShowMesh()</slot>
+  <slot>slotShowSurfaceAndMesh()</slot>
  </slots>
 </ui>

@@ -70,6 +70,10 @@ private slots:
 
 signals:
     void sendAutoRotateState(bool);
+    void sendShowSurface();
+    void sendShowMesh();
+    void sendShowSurfaceAndMesh();
+
 
 private:
     QColor bkgColor;

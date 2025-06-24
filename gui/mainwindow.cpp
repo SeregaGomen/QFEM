@@ -143,6 +143,9 @@ void TMainWindow::init(void)
 
 
     connect(iDlg, SIGNAL(sendAutoRotateState(bool)), this, SLOT(slotSetRotate(bool)));
+    connect(iDlg, SIGNAL(sendShowMesh()), this, SLOT(slotShowMesh()));
+    connect(iDlg, SIGNAL(sendShowSurface()), this, SLOT(slotShowSurface()));
+    connect(iDlg, SIGNAL(sendShowSurfaceAndMesh()), this, SLOT(slotShowSurfaceAndMesh()));
 
 
 
@@ -200,8 +203,10 @@ void TMainWindow::slotChangeTab(int nTab)
 
     ui->actionInfo->setEnabled(isEnabled);
     ui->actionRotate->setEnabled(isEnabled);
-    ui->actionScale->setEnabled(isEnabled);
-    ui->actionTranslate->setEnabled(isEnabled);
+    ui->actionMesh->setEnabled(isEnabled);
+    ui->actionSurface->setEnabled(isEnabled);
+    ui->actionMesh->setEnabled(isEnabled);
+    ui->actionSurfaceAndMesh->setEnabled(isEnabled);
     ui->actionRestore->setEnabled(isEnabled);
 //    ui->actionAnalyse->setEnabled(isEnabled);
     ui->actionAnalyse->setEnabled(femProcessor->isCalculated());
@@ -290,8 +295,10 @@ void TMainWindow::checkMenuState(void)
     ui->actionClose->setEnabled(not isUntitled);
     ui->actionSaveAs->setEnabled(not isUntitled);
     ui->actionRotate->setEnabled(not isUntitled and isEnabled);
-    ui->actionScale->setEnabled(not isUntitled and isEnabled);
-    ui->actionTranslate->setEnabled(not isUntitled and isEnabled);
+    ui->actionMesh->setEnabled(not isUntitled and isEnabled);
+    ui->actionSurface->setEnabled(not isUntitled and isEnabled);
+    ui->actionMesh->setEnabled(not isUntitled and isEnabled);
+    ui->actionSurfaceAndMesh->setEnabled(not isUntitled and isEnabled);
     ui->actionRestore->setEnabled(not isUntitled);
     ui->actionObjectParameters->setEnabled(not isUntitled);
     ui->actionStart->setEnabled(not isUntitled and not thread->isRunning());
@@ -1892,3 +1899,35 @@ void TMainWindow::slotSetRotate(bool isRotate)
     ui->actionRotate->setChecked(isRotate);
 }
 
+void TMainWindow::slotShowSurface(void)
+{
+    if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
+    {
+        ui->actionSurface->setChecked(true);
+        ui->actionMesh->setChecked(false);
+        ui->actionSurfaceAndMesh->setChecked(false);
+
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isSurface = true;
+        qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isMesh = false;
+    }
+}
+
+void TMainWindow::slotShowMesh(void)
+{
+    ui->actionSurface->setChecked(false);
+    ui->actionMesh->setChecked(true);
+    ui->actionSurfaceAndMesh->setChecked(false);
+
+    qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isSurface = false;
+    qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isMesh = true;
+}
+
+void TMainWindow::slotShowSurfaceAndMesh(void)
+{
+    ui->actionSurface->setChecked(false);
+    ui->actionMesh->setChecked(false);
+    ui->actionSurfaceAndMesh->setChecked(true);
+
+    qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isSurface = true;
+    qobject_cast<TMeshView*>(tabWidget->currentWidget())->getImageParams()->isMesh = true;
+}
