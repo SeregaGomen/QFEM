@@ -209,7 +209,7 @@ bool TFEMObject::start(void)
         fem->startProcess();
         isProcessCalculated = fem->isCalculated();
     }
-    catch (ErrorCode& err)
+    catch (ErrorCode &err)
     {
         cerr << endl << sayError(err) << endl;
         isProcessCalculated = false;

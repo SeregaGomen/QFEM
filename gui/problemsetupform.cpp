@@ -554,7 +554,7 @@ void TProblemSetupForm::clear(void)
     ui->rbStatic->setChecked(true);
     ui->rbDynamic->setChecked(false);
 
-    enabledParams();
+    //enabledParams();
 }
 
 // Начальная инициализация параметров расчета в диалоге

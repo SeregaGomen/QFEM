@@ -172,8 +172,8 @@ public:
                 ret = 6;
                 break;
             default:
-                ret = 0;
-                //throw ErrorCode::EIncorrectFE;
+                //ret = 0;
+                throw ErrorCode::EIncorrectFE;
         }
         return ret;
     }
