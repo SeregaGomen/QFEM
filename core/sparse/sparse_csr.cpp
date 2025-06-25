@@ -6,8 +6,12 @@ void TCSRMatrix::setMatrix(TMesh *mesh)
     auto freedom = mesh->getFreedom(),
          nnz = 0u;
 
+    a.clear();
+    ia.clear();
+    ja.clear();
+
     size = mesh->getNumVertex() * freedom;
-    ia.resize(size+1);
+    ia.resize(size + 1);
     ja.reserve(size);
 
     ia[0] = 0;

@@ -219,7 +219,9 @@ void TMainWindow::slotChangeTab(int nTab)
 
 void TMainWindow::slotCloseTab(int nTab)
 {
-    int i;
+    if (!tabWidget->count())
+        return;
+
 
     if (nTab not_eq 0)
     {
@@ -241,7 +243,7 @@ void TMainWindow::slotCloseTab(int nTab)
         femProcessor->clear();
         bcProcessor->clear();
         pb->setValue(0);
-        i = tabWidget->count() - 1;
+        int i = tabWidget->count() - 1;
         while (tabWidget->count() > 0)
         {
             //if (qobject_cast<TGLMesh*>(tabWidget->widget(i)))

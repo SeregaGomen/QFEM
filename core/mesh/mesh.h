@@ -173,6 +173,7 @@ public:
                 break;
             default:
                 ret = 0;
+                //throw ErrorCode::EIncorrectFE;
         }
         return ret;
     }
