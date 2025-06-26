@@ -191,6 +191,7 @@ void TMeshView::showLegend()
         painter.drawText(10, int(cy) + fontH, tr("FE type: %1").arg(mesh->feName()));
         painter.drawText(10, int(cy) + 2*fontH, tr("Vertex: %1").arg(mesh->getNumVertex()));
         painter.drawText(10, int(cy) + 3*fontH, tr("FE: %1").arg(mesh->getNumFE()));
+        painter.drawText(10, int(cy) + 4*fontH, tr("BE: %1").arg(mesh->getNumBE()));
 
         painter.end();
     }

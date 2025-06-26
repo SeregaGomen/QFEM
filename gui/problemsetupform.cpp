@@ -141,9 +141,6 @@ TProblemSetupForm::TProblemSetupForm(TFEMObject * fo, QWidget *parent) :
     }));
     connect(ui->tabWidgetLoads, &QTabWidget::currentChanged, this, ([=](void) { setEnabledBtn(ui->tbRemoveLoad, ui->tbShowLoads, getLoadTab()); }));
 
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, ([=](void) { slotCancelButton(); }));
-    connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, ([=](void) { slotApplyButton(); }));
-
     createMenu();
 
     ui->twFuncName->setItemDelegate(new TDelegateHTML(this));
@@ -153,12 +150,6 @@ TProblemSetupForm::~TProblemSetupForm()
 {
     delete ui;
 }
-
-void TProblemSetupForm::slotApplyButton(void)
-{
-    getParams();
-}
-
 
 void TProblemSetupForm::createMenu(void)
 {
@@ -1701,12 +1692,6 @@ void TProblemSetupForm::getElasticParam(void)
     getTableValue(ParamType::YoungModulus, ui->twYoungModulus, false);
     getTableValue(ParamType::PoissonRatio, ui->twPoissonsRatio, false);
 }
-
-void TProblemSetupForm::slotCancelButton(void)
-{
-    setup();
-}
-
 
 //void TProblemSetupForm::showParams(QTableWidget *tw, QString name)
 //{

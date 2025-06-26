@@ -51,8 +51,6 @@ public:
 private slots:
     void slotShowContextMenu1(const QPoint&);
     void slotShowContextMenu2(const QPoint&);
-    void slotCancelButton(void);
-    void slotApplyButton(void);
 
 private:
     Ui::TProblemSetupForm *ui;

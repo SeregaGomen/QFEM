@@ -376,7 +376,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
                 {
                     if (isProcessAborted)
                         throw ErrorCode::EAbort;
-                    // Проверка, все ли узлы ГЭ удвлетворяют предикату
+                    // Проверка, все ли узлы ГЭ удовлетворяют предикату
                     mesh->getCoordBE(i, be_coord);
                     if (params.checkElm(be_coord, it))
                     {
