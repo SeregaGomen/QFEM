@@ -42,7 +42,9 @@ protected:
     float radius{0};
     int numObjectPoints{0};
     int numMeshPoints{0};
-    double x0[3]{0, 0, 0};
+    double x0{0};
+    double y0{0};
+    double z0{0};
     TMesh *mesh;
     TImageParams *params;
     QPoint lastPos;
@@ -70,7 +72,9 @@ protected:
 
     virtual void showText(const QVector3D&, const QColor&, const QString&);
 
-    virtual double x(unsigned, unsigned);
+    virtual double x(unsigned);
+    virtual double y(unsigned);
+    virtual double z(unsigned);
 
 private:
     QMenu menu;

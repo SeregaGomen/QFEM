@@ -129,9 +129,9 @@ void TFunctionView::initObject()
     {
         for (auto j = 0u; j < elm.size2(); j++)
         {
-            data[j].setX(x(elm(i, j), 0) - x0[0]);
-            data[j].setY(x(elm(i, j), 1) - x0[1]);
-            data[j].setZ(x(elm(i, j), 2) - x0[2]);
+            data[j].setX(x(elm(i, j)) - x0);
+            data[j].setY(y(elm(i, j)) - y0);
+            data[j].setZ(z(elm(i, j)) - z0);
             data[j].setW(getValue(elm(i, j)));
         }
         if (mesh->is1D())
@@ -322,9 +322,20 @@ void TFunctionView::addTriangle(const QVector<QVector4D> &tri, QVector<GLfloat> 
     numObjectPoints += 3;
 }
 
-double TFunctionView::x(unsigned i, unsigned j)
+double TFunctionView::x(unsigned i)
 {
-    return TMeshView::x(i, j) + (j < delta.size() ? (delta[j] == nullptr ? 0 : params->ratio*radius*((*delta[j])[i]/maxTransformRatio)) : 0);
+    return TMeshView::x(i) + (delta.size() == 0 ? 0 : (mesh->isPlate() ? 0 : params->ratio*radius*((*delta[0])[i]/maxTransformRatio)));
 }
+
+double TFunctionView::y(unsigned i)
+{
+    return TMeshView::y(i) + (delta.size() < 2 ? 0 : (mesh->isPlate() ? 0 : params->ratio*radius*((*delta[1])[i]/maxTransformRatio)));
+}
+
+double TFunctionView::z(unsigned i)
+{
+    return TMeshView::z(i) + (delta.size() < 3 ? 0 : (mesh->isPlate() ? params->ratio*radius*((*delta[0])[i]/maxTransformRatio) : params->ratio*radius*((*delta[2])[i]/maxTransformRatio)));
+}
+
 
 // Si=((Sxx - Syy) ** 2 + (Sxx - Szz) ** 2 + (Syy - Szz) ** 2 + 6 * (Sxy ** 2 + Sxz ** 2 + Syz ** 2)) ** 0.5 / 1.41

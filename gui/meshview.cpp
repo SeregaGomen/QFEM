@@ -11,10 +11,12 @@
 
 TMeshView::TMeshView(TMesh* mesh, QWidget *parent) : QOpenGLWidget(parent), mesh(mesh), params(new TImageParams)
 {
-    array<double, 3> minX{ mesh->getMinX(0), mesh->getMinX(1), mesh->getMinX(2) },
-                     maxX{ mesh->getMaxX(0), mesh->getMaxX(1), mesh->getMaxX(2) };
-    x0[0] = (maxX[0] + minX[0])*0.5f; x0[1] = (maxX[1] + minX[1])*0.5f; x0[2] = (maxX[2] + minX[2])*0.5f;
-    radius = sqrt(pow(maxX[0] - minX[0], 2) + pow(maxX[1] - minX[1], 2) + pow(maxX[2] - minX[2], 2));
+    double minX{mesh->getMinX(0)}, minY{mesh->getMinX(1)}, minZ{mesh->getMinX(2)},
+           maxX{mesh->getMaxX(0)}, maxY{mesh->getMaxX(1)}, maxZ{mesh->getMaxX(2)};
+    x0 = (minX + maxX)*0.5f;
+    y0 = (minY + maxY)*0.5f;
+    z0 = (minZ + maxZ)*0.5f;
+    radius = sqrt(pow(maxX - minX, 2) + pow(maxY - minY, 2) + pow(maxZ - minZ, 2));
 
 
     setAutoFillBackground(false);
@@ -301,9 +303,19 @@ void TMeshView::initShaders()
 
 }
 
-double TMeshView::x(unsigned i, unsigned j)
+double TMeshView::x(unsigned i)
 {
-    return mesh->getX(i, j);
+    return mesh->getX(i, 0);
+}
+
+double TMeshView::y(unsigned i)
+{
+    return mesh->getX(i, 1);
+}
+
+double TMeshView::z(unsigned i)
+{
+    return mesh->getX(i, 2);
 }
 
 void TMeshView::initObject()
@@ -319,7 +331,7 @@ void TMeshView::initObject()
         vertices.reserve(elm.size1()*18);
         for (auto i = 0u; i < elm.size1(); i++)
             for (auto j = 0; j < 2; j++)
-                vertices.append({float(x(elm(i, j), 0) - x0[0]), 0, 0, color[0], color[1], color[2], 1, 0, 0}); // coordinates
+                vertices.append({float(x(elm(i, j)) - x0), 0, 0, color[0], color[1], color[2], 1, 0, 0}); // coordinates
         numObjectPoints = 2*mesh->getNumFE();
     }
     else
@@ -333,7 +345,7 @@ void TMeshView::initObject()
             {
                 for (auto j = 0; j < 3; j++)
                 {
-                    vertices.append({float(x(elm(i, index[l][j]), 0) - x0[0]), float(x(elm(i, index[l][j]), 1) - x0[1]), float(x(elm(i, index[l][j]), 2) - x0[2])}); // coordinates
+                    vertices.append({float(x(elm(i, index[l][j])) - x0), float(y(elm(i, index[l][j])) - y0), float(z(elm(i, index[l][j])) - z0)}); // coordinates
                     vertices.append(color); // colors
                     vertices.append({float(normal[0]), float(normal[1]), float(normal[2])}); // normals
                 }
@@ -378,9 +390,9 @@ void TMeshView::initMesh()
     {
         for (auto j = 0; j < len; j++)
         {
-            vertices.append({float(x(elm(i, index[j][0]), 0) - x0[0]), float(x(elm(i, index[j][0]), 1) - x0[1]), float(x(elm(i, index[j][0]), 2) - x0[2])});
+            vertices.append({float(x(elm(i, index[j][0])) - x0), float(y(elm(i, index[j][0])) - y0), float(z(elm(i, index[j][0])) - z0)});
             vertices.append(color);
-            vertices.append({float(x(elm(i, index[j][1]), 0) - x0[0]), float(x(elm(i, index[j][1]), 1) - x0[1]), float(x(elm(i, index[j][1]), 2) - x0[2])});
+            vertices.append({float(x(elm(i, index[j][1])) - x0), float(y(elm(i, index[j][1])) - y0), float(z(elm(i, index[j][1])) - z0)});
             vertices.append(color);
         }
     }

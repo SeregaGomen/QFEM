@@ -28,7 +28,9 @@ private:
     void createTriangle3D(const QVector<QVector4D>&, QVector<GLfloat>&);
     void addTriangle(const QVector<QVector4D>&, QVector<GLfloat>&, const array<float, 3>&, int);
 
-    double x(unsigned i, unsigned j) override;
+    double x(unsigned i) override;
+    double y(unsigned i) override;
+    double z(unsigned i) override;
 
     virtual double getValue(unsigned i)
     {

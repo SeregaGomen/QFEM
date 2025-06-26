@@ -79,28 +79,28 @@ void TParameterView::createLoads(void)
         }
         else*/ if (mesh->getDimension() == 2)
         {
-            x1.setX(mesh->getX(i, 0) - x0[0]);
-            x1.setY(mesh->getX(i, 1) - x0[1]);
+            x1.setX(mesh->getX(i, 0) - x0);
+            x1.setY(mesh->getX(i, 1) - y0);
             if (mesh->isPlate())
             {
-                x2.setX(mesh->getX(i, 0) + (*vertex)[i].x()*w/maxValue - x0[0]);
-                x2.setY(mesh->getX(i, 1) + (*vertex)[i].y()*w/maxValue - x0[1]);
-                x2.setZ((*vertex)[i].z()*w/maxValue - x0[2]);
+                x2.setX(mesh->getX(i, 0) + (*vertex)[i].x()*w/maxValue - x0);
+                x2.setY(mesh->getX(i, 1) + (*vertex)[i].y()*w/maxValue - y0);
+                x2.setZ((*vertex)[i].z()*w/maxValue - z0);
             }
             else
             {
-                x2.setX(mesh->getX(i, 0) + (*vertex)[i].x()*w/maxValue - x0[0]);
-                x2.setY(mesh->getX(i, 1) + (*vertex)[i].y()*w/maxValue - x0[1]);
+                x2.setX(mesh->getX(i, 0) + (*vertex)[i].x()*w/maxValue - x0);
+                x2.setY(mesh->getX(i, 1) + (*vertex)[i].y()*w/maxValue - y0);
             }
         }
         else
         {
-            x1.setX(mesh->getX(i, 0) - x0[0]);
-            x1.setY(mesh->getX(i, 1) - x0[1]);
-            x1.setZ(mesh->getX(i, 2) - x0[2]);
-            x2.setX(mesh->getX(i, 0) + (*vertex)[i].x()*w/maxValue - x0[0]);
-            x2.setY(mesh->getX(i, 1) + (*vertex)[i].y()*w/maxValue - x0[1]);
-            x2.setZ(mesh->getX(i, 2) + (*vertex)[i].z()*w/maxValue - x0[2]);
+            x1.setX(mesh->getX(i, 0) - x0);
+            x1.setY(mesh->getX(i, 1) - y0);
+            x1.setZ(mesh->getX(i, 2) - z0);
+            x2.setX(mesh->getX(i, 0) + (*vertex)[i].x()*w/maxValue - x0);
+            x2.setY(mesh->getX(i, 1) + (*vertex)[i].y()*w/maxValue - y0);
+            x2.setZ(mesh->getX(i, 2) + (*vertex)[i].z()*w/maxValue - z0);
         }
         vertices.append({x1.x(), x1.y(), x1.z(), color[0], color[1], color[2]});
         vertices.append({x2.x(), x2.y(), x2.z(), color[0], color[1], color[2]});
@@ -138,9 +138,9 @@ void TParameterView::createBoundaryConditions(void)
             /*if (mesh->is1D())
                 vertices.append({float(mesh->getX(i, 0) - x0[0]), 0, 0, color[0], color[1], color[2]});
             else */if (mesh->is2D() or mesh->isPlate())
-                vertices.append({float(mesh->getX(i, 0) - x0[0]), float(mesh->getX(i, 1) - x0[1]), 0, color[0], color[1], color[2]});
+                vertices.append({float(mesh->getX(i, 0) - x0), float(mesh->getX(i, 1) - y0), 0, color[0], color[1], color[2]});
             else
-                vertices.append({float(mesh->getX(i, 0) - x0[0]), float(mesh->getX(i, 1) - x0[1]), float(mesh->getX(i, 2) - x0[2]), color[0], color[1], color[2]});
+                vertices.append({float(mesh->getX(i, 0) - x0), float(mesh->getX(i, 1) - y0), float(mesh->getX(i, 2) - z0), color[0], color[1], color[2]});
             numPoints++;
             //(*vertex)[i].setW(0);
         }
