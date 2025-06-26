@@ -136,7 +136,7 @@ double TFEMParams::getMinStress(void)
     for (auto it : plist)
         if (it.getType() == ParamType::StressStrainCurve)
         {
-            if (not it.getStressStrainCurve().size1())
+            if (!it.getStressStrainCurve().size1())
                 throw ErrorCode::EStressStrainCurve;
             if (it.getStressStrainCurve().size1() && it.getStressStrainCurve(1, 0) < res)
                 res = it.getStressStrainCurve(1, 0);
@@ -152,7 +152,7 @@ bool TFEMParams::getPredicateValue(TParameter& p, const vector<double>& cx)
 
     if (p.isFuncPredicate())
         return bool(p.getFuncPredicate(cx[0], cx[1], cx[2]));
-    if (not p.getPredicate().length())
+    if (!p.getPredicate().length())
         return true;
 
     parser.set_variables(variables);
@@ -168,7 +168,7 @@ bool TFEMParams::getPredicateValue(TParameter& p, double cx, double cy, double c
 
     if (p.isFuncPredicate())
         return bool(p.getFuncPredicate(cx, cy, cz));
-    if (not p.getPredicate().length())
+    if (!p.getPredicate().length())
         return true;
 
     parser.set_variables(variables);
@@ -187,7 +187,7 @@ double TFEMParams::getExpressionValue(TParameter &p, const vector<double> &cx)
 
     if (p.isFuncExpression())
         return p.getFuncExpression(cx[0], cx[1], cx[2], (cx.size() == 4) ? cx[3] : 0.0);
-    if (not p.getExpression().length())
+    if (!p.getExpression().length())
         return p.getValue();
 
     parser.set_variables(variables);
@@ -204,7 +204,7 @@ double TFEMParams::getExpressionValue(TParameter& p, double cx, double cy, doubl
 
     if (p.isFuncExpression())
         return p.getFuncExpression(cx, cy, cz, t);
-    if (not p.getExpression().length())
+    if (!p.getExpression().length())
         return p.getValue();
 
     parser.set_variables(variables);
@@ -256,9 +256,9 @@ bool TFEMParams::write(ofstream& out)
 
     // Вспомогательные параметры
     out << variables.size() << endl;
-    for (map<string, double>::iterator it = variables.begin(); it not_eq variables.end(); ++it)
+    for (map<string, double>::iterator it = variables.begin(); it != variables.end(); ++it)
         out << it->first.c_str() << ' ' << it->second << endl;
-    return not out.fail();
+    return !out.fail();
 }
 //--------------------------------------------------------------------
 bool TFEMParams::read(ifstream& in)
@@ -317,7 +317,7 @@ bool TFEMParams::read(ifstream& in)
         in >> key >> value;
         variables[key] = value;
     }
-    return not in.fail();
+    return !in.fail();
 }
 //--------------------------------------------------------------------
 

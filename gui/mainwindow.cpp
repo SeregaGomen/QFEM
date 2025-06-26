@@ -175,7 +175,7 @@ void TMainWindow::slotErorrMsg(QString msg)
 {
     QColor tc = terminal->textColor();
 
-    if (msg not_eq "\n")
+    if (msg != "\n")
         terminal->setTextColor(QColor("red"));
     terminal->insertPlainText(msg);
     terminal->setTextColor(tc);
@@ -211,7 +211,7 @@ void TMainWindow::slotChangeTab(int nTab)
 //    ui->actionAnalyse->setEnabled(isEnabled);
     ui->actionAnalyse->setEnabled(femProcessor->isCalculated());
     ui->actionSetupImage->setEnabled(isEnabled);
-    if (/*tabWidget->currentIndex() == 0 and*/ not isUntitled)
+    if (/*tabWidget->currentIndex() == 0 and*/ !isUntitled)
         ui->actionObjectParameters->setEnabled(true);
     else
         ui->actionObjectParameters->setEnabled(false);
@@ -223,7 +223,7 @@ void TMainWindow::slotCloseTab(int nTab)
         return;
 
 
-    if (nTab not_eq 0)
+    if (nTab != 0)
     {
         tabWidget->removeTab(nTab);
         if (nTab == 1 and ui->actionObjectParameters->isChecked())
@@ -303,7 +303,7 @@ void TMainWindow::checkMenuState(void)
     ui->actionSurfaceAndMesh->setEnabled(not isUntitled and isEnabled);
     ui->actionRestore->setEnabled(not isUntitled);
     ui->actionObjectParameters->setEnabled(not isUntitled);
-    ui->actionStart->setEnabled(not isUntitled and not thread->isRunning());
+    ui->actionStart->setEnabled(not isUntitled and !thread->isRunning());
     ui->actionStop->setEnabled(not isUntitled and thread->isRunning());
     ui->actionAnalyse->setEnabled(not isUntitled and femProcessor->isCalculated());
     ui->actionAddExpression->setEnabled(not isUntitled and femProcessor->isCalculated());
@@ -339,7 +339,7 @@ void TMainWindow::slotOpenDocument(void)
     QString fileName = QFileDialog::getOpenFileName(this, tr("Opening a document"), windowFilePath(), tr("QFEM problem files (*.qfpf);;Mesh files (*.trp *.trpa *.vol *.mesh *.msh *.ele *.face *.node);;QFEM result files (*.qres *.res);;All files(*)"));
     if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
         qobject_cast<TMeshView*>(tabWidget->currentWidget())->startTimer();
-    if (not fileName.isEmpty())
+    if (!fileName.isEmpty())
         loadFile(fileName);
 
 }
@@ -462,7 +462,7 @@ void TMainWindow::slotSaveAsDocument(void)
             fullFileName = QFileDialog::getSaveFileName(this,tr("Saving the document"),fileName,tr("QFEM Problem files (*.qfpf)"));
     if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
         qobject_cast<TMeshView*>(tabWidget->currentWidget())->startTimer();
-    if (not fullFileName.isEmpty())
+    if (!fullFileName.isEmpty())
         saveDocument(fullFileName);
 }
 
@@ -504,7 +504,7 @@ bool TMainWindow::loadMesh(QString fileName)
     QApplication::setOverrideCursor(Qt::BusyCursor);
     ret = femObject->setMeshFile(file);
     QApplication::restoreOverrideCursor();
-    if (not ret)
+    if (!ret)
     {
         QMessageBox::critical(this, tr("Error"), tr("Error reading file %1").arg(fileName));
         return false;
@@ -676,7 +676,7 @@ bool TMainWindow::checkParams(void)
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Young's modulus!"));
         return false;
     }
-    if (femObject->getParams().plist.findParameter(ParamType::PoissonRatio) == 0 and not femObject->getMesh().is1D())
+    if (femObject->getParams().plist.findParameter(ParamType::PoissonRatio) == 0 and !femObject->getMesh().is1D())
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified Poisson's ratio!"));
         return false;
@@ -697,7 +697,7 @@ bool TMainWindow::checkParams(void)
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified FE thickness!"));
         return false;
     }
-    if (femObject->getParams().pMethod not_eq PlasticityMethod::Linear and (femObject->getParams().loadStep <= 0 or femObject->getParams().plist.findParameter(ParamType::StressStrainCurve) == 0))
+    if (femObject->getParams().pMethod != PlasticityMethod::Linear and (femObject->getParams().loadStep <= 0 or femObject->getParams().plist.findParameter(ParamType::StressStrainCurve) == 0))
     {
         QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified nonlinear parameters!"));
         return false;
@@ -742,7 +742,7 @@ void TMainWindow::startSolvingProblem(void)
     try
     {
         // Загрузка параметров
-        if (not pForm->getParams())
+        if (!pForm->getParams())
             return;
 
         // Запуск расчета
@@ -833,7 +833,7 @@ void TMainWindow::showProtocol(QString fileName)
             tabWidget->setCurrentIndex(i);
             break;
         }
-    if (not isFind)
+    if (!isFind)
     {
         QTextEdit* ed = new QTextEdit(webOut);
 
@@ -848,7 +848,7 @@ void TMainWindow::showProtocol(QString fileName)
         QFile file(fileName);
         QTextStream out(&file);
 
-        if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
             return;
@@ -880,7 +880,7 @@ void TMainWindow::sayParams(QString& webOut)
         sayParam(webOut, tr("Damping ratio"), ParamType::Damping, false);
     }
     // Упруго-пластические параметры задачи
-    if (femObject->getParams().pMethod not_eq PlasticityMethod::Linear)
+    if (femObject->getParams().pMethod != PlasticityMethod::Linear)
     {
         num = 1;
         webOut += "<br>" + ((femObject->getParams().pMethod == PlasticityMethod::MVS) ? tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of variable stiffness")) : tr("Method of elastic-plastic analysis: <b>%1</b>").arg(tr("method of elastic solutions Ilyushin"))) + "<br>";
@@ -1001,7 +1001,7 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, ParamType para
         }
         for (auto &it: femObject->getParams().plist)
         {
-            if (it.getType() not_eq param)
+            if (it.getType() != param)
                 continue;
             predicate = QString(it.getPredicate().c_str()).replace(QString("<"), QString("&lt;")).replace(QString(">"), QString("&gt;"));
             //predicate = QString(it.getPredicate().c_str()).replace(QString("<="), QString("&lt;=")).replace(QString(">="), QString("&gt;=")).replace(QString("<"), QString("&lt;")).replace(QString(">"), QString("&gt;"));
@@ -1068,7 +1068,7 @@ bool TMainWindow::saveQFPF(QString fileName)
 
     // Запись в файл
     file.setFileName(fileName);
-    if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
            return false;
     file.write(doc.toJson(), doc.toJson().length());
     file.close();
@@ -1107,7 +1107,7 @@ bool TMainWindow::loadQFPF(QString fileName)
     obj = doc.object();
 
     // Проверяем заголовок
-    if (obj.value(QString("Header"))["Title"] not_eq "QFEM problem file")
+    if (obj.value(QString("Header"))["Title"] != "QFEM problem file")
     {
         QMessageBox::critical(nullptr, QObject::tr("Error"), QObject::tr("Wrong format file %1").arg(fileName));
         return false;
@@ -1119,10 +1119,10 @@ bool TMainWindow::loadQFPF(QString fileName)
     // Проверяем наличие файла сетки
     fn = meshFile;
     fi.setFile(fn);
-    if (not fi.exists())
+    if (!fi.exists())
     {
         // Такого файла нет
-        if ((fn = fi.fileName()) not_eq meshFile)
+        if ((fn = fi.fileName()) != meshFile)
         {
             // В случае, если задан полный путь, выводим сообщение об ошибке
             QMessageBox::critical(this, tr("Error"), tr("Error reading file %1").arg(meshFile));
@@ -1135,7 +1135,7 @@ bool TMainWindow::loadQFPF(QString fileName)
 
 
     // Загрузка сетки
-    if (not loadMesh(meshFile))
+    if (!loadMesh(meshFile))
         return false;
 
 
@@ -1168,7 +1168,7 @@ bool TMainWindow::loadQFPF(QString fileName)
             type = static_cast<ParamType>(bc.at(i)["Type"].toVariant().toInt());
             if (type == ParamType::StressStrainCurve)
             {
-                if (not pForm->decodeStressStarinCurve(expr, ssc))
+                if (!pForm->decodeStressStarinCurve(expr, ssc))
                     return false;
                 params.plist.addStressStrainCurve(ssc, pred);
             }
@@ -1206,7 +1206,7 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
             isFind = true;
             tabWidget->setCurrentIndex(i);
         }
-    if (not isFind)
+    if (!isFind)
     {
         for (auto i = 0u; i < femObject->getMesh().getFreedom(); i++)
             delta.push_back(&femObject->getResult(i).getResults());
@@ -1227,7 +1227,7 @@ unsigned TMainWindow::getTimeDeltaIndex(QString funName)
 
     QApplication::setOverrideCursor(Qt::BusyCursor);
     if (femProcessor->getFEMObject()->getParams().fType == FEMType::DynamicProblem)
-        if ((pos1 = funName.lastIndexOf("(")) not_eq -1)
+        if ((pos1 = funName.lastIndexOf("(")) != -1)
         {
             pos2 = funName.lastIndexOf(")");
             t = funName.mid(pos1, pos2 - pos1 + 1);
@@ -1275,7 +1275,7 @@ void TMainWindow::repaintResults(void)
     bool isCalc = femProcessor->getFEMObject()->isCalculated();
 
     for (int i = 1; i < tabWidget->count(); i++)
-        //if ((ptr = qobject_cast<TGLFunction*>(tabWidget->widget(i))) not_eq nullptr)
+        //if ((ptr = qobject_cast<TGLFunction*>(tabWidget->widget(i))) != nullptr)
         if ((ptr = qobject_cast<TFunctionView*>(tabWidget->widget(i))) != nullptr)
         {
             if (isCalc)
@@ -1468,7 +1468,7 @@ bool TMainWindow::saveQRES(QString fileName)
 
     // Запись в файл
     file.setFileName(fileName);
-    if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
     file.write(doc.toJson(), doc.toJson().length());
     file.close();
@@ -1624,7 +1624,7 @@ bool TMainWindow::loadRES(QString fileName)
     QApplication::setOverrideCursor(Qt::BusyCursor);
     ret = femProcessor->getFEMObject()->loadResult(fileName.toStdString());
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    if (not ret)
+    if (!ret)
     {
         QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
         return false;
@@ -1645,7 +1645,7 @@ bool TMainWindow::loadQRES(QString fileName)
 //    cout << endl;
     // Чтение из файла
     file.setFileName(fileName);
-    if (not file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::critical(this, tr("Error"), tr("Error opening file %1").arg(fileName));
         return false;
@@ -1696,19 +1696,19 @@ bool TMainWindow::calcExpression(QString expression, QString& name)
 
     // Выделяем имя новой переменной
     name = QString("%1").arg(expression.left(int(expression.toStdString().find("="))).trimmed());
-    if (femObject->getResult().index(name.toStdString()) not_eq -1)
+    if (femObject->getResult().index(name.toStdString()) != -1)
     {
         QMessageBox::critical(this, tr("Error"), tr("This function is is already exists!"));
         return false;
     }
     // Выделяем выражение
-    if (not expression.contains('='))
+    if (!expression.contains('='))
     {
         QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
         return false;
     }
     exp = expression.mid(int(expression.toStdString().find("=") + 1)).trimmed();
-    if (not exp.trimmed().length())
+    if (!exp.trimmed().length())
     {
         QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
         return false;
@@ -1722,7 +1722,7 @@ bool TMainWindow::calcExpression(QString expression, QString& name)
         for (unsigned j = 0; j < femObject->getMesh().getDimension(); j++)
             parser.set_variable(femObject->getParams().names[j],femObject->getMesh().getX(i, j));
         parser.set_expression(exp.toStdString().c_str());
-        if (parser.get_error() not_eq ErrorCode::Undefined)
+        if (parser.get_error() != ErrorCode::Undefined)
         {
             QMessageBox::critical(this, tr("Error"), tr("Invalid expression!"));
             return false;
@@ -1770,7 +1770,7 @@ void TMainWindow::slotAppSettings(void)
     TAppSetupDialog* dlg = new TAppSetupDialog(langNo, numThread, isAutoSaveResults, isAutoScroll, isAutoSaveProtocol, this);
 
     dlg->changeLanguage();
-    if (dlg->exec() not_eq QDialog::Accepted)
+    if (dlg->exec() != QDialog::Accepted)
         return;
 
     switch ((langNo = dlg->getLangNo()))
@@ -1799,7 +1799,7 @@ void TMainWindow::slotSaveResults(void)
     if (qobject_cast<TMeshView*>(tabWidget->currentWidget()))
         qobject_cast<TMeshView*>(tabWidget->currentWidget())->startTimer();
     QFileInfo info(fileName);
-    if (not fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
         if (info.suffix().toUpper() == "TXT")
             femProcessor->getFEMObject()->printResult(fileName.toStdString());
@@ -1882,7 +1882,7 @@ void TMainWindow::slotShowParam(int type)
             qobject_cast<TParameterView*>(tabWidget->widget(i))->redraw(&bcProcessor->getVertex());
             tabWidget->setCurrentIndex(i);
         }
-    if (not isFind)
+    if (!isFind)
     {
         tabWidget->addTab(new TParameterView(&femProcessor->getFEMObject()->getMesh(), &bcProcessor->getVertex(), static_cast<ParamType>(type), this), tabName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);

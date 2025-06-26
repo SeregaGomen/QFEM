@@ -22,14 +22,14 @@ bool TEigenSolver::solve(vector<double> &r, double, bool&)
     msg->setProcess(ProcessCode::PreparingSystemEquation);
     solver.compute(stiffness);
     msg->stop();
-    if (solver.info() not_eq Success)
+    if (solver.info() != Success)
         throw ErrorCode::EEquationNotSolved;
 
     msg->setProcess(ProcessCode::SolutionSystemEquation);
     x = solver.solve(load);
     msg->stop();
 
-    if (solver.info() not_eq Success)
+    if (solver.info() != Success)
         throw ErrorCode::EEquationNotSolved;
 
     r.resize(stiffness.rows());
