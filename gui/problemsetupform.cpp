@@ -224,7 +224,8 @@ void TProblemSetupForm::enabledParams(void)
     ui->textWtt->setVisible(femObject->getMesh().getFreedom() > 2);
 
     // Толщина элемента недоступна для 3D-задачи
-    ui->gbThickness->setEnabled((femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D()) ? true : false);
+    //ui->gbThickness->setEnabled((femObject->getMesh().isPlate() || femObject->getMesh().isShell() || femObject->getMesh().is1D() || femObject->getMesh().is2D()) ? true : false);
+    ui->gbThickness->setEnabled(femObject->getMesh().is3D() ? false : true);
 
 
     ui->gbPoissonRatio->setEnabled(femObject->getMesh().getFreedom() > 1);

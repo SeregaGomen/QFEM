@@ -324,17 +324,17 @@ void TFunctionView::addTriangle(const QVector<QVector4D> &tri, QVector<GLfloat> 
 
 double TFunctionView::x(unsigned i)
 {
-    return TMeshView::x(i) + (delta.size() == 0 ? 0 : (mesh->isPlate() ? 0 : params->ratio*radius*((*delta[0])[i]/maxTransformRatio)));
+    return TMeshView::x(i) + (delta.size() == 0 || delta[0] == nullptr ? 0 : (mesh->isPlate() ? 0 : params->ratio*radius*((*delta[0])[i]/maxTransformRatio)));
 }
 
 double TFunctionView::y(unsigned i)
 {
-    return TMeshView::y(i) + (delta.size() < 2 ? 0 : (mesh->isPlate() ? 0 : params->ratio*radius*((*delta[1])[i]/maxTransformRatio)));
+    return TMeshView::y(i) + (delta.size() < 2 || delta[1] == nullptr ? 0 : (mesh->isPlate() ? 0 : params->ratio*radius*((*delta[1])[i]/maxTransformRatio)));
 }
 
 double TFunctionView::z(unsigned i)
 {
-    return TMeshView::z(i) + (delta.size() < 3 ? 0 : (mesh->isPlate() ? params->ratio*radius*((*delta[0])[i]/maxTransformRatio) : params->ratio*radius*((*delta[2])[i]/maxTransformRatio)));
+    return TMeshView::z(i) + (delta.size() < 3  || delta[2] == nullptr? 0 : (mesh->isPlate() ? params->ratio*radius*((*delta[0])[i]/maxTransformRatio) : params->ratio*radius*((*delta[2])[i]/maxTransformRatio)));
 }
 
 
