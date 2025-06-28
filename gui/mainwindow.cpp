@@ -996,7 +996,7 @@ void TMainWindow::sayParam(QString& webOut, const QString& title, ParamType para
             webOut += QString("<th>%1</th>").arg(femObject->getParams().names[0].c_str());
             if (femObject->getMesh().getDimension() > 1)
                 webOut += QString("<th>%1</th>").arg(femObject->getParams().names[1].c_str());
-            if (femObject->getMesh().getDimension() > 2)
+            if (femObject->getMesh().getDimension() > 2 || femObject->getMesh().isPlate())
                 webOut += QString("<th>%1</th>").arg(femObject->getParams().names[2].c_str());
             webOut += "</tr>";
         }

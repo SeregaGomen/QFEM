@@ -950,6 +950,7 @@ void TProblemSetupForm::setBoundaryConditionValue(void)
     removeAllRows(ui->twBC);
 
     Titles << tr("Expression") << tr("Predicate");
+/*
     if (femObject->getMesh().isPlate())
     {
         Titles << ui->twFuncName->item(2, 1)->text();   // W
@@ -962,6 +963,13 @@ void TProblemSetupForm::setBoundaryConditionValue(void)
         Titles << ui->twFuncName->item(1, 1)->text();   // V
         Titles << ui->twFuncName->item(2, 1)->text();   // W
     }
+*/
+    Titles << ui->textCoordX->text();
+    Titles << ui->textCoordY->text();
+    Titles << ui->textCoordZ->text();
+
+
+
     ui->twBC->setHorizontalHeaderLabels(Titles);
 
     ui->twBC->setColumnWidth(0, 320);
