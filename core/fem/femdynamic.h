@@ -103,24 +103,24 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::startProce
 template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::ansambleLocalMatrix(TFE &fe, unsigned i)
 {
     unsigned freedom = fe.getFreedom(),
-             size = fe.getSize() * fe.getFreedom();
+             size = fe.getSize()*fe.getFreedom();
 
     // Учет матрицы
     for (unsigned l = 0; l < size; l++)
     {
         for (unsigned k = l; k < size; k++)
         {
-            TFEMStatic<SOLVER, FE>::solver.addStiffness(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            TFEMStatic<SOLVER, FE>::solver.addMass(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, k / freedom) * freedom + k % freedom);
-            TFEMStatic<SOLVER, FE>::solver.addDamping(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            TFEMStatic<SOLVER, FE>::solver.addStiffness(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, k/freedom)*freedom + k % freedom);
+            TFEMStatic<SOLVER, FE>::solver.addMass(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, k/freedom)*freedom + k % freedom);
+            TFEMStatic<SOLVER, FE>::solver.addDamping(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, k/freedom)*freedom + k % freedom);
             if (l != k)
             {
-                TFEMStatic<SOLVER, FE>::solver.addStiffness(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom);
-                TFEMStatic<SOLVER, FE>::solver.addMass(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom);
-                TFEMStatic<SOLVER, FE>::solver.addDamping(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, k / freedom) * freedom + k % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                TFEMStatic<SOLVER, FE>::solver.addStiffness(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, k/freedom)*freedom + k % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom);
+                TFEMStatic<SOLVER, FE>::solver.addMass(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, k/freedom)*freedom + k % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom);
+                TFEMStatic<SOLVER, FE>::solver.addDamping(fe.getStiffnessMatrix(l, k), TFEMStatic<SOLVER, FE>::mesh->getFE(i, k/freedom)*freedom + k % freedom, TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom);
             }
         }
-        TFEMStatic<SOLVER, FE>::solver.addLoad(fe.getLoad(l), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l / freedom) * freedom + l % freedom);
+        TFEMStatic<SOLVER, FE>::solver.addLoad(fe.getLoad(l), TFEMStatic<SOLVER, FE>::mesh->getFE(i, l/freedom)*freedom + l % freedom);
     }
 }
 //---------------------------------------------------------
@@ -206,15 +206,15 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::calcDynami
     for (unsigned i = 0; i < TFEM::mesh->getDimension(); i++)
         for (unsigned j = 0; j < TFEM::mesh->getNumVertex(); j++)
         {
-            ut = (results[i][j] - u0[i][j]) / TFEM::params.th;
+            ut = (results[i][j] - u0[i][j])/TFEM::params.th;
             utt = (ut - u0[TFEM::mesh->getDimension() + i][j])/TFEM::params.th;
 
-            results[results.size1() - 2 * TFEM::mesh->getDimension() + i][j] = ut;
+            results[results.size1() - 2*TFEM::mesh->getDimension() + i][j] = ut;
             results[results.size1() - TFEM::mesh->getDimension() + i][j] = utt;
             // Запоминаем результаты текущей итерации
             u0[i][j] = results[i][j];
-            u0[TFEM::mesh->getDimension() + i][j] = results[results.size1() - 2 * TFEM::mesh->getDimension() + i][j];
-            u0[2 * TFEM::mesh->getDimension() + i][j] = results[results.size1() - TFEM::mesh->getDimension() + i][j];
+            u0[TFEM::mesh->getDimension() + i][j] = results[results.size1() - 2*TFEM::mesh->getDimension() + i][j];
+            u0[2*TFEM::mesh->getDimension() + i][j] = results[results.size1() - TFEM::mesh->getDimension() + i][j];
         }
 }
 //-----------------------------------------------------------------------------
@@ -225,10 +225,10 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDyna
     unsigned nvtx = TFEM::mesh->getNumVertex(),
              freedom = TFEM::mesh->getFreedom(),
              dim = TFEM::mesh->getDimension(),
-             size = nvtx * freedom;
-    double k1 = 3.0 / (TFEM::params.theta * TFEM::params.th),
-           k2 = 6.0 / (TFEM::params.theta * TFEM::params.theta * TFEM::params.th * TFEM::params.th),
-           k3 = 0.5 * TFEM::params.theta * TFEM::params.th;
+             size = nvtx*freedom;
+    double k1 = 3.0/(TFEM::params.theta*TFEM::params.th),
+           k2 = 6.0/(TFEM::params.theta*TFEM::params.theta*TFEM::params.th*TFEM::params.th),
+           k3 = 0.5*TFEM::params.theta*TFEM::params.th;
     vector<double> load(size),
                    u1(size),
                    u2(size),
@@ -242,14 +242,14 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDyna
     for (unsigned i = 0; i < nvtx; i++)
         for (unsigned j = 0; j < freedom; j++)
         {
-            u1[i * freedom + j] = (k1 * u0[j][i] + 2.0 * k2 * u0[u0.size1() - 2 * dim + j][i] + 2.0 * u0[u0.size1() - dim + j][i]) / k2;
-            u2[i * freedom + j] = (k2 * u0[j][i] + 2.0 * u0[u0.size1() - 2 * dim + j][i] + k3 * u0[u0.size1() - dim + j][i]) / k1;
+            u1[i*freedom + j] = (k1*u0[j][i] + 2.0*k2*u0[u0.size1() - 2*dim + j][i] + 2.0*u0[u0.size1() - dim + j][i])/k2;
+            u2[i*freedom + j] = (k2*u0[j][i] + 2.0*u0[u0.size1() - 2*dim + j][i] + k3*u0[u0.size1() - dim + j][i])/k1;
         }
     for (auto i = 0u; i < size; i++)
         for (auto j = 0u; j < size; j++)
         {
-            r1[i] += TFEMStatic<SOLVER, FE>::solver.getMass(i, j) * u1[j];
-            r2[i] += TFEMStatic<SOLVER, FE>::solver.getDamping(i, j) * u2[j];
+            r1[i] += TFEMStatic<SOLVER, FE>::solver.getMass(i, j)*u1[j];
+            r2[i] += TFEMStatic<SOLVER, FE>::solver.getDamping(i, j)*u2[j];
         }
 
     // Формирование столбца правой части с учетом "динамической" составляющей
@@ -264,13 +264,13 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDyna
 template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDynamicMatrix(double th, double theta)
 {
     double val,
-           k1 = 3.0 / (theta * th),
-           k2 = 6.0 / (theta * theta * th * th);
+           k1 = 3.0/(theta*th),
+           k2 = 6.0/(theta*theta*th*th);
 
-    for (unsigned i = 0; i < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); i++)
-        for (unsigned j = 0; j < TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom(); j++)
+    for (unsigned i = 0; i < TFEM::mesh->getNumVertex()*TFEM::mesh->getFreedom(); i++)
+        for (unsigned j = 0; j < TFEM::mesh->getNumVertex()*TFEM::mesh->getFreedom(); j++)
         {
-            val = k1 * TFEMStatic<SOLVER, FE>::solver.getDamping(i, j) + k2 * TFEMStatic<SOLVER, FE>::solver.getMass(i, j);
+            val = k1*TFEMStatic<SOLVER, FE>::solver.getDamping(i, j) + k2*TFEMStatic<SOLVER, FE>::solver.getMass(i, j);
             if (val != 0.0)
                 TFEMStatic<SOLVER, FE>::solver.addStiffness(val, i, j);
         }

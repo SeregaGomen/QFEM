@@ -55,7 +55,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
              min,
              sec;
     vector<double> res,
-                   load(mesh->getNumVertex() * mesh->getFreedom());
+                   load(mesh->getNumVertex()*mesh->getFreedom());
     ostringstream out;
 
     isProcessStarted = true;
@@ -102,18 +102,18 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::startProces
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER, FE>::ansambleLocalMatrix(TFE &fe, unsigned i)
 {
     unsigned freedom = mesh->getFreedom(),
-             size = fe.getSize() * fe.getFreedom();
+             size = fe.getSize()*fe.getFreedom();
 
     // Учет матрицы
     for (unsigned l = 0; l < size; l++)
     {
         for (unsigned k = l; k < size; k++)
         {
-            solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, l / freedom) * freedom + l % freedom, mesh->getFE(i, k / freedom) * freedom + k % freedom);
+            solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, l/freedom)*freedom + l % freedom, mesh->getFE(i, k/freedom)*freedom + k % freedom);
             if (l != k)
-                solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, k / freedom) * freedom + k % freedom, mesh->getFE(i, l / freedom) * freedom + l % freedom);
+                solver.addStiffness(fe.getStiffnessMatrix(l, k), mesh->getFE(i, k/freedom)*freedom + k % freedom, mesh->getFE(i, l/freedom)*freedom + l % freedom);
         }
-        solver.addLoad(fe.getLoad(l), mesh->getFE(i, l / freedom) * freedom + l % freedom);
+        solver.addLoad(fe.getLoad(l), mesh->getFE(i, l/freedom)*freedom + l % freedom);
     }
 }
 //-----------------------------------------------------------------------------------------
@@ -177,13 +177,13 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::avgResults
 //-----------------------------------------------------------------------------------------
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcGlobalMatrix(bool isStatic)
 {
-    unsigned step = TFEM::mesh->getNumFE() / numThread;
+    unsigned step = TFEM::mesh->getNumFE()/numThread;
     ErrorCode error = ErrorCode::Undefined;
     vector<thread> thr(numThread);
 
     msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingDynamicMatrix, 1, TFEM::mesh->getNumFE(), 5);
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getMatrix, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, isStatic, ref(error));
+        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getMatrix, this, i*step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1)*step, isStatic, ref(error));
     for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });
     if (error != ErrorCode::Undefined)
         throw error;
@@ -222,14 +222,14 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getMatrix(
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcBoundaryCondition(void)
 {
     ErrorCode error = ErrorCode::Undefined;
-    unsigned step = TFEM::mesh->getNumVertex() / numThread;
+    unsigned step = TFEM::mesh->getNumVertex()/numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::BoundaryCondition))
     {
         msg->setProcess(ProcessCode::CalcBoundaryCondition, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getBoundaryCondition, this, i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getBoundaryCondition, this, i*step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1)*step, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error != ErrorCode::Undefined)
             throw error;
@@ -262,11 +262,11 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getBoundar
                     {
                         val = params.getExpressionValue(it, coord);
                         if (contains(direct, Direction::X))
-                            solver.setBoundaryCondition(i * freedom + 0, val);
+                            solver.setBoundaryCondition(i*freedom + 0, val);
                         if (contains(direct, Direction::Y))
-                            solver.setBoundaryCondition(i * freedom + 1, val);
+                            solver.setBoundaryCondition(i*freedom + 1, val);
                         if (contains(direct, Direction::Z))
-                            solver.setBoundaryCondition(i * freedom + 2, val);
+                            solver.setBoundaryCondition(i*freedom + 2, val);
                     }
                 }
         }
@@ -282,14 +282,14 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getBoundar
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcConcentratedLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
-    unsigned step = TFEM::mesh->getNumVertex() / numThread;
+    unsigned step = TFEM::mesh->getNumVertex()/numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::ConcentratedLoad))
     {
         msg->setProcess(ProcessCode::GeneratingConcentratedLoad, 1, TFEM::mesh->getNumVertex());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getConcentratedLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getConcentratedLoad, this, ref(load), i*step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1)*step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error != ErrorCode::Undefined)
             throw error;
@@ -322,11 +322,11 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getConcent
                         continue;
                     val = params.getExpressionValue(it, coord);
                     if (contains(direct, Direction::X)) // X
-                        load[i * mesh->getFreedom() + 0] += val;
+                        load[i*mesh->getFreedom() + 0] += val;
                     if (contains(direct, Direction::Y)) // Y
-                        load[i * mesh->getFreedom() + 1] += val;
+                        load[i*mesh->getFreedom() + 1] += val;
                     if (contains(direct, Direction::Z)) // Z (W - для пластины обрабатывается особо)
-                        load[i * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val;
+                        load[i*mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val;
                 }
         }
     }
@@ -341,14 +341,14 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getConcent
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcSurfaceLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
-    unsigned step = TFEM::mesh->getNumBE() / numThread;
+    unsigned step = TFEM::mesh->getNumBE()/numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::SurfaceLoad))
     {
         msg->setProcess(ProcessCode::GeneratingSurfaceLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getSurfaceLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getSurfaceLoad, this, ref(load), i*step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1)*step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error != ErrorCode::Undefined)
             throw error;
@@ -382,15 +382,15 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
                     {
                         mesh->getCenterBE(i, coord);
                         coord.push_back(t);
-                        val = params.getExpressionValue(it, coord) * mesh->beVolume(i);
+                        val = params.getExpressionValue(it, coord)*mesh->beVolume(i);
                         for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                         {
                             if (contains(direct, Direction::X)) // X
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
+                                load[mesh->getBE(i, k)*mesh->getFreedom() + 0] += val*share[k];
                             if (contains(direct, Direction::Y)) // Y
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k];
+                                load[mesh->getBE(i, k)*mesh->getFreedom() + 1] += val*share[k];
                             if (contains(direct, Direction::Z)) // Z или W - для пластины
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
+                                load[mesh->getBE(i, k)*mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val*share[k];
                         }
 
                     }
@@ -408,14 +408,14 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getSurface
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcPressureLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
-    unsigned step = TFEM::mesh->getNumBE() / numThread;
+    unsigned step = TFEM::mesh->getNumBE()/numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::PressureLoad))
     {
         msg->setProcess(ProcessCode::GeneratingPressureLoad, 1, TFEM::mesh->getNumBE());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getPressureLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getPressureLoad, this, ref(load), i*step, (i == numThread - 1) ? TFEM::mesh->getNumBE() : (i + 1)*step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error != ErrorCode::Undefined)
             throw error;
@@ -450,24 +450,24 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
                         // Вычисление нагрузки
                         mesh->getCenterBE(i, coord);
                         coord.push_back(t);
-                        val = params.getExpressionValue(it, coord) * mesh->beVolume(i);
+                        val = params.getExpressionValue(it, coord)*mesh->beVolume(i);
                         // Вычисление нормали к ГЭ
                         normal = mesh->normal(i);
                         for (unsigned k = 0; k < mesh->getSizeBE(); k++)
                         {
-                            if (not mesh->isPlate())
+                            if (!mesh->isPlate())
                             {
                                 // X
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k] * normal[0];
+                                load[mesh->getBE(i, k)*mesh->getFreedom() + 0] += val*share[k]*normal[0];
                                 // Y
                                 if (mesh->getFreedom() > 1)
-                                    load[mesh->getBE(i, k) * mesh->getFreedom() + 1] += val * share[k] * normal[1];
-                                // Z или W - для пластины
+                                    load[mesh->getBE(i, k)*mesh->getFreedom() + 1] += val*share[k]*normal[1];
+                                // Z
                                 if (mesh->getFreedom() > 2)
-                                    load[mesh->getBE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k] * normal[2];
+                                    load[mesh->getBE(i, k)*mesh->getFreedom() + 2] += val*share[k]*normal[2];
                             }
                             else
-                                load[mesh->getBE(i, k) * mesh->getFreedom() + 0] += val * share[k];
+                                load[mesh->getBE(i, k)*mesh->getFreedom() + 0] += val*share[k];
                         }
                     }
                 }
@@ -484,14 +484,14 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getPressur
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcVolumeLoad(vector<double> &load, double t)
 {
     ErrorCode error = ErrorCode::Undefined;
-    unsigned step = TFEM::mesh->getNumFE() / numThread;
+    unsigned step = TFEM::mesh->getNumFE()/numThread;
     vector<thread> thr(numThread);
 
     if (params.plist.findParameter(ParamType::VolumeLoad))
     {
         msg->setProcess(ProcessCode::GeneratingVolumeLoad, 1, mesh->getNumFE());
         for (int i = 0; i < numThread; i++)
-            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getVolumeLoad, this, ref(load), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, t, ref(error));
+            thr[i] = thread(&TFEMStatic<SOLVER, FE>::getVolumeLoad, this, ref(load), i*step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1)*step, t, ref(error));
         for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
         if (error != ErrorCode::Undefined)
             throw error;
@@ -525,15 +525,15 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
                     {
                         mesh->getCenterFE(i, coord);
                         coord.push_back(t);
-                        val = params.getExpressionValue(it, coord) * mesh->feVolume(i);
+                        val = params.getExpressionValue(it, coord)*mesh->feVolume(i);
                         for (unsigned k = 0; k < mesh->getSizeFE(); k++)
                         {
                             if (contains(direct, Direction::X)) // X или W - для пластины
-                                load[mesh->getFE(i, k) * mesh->getFreedom() + 0] += val * share[k];
+                                load[mesh->getFE(i, k)*mesh->getFreedom() + 0] += val*share[k];
                             if (contains(direct, Direction::Y)) // Y
-                                load[mesh->getFE(i, k) * mesh->getFreedom() + 1] += val * share[k];
+                                load[mesh->getFE(i, k)*mesh->getFreedom() + 1] += val*share[k];
                             if (contains(direct, Direction::Z)) // Z
-                                load[mesh->getFE(i, k) * mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val * share[k];
+                                load[mesh->getFE(i, k)*mesh->getFreedom() + ((mesh->isPlate()) ? 0 : 2)] += val*share[k];
                         }
                     }
                 }
@@ -549,11 +549,11 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getVolumeL
 //-----------------------------------------------------------------------------------------
 template <typename SOLVER, typename FE> double TFEMStatic<SOLVER, FE>::calcStressIntensity(TResults &res, vector<double> &si)
 {
-    unsigned step = TFEM::mesh->getNumVertex() / numThread;
+    unsigned step = TFEM::mesh->getNumVertex()/numThread;
     vector<thread> thr(numThread);
 
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getStressIntensity, this, ref(res), ref(si), i * step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1) * step);
+        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getStressIntensity, this, ref(res), ref(si), i*step, (i == numThread - 1) ? TFEM::mesh->getNumVertex() : (i + 1)*step);
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     return *std::max_element(si.begin(), si.end());
 }
@@ -562,19 +562,19 @@ template <typename SOLVER, typename FE> double TFEMStatic<SOLVER, FE>::calcStres
 //--------------------------------------------------------------------------------------------------------------
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getStressIntensity(TResults &res, vector<double> &si, unsigned begin, unsigned end)
 {
-    double m_sqrt1_2 = 0.5 * sqrt(2.0);
+    double m_sqrt1_2 = 0.5*sqrt(2.0);
 
     // Вычисление узловых значений интенсивности напряжений
     for (unsigned i = begin; i < end; i++)
         switch (TFEM::mesh->getTypeFE())
         {
             case FEType::fe1d2: // U, Exx, Sxx
-                si[i] = m_sqrt1_2 * fabs(res[2].getResults(i));
+                si[i] = m_sqrt1_2*fabs(res[2].getResults(i));
                 break;
             case FEType::fe2d3:
             case FEType::fe2d4:
             case FEType::fe2d6: // U, V, Exx, Eyy, Exy, Sxx, Syy, Sxy
-                si[i] = m_sqrt1_2 * sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0 * (pow(res[7].getResults(i), 2)));
+                si[i] = m_sqrt1_2*sqrt(pow(res[5].getResults(i) - res[6].getResults(i), 2) + 6.0*(pow(res[7].getResults(i), 2)));
                 break;
             case FEType::fe2d3p:
             case FEType::fe2d4p:
@@ -582,14 +582,14 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getStressI
             case FEType::fe3d4:
             case FEType::fe3d8:
             case FEType::fe3d10: // U, V, W, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz
-                si[i] =  m_sqrt1_2 * sqrt(pow(res[9].getResults(i) - res[10].getResults(i), 2) + pow(res[9].getResults(i) - res[11].getResults(i), 2) +
-                             pow(res[11].getResults(i) - res[12].getResults(i), 2) + 6.0 * (pow(res[12].getResults(i), 2) + pow(res[13].getResults(i), 2) + pow(res[14].getResults(i), 2)));
+                si[i] =  m_sqrt1_2*sqrt(pow(res[9].getResults(i) - res[10].getResults(i), 2) + pow(res[9].getResults(i) - res[11].getResults(i), 2) +
+                             pow(res[11].getResults(i) - res[12].getResults(i), 2) + 6.0*(pow(res[12].getResults(i), 2) + pow(res[13].getResults(i), 2) + pow(res[14].getResults(i), 2)));
                 break;
             case FEType::fe3d3s:
             case FEType::fe3d4s:
             case FEType::fe3d6s: // U, V, W, Tx, Ty, Tz, Exx, Eyy, Ezz, Exy, Exz, Eyz, Sxx, Syy, Szz, Sxy, Sxz, Syz, Ut, Vt, Wt, Utt, Vtt, Wtt
-                si[i] = m_sqrt1_2 * sqrt(pow(res[12].getResults(i) - res[13].getResults(i), 2) + pow(res[12].getResults(i) - res[14].getResults(i), 2) +
-                             pow(res[13].getResults(i) - res[14].getResults(i), 2) + 6.0 * (pow(res[15].getResults(i), 2) + pow(res[16].getResults(i), 2) + pow(res[17].getResults(i), 2)));
+                si[i] = m_sqrt1_2*sqrt(pow(res[12].getResults(i) - res[13].getResults(i), 2) + pow(res[12].getResults(i) - res[14].getResults(i), 2) +
+                             pow(res[13].getResults(i) - res[14].getResults(i), 2) + 6.0*(pow(res[15].getResults(i), 2) + pow(res[16].getResults(i), 2) + pow(res[17].getResults(i), 2)));
                 break;
             default:
                 si[i] = 0;
@@ -601,7 +601,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getStressI
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcResult(matrix<double> &res, vector<double> &u)
 {
     ErrorCode error = ErrorCode::Undefined;
-    unsigned step = TFEM::mesh->getNumFE() / numThread;
+    unsigned step = TFEM::mesh->getNumFE()/numThread;
     vector<int> counter(TFEM::mesh->getNumVertex()); // Счетчик кол-ва вхождения узлов для осреднения результатов
     vector<thread> thr(numThread);
 
@@ -609,12 +609,12 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcResult
     // Копируем результаты расчета (перемещения)
     for (unsigned i = 0; i < TFEM::mesh->getNumVertex(); i++)
         for (unsigned j = 0; j < TFEM::mesh->getFreedom(); j++)
-            res[j][i] = u[i * TFEM::mesh->getFreedom() + j];
+            res[j][i] = u[i*TFEM::mesh->getFreedom() + j];
 
     // Вычисляем стандартные результаты по всем КЭ
     msg->setProcess(ProcessCode::GeneratingResult, 1, TFEM::mesh->getNumFE(), 5);
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getFEResult, this, ref(res), ref(u), ref(counter), i * step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1) * step, ref(error));
+        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getFEResult, this, ref(res), ref(u), ref(counter), i*step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1)*step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     if (error != ErrorCode::Undefined)
         throw error;
@@ -640,10 +640,10 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getFEResul
                 throw ErrorCode::EAbort;
             setupFE(fe, i);
             // Формируем вектор перемещений для текущего КЭ
-            fe_u.resize(mesh->getSizeFE() * mesh->getFreedom());
+            fe_u.resize(mesh->getSizeFE()*mesh->getFreedom());
             for (unsigned j = 0; j < mesh->getSizeFE(); j++)
                 for (unsigned k = 0; k < mesh->getFreedom(); k++)
-                    fe_u[j * mesh->getFreedom() + k] = u[mesh->getFreedom() * mesh->getFE(i, j) + k];
+                    fe_u[j*mesh->getFreedom() + k] = u[mesh->getFreedom()*mesh->getFE(i, j) + k];
             fe.calc(fe_res, fe_u);
             for (unsigned m = 0; m < params.numResult(mesh->getTypeFE()) - mesh->getFreedom(); m++)
                 for (unsigned j = 0; j < mesh->getSizeFE(); j++)
@@ -668,13 +668,13 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::getFEResul
 template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::setLoad(vector<double> &load)
 {
     ErrorCode error = ErrorCode::Undefined;
-    int size = mesh->getNumVertex() * mesh->getFreedom();
-    unsigned step = size / numThread;
+    int size = mesh->getNumVertex()*mesh->getFreedom();
+    unsigned step = size/numThread;
     vector<thread> thr(numThread);
 
     msg->setProcess(ProcessCode::UsingLoad, 1, size);
     for (int i = 0; i < numThread; i++)
-        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getLoad, this, ref(load), i * step, (i == numThread - 1) ? size : (i + 1) * step, ref(error));
+        thr[i] = thread(&TFEMStatic<SOLVER, FE>::getLoad, this, ref(load), i*step, (i == numThread - 1) ? size : (i + 1)*step, ref(error));
     for_each (thr.begin(), thr.end(), [](auto& tr) { tr.join(); });
     if (error != ErrorCode::Undefined)
         throw error;

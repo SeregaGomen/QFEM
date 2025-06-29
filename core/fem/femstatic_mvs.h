@@ -45,13 +45,13 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
            coef = 1,
            loadFactor,
            addCount = 0,
-           step = loadStep * 0.01;
+           step = loadStep*0.01;
     unsigned hour,
              min,
              sec,
              count = 1;
     vector<double> result,
-                   load(TFEM::mesh->getNumVertex() * TFEM::mesh->getFreedom());
+                   load(TFEM::mesh->getNumVertex()*TFEM::mesh->getFreedom());
     bool isLoaded = false;
     ostringstream out;
 
@@ -106,7 +106,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
                 if (not isLoaded)
                 {
                     // Вычисляем поправочный коэффициент для "пропуска" упругой зоны
-                    coef *= (loadFactor = 0.95 * (maxSsc / maxSi));
+                    coef *= (loadFactor = 0.95*(maxSsc/maxSi));
                     for_each(load.begin(), load.end(), [loadFactor](double& i) -> double{ return i *= loadFactor; });
                     isLoaded = true;
                     iterNo--;
@@ -126,7 +126,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
         // Вывод рез-тов по каждой функции на экран
         TFEM::printResultSummary();
         // Вывод информации об итерации
-        cout << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
+        cout << S_MSG_LOAD << " x " << (coef*(1 + addCount*step)) << endl;
         cout << S_MSG_SI << maxSi << endl;
         cout << S_MSG_ITERATION << count++ << endl;
         cout.unsetf(ios::scientific);
@@ -145,7 +145,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
 
     TFEM::end(hour, min, sec);
     // Выводим и сохраняем информацию об итерационном процессе
-    out << S_MSG_LOAD << " x " << (coef * (1 + addCount * step)) << endl;
+    out << S_MSG_LOAD << " x " << (coef*(1 + addCount*step)) << endl;
     if (TFEM::notes)
         TFEM::notes->push_back(out.str());
     out.str("");
@@ -161,11 +161,11 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
     if (TFEM::notes)
         TFEM::notes->push_back(out.str());
     cout << out.str() << endl;
-    // Вывод коэффициента изменения нагрузки P = P0 * k1 * (1 + k2 * n), где:
+    // Вывод коэффициента изменения нагрузки P = P0*k1*(1 + k2*n), где:
     // k1 - коэффициент пропуска упругой зоны (возврата в упругую зону);
-    // k2 - коэффициент увеличения нагрузки (loadStep / 100);
+    // k2 - коэффициент увеличения нагрузки (loadStep/100);
     // n - количество итераций по приращению нагрузки.
-//    cout << "P = P0 * " << (coef * (1 + addCount * step)) << endl;
+//    cout << "P = P0*" << (coef*(1 + addCount*step)) << endl;
 }
 //----------------------------------------------------------------------------
 //                      Настройка упругих парметров КЭ
@@ -211,8 +211,8 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
     }
 
     if (index != index0[i])
-        //newE = fabs((ssCurve[index][0] - ssCurve[index0[i]][0]) / (ssCurve[index][1] - ssCurve[index0[i]][1]));
-        newE = fabs(ssCurve[index][0] / ssCurve[index][1] - ssCurve[index0[i]][0] / ssCurve[index0[i]][1]);
+        //newE = fabs((ssCurve[index][0] - ssCurve[index0[i]][0])/(ssCurve[index][1] - ssCurve[index0[i]][1]));
+        newE = fabs(ssCurve[index][0]/ssCurve[index][1] - ssCurve[index0[i]][0]/ssCurve[index0[i]][1]);
     else
         newE = (e0[i] == 0.0) ? fe.getYoungModulus() : e0[i];
 

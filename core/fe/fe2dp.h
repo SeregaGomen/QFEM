@@ -106,9 +106,8 @@ public:
                        bp(2, TFE::freedom*TFE::shape->size),
                        c(TFE::freedom, TFE::freedom*TFE::shape->size),
                        jacobi,
-                       inverted_jacobi;
-        auto D = TFE::e*pow(TFE::thickness, 3)/(12*(1 - TFE::m*TFE::m))*matrix<double>{{1, TFE::m, 0}, {TFE::m, 1, 0}, {0, 0, (1 - TFE::m)/2}};
-        auto epsT = TFE::alpha*TFE::temperature * vector<double>{ 1.0, 1.0, 0.0 };
+                       inverted_jacobi,
+                       D = TFE::e*pow(TFE::thickness, 3)/(12.0*(1.0 - TFE::m*TFE::m))*matrix<double>{{1, TFE::m, 0}, {TFE::m, 1, 0}, {0, 0, (1.0 - TFE::m)/2.0}};
 
         TFE::K.resize(TFE::freedom*TFE::shape->size, TFE::freedom*TFE::shape->size);
         TFE::load.resize(TFE::freedom*TFE::shape->size, 1);
@@ -145,10 +144,17 @@ public:
             // Вычисление температурной нагрузки
             if (TFE::temperature != 0.0 && TFE::alpha != 0.0)
             {
-                auto fTemp = (D*epsT)*(TFE::shape->w[i]*abs(jacobian));
-                for (auto j = 0u; j < fTemp.size1(); j++)
-                    for (auto k = 0u; k < TFE::freedom; k++)
-                        TFE::load[j*TFE::freedom + k][0] += fTemp[k][0];
+                // auto fTemp = (TFE::e*pow(TFE::thickness, 3)/(12*(1 - TFE::m*TFE::m))*matrix<double>{{1, TFE::m, 0}, {TFE::m, 1, 0}, {0, 0, (1 - TFE::m)/2}}*TFE::alpha*TFE::temperature*vector<double>{ 1.0, 1.0, 0.0 })*(TFE::shape->w[i]*abs(jacobian));
+                // for (auto j = 0u; j < fTemp.size1(); j++)
+                //     for (auto k = 0u; k < TFE::freedom; k++)
+                //         TFE::load[j*TFE::freedom + k][0] += fTemp[k][0];
+
+                // TFE::load += ((transpose(bm)*TFE2D<T>::elastic_matrix())*(pow(TFE::thickness, 3)/12.0*vector<double>{ 1.0, 1.0, 0.0 }) +
+                //               (transpose(bp)*extra_elastic_matrix())*(TFE::thickness*5.0/6.0)*vector<double>{ 0.0, 1.0})*TFE::shape->w[i]*abs(jacobian)*TFE::alpha*TFE::temperature*(TFE::shape->w[i]*abs(jacobian));
+
+
+                //TFE::load += (transpose(bm)*TFE2D<T>::elastic_matrix() + transpose(bp)*extra_elastic_matrix())*(TFE::alpha*TFE::temperature*TFE::shape->w[i]*abs(jacobian));
+                TFE::load += (transpose(bm)*D)*(TFE::alpha*TFE::temperature*TFE::shape->w[i]*abs(jacobian));
             }
 
 
