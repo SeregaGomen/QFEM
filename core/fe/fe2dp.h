@@ -10,11 +10,21 @@
 template <class T> class TFE2DP : public TFE2D<T>
 {
 protected:
+    matrix<double> elastic_matrix(void)
+    {
+        // double D = TFE::e*TFE::thickness*TFE::thickness*TFE::thickness/(12.0*(1.0 - TFE::m*TFE::m));
+        // return {
+        //     { D, D*TFE::m, 0.0 },
+        //     { D*TFE::m, D, 0.0 },
+        //     { 0.0,  0.0, D*(1.0 - TFE::m)/2.0 }
+        // };
+        return TFE2D<T>::elastic_matrix();
+    }
     matrix<double> extra_elastic_matrix(void)
     {
         return {
-            { TFE::e/(2.0 + 2.0*TFE::m),  0.0 },
-            { 0.0,  TFE::e/(2.0 + 2.0*TFE::m) }
+            { (5.0/6.0)*TFE::e/(2.0 + 2.0*TFE::m),  0.0 },
+            { 0.0,  (5.0/6.0)*TFE::e/(2.0 + 2.0*TFE::m) }
         };
     }
 public:
@@ -139,7 +149,7 @@ public:
             }
 
             // Вычисление локальной матрицы жесткости
-            TFE::K += ((transpose(bm)*TFE2D<T>::elastic_matrix()*bm)*(pow(TFE::thickness, 3)/12.0) +
+            TFE::K += ((transpose(bm)*elastic_matrix()*bm)*(pow(TFE::thickness, 3)/12.0) +
                        (transpose(bp)*extra_elastic_matrix()*bp)*(TFE::thickness*5.0/6.0))*TFE::shape->w[i]*abs(jacobian);
             // Вычисление температурной нагрузки
             if (TFE::temperature != 0.0 && TFE::alpha != 0.0)
