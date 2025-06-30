@@ -79,8 +79,9 @@ protected:
                 throw ErrorCode::EDensity;
             fe.setDensity(val);
             // Загрузка параметра демпфирования
-            if ((val = params.getDamping(x)) == 0.0)
-                throw ErrorCode::EDamping;
+            //if ((val = params.getDamping(x)) == 0.0)
+                //throw ErrorCode::EDamping;
+            val = params.getDamping(x);
             fe.setDamping(val);
         }
     }

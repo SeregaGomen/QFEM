@@ -71,7 +71,7 @@ public:
     void addProgress(void)
     {
         TMessenger::addProgress();
-//        if (TMessenger::oldPersent % /*TMessenger::processStep*/5 == 0)
+        if (TMessenger::oldPersent % TMessenger::processStep == 0)
         {
             emit signalSetFormat(QString("%1: %2%").arg(sayProcess(processCode).c_str()).arg(TMessenger::oldPersent));
             if (processCurrent == processStop)

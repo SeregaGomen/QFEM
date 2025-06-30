@@ -181,7 +181,7 @@ template <typename SOLVER, typename FE> void TFEMStatic<SOLVER,  FE>::calcGlobal
     ErrorCode error = ErrorCode::Undefined;
     vector<thread> thr(numThread);
 
-    msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingDynamicMatrix, 1, TFEM::mesh->getNumFE(), 5);
+    msg->setProcess((isStatic) ? ProcessCode::GeneratingStaticMatrix : ProcessCode::GeneratingGlobalMatrix, 1, TFEM::mesh->getNumFE(), 5);
     for (int i = 0; i < numThread; i++)
         thr[i] = thread(&TFEMStatic<SOLVER, FE>::getMatrix, this, i*step, (i == numThread - 1) ? TFEM::mesh->getNumFE() : (i + 1)*step, isStatic, ref(error));
     for_each (thr.begin(), thr.end(), [](auto &tr) { tr.join(); });

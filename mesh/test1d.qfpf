@@ -1,0 +1,147 @@
+{
+    "Header": {
+        "DateTime": "2025-06-30T14:46:39.381",
+        "Object": "test1d",
+        "Title": "QFEM problem file"
+    },
+    "Mesh": {
+        "File": "/home/serhii/work/Qt/QFEM/mesh/test1d.trpa"
+    },
+    "Parameters": {
+        "Accuracy": 1e-10,
+        "BoundaryConditions": [
+            {
+                "Direct": 0,
+                "Expression": "2.1e+11",
+                "Predicate": "",
+                "Type": 7
+            },
+            {
+                "Direct": 0,
+                "Expression": "1e-4 ",
+                "Predicate": "",
+                "Type": 9
+            },
+            {
+                "Direct": 0,
+                "Expression": "7800",
+                "Predicate": "",
+                "Type": 12
+            },
+            {
+                "Direct": 0,
+                "Expression": "1.0e-10",
+                "Predicate": "",
+                "Type": 13
+            },
+            {
+                "Direct": 1,
+                "Expression": "1e-3",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 8,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 64,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 2,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 16,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 128,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 4,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 32,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 256,
+                "Expression": "0",
+                "Predicate": "",
+                "Type": 1
+            },
+            {
+                "Direct": 1,
+                "Expression": "0",
+                "Predicate": "x == 0",
+                "Type": 2
+            }
+        ],
+        "DynamicParameters": {
+            "T0": 0,
+            "T1": 0.01,
+            "TH": 0.001,
+            "WilsonTheta": 1.37
+        },
+        "Names": [
+            "x",
+            "y",
+            "z",
+            "t",
+            "U",
+            "V",
+            "W",
+            "Tx",
+            "Ty",
+            "Tz",
+            "Exx",
+            "Eyy",
+            "Ezz",
+            "Exy",
+            "Exz",
+            "Eyz",
+            "Sxx",
+            "Syy",
+            "Szz",
+            "Sxy",
+            "Sxz",
+            "Syz",
+            "Ut",
+            "Vt",
+            "Wt",
+            "Utt",
+            "Vtt",
+            "Wtt"
+        ],
+        "Nonlinearity": {
+            "CalculationMethod": 0,
+            "LoadStep": 1
+        },
+        "OutputParameters": {
+            "Precision": 5,
+            "Width": 12
+        },
+        "ProblemType": "Dynamic",
+        "Variables": [
+            "eps 1e-10"
+        ]
+    }
+}

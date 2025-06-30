@@ -715,11 +715,11 @@ bool TMainWindow::checkParams(void)
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified density!"));
             return false;
         }
-        if (femObject->getParams().plist.findParameter(ParamType::Damping) == 0)
-        {
-            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping ratio!"));
-            return false;
-        }
+        // if (femObject->getParams().plist.findParameter(ParamType::Damping) == 0)
+        // {
+        //     QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified damping ratio!"));
+        //     return false;
+        // }
         if (femObject->getParams().th == 0.0 || femObject->getParams().t0 < 0 || femObject->getParams().t1 <= 0 || (femObject->getParams().t0 >= femObject->getParams().t1))
         {
             QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified time!"));
