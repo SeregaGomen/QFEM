@@ -705,9 +705,9 @@ bool TMainWindow::checkParams(void)
     }
     if (femObject->getParams().fType == FEMType::DynamicProblem)
     {
-        if (femObject->getParams().theta <= 0)
+        if (femObject->getParams().beta <= 0 || femObject->getParams().gamma <= 0)
         {
-            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified the Wilson-Theta parameter!"));
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly specified the Newmark parameters!"));
             return false;
         }
         if (femObject->getParams().plist.findParameter(ParamType::Density) == 0)
@@ -1145,7 +1145,8 @@ bool TMainWindow::loadQFPF(QString fileName)
     params.eps = obj.value(QString("Parameters"))["Accuracy"].toVariant().toDouble();
 
     // Динамические параметры
-    params.theta = obj.value(QString("Parameters"))["DynamicParameters"]["WilsonTheta"].toVariant().toDouble();
+    params.beta = obj.value(QString("Parameters"))["DynamicParameters"]["NewmarkBeta"].toVariant().toDouble();
+    params.gamma = obj.value(QString("Parameters"))["DynamicParameters"]["NewmarkGamma"].toVariant().toDouble();
     params.t0 = obj.value(QString("Parameters"))["DynamicParameters"]["T0"].toVariant().toDouble();
     params.t1 = obj.value(QString("Parameters"))["DynamicParameters"]["T1"].toVariant().toDouble();
     params.th = obj.value(QString("Parameters"))["DynamicParameters"]["TH"].toVariant().toDouble();
@@ -1339,7 +1340,8 @@ void TMainWindow::saveParam(QJsonObject &main)
     time.insert("T0", params.t0);
     time.insert("T1", params.t1);
     time.insert("TH", params.th);
-    time.insert("WilsonTheta", params.theta);
+    time.insert("NewmarkBeta", params.beta);
+    time.insert("NewmarkGamma", params.gamma);
     paramObj.insert("DynamicParameters", time);
 
     // Параметры вывода
@@ -1543,7 +1545,8 @@ void TMainWindow::loadParam(const QJsonObject &paramObj)
     params.t0 = (paramObj["DynamicParameters"].toObject())["T0"].toDouble();
     params.t1 = (paramObj["DynamicParameters"].toObject())["T1"].toDouble();
     params.th = (paramObj["DynamicParameters"].toObject())["TH"].toDouble();
-    params.theta = (paramObj["DynamicParameters"].toObject())["WilsonTheta"].toDouble();
+    params.beta = (paramObj["DynamicParameters"].toObject())["NewmarkBeta"].toDouble();
+    params.gamma = (paramObj["DynamicParameters"].toObject())["NewmarkGamma"].toDouble();
 
     // Параметры вывода
     params.width = (paramObj["OutputParameters"].toObject())["Width"].toInt();

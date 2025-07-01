@@ -93,7 +93,7 @@ private:
     void getWidth(void);
     void getPrecission(void);
     void getTime(void);
-    void getTheta(void);
+    void getNewmarkParameters(void);
     void getThermalExpansionParam(void);
     void getDensity(void);
     void getDamping(void);

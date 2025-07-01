@@ -198,7 +198,8 @@ void TProblemSetupForm::enabledParams(void)
     ui->gbDensity->setEnabled(ui->rbDynamic->isChecked());
     ui->gbDamping->setEnabled(ui->rbDynamic->isChecked());
     ui->textTime->setEnabled(ui->rbDynamic->isChecked());
-    ui->textThetaWilson->setEnabled(ui->rbDynamic->isChecked());
+    ui->textBetaNewmark->setEnabled(ui->rbDynamic->isChecked());
+    ui->textGammaNewmark->setEnabled(ui->rbDynamic->isChecked());
     ui->twStressStrainCurve->setEnabled(not ui->rbDynamic->isChecked());
     ui->textLoadStep->setEnabled(not ui->rbDynamic->isChecked());
 
@@ -573,7 +574,8 @@ void TProblemSetupForm::setup(void)
     // Инициализация динамических параметров
     setDensity();
     setDamping();
-    ui->textThetaWilson->setText(QString("%1").arg(femObject->getParams().theta));
+    ui->textBetaNewmark->setText(QString("%1").arg(femObject->getParams().beta));
+    ui->textGammaNewmark->setText(QString("%1").arg(femObject->getParams().gamma));
     ui->textT0->setText(QString("%1").arg(femObject->getParams().t0));
     ui->textT1->setText(QString("%1").arg(femObject->getParams().t1));
     ui->textTH->setText(QString("%1").arg(femObject->getParams().th));
@@ -1344,7 +1346,8 @@ bool TProblemSetupForm::checkThickness(void)
 // Проверка корректности ввода параметров расчета в динамике
 bool TProblemSetupForm::checkDynamicParams(void)
 {
-    double theta,
+    double beta,
+           gamma,
            t0,
            t1,
            th;
@@ -1354,17 +1357,30 @@ bool TProblemSetupForm::checkDynamicParams(void)
     if (not checkTable(ui->twDamping, 4))
         return false;
 
-    if (ui->textThetaWilson->text().length())
+    if (ui->textBetaNewmark->text().length())
     {
-        if (getExpression(ui->textThetaWilson->text(), theta) != ErrorCode::Undefined || theta <= 0)
+        if (getExpression(ui->textBetaNewmark->text(), beta) != ErrorCode::Undefined || beta <= 0)
         {
-            QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Wilson-theta!"));
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Newmark-beta!"));
             return false;
         }
     }
     else
     {
-        QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Wilson-theta!"));
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Newmark-beta!"));
+        return false;
+    }
+    if (ui->textGammaNewmark->text().length())
+    {
+        if (getExpression(ui->textGammaNewmark->text(), gamma) != ErrorCode::Undefined || gamma <= 0)
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Newmark-gamma!"));
+            return false;
+        }
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Incorrectly set the Newmark-gamma!"));
         return false;
     }
     if (ui->textT0->text().length())
@@ -1524,7 +1540,7 @@ bool TProblemSetupForm::getParams(void)
     getThermalExpansionParam();
     getDensity();
     getDamping();
-    getTheta();
+    getNewmarkParameters();
     getTime();
     getInitialParam();
 
@@ -1644,9 +1660,10 @@ void TProblemSetupForm::getPrecission(void)
 }
 
 // Извлечение теты-Вильсона
-void TProblemSetupForm::getTheta(void)
+void TProblemSetupForm::getNewmarkParameters(void)
 {
-    femObject->getParams().theta = ui->textThetaWilson->text().toDouble();
+    femObject->getParams().beta = ui->textBetaNewmark->text().toDouble();
+    femObject->getParams().gamma = ui->textGammaNewmark->text().toDouble();
 }
 
 // Извлечение времени

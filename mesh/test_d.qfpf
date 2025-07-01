@@ -105,7 +105,8 @@
             "T0": 0,
             "T1": 1,
             "TH": 0.5,
-            "WilsonTheta": 1.37
+            "NewmarkBeta": 0.25,
+            "NewmarkGamma": 0.5
         },
         "Names": [
             "x",

@@ -31,7 +31,8 @@ public:
     double t0;                      // Начальный момент времени расчета
     double t1;                      // Конечный момент времени расчета
     double th;                      // Шаг по времени
-    double theta;                   // Тета Вильсона
+    double beta;                    // Параметры метода Ньюмарка
+    double gamma;                   // ...
     double loadStep;                // Шаг по нагрузке при нелинейном расчете
     vector<string> names;           // Массив имен искомых функций
     TParameterList plist;           // Список краевых условий, нагрузок etc
@@ -45,7 +46,8 @@ public:
         width = 12;
         precision = 5;
         loadStep = 1;
-        theta = 1.37;
+        beta = 0.25;
+        gamma = 0.5;
         t0 = t1 = th = 0;
         plist.clear();
         variables.clear();
@@ -56,21 +58,9 @@ public:
     }
     TFEMParams(void)
     {
-        fType = FEMType::StaticProblem;
-        tMethod = TimeMethod::Wilson;
-        pMethod = PlasticityMethod::Linear;
-        eps = 1.0E-10;
-        width = 12;
-        precision = 5;
-        loadStep = 1;
-        theta = 1.37;
-        t0 = t1 = th = 0;
-        // Заполнение имен функций стандартными значениями
-        names = stdNames();
-        // Добавление стандартных параметров
-        variables["eps"] = eps;
+        clear();
     }
-    TFEMParams(TFEMParams& r)
+    TFEMParams(TFEMParams &r)
     {
         fType = r.fType;
         tMethod = r.tMethod;
@@ -81,7 +71,8 @@ public:
         t0 = r.t0;
         t1 = r.t1;
         th = r.th;
-        theta = r.theta;
+        beta = r.beta;
+        gamma = r.gamma;
         plist = r.plist;
         variables = r.variables;
         loadStep = r.loadStep;
@@ -91,13 +82,13 @@ public:
     {
         clear();
     }
-    void setFunName(vector<string>& fn)
+    void setFunName(vector<string> &fn)
     {
         names = fn;
     }
     unsigned numResult(FEType);
     string getName(unsigned, FEType);
-    TFEMParams& operator = (TFEMParams& r)
+    TFEMParams &operator = (TFEMParams &r)
     {
         fType = r.fType;
         tMethod = r.tMethod;
@@ -108,7 +99,8 @@ public:
         t0 = r.t0;
         t1 = r.t1;
         th = r.th;
-        theta = r.theta;
+        beta = r.beta;
+        gamma = r.gamma;
         plist = r.plist;
         variables = r.variables;
         loadStep = r.loadStep;

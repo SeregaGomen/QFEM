@@ -1,37 +1,19 @@
 {
     "Header": {
-        "DateTime": "2021-08-07T06:56:29.095",
+        "DateTime": "2025-07-01T07:59:51.473",
         "Object": "balka",
         "Title": "QFEM problem file"
     },
     "Mesh": {
-        "File": "balka.trpa"
+        "File": "/home/serhii/work/Qt/QFEM/mesh/balka.trpa"
     },
     "Parameters": {
         "Accuracy": 1e-10,
         "BoundaryConditions": [
             {
                 "Direct": 0,
-                "Expression": "1.0e+10",
-                "Predicate": "y < 1",
-                "Type": 7
-            },
-            {
-                "Direct": 0,
-                "Expression": "2.0e+10",
-                "Predicate": "y >= 1 and y< 2",
-                "Type": 7
-            },
-            {
-                "Direct": 0,
-                "Expression": "3.0e+10",
-                "Predicate": "y >= 2 and y< 3",
-                "Type": 7
-            },
-            {
-                "Direct": 0,
-                "Expression": "4.0e+10",
-                "Predicate": "y>=3",
+                "Expression": "2.1e+11",
+                "Predicate": "",
                 "Type": 7
             },
             {
@@ -42,13 +24,13 @@
             },
             {
                 "Direct": 0,
-                "Expression": "1",
+                "Expression": "7800",
                 "Predicate": "",
                 "Type": 12
             },
             {
                 "Direct": 0,
-                "Expression": "1",
+                "Expression": "0",
                 "Predicate": "",
                 "Type": 13
             },
@@ -108,7 +90,7 @@
             },
             {
                 "Direct": 2,
-                "Expression": "-100",
+                "Expression": "-1e+5*cos(t)",
                 "Predicate": "",
                 "Type": 3
             },
@@ -123,7 +105,8 @@
             "T0": 0,
             "T1": 1,
             "TH": 0.2,
-            "WilsonTheta": 1.37
+            "NewmarkBeta": 0.25,
+            "NewmarkGamma": 0.5
         },
         "Names": [
             "x",
