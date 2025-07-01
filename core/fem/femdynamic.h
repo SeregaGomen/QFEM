@@ -221,52 +221,6 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::calcDynami
 //-----------------------------------------------------------------------------
 // Формирование "динамической" правой части СЛАУ для текущего момента времени
 //-----------------------------------------------------------------------------
-// template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDynamicVector(void)
-// {
-//     auto nvtx = TFEM::mesh->getNumVertex(),
-//          freedom = TFEM::mesh->getFreedom(),
-//          dim = TFEM::mesh->getDimension(),
-//          size = nvtx*freedom;
-//     double k1 = 3.0/(TFEM::params.theta*TFEM::params.th),
-//            k2 = 6.0/(TFEM::params.theta*TFEM::params.theta*TFEM::params.th*TFEM::params.th),
-//            k3 = 0.5*TFEM::params.theta*TFEM::params.th;
-//     vector<double> load(size),
-//                    u1(size),
-//                    u2(size),
-//                    r1(size),
-//                    r2(size);
-
-//     // Вычисление вектора нагрузок для текущего момента времени
-//     TFEMStatic<SOLVER, FE>::calcLoad(load, t);
-
-//     // Получаем значения U, Ut и Utt предыдущей итерации (или из начальных условий)
-//     msg->setProcess(ProcessCode::GeneratingDynamicLoad, 1, nvtx + size, 5);
-//     for (unsigned i = 0; i < nvtx; i++)
-//     {
-//         msg->addProgress();
-//         for (unsigned j = 0; j < freedom; j++)
-//         {
-//             u1[i*freedom + j] = (k1*u0[j][i] + 2.0*k2*u0[u0.size1() - 2*dim + j][i] + 2.0*u0[u0.size1() - dim + j][i])/k2;
-//             u2[i*freedom + j] = (k2*u0[j][i] + 2.0*u0[u0.size1() - 2*dim + j][i] + k3*u0[u0.size1() - dim + j][i])/k1;
-//         }
-//     }
-//     for (auto i = 0u; i < size; i++)
-//     {
-//         msg->addProgress();
-//         for (auto j = 0u; j < size; j++)
-//         {
-//             r1[i] += TFEMStatic<SOLVER, FE>::solver.getMass(i, j)*u1[j];
-//             r2[i] += TFEMStatic<SOLVER, FE>::solver.getDamping(i, j)*u2[j];
-//         }
-//     }
-//     msg->stopProcess();
-
-//     // Формирование столбца правой части с учетом "динамической" составляющей
-//     for (unsigned i = 0; i < size; i++)
-//         load[i] += (r1[i] + r2[i]);
-
-//     TFEMStatic<SOLVER, FE>::setLoad(load);
-// }
 template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDynamicVector(void)
 {
     auto nvtx = TFEM::mesh->getNumVertex(),
@@ -288,6 +242,8 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDyna
     for (unsigned i = 0; i < nvtx; i++)
     {
         msg->addProgress();
+        if (TFEM::isProcessAborted)
+            throw ErrorCode::EAbort;
         for (unsigned j = 0; j < freedom; j++)
         {
             am[i*freedom + j] = a2*(u0[j][i] + TFEM::params.th*u0[u0.size1() - 2*dim + j][i] + 0.5*TFEM::params.th*TFEM::params.th*(1.0 - 2.0*TFEM::params.beta)*u0[u0.size1() - dim + j][i]);
@@ -298,6 +254,8 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDyna
     for (auto i = 0u; i < size; i++)
     {
         msg->addProgress();
+        if (TFEM::isProcessAborted)
+            throw ErrorCode::EAbort;
         for (auto j = 0u; j < size; j++)
             r[i] += TFEMStatic<SOLVER, FE>::solver.getMass(i, j)*am[j] + TFEMStatic<SOLVER, FE>::solver.getDamping(i, j)*ac[j];
     }
@@ -323,6 +281,8 @@ template <typename SOLVER, typename FE> void TFEMDynamic<SOLVER, FE>::createDyna
     for (unsigned i = 0; i < TFEM::mesh->getNumVertex()*TFEM::mesh->getFreedom(); i++)
     {
         msg->addProgress();
+        if (TFEM::isProcessAborted)
+            throw ErrorCode::EAbort;
         for (unsigned j = i; j < TFEM::mesh->getNumVertex()*TFEM::mesh->getFreedom(); j++)
         {
             val = a1*TFEMStatic<SOLVER, FE>::solver.getDamping(i, j) + a2*TFEMStatic<SOLVER, FE>::solver.getMass(i, j);
