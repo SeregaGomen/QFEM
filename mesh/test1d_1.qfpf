@@ -1,6 +1,6 @@
 {
     "Header": {
-        "DateTime": "2025-06-30T20:13:08.200",
+        "DateTime": "2025-06-30T20:45:26.927",
         "Object": "test1d",
         "Title": "QFEM problem file"
     },
@@ -18,7 +18,7 @@
             },
             {
                 "Direct": 0,
-                "Expression": "1e-4 ",
+                "Expression": "0.01",
                 "Predicate": "",
                 "Type": 9
             },
@@ -90,6 +90,12 @@
             },
             {
                 "Direct": 1,
+                "Expression": "1e+5",
+                "Predicate": "x == 1",
+                "Type": 5
+            },
+            {
+                "Direct": 1,
                 "Expression": "0",
                 "Predicate": "x == 0",
                 "Type": 2
@@ -97,8 +103,8 @@
         ],
         "DynamicParameters": {
             "T0": 0,
-            "T1": 0.01,
-            "TH": 0.001,
+            "T1": 0.005,
+            "TH": 1e-05,
             "WilsonTheta": 1.37
         },
         "Names": [

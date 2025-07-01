@@ -1197,7 +1197,8 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
 {
     TFEMObject* femObject = femProcessor->getFEMObject();
     bool isFind = false;
-    unsigned funIndex = unsigned(femObject->getResult().index(funName.toStdString()));
+    unsigned funIndex = femObject->getResult().index(funName.toStdString()),
+             tmIndex = getTimeDeltaIndex(funName);
     vector<vector<double>*> delta;
 
     // Проверка наличия такой функции в уже открытых закладках
@@ -1210,7 +1211,7 @@ void TMainWindow::addFuncToAnalyse(QString funName, QString expression)
     if (!isFind)
     {
         for (auto i = 0u; i < femObject->getMesh().getFreedom(); i++)
-            delta.push_back(&femObject->getResult(i).getResults());
+            delta.push_back(&femObject->getResult(tmIndex + i).getResults());
         //tabWidget->addTab(new TGLFunction(&femObject->getMesh(), &femObject->getResult(ind_f).getResults(), &femObject->getResult(ind_d + 0).getResults(), &femObject->getResult(ind_d + 1).getResults(), &femObject->getResult(ind_d + 2).getResults(), expression, this), funName);
         tabWidget->addTab(new TFunctionView(&femObject->getMesh(), &femObject->getResult(funIndex).getResults(), delta, expression, this), funName);
         tabWidget->setCurrentIndex(tabWidget->count() - 1);
