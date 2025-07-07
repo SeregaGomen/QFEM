@@ -86,7 +86,7 @@ private:
 
 
     void saveImage(const QString&);
-        QVector3D worldToScreen(const QVector3D&, const QMatrix4x4&, const QMatrix4x4&, const QMatrix4x4&, const QVector4D&);
+    //QVector3D worldToScreen(const QVector3D&, const QMatrix4x4&, const QMatrix4x4&, const QMatrix4x4&, const QVector4D&);
 };
 
 #endif // MESHVIEW_H

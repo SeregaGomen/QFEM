@@ -144,6 +144,24 @@ void TMeshView::showObject()
 
 void TMeshView::showAxiss()
 {
+    auto worldToScreen = [this](const QVector3D &worldPos, const QMatrix4x4 &model, const QMatrix4x4 &view, const QMatrix4x4 &projection, const QVector4D &translation) {
+        QMatrix4x4 mvp = projection*view*model;
+        QVector4D clipSpacePos = mvp*QVector4D(worldPos, 1.0) - translation;
+
+        if (clipSpacePos.w() == 0.0f)
+            return QVector3D(); // ошибка деления
+
+        // NDC [-1, 1]
+        QVector3D ndc = clipSpacePos.toVector3DAffine();  // делит на w
+
+        // Viewport transform -> [0, width], [0, height]
+        float x = (ndc.x()*0.5f + 0.5f)*width();
+        float y = (1.0f - (ndc.y()*0.5f + 0.5f))*height(); // инверсия Y
+        float z = ndc.z();
+
+        return QVector3D(x, y, z);
+    };
+
     if (params->isAxis)
     {
         shaderAxiss.bind();
@@ -199,24 +217,24 @@ void TMeshView::showLegend()
     }
 }
 
-QVector3D TMeshView::worldToScreen(const QVector3D &worldPos, const QMatrix4x4 &model, const QMatrix4x4 &view, const QMatrix4x4 &projection, const QVector4D &translation)
-{
-    QMatrix4x4 mvp = projection*view*model;
-    QVector4D clipSpacePos = mvp*QVector4D(worldPos, 1.0) - translation;
+// QVector3D TMeshView::worldToScreen(const QVector3D &worldPos, const QMatrix4x4 &model, const QMatrix4x4 &view, const QMatrix4x4 &projection, const QVector4D &translation)
+// {
+//     QMatrix4x4 mvp = projection*view*model;
+//     QVector4D clipSpacePos = mvp*QVector4D(worldPos, 1.0) - translation;
 
-    if (clipSpacePos.w() == 0.0f)
-        return QVector3D(); // ошибка деления
+//     if (clipSpacePos.w() == 0.0f)
+//         return QVector3D(); // ошибка деления
 
-    // NDC [-1, 1]
-    QVector3D ndc = clipSpacePos.toVector3DAffine();  // делит на w
+//     // NDC [-1, 1]
+//     QVector3D ndc = clipSpacePos.toVector3DAffine();  // делит на w
 
-    // Viewport transform -> [0, width], [0, height]
-    float x = (ndc.x()*0.5f + 0.5f)*width();
-    float y = (1.0f - (ndc.y()*0.5f + 0.5f))*height(); // инверсия Y
-    float z = ndc.z();
+//     // Viewport transform -> [0, width], [0, height]
+//     float x = (ndc.x()*0.5f + 0.5f)*width();
+//     float y = (1.0f - (ndc.y()*0.5f + 0.5f))*height(); // инверсия Y
+//     float z = ndc.z();
 
-    return QVector3D(x, y, z);
-}
+//     return QVector3D(x, y, z);
+// }
 
 void TMeshView::initShaders()
 {
