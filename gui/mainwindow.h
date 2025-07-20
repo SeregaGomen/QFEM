@@ -2,22 +2,23 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "qstdredirector.h"
 
 namespace Ui {
     class TMainWindow;
 }
 
-class TTerminal;
+class QTranslator;
+class QThread;
 class QProgressBar;
 class QDockWidget;
 class QTabWidget;
 class TSetupImageDialog;
-class QTranslator;
-class QThread;
 class TFEMProcessor;
 class TBCProcessor;
 class TProblemSetupForm;
+class TTerminal;
+class TStreamRedirector;
+
 enum class ParamType;
 
 const int maxRecentFiles = 5;
@@ -62,8 +63,6 @@ protected:
 
 private slots:
     void slotOpenRecentFile(void);
-    void slotErorrMsg(QString);
-    void slotMsg(QString);
     void slotShowParam(int);
     void slotSetRotate(void);
 
@@ -84,8 +83,8 @@ private:
     QAction* recentFileActs[maxRecentFiles];
     QAction* separatorAct;
     QStringList files;
-    QStdRedirector<> *myCout;
-    QStdRedirector<> *myCerr;
+    TStreamRedirector *qCout{nullptr};
+    TStreamRedirector *qCerr{nullptr};
     TSetupImageDialog *iDlg;
     TProblemSetupForm *pForm;
     QProgressBar *pb;

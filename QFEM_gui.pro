@@ -63,8 +63,8 @@ HEADERS  += gui/mainwindow.h \
     gui/meshview.h \
     gui/paramview.h \
     gui/problemsetupform.h \
-    gui/qstdredirector.h \
     gui/fldialog.h \
+    gui/redirector.h \
     gui/setupimagedialog.h \
     gui/imageparams.h \
     gui/vcdialog.h \

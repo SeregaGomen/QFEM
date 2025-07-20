@@ -14,6 +14,7 @@
 #include <QScrollArea>
 #include <ctime>
 
+#include "redirector.h"
 #include "problemsetupform.h"
 #include "appesetupdialog.h"
 #include "vcdialog.h"
@@ -52,8 +53,8 @@ TMainWindow::~TMainWindow()
     delete thread;
     delete femProcessor;
     delete bcProcessor;
-    delete myCout;
-    delete myCerr;
+    delete qCout;
+    delete qCerr;
     delete terminal;
     delete dock;
     delete tabWidget;
@@ -116,18 +117,12 @@ void TMainWindow::init(void)
 
     //////////////////////
     // Перехват cout и cerr
-    myCout = new QStdRedirector<>(std::cout, this);
-//    connect(myCout, SIGNAL(messageChanged(QString)), terminal, SLOT(insertPlainText(QString)));
-    connect(myCout, SIGNAL(messageChanged(QString)), this, SLOT(slotMsg(QString)));
+    qCout = new TStreamRedirector(terminal, std::cout);
+    qCerr = new TStreamRedirector(terminal, std::cerr, Qt::red);
 //    if (langCode == 1)
 //        cout.imbue(std::locale("ru_RU.utf8"));
 //    cout << put_time(localtime(&now), "%d-%m-%Y %X") << endl;
     cout << QDateTime::currentDateTime().toString("d-MM-yyyy hh:mm:ss").toStdString() << endl;
-
-    myCerr = new QStdRedirector<>(std::cerr, this);
-//    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(setErrColor()));
-//    connect(myCerr, SIGNAL(messageChanged(QString)), terminal, SLOT(insertPlainText(QString)));
-    connect(myCerr, SIGNAL(messageChanged(QString)), this, SLOT(slotErorrMsg(QString)));
 
 
     //////////////////////
@@ -169,31 +164,6 @@ void TMainWindow::init(void)
 
 //    connect(pForm, &TProblemSetupForm::clicked, ([=](void) { testSignal(); }));
     connect(pForm, SIGNAL(clicked(int)), this, SLOT(slotShowParam(int)));
-}
-
-void TMainWindow::slotErorrMsg(QString msg)
-{
-    QColor tc = terminal->textColor();
-
-    if (msg != "\n")
-        terminal->setTextColor(QColor("red"));
-    terminal->insertPlainText(msg);
-    terminal->setTextColor(tc);
-//    QApplication::processEvents();
-}
-
-void TMainWindow::slotMsg(QString msg)
-{
-    QTextCursor cursor = terminal->textCursor();
-
-    if (msg.contains('\r'))
-    {
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.select(QTextCursor::BlockUnderCursor);
-        cursor.insertText(msg);
-    }
-    else
-        terminal->insertPlainText(msg);
 }
 
 void TMainWindow::slotChangeTab(int nTab)

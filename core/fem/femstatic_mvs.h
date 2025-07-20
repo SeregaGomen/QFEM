@@ -131,7 +131,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::startPro
         cout << S_MSG_ITERATION << count++ << endl;
         cout.unsetf(ios::scientific);
 
-        if (++iterNo > 0 and isStopLocalIteration)
+        if (++iterNo > 0 && isStopLocalIteration)
         {
             addCount += 1;
             isStopLocalIteration = false;
@@ -200,7 +200,7 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
         index = 0;
     else
         for (index = 1; index < ssCurve.size1(); index++)
-            if (feSi > ssCurve[index - 1][0] and feSi <= ssCurve[index][0])
+            if (feSi > ssCurve[index - 1][0] && feSi <= ssCurve[index][0])
                 break;
 
     if (index == ssCurve.size1())
@@ -215,6 +215,10 @@ template <typename SOLVER, typename FE> void TFEMStaticMVS<SOLVER, FE>::setupFE(
         newE = fabs(ssCurve[index][0]/ssCurve[index][1] - ssCurve[index0[i]][0]/ssCurve[index0[i]][1]);
     else
         newE = (e0[i] == 0.0) ? fe.getYoungModulus() : e0[i];
+
+
+    if (std::isnan(newE))
+        cerr << "Error: NAN " << i << endl;
 
     fe.setYoungModulus(newE);
     fe.setPoissonRatio(TFEM::params.getPoissonRatio(x));
