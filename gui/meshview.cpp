@@ -208,7 +208,7 @@ void TMeshView::showLegend()
         painter.setFont(font);
         painter.setPen(QColor(255 - float(params->bkgColor.red()), 255 - float(params->bkgColor.green()), 255 - float(params->bkgColor.blue())));
         painter.drawText(10, int(cy), tr("Mesh info"));
-        painter.drawText(10, int(cy) + fontH, tr("FE type: %1").arg(mesh->feName()));
+        painter.drawText(10, int(cy) + fontH, tr("FE type: %1").arg(mesh->feName().c_str()));
         painter.drawText(10, int(cy) + 2*fontH, tr("Vertex: %1").arg(mesh->getNumVertex()));
         painter.drawText(10, int(cy) + 3*fontH, tr("FE: %1").arg(mesh->getNumFE()));
         painter.drawText(10, int(cy) + 4*fontH, tr("BE: %1").arg(mesh->getNumBE()));

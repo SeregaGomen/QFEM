@@ -22,8 +22,8 @@ INCLUDEPATH += core \
 #gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
-    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2024.0/include/'
-    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2024.0/lib/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2025.0/include/'
+    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2025.0/lib/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
 }
 
 unix {

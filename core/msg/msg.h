@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <chrono>
 
 extern int langCode;
 
