@@ -94,6 +94,9 @@ void TMainWindow::init(void)
 
     setCentralWidget(tabWidget);
 
+    // Для предотвращения "мерцания"
+    (new QOpenGLWidget(this))->setVisible(false);
+
     thread = new QThread(this);
 
     terminal = new TTerminal(thread, this);
