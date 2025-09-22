@@ -10,8 +10,8 @@ TEMPLATE = app
 DEFINES += BOOST_ALL_NO_LIB
 
 
-INCLUDEPATH += core \
-               ../../eigen
+INCLUDEPATH += core
+
 
 #LIBS += -lopengl32
 #msvc:LIBS += -lOpenGL32
@@ -22,13 +22,15 @@ INCLUDEPATH += core \
 #gcc:QMAKE_LFLAGS += -fopenmp
 
 win32 {
-    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2025.0/include/'
-    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2025.0/lib/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+    INCLUDEPATH += 'C:/Program Files (x86)/Intel/oneAPI/mkl/2025.2/include/' \
+                   ../../eigen
+    LIBS += -L'C:/Program Files (x86)/Intel/oneAPI/mkl/2025.2/lib/' -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
 }
 
 unix {
-    INCLUDEPATH += /opt/intel/oneapi/mkl/2025.1/include/
-    LIBS += -L/opt/intel/oneapi/mkl/2025.1/lib/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+    INCLUDEPATH += /opt/intel/oneapi/mkl/2025.2/include/ \
+                   /usr/include/eigen3/
+    LIBS += -L/opt/intel/oneapi/mkl/2025.2/lib/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 }
 
 
