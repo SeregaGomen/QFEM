@@ -779,18 +779,120 @@ bool TMesh::readVOL(string fname)
     cout << *this << endl;
     return false;
 }
-// --------------- Чтение MESH-файла (GRUMMP) ----------------------
+// // --------------- Чтение MESH-файла (GRUMMP) ----------------------
+// bool TMesh::readMESH(string fname)
+// {
+//     unsigned num1,
+//              num2,
+//              numFE,
+//              numVertex,
+//              v1,
+//              v2,
+//              v3;
+//     ifstream in(fname.c_str(), ios::in);
+//     matrix<unsigned> tmp;
+
+//     clear();
+//     if (not in.is_open())
+//     {
+//         cerr << sayError(ErrorCode::EOpenFile) << endl;
+//         return (error = true);
+//     }
+
+//     // Cчитываем размерности
+//     in >> numFE >> num1 >> num2 >> numVertex;
+//     // Cчитываем узлы
+//     x.resize(numVertex,2);
+//     for (unsigned i = 0; i < numVertex; i++)
+//         in >> x(i, 0) >> x(i, 1);
+
+//     // Cчитываем грани КЭ
+//     fe.resize(numFE, 3);
+//     be.resize(num2, 2);
+//     tmp.resize(num1 + num2, 4);
+//     for (unsigned i = 0; i < num1 + num2; i++)
+//     {
+//         in >> tmp(i, 0) >> tmp(i, 1) >> tmp(i, 2) >> tmp(i, 3);
+//         if (i >= num1)
+//             for (unsigned j = 0; j < 2; j++)
+//                 be(i - num1, j) = tmp(i, j + 2);
+//     }
+
+//     // Формируем КЭ
+//     for (unsigned i = 0; i < numFE; i++)
+//         for (unsigned j = 0; j < 3; j++)
+//             fe(i, j) = UINT_MAX;
+
+//     for (unsigned i = 0; i < num1; i++)
+//     {
+//         v1 = tmp(i, 2);
+//         v2 = tmp(i, 3);
+//         v3 = tmp(i, 0);
+
+//         if (v3 > numFE - 1)
+//             continue;
+
+//         if (fe(v3, 0) == UINT_MAX)
+//         {
+//             fe(v3, 0) = v1;
+//             fe(v3, 1) = v2;
+//         }
+//         else
+//         {
+//             if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
+//                 v1 = UINT_MAX;
+//             if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
+//                 v2 = UINT_MAX;
+//             if (v1 != UINT_MAX)
+//                 fe(v3, 2) = v1;
+//             if (v2 != UINT_MAX)
+//                 fe(v3, 2) = v2;
+//         }
+//     }
+
+//     for (unsigned i = 0; i < num1; i++)
+//     {
+//         v1 = tmp(i, 2);
+//         v2 = tmp(i, 3);
+//         v3 = tmp(i, 1);
+
+//         if (v3 == UINT_MAX)
+//             continue;
+
+//         if (fe(v3, 0) == UINT_MAX)
+//         {
+//             fe(v3, 0) = v1;
+//             fe(v3, 1) = v2;
+//         }
+//         else
+//         {
+//             if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
+//                 v1 = UINT_MAX;
+//             if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
+//                 v2 = UINT_MAX;
+//             if (v1 != UINT_MAX)
+//                 fe(v3, 2) = v1;
+//             if (v2 != UINT_MAX)
+//                 fe(v3, 2) = v2;
+//         }
+//     }
+//     in.close();
+//     feType = FEType::fe2d3;
+//     if (in.fail())
+//     {
+//         cerr << sayError(ErrorCode::EReadFile) << endl;
+//         return (error = true);
+//     }
+//     cout << *this << endl;
+//     return false;
+// }
+// --------------- Чтение MESH-файла (CGAL) ----------------------
 bool TMesh::readMESH(string fname)
 {
-    unsigned num1,
-             num2,
-             numFE,
-             numVertex,
-             v1,
-             v2,
-             v3;
+    unsigned numFE, numVertex, numBE, tmp;
+    string str;
     ifstream in(fname.c_str(), ios::in);
-    matrix<unsigned> tmp;
+
 
     clear();
     if (not in.is_open())
@@ -799,85 +901,57 @@ bool TMesh::readMESH(string fname)
         return (error = true);
     }
 
-    // Cчитываем размерности
-    in >> numFE >> num1 >> num2 >> numVertex;
+    // Cчитываем заголовок
+    in >> str;
+    if (str != "MeshVersionFormatted")
+    {
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
+        return (error = true);
+    }
+    in >> str >> str >> str >> str >> str >> str;
+    if (str != "Vertices")
+    {
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
+        return (error = true);
+    }
+
+    in >> numVertex;
     // Cчитываем узлы
-    x.resize(numVertex,2);
+    x.resize(numVertex, 3);
     for (unsigned i = 0; i < numVertex; i++)
-        in >> x(i, 0) >> x(i, 1);
+        in >> x(i, 0) >> x(i, 1) >> x(i, 2) >> tmp;
 
-    // Cчитываем грани КЭ
-    fe.resize(numFE, 3);
-    be.resize(num2, 2);
-    tmp.resize(num1 + num2, 4);
-    for (unsigned i = 0; i < num1 + num2; i++)
+    in >> str;
+    if (str != "Triangles")
     {
-        in >> tmp(i, 0) >> tmp(i, 1) >> tmp(i, 2) >> tmp(i, 3);
-        if (i >= num1)
-            for (unsigned j = 0; j < 2; j++)
-                be(i - num1, j) = tmp(i, j + 2);
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
+        return (error = true);
     }
+    in >> numBE;
 
-    // Формируем КЭ
+    // Cчитываем ГЭ
+    be.resize(numBE, 3);
+    for (unsigned i = 0; i < numBE; i++)
+        in >> be(i, 0) >> be(i, 1) >> be(i, 2) >> tmp;
+
+    std::for_each_n(be.asVector().begin(), be.size1()*be.size2(), [](auto &val) {val--;});
+
+    in >> str;
+    if (str != "Tetrahedra")
+    {
+        cerr << sayError(ErrorCode::EUndefTypeFile) << endl;
+        return (error = true);
+    }
+    in >> numFE;
+    fe.resize(numFE, 4);
     for (unsigned i = 0; i < numFE; i++)
-        for (unsigned j = 0; j < 3; j++)
-            fe(i, j) = UINT_MAX;
+        in >> fe(i, 0) >> fe(i, 1) >> fe(i, 2) >> fe(i, 3) >> tmp;
 
-    for (unsigned i = 0; i < num1; i++)
-    {
-        v1 = tmp(i, 2);
-        v2 = tmp(i, 3);
-        v3 = tmp(i, 0);
+    std::for_each_n(fe.asVector().begin(), fe.size1()*fe.size2(), [](auto &val) {val--;});
 
-        if (v3 > numFE - 1)
-            continue;
 
-        if (fe(v3, 0) == UINT_MAX)
-        {
-            fe(v3, 0) = v1;
-            fe(v3, 1) = v2;
-        }
-        else
-        {
-            if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
-                v1 = UINT_MAX;
-            if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
-                v2 = UINT_MAX;
-            if (v1 != UINT_MAX)
-                fe(v3, 2) = v1;
-            if (v2 != UINT_MAX)
-                fe(v3, 2) = v2;
-        }
-    }
-
-    for (unsigned i = 0; i < num1; i++)
-    {
-        v1 = tmp(i, 2);
-        v2 = tmp(i, 3);
-        v3 = tmp(i, 1);
-
-        if (v3 == UINT_MAX)
-            continue;
-
-        if (fe(v3, 0) == UINT_MAX)
-        {
-            fe(v3, 0) = v1;
-            fe(v3, 1) = v2;
-        }
-        else
-        {
-            if (fe(v3, 0) == v1 || fe(v3, 1) == v1)
-                v1 = UINT_MAX;
-            if (fe(v3, 0) == v2 || fe(v3, 1) == v2)
-                v2 = UINT_MAX;
-            if (v1 != UINT_MAX)
-                fe(v3, 2) = v1;
-            if (v2 != UINT_MAX)
-                fe(v3, 2) = v2;
-        }
-    }
     in.close();
-    feType = FEType::fe2d3;
+    feType = FEType::fe3d4;
     if (in.fail())
     {
         cerr << sayError(ErrorCode::EReadFile) << endl;
